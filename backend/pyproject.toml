@@ -11,6 +11,7 @@ google-cloud-bigquery = "^2.6.1"
 fastapi = "^0.63.0"
 requests = "^2.25.1"
 uvicorn = {extras = ["standard"], version = "^0.13.3"}
+python-dotenv = "^0.15.0"
 
 [tool.poetry.dev-dependencies]
 
