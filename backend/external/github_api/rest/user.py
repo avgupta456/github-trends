@@ -1,6 +1,6 @@
 from typing import Optional
 
-from external.github_api.template import get_template
+from external.github_api.rest.template import get_template
 
 BASE_URL = "https://api.github.com/users/"
 
