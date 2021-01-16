@@ -1,7 +1,10 @@
 from fastapi import FastAPI
+from dotenv import load_dotenv
 
-from external.github_api.rest.user import get_user as _get_user
-from external.github_api.rest.repo import get_repo as _get_repo
+from external.github_api.graphql.user import get_user as _get_user
+from external.github_api.graphql.repo import get_repo as _get_repo
+
+load_dotenv()
 
 app = FastAPI()
 
