@@ -1,45 +1,40 @@
-import requests
+from typing import Optional
 
-s = requests.session()
+from external.github_api.template import get_template
 
 BASE_URL = "https://api.github.com/users/"
 
 
 def get_user(user_id: str) -> dict:
-    """
-    Returns raw user data
-    """
-    r = s.get(BASE_URL + user_id)
-    return r.json()
+    """Returns raw user data"""
+    return get_template(BASE_URL + user_id)
 
 
 def get_user_followers(user_id: str) -> dict:
-    """
-    Returns list of followers
-    """
-    r = s.get(BASE_URL + user_id + "/followers")
-    return r.json()
+    """Returns list of followers"""
+    return get_template(BASE_URL + user_id + "/followers", plural=True)
 
 
 def get_user_following(user_id: str) -> dict:
     """Returns list of following"""
-    r = s.get(BASE_URL + user_id + "/following")
-    return r.json()
+    return get_template(BASE_URL + user_id + "/following", plural=True)
 
 
-def get_user_starred_repos(user_id: str) -> dict:
+def get_user_starred_repos(user_id: str, per_page: Optional[str] = "100") -> dict:
     """Returns list of starred repos"""
-    r = s.get(BASE_URL + user_id + "/starred")
-    return r.json()
+    return get_template(
+        BASE_URL + user_id + "/starred",
+        plural=True,
+        per_page=per_page,
+        accept_header="application/vnd.github.v3.star+json",
+    )
 
 
-def get_user_orgs(user_id: str) -> dict:
+def get_user_orgs(user_id: str, per_page: Optional[str] = "100") -> dict:
     """Returns list of user organizations"""
-    r = s.get(BASE_URL + user_id + "/orgs")
-    return r.json()
+    return get_template(BASE_URL + user_id + "/orgs", plural=True, per_page=per_page)
 
 
-def get_user_repos(user_id: str) -> dict:
+def get_user_repos(user_id: str, per_page: Optional[str] = "100") -> dict:
     """Returns list of user repositories"""
-    r = s.get(BASE_URL + user_id + "/repos")
-    return r.json()
+    return get_template(BASE_URL + user_id + "/repos", plural=True, per_page=per_page)
