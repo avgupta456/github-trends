@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from external.github_api.user import get_user as _get_user
-from external.github_api.repo import get_repo_stargazers as _get_repo
+from external.github_api.repo import get_repo as _get_repo
 
 app = FastAPI()
 
