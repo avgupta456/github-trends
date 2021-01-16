@@ -1,1 +1,4 @@
+*.pyc
+
+.vscode
 backend/poetry.lock
