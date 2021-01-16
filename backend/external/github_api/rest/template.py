@@ -5,7 +5,7 @@ from typing import Optional
 s = requests.session()
 
 
-class HTTPError(Exception):
+class RESTError(Exception):
     pass
 
 
@@ -22,4 +22,11 @@ def get_template(
     if r.status_code == 200:
         return r.json()
     else:
-        raise HTTPError("Invalid status code")
+        raise RESTError(
+            "Invalid status code "
+            + str(r.status_code)
+            + ": "
+            + str(r.json()["message"])
+            + " Documentation at "
+            + str(r.json()["documentation_url"])
+        )
