@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from typing import Dict, Any
+
 from dotenv import load_dotenv
 
 from external.github_api.graphql.user import get_user as _get_user
@@ -20,5 +22,5 @@ def get_user(user_id: str) -> dict:
 
 
 @app.get("/repo/{user_id}/{repo_name}")
-def get_repo(user_id: str, repo_name: str) -> dict:
+def get_repo(user_id: str, repo_name: str) -> Dict[str, Any]:
     return _get_repo(user_id, repo_name)

@@ -1,3 +1,5 @@
+# type: ignore
+
 from google.cloud import bigquery
 
 

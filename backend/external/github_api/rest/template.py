@@ -1,6 +1,8 @@
+# type: ignore[reportUnknownMemberType]
+
 import requests
 
-from typing import Optional
+from typing import Optional, Dict, Any
 
 s = requests.session()
 
@@ -12,12 +14,12 @@ class RESTError(Exception):
 def get_template(
     query: str,
     plural: Optional[bool] = False,
-    per_page: Optional[str] = "100",
+    per_page: Optional[int] = 100,
     accept_header: Optional[str] = "application/vnd.github.v3+json",
-) -> dict:
+) -> Dict[str, Any]:
     """Template for interacting with the GitHub API"""
-    headers = {"Accept": accept_header}
-    params = {"per_page": per_page} if plural else {}
+    headers: Dict[str, str] = {"Accept": accept_header}
+    params: Dict[str, str] = {"per_page": str(per_page)} if plural else {}
     r = s.get(query, params=params, headers=headers)
     if r.status_code == 200:
         return r.json()

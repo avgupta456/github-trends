@@ -1,7 +1,9 @@
+from typing import Optional, Dict, Any
+
 from external.github_api.graphql.template import get_template
 
 
-def get_user(user_id: str) -> dict:
+def get_user(user_id: str) -> Dict[str, Any]:
     query = {
         "variables": {"login": user_id},
         "query": """
