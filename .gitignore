@@ -1,6 +1,5 @@
 *.pyc
 
-.vscode
-
 backend/.env
+backend/.venv
 backend/poetry.lock
