@@ -14,11 +14,18 @@ def get_user(user_id: str) -> Dict[str, Any]:
                         repository{
                             name,
                         },
-                        contributions(first: 10){
-                        totalCount
-                        nodes{
-                            commitCount,
-                            occurredAt,       	
+                        totalCount:contributions(first: 1){
+                            totalCount
+                        }
+                        contributions(first: 100){
+                            nodes{
+                                commitCount,
+                                occurredAt,       	
+                            }
+                            pageInfo{
+                                hasNextPage,
+                                endCursor
+                            }
                         }
                     }
                 },
@@ -143,4 +150,55 @@ def get_user(user_id: str) -> Dict[str, Any]:
         """,
     }
 
-    return get_template(query)
+    try:
+        return get_template(query)
+    except Exception as e:
+        raise e
+
+
+def get_user_commit_contributions_by_repository(
+    user_id: str,
+    max_repos: Optional[int] = 10,
+    first: Optional[int] = 100,
+    after: Optional[str] = "",
+):
+    """Runs an individual query, fetching at most 100 days of history"""
+    query = {
+        "variables": {
+            "login": user_id,
+            "maxRepos": max_repos,
+            "first": first,
+            "after": after,
+        },
+        "query": """
+            query getUser($login: String! $maxRepos: Int!, $first: Int!, $after: String!) { 
+                user(login: $login){
+                    contributionsCollection{
+                        commitContributionsByRepository(maxRepositories: $maxRepos){
+                            repository{
+                                name,
+                            },
+                            totalCount:contributions(first: 1){
+                                totalCount
+                            }
+                            contributions(first: $first, after: $after){
+                                nodes{
+                                    commitCount,
+                                    occurredAt,       	
+                                }
+                                pageInfo{
+                                    hasNextPage,
+                                    endCursor
+                                }
+                            }
+                        }
+                    },
+                },
+            }
+            """,
+    }
+
+    try:
+        return get_template(query)
+    except Exception as e:
+        raise e
