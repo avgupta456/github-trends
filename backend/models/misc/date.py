@@ -11,7 +11,10 @@ class Date:
     def __init__(self, date: Union[str, datetime]) -> None:
         self.date_obj: datetime
         if isinstance(date, datetime):
-            date = "-".join([str(date.year), str(date.month), str(date.day)])
+            year: int = date.year
+            month: int = date.month
+            day: int = date.day
+            date = "-".join([str(year), str(month), str(day)])
         date_str: str = date.split("T")[0] if "T" in date else date
         self.date_obj = datetime.strptime(date_str, "%Y-%m-%d")
 

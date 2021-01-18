@@ -1,5 +1,5 @@
 import logging
-from typing import Dict, Any
+from typing import List, Dict, Any
 
 from fastapi import FastAPI, Response, status
 from dotenv import load_dotenv
@@ -22,7 +22,7 @@ def read_root():
 @app.get("/user/{user_id}", status_code=status.HTTP_200_OK)
 def get_user(user_id: str, response: Response) -> Dict[str, Any]:
     try:
-        data = list(map(lambda x: x.dict(), _get_user(user_id)))
+        data: List[Dict[str, Any]] = list(map(lambda x: x.dict(), _get_user(user_id)))
         return {"data": data, "message": ""}
     except Exception as e:
         logging.exception(e)
