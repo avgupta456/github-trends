@@ -44,8 +44,6 @@ def get_user_commit_contributions_by_repository(
                 )
 
             raw_contribs = repo["contributions"]["nodes"]
-            print(raw_contribs[0])
-            print(CommitContribution.parse_obj(raw_contribs[0]))
             contribs = map(lambda x: CommitContribution.parse_obj(x), raw_contribs)
             output[i]["timeline"].extend(contribs)
 
