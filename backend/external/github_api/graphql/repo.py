@@ -4,6 +4,7 @@ from external.github_api.graphql.template import get_template
 
 
 def get_repo(owner: str, repo: str) -> Dict[str, Any]:
+    """gets all repository data from graphql"""
     query = {
         "variables": {"owner": owner, "repo": repo},
         "query": """

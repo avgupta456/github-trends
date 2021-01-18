@@ -14,6 +14,7 @@ class GraphQlError(Exception):
 
 
 def get_template(query: Dict[str, Any]) -> Dict[str, Any]:
+    """Template for interacting with the GitHub GraphQL API"""
     token = os.getenv("GITHUB_TOKEN", "")
     headers: Dict[str, str] = {"Authorization": "bearer " + token}
     r = s.post("https://api.github.com/graphql", json=query, headers=headers)

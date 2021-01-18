@@ -17,7 +17,7 @@ def get_template(
     per_page: Optional[int] = 100,
     accept_header: Optional[str] = "application/vnd.github.v3+json",
 ) -> Dict[str, Any]:
-    """Template for interacting with the GitHub API"""
+    """Template for interacting with the GitHub REST API"""
     headers: Dict[str, str] = {"Accept": accept_header}
     params: Dict[str, str] = {"per_page": str(per_page)} if plural else {}
     r = s.get(query, params=params, headers=headers)

@@ -1,9 +1,12 @@
+import logging
+
 from typing import Optional, Dict, Any
 
 from external.github_api.graphql.template import get_template
 
 
 def get_user(user_id: str) -> Dict[str, Any]:
+    """gets all user data from graphql"""
     query = {
         "variables": {"login": user_id},
         "query": """
@@ -153,6 +156,7 @@ def get_user(user_id: str) -> Dict[str, Any]:
     try:
         return get_template(query)
     except Exception as e:
+        logging.exception(e)
         raise e
 
 
@@ -201,4 +205,5 @@ def get_user_commit_contributions_by_repository(
     try:
         return get_template(query)
     except Exception as e:
+        logging.exception(e)
         raise e
