@@ -1,6 +1,6 @@
 import logging
 
-from typing import Optional, Dict, Any
+from typing import Dict, Any
 
 from external.github_api.graphql.template import get_template
 
@@ -162,10 +162,10 @@ def get_user(user_id: str) -> Dict[str, Any]:
 
 def get_user_commit_contributions_by_repository(
     user_id: str,
-    max_repos: Optional[int] = 10,
-    first: Optional[int] = 100,
-    after: Optional[str] = "",
 ):
+    max_repos: int = 100,
+    first: int = 100,
+    after: str = "",
     """Runs an individual query, fetching at most 100 days of history"""
     query = {
         "variables": {

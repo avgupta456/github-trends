@@ -1,4 +1,4 @@
-from typing import Optional, Dict, Any
+from typing import Dict, Any
 
 from external.github_api.rest.template import get_template
 
@@ -20,7 +20,7 @@ def get_user_following(user_id: str) -> Dict[str, Any]:
     return get_template(BASE_URL + user_id + "/following", plural=True)
 
 
-def get_user_starred_repos(user_id: str, per_page: Optional[int] = 100) -> Dict[str, Any]:
+def get_user_starred_repos(user_id: str, per_page: int = 100) -> Dict[str, Any]:
     """Returns list of starred repos"""
     return get_template(
         BASE_URL + user_id + "/starred",
@@ -30,11 +30,11 @@ def get_user_starred_repos(user_id: str, per_page: Optional[int] = 100) -> Dict[
     )
 
 
-def get_user_orgs(user_id: str, per_page: Optional[int] = 100) -> Dict[str, Any]:
+def get_user_orgs(user_id: str, per_page: int = 100) -> Dict[str, Any]:
     """Returns list of user organizations"""
     return get_template(BASE_URL + user_id + "/orgs", plural=True, per_page=per_page)
 
 
-def get_user_repos(user_id: str, per_page: Optional[int] = 100) -> Dict[str, Any]:
+def get_user_repos(user_id: str, per_page: int = 100) -> Dict[str, Any]:
     """Returns list of user repositories"""
     return get_template(BASE_URL + user_id + "/repos", plural=True, per_page=per_page)

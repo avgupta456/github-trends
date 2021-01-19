@@ -1,4 +1,4 @@
-from typing import Optional, Dict, Any
+from typing import Dict, Any
 
 from external.github_api.rest.template import get_template
 
@@ -15,9 +15,7 @@ def get_repo_languages(owner: str, repo: str) -> Dict[str, Any]:
     return get_template(BASE_URL + owner + "/" + repo + "/languages", plural=True)
 
 
-def get_repo_stargazers(
-    owner: str, repo: str, per_page: Optional[int] = 100
-) -> Dict[str, Any]:
+def get_repo_stargazers(owner: str, repo: str, per_page: int = 100) -> Dict[str, Any]:
     """Returns stargazers with timestamp for repository"""
     return get_template(
         BASE_URL + owner + "/" + repo + "/stargazers",

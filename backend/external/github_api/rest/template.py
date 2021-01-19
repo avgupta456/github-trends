@@ -1,7 +1,7 @@
 import requests
 from datetime import datetime
 
-from typing import Optional, Dict, Any
+from typing import Dict, Any
 
 s = requests.session()
 
@@ -12,9 +12,9 @@ class RESTError(Exception):
 
 def get_template(
     query: str,
-    plural: Optional[bool] = False,
-    per_page: Optional[int] = 100,
-    accept_header: Optional[str] = "application/vnd.github.v3+json",
+    plural: bool = False,
+    per_page: int = 100,
+    accept_header: str = "application/vnd.github.v3+json",
 ) -> Dict[str, Any]:
     """Template for interacting with the GitHub REST API"""
     start = datetime.now()
