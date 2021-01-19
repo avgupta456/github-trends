@@ -16,6 +16,18 @@ poetry init
 
 ## Run Locally
 
+Navigate to localhost:8000
+
 ```
 poetry run uvicorn main:app --reload
 ```
+
+## Build
+
+If a new requirement has been added, make sure to update the requirements.txt
+
+```
+poetry export -f requirements.txt --output requirements.txt --without-hashes # generate requirements.txt
+```
+
+TODO
