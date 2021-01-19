@@ -7,8 +7,8 @@ from functools import wraps
 from fastapi import FastAPI, Response, status
 from dotenv import load_dotenv
 
-from processing.user.commit_contributions_by_repository import (
-    get_user_commit_contributions_by_repository as _get_user,
+from processing.user.contribution_calendar import (
+    get_user_contribution_calendar as _get_user,
 )
 from external.github_api.graphql.repo import get_repo as _get_repo
 
@@ -44,7 +44,7 @@ def fail_gracefully(func: Callable[..., Any]):
 @app.get("/user/{user_id}", status_code=status.HTTP_200_OK)
 @fail_gracefully
 def get_user(response: Response, user_id: str) -> List[Dict[str, Any]]:
-    return list(map(lambda x: x.dict(), _get_user(user_id)))
+    return _get_user(user_id)
 
 
 @app.get("/repo/{user_id}/{repo_name}", status_code=status.HTTP_200_OK)
