@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta
 
-from typing import Union
+from typing import Union, overload
 
 
 class Date:
@@ -25,12 +25,31 @@ class Date:
         new_date: Date = Date(self.date_obj + timedelta(days=other))
         return new_date
 
+    @overload
     def __sub__(self, other: int) -> Date:
-        new_date: Date = Date(self.date_obj - timedelta(days=other))
-        return new_date
+        return Date("")  # never called
+
+    @overload
+    def __sub__(self, other: Date) -> int:
+        return 0  # never called
+
+    def __sub__(self, other: Union[int, Date]) -> Union[int, Date]:
+        if isinstance(other, int):
+            return Date(self.date_obj - timedelta(days=other))
+        else:
+            return abs((self.date_obj - other.date_obj).days)
 
     def __lt__(self, other: Date) -> bool:
         return self.date_obj < other.date_obj
+
+    def __le__(self, other: Date) -> bool:
+        return self.date_obj <= other.date_obj
+
+    def __gt__(self, other: Date) -> bool:
+        return self.date_obj > other.date_obj
+
+    def __ge__(self, other: Date) -> bool:
+        return self.date_obj >= other.date_obj
 
 
 today = Date(datetime.now())
