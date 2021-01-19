@@ -1,5 +1,4 @@
 import math
-import logging
 from typing import List
 
 from models.misc.date import Date, today
@@ -19,7 +18,6 @@ def get_user_commit_contributions_by_repository(
     end_date: Date = today,
 ) -> List[CommitContributionsByRepository]:
     """Gets the daily contribution history for a users top x repositories"""
-
     time_range = today - start_date  # gets number of days to end date
     segments = min(math.ceil(time_range / 100), 10)  # no more than three years
     raw_output: List[CommitContributionsByRepository] = []
@@ -28,7 +26,6 @@ def get_user_commit_contributions_by_repository(
         try:
             data = run_query(user_id, max_repos, after=after)
         except Exception as e:
-            logging.exception(e)
             raise e
 
         cont = False

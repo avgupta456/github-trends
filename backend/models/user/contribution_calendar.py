@@ -4,6 +4,8 @@ from typing import List
 
 from pydantic import BaseModel, Field
 
+from models.misc.date import Date
+
 
 """
 APIResponse
@@ -68,3 +70,41 @@ class APIResponse(BaseModel):
 
     contribution_calendar: APIResponse_Calendar = Field(alias="contributionCalendar")
     contribution_years: List[int] = Field(alias="contributionYears")
+
+
+"""
+EXTERNAL
+"""
+
+
+class ContributionDay(BaseModel):
+    """
+    BaseModel which accepts:
+    - date: Date
+    - weekday: int
+    - contribution_count: int
+    - contribution_level: Quartile
+    """
+
+    date: Date
+    weekday: int
+    contribution_count: int
+    contribution_level: Quartile
+
+    class Config:
+        arbitrary_types_allowed = True
+
+
+class ContributionCalendar(BaseModel):
+    """
+    BaseModel which accepts:
+    - contribution_years: List[int]
+    - total_contributions: int
+    - colors: List[str]
+    - days: List[ContributionDay]
+    """
+
+    contribution_years: List[int]
+    total_contributions: int
+    colors: List[str]
+    days: List[ContributionDay]

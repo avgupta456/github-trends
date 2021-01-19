@@ -43,11 +43,11 @@ def fail_gracefully(func: Callable[..., Any]):
 
 @app.get("/user/{user_id}", status_code=status.HTTP_200_OK)
 @fail_gracefully
-def get_user(response: Response, user_id: str) -> List[Dict[str, Any]]:
+def get_user(response: Response, user_id: str) -> Any:
     return _get_user(user_id)
 
 
 @app.get("/repo/{user_id}/{repo_name}", status_code=status.HTTP_200_OK)
 @fail_gracefully
-def get_repo(response: Response, user_id: str, repo_name: str) -> Dict[str, Any]:
+def get_repo(response: Response, user_id: str, repo_name: str) -> Any:
     return _get_repo(user_id, repo_name)
