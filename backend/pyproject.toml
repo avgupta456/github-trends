@@ -12,10 +12,12 @@ fastapi = "^0.63.0"
 requests = "^2.25.1"
 uvicorn = {extras = ["standard"], version = "^0.13.3"}
 python-dotenv = "^0.15.0"
-black = "^20.8b1"
+typing-extensions = "^3.7.4"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.8.4"
+black = "^20.8b1"
+pyinstrument = "^3.3.0"
 
 [build-system]
 requires = ["poetry>=0.12"]
