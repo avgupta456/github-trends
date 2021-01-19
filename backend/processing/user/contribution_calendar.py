@@ -1,5 +1,9 @@
 from models.misc.date import Date, today
-from models.user.contribution_calendar import ContributionDay, ContributionCalendar
+from models.user.contribution_calendar import (
+    ContributionDay,
+    ContributionPeriod,
+    ContributionCalendar,
+)
 from external.github_api.graphql.user import (
     get_user_contribution_calendar as run_query,
 )
@@ -40,11 +44,55 @@ def get_user_contribution_calendar(
         )
     )
 
+    # creates total period (up to 1 year long)
+    total = ContributionPeriod(
+        days=days,
+        num_days=len(days),
+        total_contributions=total_contributions,
+        avg_contributions=total_contributions / len(days),
+    )
+
+    # creates months (0 is January, 11 is December)
+    months = [[] for _ in range(12)]
+    for day in days:
+        months[day.date.month() - 1].append(day)
+
+    months = list(
+        map(
+            lambda x: ContributionPeriod(
+                days=x,
+                num_days=len(x),
+                total_contributions=sum([y.contribution_count for y in x]),
+                avg_contributions=sum([y.contribution_count for y in x]) / len(x),
+            ),
+            months,
+        )
+    )
+
+    # create weekdays (0 is Sunday, 6 is Saturday)
+    weekdays = [[] for _ in range(7)]
+    for day in days:
+        weekdays[day.weekday].append(day)
+
+    weekdays = list(
+        map(
+            lambda x: ContributionPeriod(
+                days=x,
+                num_days=len(x),
+                total_contributions=sum([y.contribution_count for y in x]),
+                avg_contributions=sum([y.contribution_count for y in x]) / len(x),
+            ),
+            weekdays,
+        )
+    )
+
+    # create final output
     calendar = ContributionCalendar(
         contribution_years=contribution_years,
-        total_contributions=total_contributions,
         colors=colors,
-        days=days,
+        total=total,
+        months=months,
+        weekdays=weekdays,
     )
 
     return calendar

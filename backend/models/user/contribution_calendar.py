@@ -95,16 +95,32 @@ class ContributionDay(BaseModel):
         arbitrary_types_allowed = True
 
 
-class ContributionCalendar(BaseModel):
+class ContributionPeriod(BaseModel):
     """
     BaseModel which accepts:
-    - contribution_years: List[int]
     - total_contributions: int
-    - colors: List[str]
+    - avg_contributions: float
     - days: List[ContributionDay]
     """
 
-    contribution_years: List[int]
     total_contributions: int
-    colors: List[str]
+    avg_contributions: float
     days: List[ContributionDay]
+    num_days: int
+
+
+class ContributionCalendar(BaseModel):
+    """
+    BaseModel which accepts:
+    - total_contributions: int
+    - colors: List[str]
+    - total: ContributionPeriod
+    - months: List[ContributionPeriod]
+    - weekdays: List[ContributionPeriod]
+    """
+
+    contribution_years: List[int]
+    colors: List[str]
+    total: ContributionPeriod
+    months: List[ContributionPeriod]
+    weekdays: List[ContributionPeriod]

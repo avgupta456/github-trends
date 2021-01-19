@@ -51,5 +51,14 @@ class Date:
     def __ge__(self, other: Date) -> bool:
         return self.date_obj >= other.date_obj
 
+    def year(self) -> int:
+        return self.date_obj.year
+
+    def month(self) -> int:
+        return self.date_obj.month
+
+    def day(self) -> int:
+        return self.date_obj.day
+
 
 today = Date(datetime.now())
