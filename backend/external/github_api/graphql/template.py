@@ -1,5 +1,6 @@
 import os
 import requests
+from datetime import datetime
 
 from typing import Dict, Any
 
@@ -15,9 +16,11 @@ def get_template(query: Dict[str, Any]) -> Dict[str, Any]:
     """Template for interacting with the GitHub GraphQL API"""
     token = os.getenv("GITHUB_TOKEN", "")
     headers: Dict[str, str] = {"Authorization": "bearer " + token}
+    start = datetime.now()
     r = s.post(  # type: ignore
         "https://api.github.com/graphql", json=query, headers=headers
     )
+    print("GraphQL", datetime.now() - start)
     if r.status_code == 200:
         return r.json()  # type: ignore
     else:
