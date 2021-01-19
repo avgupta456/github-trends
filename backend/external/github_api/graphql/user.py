@@ -3,6 +3,9 @@ import logging
 from typing import Dict, Any
 
 from external.github_api.graphql.template import get_template
+from models.user.commit_contributions_by_repository import (
+    APIResponse as UserCommitContributionsByRepositoryAPIResponse,
+)
 
 
 def get_user(user_id: str) -> Dict[str, Any]:
@@ -162,10 +165,10 @@ def get_user(user_id: str) -> Dict[str, Any]:
 
 def get_user_commit_contributions_by_repository(
     user_id: str,
-):
     max_repos: int = 100,
     first: int = 100,
     after: str = "",
+) -> UserCommitContributionsByRepositoryAPIResponse:
     """Runs an individual query, fetching at most 100 days of history"""
     query = {
         "variables": {
@@ -203,7 +206,10 @@ def get_user_commit_contributions_by_repository(
     }
 
     try:
-        return get_template(query)
+        output_dict = get_template(query)["data"]["user"]["contributionsCollection"][
+            "commitContributionsByRepository"
+        ]
+        return UserCommitContributionsByRepositoryAPIResponse(data=output_dict)
     except Exception as e:
         logging.exception(e)
         raise e
