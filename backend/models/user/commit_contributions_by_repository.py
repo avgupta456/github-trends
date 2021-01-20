@@ -1,8 +1,8 @@
 from typing import List
 
+from models.misc.date import Date
 from pydantic import BaseModel, Field
 
-from models.misc.date import Date
 
 """
 APIResponse

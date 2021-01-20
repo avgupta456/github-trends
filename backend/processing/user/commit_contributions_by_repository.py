@@ -1,13 +1,13 @@
 import math
 from typing import List
 
-from models.misc.date import Date, today
-from models.user.commit_contributions_by_repository import (
-    create_commit_contribution,
-    CommitContributionsByRepository,
-)
 from external.github_api.graphql.user import (
     get_user_commit_contributions_by_repository as run_query,
+)
+from models.misc.date import Date, today
+from models.user.commit_contributions_by_repository import (
+    CommitContributionsByRepository,
+    create_commit_contribution,
 )
 
 

@@ -1,10 +1,8 @@
 from enum import Enum
-
 from typing import List
 
-from pydantic import BaseModel, Field
-
 from models.misc.date import Date
+from pydantic import BaseModel, Field
 
 
 """

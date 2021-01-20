@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Any, Dict
 
 from external.github_api.graphql.template import get_template
 
@@ -8,8 +8,8 @@ def get_repo(owner: str, repo: str) -> Dict[str, Any]:
     query = {
         "variables": {"owner": owner, "repo": repo},
         "query": """
-        query getRepo($owner: String!, $repo: String!) { 
-            repository(owner: $owner, name: $repo) { 
+        query getRepo($owner: String!, $repo: String!) {
+            repository(owner: $owner, name: $repo) {
                 createdAt,
                 updatedAt,
                 forkCount,

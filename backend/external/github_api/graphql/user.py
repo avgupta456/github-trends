@@ -1,6 +1,5 @@
 import logging
-
-from typing import Dict, Any
+from typing import Any, Dict
 
 from external.github_api.graphql.template import get_template
 from models.user.commit_contributions_by_repository import (
@@ -14,7 +13,7 @@ def get_user(user_id: str) -> Dict[str, Any]:
     query = {
         "variables": {"login": user_id},
         "query": """
-        query getUser($login: String!) { 
+        query getUser($login: String!) {
             user(login: $login){
                 contributionsCollection{
                     commitContributionsByRepository(maxRepositories: 10){
@@ -27,7 +26,7 @@ def get_user(user_id: str) -> Dict[str, Any]:
                         contributions(first: 100){
                             nodes{
                                 commitCount,
-                                occurredAt,       	
+                                occurredAt,
                             }
                             pageInfo{
                                 hasNextPage,
@@ -179,7 +178,7 @@ def get_user_commit_contributions_by_repository(
             "after": after,
         },
         "query": """
-        query getUser($login: String!, $maxRepos: Int!, $first: Int!, $after: String!) { 
+        query getUser($login: String!, $maxRepos: Int!, $first: Int!, $after: String!) {
             user(login: $login){
                 contributionsCollection{
                     commitContributionsByRepository(maxRepositories: $maxRepos){
@@ -192,7 +191,7 @@ def get_user_commit_contributions_by_repository(
                         contributions(first: $first, after: $after){
                             nodes{
                                 commitCount,
-                                occurredAt,       	
+                                occurredAt,
                             }
                             pageInfo{
                                 hasNextPage,
@@ -221,7 +220,7 @@ def get_user_contribution_calendar(user_id: str) -> UserContributionCalendar:
     query = {
         "variables": {"login": user_id},
         "query": """
-        query getUser($login: String!) { 
+        query getUser($login: String!) {
             user(login: $login){
                 contributionsCollection{
                     contributionCalendar{

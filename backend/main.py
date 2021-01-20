@@ -1,16 +1,14 @@
 import logging
 from datetime import datetime
-
-from typing import Callable, List, Dict, Any
 from functools import wraps
+from typing import Any, Callable, Dict, List
 
-from fastapi import FastAPI, Response, status
 from dotenv import load_dotenv
-
+from external.github_api.graphql.repo import get_repo as _get_repo
+from fastapi import FastAPI, Response, status
 from processing.user.contribution_calendar import (
     get_user_contribution_calendar as _get_user,
 )
-from external.github_api.graphql.repo import get_repo as _get_repo
 
 load_dotenv()
 

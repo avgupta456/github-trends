@@ -1,7 +1,7 @@
-import requests
 from datetime import datetime
+from typing import Any, Dict
 
-from typing import Dict, Any
+import requests
 
 s = requests.session()
 

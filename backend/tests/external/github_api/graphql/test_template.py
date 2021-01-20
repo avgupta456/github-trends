@@ -8,7 +8,7 @@ class TestTemplate(unittest.TestCase):
         query = {
             "variables": {"login": "avgupta456"},
             "query": """
-            query getUser($login: String!) { 
+            query getUser($login: String!) {
                 user(login: $login){
                     contributionsCollection{
                         contributionCalendar{

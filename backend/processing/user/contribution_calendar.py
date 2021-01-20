@@ -1,11 +1,9 @@
+from external.github_api.graphql.user import get_user_contribution_calendar as run_query
 from models.misc.date import Date, today
 from models.user.contribution_calendar import (
+    ContributionCalendar,
     ContributionDay,
     create_contribution_period,
-    ContributionCalendar,
-)
-from external.github_api.graphql.user import (
-    get_user_contribution_calendar as run_query,
 )
 
 
