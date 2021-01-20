@@ -26,3 +26,5 @@ jobs:
       run: |
         cd backend
         python -m unittest
+      env:
+        AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
