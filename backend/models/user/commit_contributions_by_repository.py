@@ -27,7 +27,7 @@ class APIResponse_Repo_TotalCount(BaseModel):
     total_count: int = Field(alias="totalCount")
 
 
-class APIResponse_Repo_Contribs_Nodes(BaseModel):
+class APIResponse_Repo_Contribs_Node(BaseModel):
     """
     BaseModel which accepts:
     - commitCount: int
@@ -56,7 +56,7 @@ class APIResponse_Repo_Contribs(BaseModel):
     - pageInfo: APIResponse_Repo_Contribs_PageInfo
     """
 
-    nodes: List[APIResponse_Repo_Contribs_Nodes]
+    nodes: List[APIResponse_Repo_Contribs_Node]
     page_info: APIResponse_Repo_Contribs_PageInfo = Field(alias="pageInfo")
 
 
@@ -99,6 +99,13 @@ class CommitContribution(BaseModel):
 
     class Config:
         arbitrary_types_allowed = True
+
+
+def create_commit_contribution(x: APIResponse_Repo_Contribs_Node) -> CommitContribution:
+    """helper function to create a CommitContribution"""
+    return CommitContribution(
+        commit_count=x.commit_count, occured_at=Date(x.occurred_at)
+    )
 
 
 class CommitContributionsByRepository(BaseModel):

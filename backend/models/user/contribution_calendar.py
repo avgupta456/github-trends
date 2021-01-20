@@ -109,6 +109,18 @@ class ContributionPeriod(BaseModel):
     num_days: int
 
 
+def create_contribution_period(days: List[ContributionDay]) -> ContributionPeriod:
+    num_days = len(days)
+    total_contributions = sum([day.contribution_count for day in days])
+    avg_contributions = total_contributions / num_days
+    return ContributionPeriod(
+        total_contributions=total_contributions,
+        avg_contributions=avg_contributions,
+        days=days,
+        num_days=num_days,
+    )
+
+
 class ContributionCalendar(BaseModel):
     """
     BaseModel which accepts:
