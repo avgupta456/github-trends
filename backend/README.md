@@ -3,9 +3,11 @@
 I use the following tools to improve the developer experience
 
 - VSCode for IDE
+- Poetry for Dependencies
 - Flake8 for Linting (get VSCode extension)
 - Pylance for Type Checking (get VSCode extension)
-- Poetry for Dependencies
+- UnitTest for Testing
+- GitHub Actions for CI/CD
 
 ## Installation
 
