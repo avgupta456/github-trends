@@ -1,7 +1,7 @@
 from models.misc.date import Date, today
 from models.user.contribution_calendar import (
     ContributionDay,
-    ContributionPeriod,
+    create_contribution_period,
     ContributionCalendar,
 )
 from external.github_api.graphql.user import (
@@ -24,7 +24,6 @@ def get_user_contribution_calendar(
         raise e
 
     contribution_years = data.contribution_years
-    total_contributions = data.contribution_calendar.total_contributions
     colors = data.contribution_calendar.colors
     days = list(
         map(
@@ -45,46 +44,21 @@ def get_user_contribution_calendar(
     )
 
     # creates total period (up to 1 year long)
-    total = ContributionPeriod(
-        days=days,
-        num_days=len(days),
-        total_contributions=total_contributions,
-        avg_contributions=total_contributions / len(days),
-    )
+    total = create_contribution_period(days)
 
     # creates months (0 is January, 11 is December)
     months = [[] for _ in range(12)]
     for day in days:
         months[day.date.month() - 1].append(day)
 
-    months = list(
-        map(
-            lambda x: ContributionPeriod(
-                days=x,
-                num_days=len(x),
-                total_contributions=sum([y.contribution_count for y in x]),
-                avg_contributions=sum([y.contribution_count for y in x]) / len(x),
-            ),
-            months,
-        )
-    )
+    months = list(map(lambda x: create_contribution_period(x), months))
 
     # create weekdays (0 is Sunday, 6 is Saturday)
     weekdays = [[] for _ in range(7)]
     for day in days:
         weekdays[day.weekday].append(day)
 
-    weekdays = list(
-        map(
-            lambda x: ContributionPeriod(
-                days=x,
-                num_days=len(x),
-                total_contributions=sum([y.contribution_count for y in x]),
-                avg_contributions=sum([y.contribution_count for y in x]) / len(x),
-            ),
-            weekdays,
-        )
-    )
+    weekdays = list(map(lambda x: create_contribution_period(x), weekdays))
 
     # create final output
     calendar = ContributionCalendar(

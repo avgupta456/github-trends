@@ -3,7 +3,7 @@ from typing import List
 
 from models.misc.date import Date, today
 from models.user.commit_contributions_by_repository import (
-    CommitContribution,
+    create_commit_contribution,
     CommitContributionsByRepository,
 )
 from external.github_api.graphql.user import (
@@ -44,12 +44,7 @@ def get_user_commit_contributions_by_repository(
 
             raw_contribs = repo.contributions.nodes
             contribs = map(
-                lambda x: CommitContribution.parse_obj(
-                    {
-                        "commit_count": x.commit_count,
-                        "occurred_at": Date(x.occurred_at),
-                    }
-                ),
+                lambda x: create_commit_contribution(x),
                 raw_contribs,
             )
             contribs = filter(
