@@ -24,4 +24,5 @@ jobs:
         pip install -r requirements.txt
     - name: Test with unittest
       run: |
+        cd backend
         python -m unittest
