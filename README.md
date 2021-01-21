@@ -1,19 +1,10 @@
-## Developer Experience
+# GitHub Trends
 
-I use the following tools to improve the developer experience
-
-- VSCode for IDE
-- Poetry for Dependencies
-- Flake8 for Linting (get VSCode extension)
-- Pylance for Type Checking (get VSCode extension)
-- UnitTest for Testing
-- Coverage.py for Coverage
-- GitHub Actions for CI/CD
+[![Coverage Status](https://coveralls.io/repos/github/avgupta456/github-trends/badge.svg?t=jQQ3FK)](https://coveralls.io/github/avgupta456/github-trends)
 
 ## Installation
 
 ```
-poetry config virtualenvs.in-project
 poetry install
 poetry run pre-commit install
 ```
