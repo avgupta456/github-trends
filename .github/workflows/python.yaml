@@ -1,4 +1,4 @@
-name: Python Test
+name: Python
 
 on:
   push:
@@ -28,3 +28,7 @@ jobs:
         python -m unittest
       env:
         AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        fail_ci_if_error: true
