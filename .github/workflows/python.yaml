@@ -25,9 +25,9 @@ jobs:
       run: python -m unittest
       env:
         AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
-      with:
-        fail_ci_if_error: true
-        token: ${{ secrets.CODECOV_TOKEN }}
-        path_to_write_report: ./tests/coverage.txt
+    - name: Upload coverage to Coveralls
+      run: |
+          coverage -m unittest
+          coveralls
+      env:
+        COVERALLS_REPO_TOKEN: ${{ secrests.COVERALLS_REPO_TOKEN }}
