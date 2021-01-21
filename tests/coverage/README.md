@@ -1,3 +1,0 @@
-# Coverage
-
-Stores coverage report.
