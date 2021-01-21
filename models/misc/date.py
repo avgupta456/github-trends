@@ -9,12 +9,16 @@ class Date:
 
     def __init__(self, date: Union[str, datetime]) -> None:
         self.date_obj: datetime
+        date_str: str = ""
         if isinstance(date, datetime):
-            year: int = int(date.year)
-            month: int = int(date.month)
-            day: int = int(date.day)
-            date = "-".join([str(year), str(month), str(day)])
-        date_str: str = date.split("T")[0] if "T" in date else date
+            date_obj: datetime = date
+            year: int = int(date_obj.year)
+            month: int = int(date_obj.month)
+            day: int = int(date_obj.day)
+            date_str = "-".join([str(year), str(month), str(day)])
+        else:
+            date_str = date
+        date_str = date_str.split("T")[0] if "T" in date_str else date_str
         self.date_obj = datetime.strptime(date_str, "%Y-%m-%d")
 
     def __str__(self) -> str:
