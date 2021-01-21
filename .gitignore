@@ -4,4 +4,3 @@ __pycache__
 .env
 .venv
 poetry.lock
-coverage.xml
