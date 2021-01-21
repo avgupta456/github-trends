@@ -5,4 +5,10 @@
     "python.analysis.typeCheckingMode": "strict",
     "python.analysis.diagnosticMode": "workspace",
     "python.pythonPath": ".venv\\Scripts\\python.exe",
+
+    "files.exclude": {
+        "**/.git": true,
+        "**/__pycache__": true,
+        "**/.venv": true,
+    }
 }
