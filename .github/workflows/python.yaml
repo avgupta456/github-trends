@@ -27,7 +27,7 @@ jobs:
         AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
     - name: Upload coverage to Coveralls
       run: |
-          coverage -m unittest
+          coverage run -m unittest
           coveralls
       env:
         COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
