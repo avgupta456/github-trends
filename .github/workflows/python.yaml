@@ -30,4 +30,5 @@ jobs:
           coverage run -m unittest
           coveralls
       env:
+        AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
         COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
