@@ -3,6 +3,5 @@ __pycache__
 
 .env
 .venv
-.coverage
 poetry.lock
 
