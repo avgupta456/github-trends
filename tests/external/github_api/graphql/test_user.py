@@ -8,4 +8,5 @@ class TestTemplate(unittest.TestCase):
     def test_get_user_commit_contributions_by_repository(self):
         response = get_user_commit_contributions_by_repository(user_id="avgupta456")
 
+        # aside from validating APIResponse class, pydantic will validate tree
         self.assertIsInstance(response, APIResponse)
