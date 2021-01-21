@@ -5,4 +5,4 @@ backend/.env
 backend/.venv
 backend/poetry.lock
 backend/.coverage
-backend/coverage/*.txt
+backend/tests/coverage/*.txt

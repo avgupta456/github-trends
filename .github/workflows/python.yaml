@@ -31,10 +31,10 @@ jobs:
     - name: Run coverage report
       run: |
         cd backend
-        coverage report -m > coverage/coverage.txt
+        coverage report -m > tests/coverage/report.txt
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:
         fail_ci_if_error: true
         token: ${{ secrets.CODECOV_TOKEN }}
-        directory: ./backend/coverage/
+        directory: ./backend/tests/coverage/
