@@ -2,8 +2,7 @@
     "python.linting.flake8Enabled": true,
     "python.linting.pylintEnabled": false,
     "python.linting.enabled": true,
-    "python.analysis.extraPaths": ["backend"],
     "python.analysis.typeCheckingMode": "strict",
     "python.analysis.diagnosticMode": "workspace",
-    "python.pythonPath": "backend\\.venv\\Scripts\\python.exe",
+    "python.pythonPath": ".venv\\Scripts\\python.exe",
 }

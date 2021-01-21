@@ -19,22 +19,14 @@ jobs:
         python-version: 3.7
     - name: Install dependencies
       run: |
-        cd backend
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Test with unittest
-      run: |
-        cd backend
-        coverage run --branch -m unittest
+      run: python -m unittest
       env:
         AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
-    - name: Run coverage report
-      run: |
-        cd backend
-        coverage xml > tests/coverage/coverage.xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:
         fail_ci_if_error: true
         token: ${{ secrets.CODECOV_TOKEN }}
-        directory: ./backend/tests/coverage/
