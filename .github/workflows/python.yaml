@@ -25,11 +25,16 @@ jobs:
     - name: Test with unittest
       run: |
         cd backend
-        python -m unittest
+        coverage run --branch -m unittest
       env:
         AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+    - name: Run coverage report
+      run: |
+        cd backend
+        coverage report -m > coverage/coverage.txt
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:
         fail_ci_if_error: true
         token: ${{ secrets.CODECOV_TOKEN }}
+        directory: ./backend/coverage/
