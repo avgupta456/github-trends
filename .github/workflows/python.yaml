@@ -30,4 +30,4 @@ jobs:
           coverage -m unittest
           coveralls
       env:
-        COVERALLS_REPO_TOKEN: ${{ secrests.COVERALLS_REPO_TOKEN }}
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
