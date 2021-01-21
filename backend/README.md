@@ -7,6 +7,7 @@ I use the following tools to improve the developer experience
 - Flake8 for Linting (get VSCode extension)
 - Pylance for Type Checking (get VSCode extension)
 - UnitTest for Testing
+- Coverage.py for Coverage
 - GitHub Actions for CI/CD
 
 ## Installation
@@ -14,6 +15,7 @@ I use the following tools to improve the developer experience
 ```
 poetry config virtualenvs.in-project
 poetry init
+poetry run pre-commit install
 ```
 
 ## Run Locally
@@ -22,6 +24,13 @@ Navigate to localhost:8000
 
 ```
 poetry run uvicorn main:app --reload
+```
+
+## Test with Code Coverage
+
+```
+poetry run coverage -m unittest
+poetry run coverage report
 ```
 
 ## Build
