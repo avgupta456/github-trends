@@ -31,7 +31,7 @@ jobs:
     - name: Run coverage report
       run: |
         cd backend
-        coverage report -m > tests/coverage/report.txt
+        coverage xml > tests/coverage/coverage.xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:
