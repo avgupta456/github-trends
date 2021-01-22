@@ -260,7 +260,7 @@ def get_user_contribution_stats(
     max_repos: int = 100,
     first: int = 100,
     after: str = "",
-) -> Any:
+) -> UserContributionStatsAPIResponse:
     """Fetches user contribution calendar and contribution years"""
     query = {
         "variables": {

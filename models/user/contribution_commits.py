@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from models.misc.date import Date
 from pydantic import BaseModel, Field
@@ -46,7 +46,10 @@ class APIResponse_Repo_Contribs_PageInfo(BaseModel):
     """
 
     has_next_page: bool = Field(alias="hasNextPage")
-    end_cursor: str = Field(alias="endCursor")
+    end_cursor: Optional[str] = Field(alias="endCursor")
+
+    class Config:
+        allow_none = True
 
 
 class APIResponse_Repo_Contribs(BaseModel):

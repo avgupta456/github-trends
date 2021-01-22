@@ -1,5 +1,5 @@
 import math
-from typing import List
+from typing import List, Optional
 
 from external.github_api.graphql.user import (
     get_user_contribution_commits as run_query,
@@ -13,21 +13,23 @@ from models.user.contribution_commits import (
 )
 
 
-def get_user_commit_contributions_by_repository(
+def get_user_contribution_commits(
     user_id: str,
     max_repos: int = 100,
     start_date: Date = today - 365,
     end_date: Date = today,
 ) -> CommitContributions:
-    """Gets the daily contribution history for a users top x repositories"""
+    """Gets the daily commit history for a users top x repositories"""
     time_range = today - start_date  # gets number of days to end date
     segments = min(math.ceil(time_range / 100), 10)  # no more than three years
     raw_repos: List[CommitContributionsByRepository] = []
     commit_contribs_count, repos_with_commit_contrib = 0, 0
-    index, cont, after = 0, True, ""  # initialize variables
+    after: Optional[str] = ""
+    index, cont = 0, True  # initialize variables
     while cont and index < segments:
         try:
-            data = run_query(user_id, max_repos, after=after)
+            after_str = after if isinstance(after, str) else ""
+            data = run_query(user_id, max_repos, after=after_str)
         except Exception as e:
             raise e
 
