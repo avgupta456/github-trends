@@ -4,10 +4,12 @@ source =
 omit =
     ./.venv/*
     ./tests/*
+    ./models/*
     */__init__.py
 
 [report]
 omit =
     ./.venv/*
     ./tests/*
+    ./models/*
     */__init__.py
