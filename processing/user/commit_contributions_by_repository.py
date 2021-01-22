@@ -6,6 +6,7 @@ from external.github_api.graphql.user import (
 )
 from models.misc.date import Date, today
 from models.user.commit_contributions_by_repository import (
+    CommitContribution,
     CommitContributionsByRepository,
     CommitContributions,
     create_commit_contribution,
@@ -37,13 +38,11 @@ def get_user_commit_contributions_by_repository(
         for i, repo in enumerate(data.commits_by_repo):
             if index == 0:
                 raw_repos.append(
-                    CommitContributionsByRepository.parse_obj(
-                        {
-                            "name": repo.repository.name,
-                            "contributions": repo.total_count.total_count,
-                            "contributions_in_range": 0,
-                            "timeline": [],
-                        }
+                    CommitContributionsByRepository(
+                        name=repo.repository.name,
+                        contributions=repo.total_count.total_count,
+                        contributions_in_range=0,
+                        timeline=[],
                     )
                 )
 
@@ -73,11 +72,28 @@ def get_user_commit_contributions_by_repository(
     )
 
     # filters out empty results
-    repo_objects = filter(lambda x: x.contributions_in_range > 0, repo_objects)
+    repo_objects = list(filter(lambda x: x.contributions_in_range > 0, repo_objects))
+
+    timeline: List[int] = [0 for _ in range(end_date - start_date + 1)]
+    for repo in repo_objects:
+        for day in repo.timeline:
+            timeline[day.occurred_at - start_date] += day.commit_count
+
+    timeline_object = [
+        CommitContribution(occurred_at=start_date + i, commit_count=x)
+        for i, x in enumerate(timeline)
+    ]
+
+    total_object = CommitContributionsByRepository(
+        name="total",
+        contributions=commit_contribs_count,
+        contributions_in_range=sum(timeline),
+        timeline=timeline_object,
+    )
 
     output = CommitContributions(
         commit_contribs_by_repo=list(repo_objects),
-        commit_contribs_count=commit_contribs_count,
+        commit_contribs=total_object,
         repos_with_commit_contrib=repos_with_commit_contrib,
     )
 
