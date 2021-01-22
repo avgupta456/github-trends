@@ -133,10 +133,10 @@ class CommitContributions(BaseModel):
     """
     BaseModel which accepts:
     - commit_contribs_by_repo: List[CommitContributionsByRepository]
-    - commit_contribs: CommitContributionsByRepository
+    - commit_contribs_count: int
     - repos_with_commit_contrib: int
     """
 
     commit_contribs_by_repo: List[CommitContributionsByRepository]
-    commit_contribs: CommitContributionsByRepository
+    commit_contribs_count: int
     repos_with_commit_contrib: int

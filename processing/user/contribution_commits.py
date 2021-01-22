@@ -2,10 +2,10 @@ import math
 from typing import List
 
 from external.github_api.graphql.user import (
-    get_user_commit_contributions_by_repository as run_query,
+    get_user_contribution_commits as run_query,
 )
 from models.misc.date import Date, today
-from models.user.commit_contributions_by_repository import (
+from models.user.contribution_commits import (
     CommitContribution,
     CommitContributionsByRepository,
     CommitContributions,
