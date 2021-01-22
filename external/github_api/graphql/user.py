@@ -8,6 +8,9 @@ from models.user.commit_contributions_by_repository import (
 from models.user.contribution_calendar import (
     APIResponse as UserContributionCalendarAPIResponse,
 )
+from models.user.contribution_stats import (
+    APIResponse as UserContributionStatsAPIResponse,
+)
 
 
 def get_user(user_id: str) -> Dict[str, Any]:
@@ -247,6 +250,113 @@ def get_user_contribution_calendar(user_id: str) -> UserContributionCalendarAPIR
     try:
         output_dict = get_template(query)["data"]["user"]["contributionsCollection"]
         return UserContributionCalendarAPIResponse.parse_obj(output_dict)
+    except Exception as e:
+        logging.exception(e)
+        raise e
+
+
+def get_user_contribution_stats(
+    user_id: str,
+    max_repos: int = 100,
+    first: int = 100,
+    after: str = "",
+) -> Any:
+    """Fetches user contribution calendar and contribution years"""
+    query = {
+        "variables": {
+            "login": user_id,
+            "maxRepos": max_repos,
+            "first": first,
+            "after": after,
+        },
+        "query": """
+        query getUser($login: String!, $maxRepos: Int!, $first: Int!, $after: String!) {
+            user(login: $login){
+                contributionsCollection{
+                    issueContributionsByRepository(maxRepositories: $maxRepos){
+                        repository{
+                            name
+                        },
+                        contributions(first: $first, after: $after){
+                            totalCount,
+                            nodes{
+                                occurredAt,
+                                issue{
+                                    state
+                                }
+                            }
+                            pageInfo{
+                                hasNextPage,
+                                endCursor
+                            }
+                        }
+                    }
+                    pullRequestContributionsByRepository(maxRepositories: $maxRepos){
+                        repository{
+                            name
+                        },
+                        contributions(first: $first, after: $after){
+                            totalCount,
+                            nodes{
+                                occurredAt,
+                                pullRequest{
+                                    state,
+                                }
+                            }
+                            pageInfo{
+                                hasNextPage,
+                                endCursor
+                            }
+                        }
+                    }
+                    pullRequestReviewContributionsByRepository(maxRepositories: $maxRepos){
+                        repository{
+                            name
+                        },
+                        contributions(first: $first, after: $after){
+                            totalCount,
+                            nodes{
+                                occurredAt,
+                                pullRequestReview{
+                                    state,
+                                }
+                            }
+                            pageInfo{
+                                hasNextPage,
+                                endCursor
+                            }
+                        }
+                    },
+                    repositoryContributions(first: $first, after: $after){
+                        totalCount,
+                        nodes{
+                            repository{
+                                name,
+                            }
+                            occurredAt,
+                        }
+                        pageInfo{
+                            hasNextPage,
+                            endCursor
+                        }
+                    },
+                    restrictedContributionsCount,
+                    totalIssueContributions,
+                    totalPullRequestContributions,
+                    totalPullRequestReviewContributions,
+                    totalRepositoryContributions,
+                    totalRepositoriesWithContributedIssues,
+                    totalRepositoriesWithContributedPullRequests,
+                    totalRepositoriesWithContributedPullRequestReviews
+                },
+            }
+        }
+        """,
+    }
+
+    try:
+        output_dict = get_template(query)["data"]["user"]["contributionsCollection"]
+        return UserContributionStatsAPIResponse.parse_obj(output_dict)
     except Exception as e:
         logging.exception(e)
         raise e
