@@ -79,7 +79,13 @@ class APIResponse(BaseModel):
     - data: List[APIResponse_Repo]
     """
 
-    data: List[APIResponse_Repo]
+    commits_by_repo: List[APIResponse_Repo] = Field(
+        alias="commitContributionsByRepository"
+    )
+    commit_contribs_count: int = Field(alias="totalCommitContributions")
+    repos_with_commit_contrib: int = Field(
+        alias="totalRepositoriesWithContributedCommits"
+    )
 
 
 """
@@ -104,7 +110,7 @@ class CommitContribution(BaseModel):
 def create_commit_contribution(x: APIResponse_Repo_Contribs_Node) -> CommitContribution:
     """helper function to create a CommitContribution"""
     return CommitContribution(
-        commit_count=x.commit_count, occured_at=Date(x.occurred_at)
+        commit_count=x.commit_count, occurred_at=Date(x.occurred_at)
     )
 
 
@@ -121,3 +127,16 @@ class CommitContributionsByRepository(BaseModel):
     contributions: int
     contributions_in_range: int
     timeline: List[CommitContribution]
+
+
+class CommitContributions(BaseModel):
+    """
+    BaseModel which accepts:
+    - commit_contribs_by_repo: List[CommitContributionsByRepository]
+    - commit_contribs_count: int
+    - repos_with_commit_contrib: int
+    """
+
+    commit_contribs_by_repo: List[CommitContributionsByRepository]
+    commit_contribs_count: int
+    repos_with_commit_contrib: int

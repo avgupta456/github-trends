@@ -5,7 +5,9 @@ from external.github_api.graphql.template import get_template
 from models.user.commit_contributions_by_repository import (
     APIResponse as UserCommitContributionsByRepositoryAPIResponse,
 )
-from models.user.contribution_calendar import APIResponse as UserContributionCalendar
+from models.user.contribution_calendar import (
+    APIResponse as UserContributionCalendarAPIResponse,
+)
 
 
 def get_user(user_id: str) -> Dict[str, Any]:
@@ -199,6 +201,8 @@ def get_user_commit_contributions_by_repository(
                             }
                         }
                     }
+                    totalCommitContributions,
+                    totalRepositoriesWithContributedCommits,
                 },
             },
         }
@@ -206,16 +210,14 @@ def get_user_commit_contributions_by_repository(
     }
 
     try:
-        output_dict = get_template(query)["data"]["user"]["contributionsCollection"][
-            "commitContributionsByRepository"
-        ]
-        return UserCommitContributionsByRepositoryAPIResponse(data=output_dict)
+        output_dict = get_template(query)["data"]["user"]["contributionsCollection"]
+        return UserCommitContributionsByRepositoryAPIResponse.parse_obj(output_dict)
     except Exception as e:
         logging.exception(e)
         raise e
 
 
-def get_user_contribution_calendar(user_id: str) -> UserContributionCalendar:
+def get_user_contribution_calendar(user_id: str) -> UserContributionCalendarAPIResponse:
     """Fetches user contribution calendar and contribution years"""
     query = {
         "variables": {"login": user_id},
@@ -244,7 +246,7 @@ def get_user_contribution_calendar(user_id: str) -> UserContributionCalendar:
 
     try:
         output_dict = get_template(query)["data"]["user"]["contributionsCollection"]
-        return UserContributionCalendar.parse_obj(output_dict)
+        return UserContributionCalendarAPIResponse.parse_obj(output_dict)
     except Exception as e:
         logging.exception(e)
         raise e
