@@ -1,3 +1,4 @@
+from models.misc.date import Date
 from typing import List, Optional
 
 # from models.misc.date import Date
@@ -130,3 +131,65 @@ class APIResponse(BaseModel):
     repos_with_pr_review_contrib: int = Field(
         alias="totalRepositoriesWithContributedPullRequestReviews"
     )
+
+
+"""
+EXTERNAL
+"""
+
+
+class Contribution(BaseModel):
+    """
+    BaseModel which accepts:
+    - occurred_at: Date
+    """
+
+    occurred_at: Date
+
+    class Config:
+        arbitrary_types_allowed = True
+
+
+class RepoContribStats(BaseModel):
+    """
+    BaseModel which includes:
+    - name: str
+    - issues: List[Contribution]
+    - prs: List[Contribution]
+    - reviews: List[Contribution]
+    - repo: List[Contribution]
+    """
+
+    name: str
+    issues: List[Contribution]
+    prs: List[Contribution]
+    reviews: List[Contribution]
+    repo: List[Contribution]
+
+
+class ContribStats(BaseModel):
+    """
+    BaseModel which accepts:
+    - repos: List[RepoContribStats]
+    - total: RepoContribStats
+    - restricted_contrib_count: int
+    - issue_contribs_count: int
+    - pr_contribs_count: int
+    - pr_review_contribs_count: int
+    - repo_contribs_count: int
+    - repos_with_issue_contrib: int
+    - repos_with_pr_contrib: int
+    - repos_with_pr_review_contrib: int
+    """
+
+    repos: List[RepoContribStats]
+    total: RepoContribStats
+
+    restricted_contrib_count: int
+    issue_contribs_count: int
+    pr_contribs_count: int
+    pr_review_contribs_count: int
+    repo_contribs_count: int
+    repos_with_issue_contrib: int
+    repos_with_pr_contrib: int
+    repos_with_pr_review_contrib: int
