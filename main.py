@@ -6,8 +6,15 @@ from typing import Any, Callable, Dict, List
 from dotenv import load_dotenv
 from external.github_api.graphql.repo import get_repo as _get_repo
 from fastapi import FastAPI, Response, status
+
+"""
 from external.github_api.graphql.user import (
     get_user_contribution_stats as _get_user,
+)
+"""
+
+from processing.user.contribution_commits import (
+    get_user_commit_contributions_by_repository as _get_user,
 )
 
 load_dotenv()
