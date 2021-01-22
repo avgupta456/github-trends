@@ -23,23 +23,23 @@ def get_user_contribution_calendar(
 
     contribution_years = data.contribution_years
     colors = data.contribution_calendar.colors
-    days = list(
-        map(
-            lambda x: ContributionDay.parse_obj(
-                {
-                    "date": Date(x.date),
-                    "weekday": x.weekday,
-                    "contribution_count": x.contribution_count,
-                    "contribution_level": x.contribution_level,
-                }
-            ),
-            [
-                day
-                for week in data.contribution_calendar.weeks
-                for day in week.contribution_days
-            ],
-        )
+    days = map(
+        lambda x: ContributionDay.parse_obj(
+            {
+                "date": Date(x.date),
+                "weekday": x.weekday,
+                "contribution_count": x.contribution_count,
+                "contribution_level": x.contribution_level,
+            }
+        ),
+        [
+            day
+            for week in data.contribution_calendar.weeks
+            for day in week.contribution_days
+        ],
     )
+
+    days = list(filter(lambda x: start_date <= x.date <= end_date, days))
 
     # creates total period (up to 1 year long)
     total = create_contribution_period(days)

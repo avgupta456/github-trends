@@ -21,7 +21,10 @@ def get_template(query: Dict[str, Any]) -> Dict[str, Any]:
     )
     print("GraphQL", datetime.now() - start)
     if r.status_code == 200:
-        return r.json()  # type: ignore
+        data = r.json()  # type: ignore
+        if "errors" in data:
+            raise GraphQlError("GraphQL errors: " + str(data["errors"]))
+        return data
     else:
         raise GraphQlError(
             "Invalid status code "
