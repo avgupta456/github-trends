@@ -12,6 +12,7 @@ from models.user.contribution_calendar import UserContribCalendar as ContribCale
 from models.user.contribution_commits import UserContribCommits as ContribCommits
 from models.user.contribution_stats import UserContribStats as ContribStats
 from models.user.follows import UserFollows as Follows
+from models.misc.date import Date, today
 from models.user.user import UserPackage
 
 
@@ -31,12 +32,17 @@ def async_function(func: Callable[..., Any]) -> Callable[..., Any]:
     return run
 
 
-async def _main(user_id: str) -> UserPackage:
+async def _main(
+    user_id: str,
+    max_repos: int = 100,
+    start_date: Date = today - 365,
+    end_date: Date = today,
+) -> UserPackage:
     output: List[Union[ContribCalendar, ContribCommits, ContribStats, Follows]] = list(
         await asyncio.gather(
-            async_function(get_user_contribution_calendar)(user_id=user_id),  # type: ignore
-            async_function(get_user_contribution_commits)(user_id=user_id),  # type: ignore
-            async_function(get_user_contribution_stats)(user_id=user_id),  # type: ignore
+            async_function(get_user_contribution_calendar)(user_id=user_id, start_date=start_date, end_date=end_date),  # type: ignore
+            async_function(get_user_contribution_commits)(user_id=user_id, max_repos=max_repos, start_date=start_date, end_date=end_date),  # type: ignore
+            async_function(get_user_contribution_stats)(user_id=user_id, max_repos=max_repos, start_date=start_date, end_date=end_date),  # type: ignore
             async_function(get_user_followers)(user_id=user_id),  # type: ignore
         )
     )
@@ -57,5 +63,17 @@ async def _main(user_id: str) -> UserPackage:
     return user_package
 
 
-def main(user_id: str) -> UserPackage:
-    return asyncio.run(_main(user_id=user_id))
+def main(
+    user_id: str,
+    max_repos: int = 100,
+    start_date: Date = today - 365,
+    end_date: Date = today,
+) -> UserPackage:
+    return asyncio.run(
+        _main(
+            user_id=user_id,
+            max_repos=max_repos,
+            start_date=start_date,
+            end_date=end_date,
+        )
+    )
