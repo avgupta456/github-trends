@@ -11,10 +11,10 @@ class TestTemplate(unittest.TestCase):
         self.assertIsInstance(response, UserContribStats)
 
         response = get_user_contribution_stats(user_id="avgupta456", max_repos=1)
-        self.assertLessEqual(len(response.repos), 1)
+        self.assertLessEqual(len(response.contribs_by_repo), 1)
 
         start = today - 100
         response = get_user_contribution_stats(user_id="avgupta456", start_date=start)
-        date = response.total.issues[0].occurred_at
+        date = response.contribs.issues[0].occurred_at
         self.assertGreaterEqual(date - start, 0)
         self.assertGreaterEqual(today - date, 0)

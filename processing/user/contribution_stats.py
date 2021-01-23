@@ -9,6 +9,7 @@ from models.misc.date import Date, today
 from models.user.contribution_stats import (
     APIResponse_ContribsByRepo,
     Contribution,
+    ContributionTimeline,
     RepoContribStats,
     UserContribStats,
 )
@@ -22,10 +23,10 @@ def get_user_contribution_stats(
 ) -> UserContribStats:
     """Gets the daily contribution history for a users top x repositories"""
     repo_names = set()
-    repo_contribs: DefaultDict[str, Dict[str, List[Contribution]]] = defaultdict(
+    raw_repo_contribs: DefaultDict[str, Dict[str, List[Contribution]]] = defaultdict(
         lambda: {"issues": [], "prs": [], "reviews": [], "repo": []}
     )
-    total_contribs: Dict[str, List[Contribution]] = {
+    raw_total_contribs: Dict[str, List[Contribution]] = {
         "issues": [],
         "prs": [],
         "reviews": [],
@@ -80,30 +81,58 @@ def get_user_contribution_stats(
                 repo_name = repo.repository.name
                 for event in repo.contributions.nodes:
                     contrib = Contribution(occurred_at=Date(event.occurred_at))
-                    repo_contribs[repo_name][category].append(contrib)
-                    total_contribs[category].append(contrib)
+                    raw_repo_contribs[repo_name][category].append(contrib)
+                    raw_total_contribs[category].append(contrib)
                 if repo.contributions.page_info.has_next_page:
                     after = repo.contributions.page_info.end_cursor
                     cont = True
 
         for repo in data.repo_contribs.nodes:
             contrib = Contribution(occurred_at=Date(repo.occurred_at))
-            repo_contribs[repo.repository.name]["repo"].append(contrib)
-            total_contribs["repo"].append(contrib)
+            raw_repo_contribs[repo.repository.name]["repo"].append(contrib)
+            raw_total_contribs["repo"].append(contrib)
 
         index += 1
 
-    date_filter: Callable[[Contribution], bool] = (
+    repo_contribs: DefaultDict[
+        str, Dict[str, Dict[int, ContributionTimeline]]
+    ] = defaultdict(lambda: {"issues": {}, "prs": {}, "reviews": {}, "repo": {}})
+    for name, repo in raw_repo_contribs.items():
+        for type, event_list in repo.items():
+            for event in event_list:
+                key = today - event.occurred_at
+                if key not in repo_contribs[name][type]:
+                    repo_contribs[name][type][key] = ContributionTimeline(
+                        occurred_at=event.occurred_at, count=0
+                    )
+                repo_contribs[name][type][key].count += 1
+
+    total_contribs: Dict[str, Dict[int, ContributionTimeline]] = {
+        "issues": {},
+        "prs": {},
+        "reviews": {},
+        "repo": {},
+    }
+    for type, event_list in raw_total_contribs.items():
+        for event in event_list:
+            key = today - event.occurred_at
+            if key not in total_contribs[type]:
+                total_contribs[type][key] = ContributionTimeline(
+                    occurred_at=event.occurred_at, count=0
+                )
+            total_contribs[type][key].count += 1
+
+    date_filter: Callable[[ContributionTimeline], bool] = (
         lambda x: start_date <= x.occurred_at <= end_date
     )
 
     repo_contrib_objs: List[RepoContribStats] = [
         RepoContribStats(
             name=k,
-            issues=list(filter(date_filter, v["issues"])),
-            prs=list(filter(date_filter, v["prs"])),
-            reviews=list(filter(date_filter, v["reviews"])),
-            repo=list(filter(date_filter, v["repo"])),
+            issues=list(filter(date_filter, v["issues"].values())),
+            prs=list(filter(date_filter, v["prs"].values())),
+            reviews=list(filter(date_filter, v["reviews"].values())),
+            repo=list(filter(date_filter, v["repo"].values())),
         )
         for k, v in repo_contribs.items()
     ]
@@ -117,15 +146,15 @@ def get_user_contribution_stats(
 
     total_contrib_obj: RepoContribStats = RepoContribStats(
         name="total",
-        issues=list(filter(date_filter, total_contribs["issues"])),
-        prs=list(filter(date_filter, total_contribs["prs"])),
-        reviews=list(filter(date_filter, total_contribs["reviews"])),
-        repo=list(filter(date_filter, total_contribs["repo"])),
+        issues=list(filter(date_filter, total_contribs["issues"].values())),
+        prs=list(filter(date_filter, total_contribs["prs"].values())),
+        reviews=list(filter(date_filter, total_contribs["reviews"].values())),
+        repo=list(filter(date_filter, total_contribs["repo"].values())),
     )
 
     output: UserContribStats = UserContribStats(
-        total=total_contrib_obj,
-        repos=repo_contrib_objs,
+        contribs=total_contrib_obj,
+        contribs_by_repo=repo_contrib_objs,
         restricted_contrib_count=restricted_contrib_count,
         issue_contribs_count=issue_contribs_count,
         pr_contribs_count=pr_contribs_count,

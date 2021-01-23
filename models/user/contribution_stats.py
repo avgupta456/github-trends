@@ -148,6 +148,20 @@ class Contribution(BaseModel):
         arbitrary_types_allowed = True
 
 
+class ContributionTimeline(BaseModel):
+    """
+    BaseModel which accepts:
+    - occurred_at: Date
+    - count: int
+    """
+
+    occurred_at: Date
+    count: int
+
+    class Config:
+        arbitrary_types_allowed = True
+
+
 class RepoContribStats(BaseModel):
     """
     BaseModel which includes:
@@ -159,17 +173,17 @@ class RepoContribStats(BaseModel):
     """
 
     name: str
-    issues: List[Contribution]
-    prs: List[Contribution]
-    reviews: List[Contribution]
-    repo: List[Contribution]
+    issues: List[ContributionTimeline]
+    prs: List[ContributionTimeline]
+    reviews: List[ContributionTimeline]
+    repo: List[ContributionTimeline]
 
 
 class UserContribStats(BaseModel):
     """
     BaseModel which accepts:
-    - repos: List[RepoContribStats]
-    - total: RepoContribStats
+    - contribs_by_repo: List[RepoContribStats]
+    - contribs: RepoContribStats
     - restricted_contrib_count: int
     - issue_contribs_count: int
     - pr_contribs_count: int
@@ -180,8 +194,8 @@ class UserContribStats(BaseModel):
     - repos_with_pr_review_contrib: int
     """
 
-    repos: List[RepoContribStats]
-    total: RepoContribStats
+    contribs_by_repo: List[RepoContribStats]
+    contribs: RepoContribStats
 
     restricted_contrib_count: int
     issue_contribs_count: int
