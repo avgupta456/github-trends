@@ -46,11 +46,8 @@ def get_user_contribution_stats(
     after: Optional[str] = ""
     index, cont = 0, True  # initialize variables
     while cont and index < 10:
-        try:
-            after_str: str = after if isinstance(after, str) else ""
-            data = run_query(user_id, max_repos, after=after_str)
-        except Exception as e:
-            raise e
+        after_str: str = after if isinstance(after, str) else ""
+        data = run_query(user_id, max_repos, after=after_str)
 
         restricted_contrib_count = data.restricted_contrib_count
         issue_contribs_count = data.issue_contribs_count

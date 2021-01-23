@@ -1,4 +1,3 @@
-import logging
 from typing import Dict, Union
 
 from external.github_api.graphql.template import get_template
@@ -60,12 +59,8 @@ def get_user_contribution_commits(
         """,
     }
 
-    try:
-        output_dict = get_template(query)["data"]["user"]["contributionsCollection"]
-        return UserContributionCommitsAPIResponse.parse_obj(output_dict)
-    except Exception as e:
-        logging.exception(e)
-        raise e
+    output_dict = get_template(query)["data"]["user"]["contributionsCollection"]
+    return UserContributionCommitsAPIResponse.parse_obj(output_dict)
 
 
 def get_user_contribution_calendar(user_id: str) -> UserContributionCalendarAPIResponse:
@@ -95,12 +90,8 @@ def get_user_contribution_calendar(user_id: str) -> UserContributionCalendarAPIR
         """,
     }
 
-    try:
-        output_dict = get_template(query)["data"]["user"]["contributionsCollection"]
-        return UserContributionCalendarAPIResponse.parse_obj(output_dict)
-    except Exception as e:
-        logging.exception(e)
-        raise e
+    output_dict = get_template(query)["data"]["user"]["contributionsCollection"]
+    return UserContributionCalendarAPIResponse.parse_obj(output_dict)
 
 
 def get_user_contribution_stats(
@@ -198,12 +189,8 @@ def get_user_contribution_stats(
         """,
     }
 
-    try:
-        output_dict = get_template(query)["data"]["user"]["contributionsCollection"]
-        return UserContributionStatsAPIResponse.parse_obj(output_dict)
-    except Exception as e:
-        logging.exception(e)
-        raise e
+    output_dict = get_template(query)["data"]["user"]["contributionsCollection"]
+    return UserContributionStatsAPIResponse.parse_obj(output_dict)
 
 
 def get_user_followers(
@@ -260,12 +247,8 @@ def get_user_followers(
         "query": query_str,
     }
 
-    try:
-        output_dict = get_template(query)["data"]["user"]["followers"]
-        return UserFollowAPIResponse.parse_obj(output_dict)
-    except Exception as e:
-        logging.exception(e)
-        raise e
+    output_dict = get_template(query)["data"]["user"]["followers"]
+    return UserFollowAPIResponse.parse_obj(output_dict)
 
 
 def get_user_following(
@@ -322,9 +305,5 @@ def get_user_following(
         "query": query_str,
     }
 
-    try:
-        output_dict = get_template(query)["data"]["user"]["following"]
-        return UserFollowAPIResponse.parse_obj(output_dict)
-    except Exception as e:
-        logging.exception(e)
-        raise e
+    output_dict = get_template(query)["data"]["user"]["following"]
+    return UserFollowAPIResponse.parse_obj(output_dict)

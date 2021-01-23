@@ -16,10 +16,7 @@ def get_user_contribution_calendar(
     if today - start_date > 365:
         raise AssertionError("start_date can only be within past 1 year")
 
-    try:
-        data = run_query(user_id)
-    except Exception as e:
-        raise e
+    data = run_query(user_id)
 
     contribution_years = data.contribution_years
     colors = data.contribution_calendar.colors

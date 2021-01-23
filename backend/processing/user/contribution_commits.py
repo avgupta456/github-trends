@@ -27,11 +27,8 @@ def get_user_contribution_commits(
     after: Optional[str] = ""
     index, cont = 0, True  # initialize variables
     while cont and index < segments:
-        try:
-            after_str = after if isinstance(after, str) else ""
-            data = run_query(user_id, max_repos, after=after_str)
-        except Exception as e:
-            raise e
+        after_str = after if isinstance(after, str) else ""
+        data = run_query(user_id, max_repos, after=after_str)
 
         commit_contribs_count = data.commit_contribs_count
         repos_with_commit_contrib = data.repos_with_commit_contrib
