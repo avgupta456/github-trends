@@ -110,7 +110,7 @@ class ContributionPeriod(BaseModel):
 def create_contribution_period(days: List[ContributionDay]) -> ContributionPeriod:
     num_days = len(days)
     total_contributions = sum([day.contribution_count for day in days])
-    avg_contributions = total_contributions / num_days
+    avg_contributions = total_contributions / max(num_days, 1)
     return ContributionPeriod(
         total_contributions=total_contributions,
         avg_contributions=avg_contributions,
