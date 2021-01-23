@@ -90,9 +90,6 @@ def get_user_contribution_stats(
             contrib = Contribution(occurred_at=Date(repo.occurred_at))
             repo_contribs[repo.repository.name]["repo"].append(contrib)
             total_contribs["repo"].append(contrib)
-        if data.repo_contribs.page_info.has_next_page:
-            after = data.repo_contribs.page_info.end_cursor
-            cont = True
 
         index += 1
 
@@ -110,6 +107,13 @@ def get_user_contribution_stats(
         )
         for k, v in repo_contribs.items()
     ]
+
+    # can get more than max_repos outputs if issues/prs/reviews come from different repos
+    repo_contrib_objs = sorted(
+        repo_contrib_objs,
+        key=lambda x: len(x.issues) + len(x.prs) + len(x.reviews) + len(x.repo),
+        reverse=True,
+    )[:max_repos]
 
     total_contrib_obj: RepoContribStats = RepoContribStats(
         name="total",

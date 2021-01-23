@@ -175,17 +175,13 @@ def get_user_contribution_stats(
                             }
                         }
                     },
-                    repositoryContributions(first: $first, after: $after){
+                    repositoryContributions(first: $maxRepos){
                         totalCount,
                         nodes{
                             repository{
                                 name,
                             }
                             occurredAt,
-                        }
-                        pageInfo{
-                            hasNextPage,
-                            endCursor
                         }
                     },
                     restrictedContributionsCount,

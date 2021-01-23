@@ -82,12 +82,10 @@ class APIResponse_RepoContribs(BaseModel):
     BaseModel which accepts:
     - totalCount: int
     - nodes: List[APIResponse_RepoContribs_Contrib]
-    - pageInfo: APIResponse_PageInfo
     """
 
     total_count: int = Field(alias="totalCount")
     nodes: List[APIResponse_RepoContribs_Contrib]
-    page_info: APIResponse_PageInfo = Field(alias="pageInfo")
 
 
 class APIResponse(BaseModel):
