@@ -4,10 +4,10 @@ from external.github_api.graphql.user import (
     get_user_followers as _get_user_followers,
     get_user_following as _get_user_following,
 )
-from models.user.followers import User, UserFollowers
+from models.user.follows import User, UserFollows
 
 
-def get_user_followers(user_id: str) -> UserFollowers:
+def get_user_followers(user_id: str) -> UserFollows:
     """get user followers and users following for given user"""
 
     followers: List[User] = []
@@ -39,5 +39,5 @@ def get_user_followers(user_id: str) -> UserFollowers:
 
             index += 1
 
-    output = UserFollowers(followers=followers, following=following)
+    output = UserFollows(followers=followers, following=following)
     return output

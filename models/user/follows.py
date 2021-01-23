@@ -70,7 +70,7 @@ class User(BaseModel):
         allow_none = True
 
 
-class UserFollowers(BaseModel):
+class UserFollows(BaseModel):
     """
     BaseModel which accepts:
     - followers: List[User]
