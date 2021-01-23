@@ -13,8 +13,8 @@ from external.github_api.graphql.user import (
 )
 """
 
-from processing.user.contribution_stats import (
-    get_user_contribution_stats as _get_user,
+from processing.user.followers import (
+    get_user_followers as _get_user,
 )
 
 load_dotenv()
