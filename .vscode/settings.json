@@ -4,11 +4,11 @@
     "python.linting.enabled": true,
     "python.analysis.typeCheckingMode": "strict",
     "python.analysis.diagnosticMode": "workspace",
-    "python.pythonPath": ".venv\\Scripts\\python.exe",
+    "python.analysis.extraPaths": ["backend"],
+    "python.pythonPath": "backend\\.venv\\Scripts\\python.exe",
 
     "files.exclude": {
         "**/.git": true,
         "**/__pycache__": true,
-        "**/.venv": true,
     }
 }

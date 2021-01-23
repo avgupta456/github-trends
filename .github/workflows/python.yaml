@@ -19,14 +19,18 @@ jobs:
         python-version: 3.7
     - name: Install dependencies
       run: |
+        cd backend
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Test with unittest
-      run: python -m unittest
+      run: |
+        cd backend
+        python -m unittest
       env:
         AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
     - name: Upload coverage to Coveralls
       run: |
+          cd backend
           coverage run -m unittest
           coveralls
       env:

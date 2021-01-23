@@ -1,7 +1,7 @@
 *.pyc
 __pycache__
 
-.env
-.venv
-poetry.lock
-.coverage
+backend/.env
+backend/.venv
+backend/poetry.lock
+backend/.coverage
