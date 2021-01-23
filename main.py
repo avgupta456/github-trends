@@ -7,9 +7,7 @@ from dotenv import load_dotenv
 from external.github_api.graphql.repo import get_repo as _get_repo
 from fastapi import FastAPI, Response, status
 
-from packaging.user import (
-    main as _get_user,
-)
+from endpoints.user import get_user as _get_user
 
 load_dotenv()
 
