@@ -44,10 +44,18 @@ def get_user_contribution_calendar(
     # creates total period (up to 1 year long)
     total = create_contribution_period(days)
 
-    # creates months (0 is January, 11 is December)
-    months = [[] for _ in range(12)]
+    # creates months (0 is first month, up to present)
+    start_year, start_month = start_date.year(), start_date.month()
+    year_diff = end_date.year() - start_year
+    month_diff = end_date.month() - start_month
+    num_months = year_diff * 12 + month_diff + 1
+    months = [[] for _ in range(num_months)]
     for day in days:
-        months[day.date.month() - 1].append(day)
+        date = day.date
+        year_diff = date.year() - start_year
+        month_diff = date.month() - start_month
+        index = year_diff * 12 + month_diff
+        months[index].append(day)
 
     months = list(map(lambda x: create_contribution_period(x), months))
 

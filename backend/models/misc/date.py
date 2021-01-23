@@ -65,3 +65,6 @@ class Date:
 
 
 today = Date(datetime.now())
+date_2019 = Date("2019-01-01")
+date_2020 = Date("2020-01-01")
+date_2021 = Date("2021-01-01")
