@@ -10,7 +10,7 @@ from models.user.contribution_stats import (
     APIResponse_ContribsByRepo,
     Contribution,
     RepoContribStats,
-    ContribStats,
+    UserContribStats,
 )
 
 
@@ -19,7 +19,7 @@ def get_user_contribution_stats(
     max_repos: int = 100,
     start_date: Date = today - 365,
     end_date: Date = today,
-) -> ContribStats:
+) -> UserContribStats:
     """Gets the daily contribution history for a users top x repositories"""
     repo_names = set()
     repo_contribs: DefaultDict[str, Dict[str, List[Contribution]]] = defaultdict(
@@ -123,7 +123,7 @@ def get_user_contribution_stats(
         repo=list(filter(date_filter, total_contribs["repo"])),
     )
 
-    output: ContribStats = ContribStats(
+    output: UserContribStats = UserContribStats(
         total=total_contrib_obj,
         repos=repo_contrib_objs,
         restricted_contrib_count=restricted_contrib_count,

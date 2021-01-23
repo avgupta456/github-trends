@@ -1,7 +1,7 @@
 from external.github_api.graphql.user import get_user_contribution_calendar as run_query
 from models.misc.date import Date, today
 from models.user.contribution_calendar import (
-    ContributionCalendar,
+    UserContribCalendar,
     ContributionDay,
     create_contribution_period,
 )
@@ -11,7 +11,7 @@ def get_user_contribution_calendar(
     user_id: str,
     start_date: Date = today - 365,
     end_date: Date = today,
-) -> ContributionCalendar:
+) -> UserContribCalendar:
     """get user contributions for the past year"""
     if today - start_date > 365:
         raise AssertionError("start_date can only be within past 1 year")
@@ -59,7 +59,7 @@ def get_user_contribution_calendar(
     weekdays = list(map(lambda x: create_contribution_period(x), weekdays))
 
     # create final output
-    calendar = ContributionCalendar(
+    calendar = UserContribCalendar(
         contribution_years=contribution_years,
         colors=colors,
         total=total,

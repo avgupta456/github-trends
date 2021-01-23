@@ -9,7 +9,7 @@ from models.user.contribution_commits import (
 from models.user.contribution_stats import (
     APIResponse as UserContributionStatsAPIResponse,
 )
-from models.user.followers import APIResponse as UserFollowAPIResponse
+from models.user.follows import APIResponse as UserFollowAPIResponse
 from external.github_api.graphql.user import (
     get_user_contribution_calendar,
     get_user_contribution_commits,

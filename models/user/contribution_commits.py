@@ -132,7 +132,7 @@ class CommitContributionsByRepository(BaseModel):
     timeline: List[CommitContribution]
 
 
-class CommitContributions(BaseModel):
+class UserContribCommits(BaseModel):
     """
     BaseModel which accepts:
     - commit_contribs_by_repo: List[CommitContributionsByRepository]

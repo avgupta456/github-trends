@@ -11,7 +11,7 @@ from models.user.contribution_calendar import (
 from models.user.contribution_stats import (
     APIResponse as UserContributionStatsAPIResponse,
 )
-from models.user.followers import (
+from models.user.follows import (
     APIResponse as UserFollowAPIResponse,
 )
 

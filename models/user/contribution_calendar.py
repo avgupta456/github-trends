@@ -119,7 +119,7 @@ def create_contribution_period(days: List[ContributionDay]) -> ContributionPerio
     )
 
 
-class ContributionCalendar(BaseModel):
+class UserContribCalendar(BaseModel):
     """
     BaseModel which accepts:
     - total_contributions: int

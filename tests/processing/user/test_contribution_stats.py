@@ -1,17 +1,16 @@
 import unittest
 
 from models.misc.date import today
-from models.user.contribution_stats import ContribStats
+from models.user.contribution_stats import UserContribStats
 from processing.user.contribution_stats import get_user_contribution_stats
 
 
 class TestTemplate(unittest.TestCase):
     def test_get_user_contribution_stats(self):
         response = get_user_contribution_stats(user_id="avgupta456")
-        self.assertIsInstance(response, ContribStats)
+        self.assertIsInstance(response, UserContribStats)
 
         response = get_user_contribution_stats(user_id="avgupta456", max_repos=1)
-        print(response.repos)
         self.assertLessEqual(len(response.repos), 1)
 
         start = today - 100

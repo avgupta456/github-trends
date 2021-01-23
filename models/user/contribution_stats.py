@@ -165,7 +165,7 @@ class RepoContribStats(BaseModel):
     repo: List[Contribution]
 
 
-class ContribStats(BaseModel):
+class UserContribStats(BaseModel):
     """
     BaseModel which accepts:
     - repos: List[RepoContribStats]

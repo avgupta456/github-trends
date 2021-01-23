@@ -8,7 +8,7 @@ from models.misc.date import Date, today
 from models.user.contribution_commits import (
     CommitContribution,
     CommitContributionsByRepository,
-    CommitContributions,
+    UserContribCommits,
     create_commit_contribution,
 )
 
@@ -18,7 +18,7 @@ def get_user_contribution_commits(
     max_repos: int = 100,
     start_date: Date = today - 365,
     end_date: Date = today,
-) -> CommitContributions:
+) -> UserContribCommits:
     """Gets the daily commit history for a users top x repositories"""
     time_range = today - start_date  # gets number of days to end date
     segments = min(math.ceil(time_range / 100), 10)  # no more than three years
@@ -93,7 +93,7 @@ def get_user_contribution_commits(
         timeline=timeline_object,
     )
 
-    output = CommitContributions(
+    output = UserContribCommits(
         commit_contribs_by_repo=list(repo_objects),
         commit_contribs=total_object,
         repos_with_commit_contrib=repos_with_commit_contrib,

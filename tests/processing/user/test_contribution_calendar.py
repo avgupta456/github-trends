@@ -1,14 +1,14 @@
 import unittest
 
 from models.misc.date import today
-from models.user.contribution_calendar import ContributionCalendar
+from models.user.contribution_calendar import UserContribCalendar
 from processing.user.contribution_calendar import get_user_contribution_calendar
 
 
 class TestTemplate(unittest.TestCase):
     def test_get_user_contribution_calendar(self):
         response = get_user_contribution_calendar(user_id="avgupta456")
-        self.assertIsInstance(response, ContributionCalendar)
+        self.assertIsInstance(response, UserContribCalendar)
 
         start = today - 100
         response = get_user_contribution_calendar(
