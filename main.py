@@ -7,12 +7,6 @@ from dotenv import load_dotenv
 from external.github_api.graphql.repo import get_repo as _get_repo
 from fastapi import FastAPI, Response, status
 
-"""
-from external.github_api.graphql.user import (
-    get_user_contribution_stats as _get_user,
-)
-"""
-
 from processing.user.followers import (
     get_user_followers as _get_user,
 )
