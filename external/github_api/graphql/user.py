@@ -1,4 +1,5 @@
 import logging
+from typing import Dict, Union
 
 from external.github_api.graphql.template import get_template
 from models.user.contribution_commits import (
@@ -9,6 +10,9 @@ from models.user.contribution_calendar import (
 )
 from models.user.contribution_stats import (
     APIResponse as UserContributionStatsAPIResponse,
+)
+from models.user.followers import (
+    APIResponse as UserFollowAPIResponse,
 )
 
 
@@ -201,6 +205,130 @@ def get_user_contribution_stats(
     try:
         output_dict = get_template(query)["data"]["user"]["contributionsCollection"]
         return UserContributionStatsAPIResponse.parse_obj(output_dict)
+    except Exception as e:
+        logging.exception(e)
+        raise e
+
+
+def get_user_followers(
+    user_id: str, first: int = 100, after: str = ""
+) -> UserFollowAPIResponse:
+    """gets user's followers and users following'"""
+
+    variables: Dict[str, Union[str, int]] = (
+        {"login": user_id, "first": first, "after": after}
+        if after != ""
+        else {"login": user_id, "first": first}
+    )
+
+    query_str: str = (
+        """
+        query getUser($login: String!, $first: Int!, $after: String!) {
+            user(login: $login){
+                followers(first: $first, after: $after){
+                    nodes{
+                        name,
+                        login,
+                        url
+                    }
+                    pageInfo{
+                        hasNextPage,
+                        endCursor
+                    }
+                }
+            }
+        }
+    """
+        if after != ""
+        else """
+        query getUser($login: String!, $first: Int!) {
+            user(login: $login){
+                followers(first: $first){
+                    nodes{
+                        name,
+                        login,
+                        url
+                    }
+                    pageInfo{
+                        hasNextPage,
+                        endCursor
+                    }
+                }
+            }
+        }
+    """
+    )
+
+    query = {
+        "variables": variables,
+        "query": query_str,
+    }
+
+    try:
+        output_dict = get_template(query)["data"]["user"]["followers"]
+        return UserFollowAPIResponse.parse_obj(output_dict)
+    except Exception as e:
+        logging.exception(e)
+        raise e
+
+
+def get_user_following(
+    user_id: str, first: int = 10, after: str = ""
+) -> UserFollowAPIResponse:
+    """gets user's followers and users following'"""
+
+    variables: Dict[str, Union[str, int]] = (
+        {"login": user_id, "first": first, "after": after}
+        if after != ""
+        else {"login": user_id, "first": first}
+    )
+
+    query_str: str = (
+        """
+        query getUser($login: String!, $first: Int!, $after: String!) {
+            user(login: $login){
+                following(first: $first, after: $after){
+                    nodes{
+                        name,
+                        login,
+                        url
+                    }
+                    pageInfo{
+                        hasNextPage,
+                        endCursor
+                    }
+                }
+            }
+        }
+    """
+        if after != ""
+        else """
+        query getUser($login: String!, $first: Int!) {
+            user(login: $login){
+                following(first: $first){
+                    nodes{
+                        name,
+                        login,
+                        url
+                    }
+                    pageInfo{
+                        hasNextPage,
+                        endCursor
+                    }
+                }
+            }
+        }
+    """
+    )
+
+    query = {
+        "variables": variables,
+        "query": query_str,
+    }
+
+    try:
+        output_dict = get_template(query)["data"]["user"]["following"]
+        return UserFollowAPIResponse.parse_obj(output_dict)
     except Exception as e:
         logging.exception(e)
         raise e
