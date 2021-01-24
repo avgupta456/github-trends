@@ -7,7 +7,7 @@ from external.github_api.graphql.user import (
 from models.user.follows import User, UserFollows
 
 
-def get_user_followers(user_id: str) -> UserFollows:
+def get_user_follows(user_id: str) -> UserFollows:
     """get user followers and users following for given user"""
 
     followers: List[User] = []

@@ -1,4 +1,3 @@
-from typing import List
 import unittest
 
 from models.user.contribs import RawCalendar, RawEvents
@@ -17,7 +16,7 @@ class TestTemplate(unittest.TestCase):
         response = get_user_contribution_years(user_id="avgupta456")
 
         # aside from validating APIResponse class, pydantic will validate tree
-        self.assertIsInstance(response, List[int])
+        self.assertIsInstance(response, list)
 
     def test_get_user_contribution_calendar(self):
         response = get_user_contribution_calendar(user_id="avgupta456")
