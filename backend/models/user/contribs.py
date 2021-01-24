@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -90,3 +90,35 @@ class RawEvents(BaseModel):
         alias="pullRequestReviewContributionsByRepository"
     )
     repo_contribs: RawEventsRepoContribs = Field(alias="repositoryContributions")
+
+
+class ContributionStats(BaseModel):
+    contribs_count: int
+    commits_count: int
+    issues_count: int
+    prs_count: int
+    reviews_count: int
+    repos_count: int
+    other_count: int
+
+
+class ContributionLists(BaseModel):
+    commits: List[datetime]
+    issues: List[datetime]
+    prs: List[datetime]
+    reviews: List[datetime]
+    repos: List[datetime]
+
+
+class ContributionDay(BaseModel):
+    date: date
+    weekday: int
+    stats: ContributionStats
+    lists: ContributionLists
+
+
+class UserContributions(BaseModel):
+    total_stats: ContributionStats
+    total: List[ContributionDay]
+    repo_stats: Dict[str, ContributionStats]
+    repos: Dict[str, List[ContributionDay]]
