@@ -1,39 +1,99 @@
-import logging
-from typing import Dict, Union
+# import json
+from typing import Dict, List, Union
+from datetime import date, timedelta
 
 from external.github_api.graphql.template import get_template
-from models.user.contribution_commits import (
-    APIResponse as UserContributionCommitsAPIResponse,
-)
-from models.user.contribution_calendar import (
-    APIResponse as UserContributionCalendarAPIResponse,
-)
-from models.user.contribution_stats import (
-    APIResponse as UserContributionStatsAPIResponse,
-)
-from models.user.follows import (
-    APIResponse as UserFollowAPIResponse,
-)
+
+from models.user.contribs import RawCalendar, RawEvents
+from models.user.follows import RawFollows
 
 
-def get_user_contribution_commits(
+def get_user_contribution_years(user_id: str) -> List[int]:
+    """Gets years where the user had activity"""
+    query = {
+        "variables": {"login": user_id},
+        "query": """
+        query getUser($login: String!) {
+            user(login: $login){
+                contributionsCollection{
+                    contributionYears
+                }
+            }
+        }
+        """,
+    }
+
+    years = get_template(query)["data"]["user"]["contributionsCollection"][
+        "contributionYears"
+    ]
+
+    return years
+
+
+def get_user_contribution_calendar(
     user_id: str,
-    max_repos: int = 100,
-    first: int = 100,
-    after: str = "",
-) -> UserContributionCommitsAPIResponse:
-    """Runs an individual query, fetching at most 100 days of history"""
+    start_date: date = date.today() - timedelta(days=365),
+    end_date: date = date.today(),
+) -> RawCalendar:
+    """Gets contribution calendar for a given time period (max one year)"""
+    if (end_date - start_date).days > 365:
+        raise ValueError("date range can be at most 1 year")
     query = {
         "variables": {
             "login": user_id,
+            "startDate": str(start_date) + "T00:00:00.000Z",
+            "endDate": str(end_date) + "T00:00:00.000Z",
+        },
+        "query": """
+        query getUser($login: String!, $startDate: DateTime!, $endDate: DateTime!){
+            user(login: $login){
+                contributionsCollection(from: $startDate, to: $endDate){
+                    contributionCalendar{
+                        weeks{
+                            contributionDays{
+                                date
+                                weekday
+                                contributionCount
+                            }
+                        }
+                        totalContributions
+                    }
+                }
+            }
+        }
+        """,
+    }
+
+    output = get_template(query)["data"]["user"]["contributionsCollection"][
+        "contributionCalendar"
+    ]
+    return RawCalendar.parse_obj(output)
+
+
+def get_user_contribution_events(
+    user_id: str,
+    start_date: date = date.today() - timedelta(365),
+    end_date: date = date.today(),
+    max_repos: int = 100,
+    first: int = 100,
+    after: str = "",
+) -> RawEvents:
+    """Fetches user contributions (commits, issues, prs, reviews)"""
+    if (end_date - start_date).days > 365:
+        raise ValueError("date range can be at most 1 year")
+    query = {
+        "variables": {
+            "login": user_id,
+            "startDate": str(start_date) + "T00:00:00.000Z",
+            "endDate": str(end_date) + "T00:00:00.000Z",
             "maxRepos": max_repos,
             "first": first,
             "after": after,
         },
         "query": """
-        query getUser($login: String!, $maxRepos: Int!, $first: Int!, $after: String!) {
+        query getUser($login: String!, $startDate: DateTime!, $endDate: DateTime!, $maxRepos: Int!, $first: Int!, $after: String!) {
             user(login: $login){
-                contributionsCollection{
+                contributionsCollection(from: $startDate, to: $endDate){
                     commitContributionsByRepository(maxRepositories: $maxRepos){
                         repository{
                             name,
@@ -52,86 +112,16 @@ def get_user_contribution_commits(
                             }
                         }
                     }
-                    totalCommitContributions,
-                    totalRepositoriesWithContributedCommits,
-                },
-            },
-        }
-        """,
-    }
-
-    try:
-        output_dict = get_template(query)["data"]["user"]["contributionsCollection"]
-        return UserContributionCommitsAPIResponse.parse_obj(output_dict)
-    except Exception as e:
-        logging.exception(e)
-        raise e
-
-
-def get_user_contribution_calendar(user_id: str) -> UserContributionCalendarAPIResponse:
-    """Fetches user contribution calendar and contribution years"""
-    query = {
-        "variables": {"login": user_id},
-        "query": """
-        query getUser($login: String!) {
-            user(login: $login){
-                contributionsCollection{
-                    contributionCalendar{
-                        totalContributions,
-                        weeks{
-                            contributionDays{
-                                date,
-                                weekday,
-                                contributionCount,
-                                contributionLevel,
-                            }
-                        }
-                        colors,
-                    }
-                    contributionYears,
-                }
-            },
-        }
-        """,
-    }
-
-    try:
-        output_dict = get_template(query)["data"]["user"]["contributionsCollection"]
-        return UserContributionCalendarAPIResponse.parse_obj(output_dict)
-    except Exception as e:
-        logging.exception(e)
-        raise e
-
-
-def get_user_contribution_stats(
-    user_id: str,
-    max_repos: int = 100,
-    first: int = 100,
-    after: str = "",
-) -> UserContributionStatsAPIResponse:
-    """Fetches user contribution calendar and contribution years"""
-    query = {
-        "variables": {
-            "login": user_id,
-            "maxRepos": max_repos,
-            "first": first,
-            "after": after,
-        },
-        "query": """
-        query getUser($login: String!, $maxRepos: Int!, $first: Int!, $after: String!) {
-            user(login: $login){
-                contributionsCollection{
                     issueContributionsByRepository(maxRepositories: $maxRepos){
                         repository{
                             name
                         },
+                        totalCount:contributions(first: 1){
+                            totalCount
+                        }
                         contributions(first: $first, after: $after){
-                            totalCount,
                             nodes{
                                 occurredAt,
-                                issue{
-                                    state
-                                }
                             }
                             pageInfo{
                                 hasNextPage,
@@ -143,13 +133,12 @@ def get_user_contribution_stats(
                         repository{
                             name
                         },
+                        totalCount:contributions(first: 1){
+                            totalCount
+                        }
                         contributions(first: $first, after: $after){
-                            totalCount,
                             nodes{
                                 occurredAt,
-                                pullRequest{
-                                    state,
-                                }
                             }
                             pageInfo{
                                 hasNextPage,
@@ -161,13 +150,12 @@ def get_user_contribution_stats(
                         repository{
                             name
                         },
+                        totalCount:contributions(first: 1){
+                            totalCount
+                        }
                         contributions(first: $first, after: $after){
-                            totalCount,
                             nodes{
                                 occurredAt,
-                                pullRequestReview{
-                                    state,
-                                }
                             }
                             pageInfo{
                                 hasNextPage,
@@ -176,7 +164,7 @@ def get_user_contribution_stats(
                         }
                     },
                     repositoryContributions(first: $maxRepos){
-                        totalCount,
+                        totalCount
                         nodes{
                             repository{
                                 name,
@@ -184,31 +172,18 @@ def get_user_contribution_stats(
                             occurredAt,
                         }
                     },
-                    restrictedContributionsCount,
-                    totalIssueContributions,
-                    totalPullRequestContributions,
-                    totalPullRequestReviewContributions,
-                    totalRepositoryContributions,
-                    totalRepositoriesWithContributedIssues,
-                    totalRepositoriesWithContributedPullRequests,
-                    totalRepositoriesWithContributedPullRequestReviews
                 },
             }
         }
         """,
     }
 
-    try:
-        output_dict = get_template(query)["data"]["user"]["contributionsCollection"]
-        return UserContributionStatsAPIResponse.parse_obj(output_dict)
-    except Exception as e:
-        logging.exception(e)
-        raise e
+    output = get_template(query)["data"]["user"]["contributionsCollection"]
+    # print(json.dumps(output, indent=2))
+    return RawEvents.parse_obj(output)
 
 
-def get_user_followers(
-    user_id: str, first: int = 100, after: str = ""
-) -> UserFollowAPIResponse:
+def get_user_followers(user_id: str, first: int = 100, after: str = "") -> RawFollows:
     """gets user's followers and users following'"""
 
     variables: Dict[str, Union[str, int]] = (
@@ -260,17 +235,11 @@ def get_user_followers(
         "query": query_str,
     }
 
-    try:
-        output_dict = get_template(query)["data"]["user"]["followers"]
-        return UserFollowAPIResponse.parse_obj(output_dict)
-    except Exception as e:
-        logging.exception(e)
-        raise e
+    output_dict = get_template(query)["data"]["user"]["followers"]
+    return RawFollows.parse_obj(output_dict)
 
 
-def get_user_following(
-    user_id: str, first: int = 10, after: str = ""
-) -> UserFollowAPIResponse:
+def get_user_following(user_id: str, first: int = 10, after: str = "") -> RawFollows:
     """gets user's followers and users following'"""
 
     variables: Dict[str, Union[str, int]] = (
@@ -322,9 +291,5 @@ def get_user_following(
         "query": query_str,
     }
 
-    try:
-        output_dict = get_template(query)["data"]["user"]["following"]
-        return UserFollowAPIResponse.parse_obj(output_dict)
-    except Exception as e:
-        logging.exception(e)
-        raise e
+    output_dict = get_template(query)["data"]["user"]["following"]
+    return RawFollows.parse_obj(output_dict)

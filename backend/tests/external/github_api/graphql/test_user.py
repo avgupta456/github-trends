@@ -1,63 +1,43 @@
 import unittest
 
-from models.user.contribution_calendar import (
-    APIResponse as UserContributionCalendarAPIResponse,
-)
-from models.user.contribution_commits import (
-    APIResponse as UserContributionCommitsAPIResponse,
-)
-from models.user.contribution_stats import (
-    APIResponse as UserContributionStatsAPIResponse,
-)
-from models.user.follows import APIResponse as UserFollowAPIResponse
+from models.user.contribs import RawCalendar, RawEvents
+from models.user.follows import RawFollows
 from external.github_api.graphql.user import (
+    get_user_contribution_years,
     get_user_contribution_calendar,
-    get_user_contribution_commits,
-    get_user_contribution_stats,
+    get_user_contribution_events,
     get_user_followers,
     get_user_following,
 )
 
 
 class TestTemplate(unittest.TestCase):
-    def test_get_user_contribution_calendar(self):
-        response = get_user_contribution_calendar(user_id="avgupta456")
+    def test_get_user_contribution_years(self):
+        response = get_user_contribution_years(user_id="avgupta456")
 
         # aside from validating APIResponse class, pydantic will validate tree
-        self.assertIsInstance(response, UserContributionCalendarAPIResponse)
+        self.assertIsInstance(response, list)
 
-    def test_get_user_contribution_commits(self):
-        response = get_user_contribution_commits(user_id="avgupta456")
-        self.assertIsInstance(response, UserContributionCommitsAPIResponse)
+    def test_get_user_contribution_calendar(self):
+        response = get_user_contribution_calendar(user_id="avgupta456")
+        self.assertIsInstance(response, RawCalendar)
 
-        response = get_user_contribution_commits(user_id="avgupta456", max_repos=1)
-        self.assertLessEqual(len(response.commits_by_repo), 1)
+    def test_get_user_contribution_events(self):
+        response = get_user_contribution_events(user_id="avgupta456")
+        self.assertIsInstance(response, RawEvents)
 
-        response = get_user_contribution_commits(user_id="avgupta456", first=1)
-        self.assertLessEqual(len(response.commits_by_repo[0].contributions.nodes), 1)
-
-    def test_get_user_contribution_stats(self):
-        response = get_user_contribution_stats(user_id="avgupta456")
-        self.assertIsInstance(response, UserContributionStatsAPIResponse)
-
-        response = get_user_contribution_stats(user_id="avgupta456", max_repos=1)
-        self.assertLessEqual(len(response.issue_contribs_by_repo), 1)
-
-        response = get_user_contribution_stats(user_id="avgupta456", first=1)
-        self.assertLessEqual(
-            len(response.issue_contribs_by_repo[0].contributions.nodes), 1
-        )
+        # TODO: Add more validation here
 
     def test_get_user_followers(self):
         response = get_user_followers(user_id="avgupta456")
-        self.assertIsInstance(response, UserFollowAPIResponse)
+        self.assertIsInstance(response, RawFollows)
 
         response = get_user_followers(user_id="avgupta456", first=1)
         self.assertLessEqual(len(response.nodes), 1)
 
     def test_get_user_following(self):
         response = get_user_following(user_id="avgupta456")
-        self.assertIsInstance(response, UserFollowAPIResponse)
+        self.assertIsInstance(response, RawFollows)
 
         response = get_user_following(user_id="avgupta456", first=1)
         self.assertLessEqual(len(response.nodes), 1)

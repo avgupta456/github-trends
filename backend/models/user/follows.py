@@ -7,14 +7,7 @@ APIResponse
 """
 
 
-class APIResponse_User(BaseModel):
-    """
-    BaseModel which accepts:
-    - name: Optional[str]
-    - login: str
-    - url: str
-    """
-
+class User(BaseModel):
     name: Optional[str]
     login: str
     url: str
@@ -23,13 +16,7 @@ class APIResponse_User(BaseModel):
         allow_none = True
 
 
-class APIResponse_PageInfo(BaseModel):
-    """
-    BaseModel which accepts:
-    - hasNextPage: bool
-    - endCursor: str
-    """
-
+class PageInfo(BaseModel):
     has_next_page: bool = Field(alias="hasNextPage")
     end_cursor: Optional[str] = Field(alias="endCursor")
 
@@ -37,45 +24,11 @@ class APIResponse_PageInfo(BaseModel):
         allow_none = True
 
 
-class APIResponse(BaseModel):
-    """
-    BaseModel which accepts:
-    - totalCount: int
-    - nodes: List[APIResponse_User]
-    - pageInfo: APIResponse_PageInfo
-    """
-
-    nodes: List[APIResponse_User]
-    page_info: APIResponse_PageInfo = Field(alias="pageInfo")
-
-
-"""
-EXTERNAL
-"""
-
-
-class User(BaseModel):
-    """
-    BaseModel which accepts:
-    - name: Optional[str]
-    - login: str
-    - url: str
-    """
-
-    name: Optional[str]
-    login: str
-    url: str
-
-    class Config:
-        allow_none = True
+class RawFollows(BaseModel):
+    nodes: List[User]
+    page_info: PageInfo = Field(alias="pageInfo")
 
 
 class UserFollows(BaseModel):
-    """
-    BaseModel which accepts:
-    - followers: List[User]
-    - following: List[User]
-    """
-
     followers: List[User]
     following: List[User]
