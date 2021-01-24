@@ -3,7 +3,12 @@ from datetime import date, timedelta
 from pytz import timezone
 from typing import Any, DefaultDict, Dict, List, Optional, Union
 
-from models.user.contribs import RawCalendar, RawEventsCommit, RawEventsEvent
+from models.user.contribs import (
+    RawCalendar,
+    RawEventsCommit,
+    RawEventsEvent,
+    UserContributions,
+)
 
 from external.github_api.graphql.user import (
     get_user_contribution_years,
@@ -69,7 +74,7 @@ def get_contributions(
     user_id: str,
     start_date: date = date.today() - timedelta(365),
     end_date: date = date.today(),
-) -> Any:
+) -> UserContributions:
 
     # get years for contribution calendar
     years = list(
@@ -112,19 +117,8 @@ def get_contributions(
             repos.add(repo)
     repos = list(repos)
 
-    total_stats: Dict[str, int] = {
-        "contribs_count": 0,
-        "commits_count": 0,
-        "issues_count": 0,
-        "prs_count": 0,
-        "reviews_count": 0,
-        "repos_count": 0,
-        "other_count": 0,
-    }
-
-    total: DefaultDict[str, Dict[str, Any]] = defaultdict(
-        lambda: {
-            "weekday": 0,
+    def get_stats():
+        return {
             "contribs_count": 0,
             "commits_count": 0,
             "issues_count": 0,
@@ -132,43 +126,29 @@ def get_contributions(
             "reviews_count": 0,
             "repos_count": 0,
             "other_count": 0,
+        }
+
+    def get_lists():
+        return {
             "commits": [],
             "issues": [],
             "prs": [],
             "reviews": [],
             "repos": [],
-            "repos_contributed": set(),
         }
-    )
 
-    repo_stats: DefaultDict[str, Dict[str, int]] = defaultdict(
-        lambda: {
-            "contribs_count": 0,
-            "commits_count": 0,
-            "issues_count": 0,
-            "prs_count": 0,
-            "reviews_count": 0,
-            "repos_count": 0,
-            "other_count": 0,
-        }
+    total_stats: Dict[str, int] = get_stats()
+    total: DefaultDict[str, Dict[str, Any]] = defaultdict(
+        lambda: {"date": "", "weekday": 0, "stats": get_stats(), "lists": get_lists()}
     )
-
+    repo_stats: DefaultDict[str, Dict[str, int]] = defaultdict(lambda: get_stats())
     repositories: DefaultDict[str, DefaultDict[str, Dict[str, Any]]] = defaultdict(
         lambda: defaultdict(
             lambda: {
+                "date": "",
                 "weekday": 0,
-                "contribs_count": 0,
-                "commits_count": 0,
-                "issues_count": 0,
-                "prs_count": 0,
-                "reviews_count": 0,
-                "repos_count": 0,
-                "other_count": 0,
-                "commits": [],
-                "issues": [],
-                "prs": [],
-                "reviews": [],
-                "repos": [],
+                "stats": get_stats(),
+                "lists": get_lists(),
             }
         )
     )
@@ -176,9 +156,10 @@ def get_contributions(
     for calendar_year in calendars:
         for week in calendar_year.weeks:
             for day in week.contribution_days:
+                total[str(day.date)]["date"] = day.date
                 total[str(day.date)]["weekday"] = day.weekday
-                total[str(day.date)]["contribs_count"] = day.count
-                total[str(day.date)]["other_count"] = day.count
+                total[str(day.date)]["stats"]["contribs_count"] = day.count
+                total[str(day.date)]["stats"]["other_count"] = day.count
                 total_stats["contribs_count"] += day.count
                 total_stats["other_count"] += day.count
 
@@ -189,31 +170,48 @@ def get_contributions(
                     datetime_obj = event.occurred_at.astimezone(eastern)
                     date_str = str(datetime_obj.date())
                     if isinstance(event, RawEventsCommit):
-                        total[date_str]["commits_count"] += event.count
+                        total[date_str]["stats"]["commits_count"] += event.count
                         total_stats["commits_count"] += event.count
-                        repositories[repo][date_str]["commits_count"] += event.count
+                        repositories[repo][date_str]["stats"][
+                            "commits_count"
+                        ] += event.count
                         repo_stats[repo]["commits_count"] += event.count
-                        total[date_str]["other_count"] -= event.count
+                        total[date_str]["stats"]["other_count"] -= event.count
                         total_stats["other_count"] -= event.count
-                        repositories[repo][date_str]["contribs_count"] += event.count
+                        repositories[repo][date_str]["stats"][
+                            "contribs_count"
+                        ] += event.count
                         repo_stats[repo]["contribs_count"] += event.count
                     else:
-                        total[date_str][event_type + "_count"] += 1
+                        total[date_str]["stats"][event_type + "_count"] += 1
                         total_stats[event_type + "_count"] += 1
-                        repositories[repo][date_str][event_type + "_count"] += 1
+                        repositories[repo][date_str]["stats"][
+                            event_type + "_count"
+                        ] += 1
                         repo_stats[repo][event_type + "_count"] += 1
-                        total[date_str][event_type].append(datetime_obj)
-                        repositories[repo][date_str][event_type].append(datetime_obj)
-                        total[date_str]["other_count"] -= 1
+                        total[date_str]["lists"][event_type].append(datetime_obj)
+                        repositories[repo][date_str]["lists"][event_type].append(
+                            datetime_obj
+                        )
+                        total[date_str]["stats"]["other_count"] -= 1
                         total_stats["other_count"] -= 1
-                        repositories[repo][date_str]["contribs_count"] += 1
+                        repositories[repo][date_str]["stats"]["contribs_count"] += 1
                         repo_stats[repo]["contribs_count"] += 1
 
-                    total[date_str]["repos_contributed"].add(repo)
+                    repositories[repo][date_str]["date"] = datetime_obj.date()
 
-    return {
-        "stats": total_stats,
-        "total": total,
-        "repo_stats": repo_stats,
-        "repos": repositories,
+    total_list = list(total.values())
+    repositories_list = {
+        name: list(repo.values()) for name, repo in repositories.items()
     }
+
+    output = UserContributions.parse_obj(
+        {
+            "total_stats": total_stats,
+            "total": total_list,
+            "repo_stats": repo_stats,
+            "repos": repositories_list,
+        }
+    )
+
+    return output
