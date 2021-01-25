@@ -25,12 +25,12 @@ def get_template(query: Dict[str, Any]) -> Dict[str, Any]:
         if "errors" in data:
             raise GraphQlError("GraphQL errors: " + str(data["errors"]))
         return data
-    else:
-        raise GraphQlError(
-            "Invalid status code "
-            + str(r.status_code)
-            + ": "
-            + str(r.json()["message"])  # type: ignore
-            + " Documentation at "
-            + str(r.json()["documentation_url"])  # type: ignore
-        )
+
+    raise GraphQlError(
+        "Invalid status code "
+        + str(r.status_code)
+        + ": "
+        + str(r.json()["message"])  # type: ignore
+        + " Documentation at "
+        + str(r.json()["documentation_url"])  # type: ignore
+    )

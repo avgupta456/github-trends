@@ -24,12 +24,12 @@ def get_template(
     if r.status_code == 200:
         print("REST API", datetime.now() - start)
         return r.json()  # type: ignore
-    else:
-        raise RESTError(
-            "Invalid status code "
-            + str(r.status_code)
-            + ": "
-            + str(r.json()["message"])  # type: ignore
-            + " Documentation at "
-            + str(r.json()["documentation_url"])  # type: ignore
-        )
+
+    raise RESTError(
+        "Invalid status code "
+        + str(r.status_code)
+        + ": "
+        + str(r.json()["message"])  # type: ignore
+        + " Documentation at "
+        + str(r.json()["documentation_url"])  # type: ignore
+    )

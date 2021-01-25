@@ -141,7 +141,7 @@ def get_contributions(
     total: DefaultDict[str, Dict[str, Any]] = defaultdict(
         lambda: {"date": "", "weekday": 0, "stats": get_stats(), "lists": get_lists()}
     )
-    repo_stats: DefaultDict[str, Dict[str, int]] = defaultdict(lambda: get_stats())
+    repo_stats: DefaultDict[str, Dict[str, int]] = defaultdict(get_stats)
     repositories: DefaultDict[str, DefaultDict[str, Dict[str, Any]]] = defaultdict(
         lambda: defaultdict(
             lambda: {
