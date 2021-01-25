@@ -1,22 +1,14 @@
 from collections import defaultdict
 from datetime import date, timedelta
-from pytz import timezone
 from typing import Any, DefaultDict, Dict, List, Optional, Union
 
-from models.user.contribs import (
-    RawCalendar,
-    RawEventsCommit,
-    RawEventsEvent,
-    UserContributions,
-)
-
-from external.github_api.graphql.user import (
-    get_user_contribution_years,
-    get_user_contribution_calendar,
-    get_user_contribution_events,
-)
-
+from external.github_api.graphql.user import (get_user_contribution_calendar,
+                                              get_user_contribution_events,
+                                              get_user_contribution_years)
 from helper.gather import gather
+from models.user.contribs import (RawCalendar, RawEventsCommit, RawEventsEvent,
+                                  UserContributions)
+from pytz import timezone
 
 t = DefaultDict[str, Dict[str, List[Union[RawEventsEvent, RawEventsCommit]]]]
 

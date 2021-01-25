@@ -6,7 +6,6 @@ from typing import Any, Callable, Dict, List
 from dotenv import load_dotenv
 from external.github_api.graphql.repo import get_repo as _get_repo
 from fastapi import FastAPI, Response, status
-
 from processing.user.contributions import get_contributions as _get_user
 
 load_dotenv()

@@ -1,14 +1,12 @@
 import unittest
 
+from external.github_api.graphql.user import (get_user_contribution_calendar,
+                                              get_user_contribution_events,
+                                              get_user_contribution_years,
+                                              get_user_followers,
+                                              get_user_following)
 from models.user.contribs import RawCalendar, RawEvents
 from models.user.follows import RawFollows
-from external.github_api.graphql.user import (
-    get_user_contribution_years,
-    get_user_contribution_calendar,
-    get_user_contribution_events,
-    get_user_followers,
-    get_user_following,
-)
 
 
 class TestTemplate(unittest.TestCase):

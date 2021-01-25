@@ -1,7 +1,6 @@
 import unittest
 
 from models.user.contribs import UserContributions
-
 from processing.user.contributions import get_contributions
 
 

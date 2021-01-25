@@ -1,9 +1,8 @@
 # import json
-from typing import Dict, List, Union
 from datetime import date, timedelta
+from typing import Dict, List, Union
 
 from external.github_api.graphql.template import get_template
-
 from models.user.contribs import RawCalendar, RawEvents
 from models.user.follows import RawFollows
 

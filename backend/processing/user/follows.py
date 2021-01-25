@@ -1,9 +1,9 @@
 from typing import List, Optional
 
-from external.github_api.graphql.user import (
-    get_user_followers as _get_user_followers,
-    get_user_following as _get_user_following,
-)
+from external.github_api.graphql.user import \
+    get_user_followers as _get_user_followers
+from external.github_api.graphql.user import \
+    get_user_following as _get_user_following
 from models.user.follows import User, UserFollows
 
 
