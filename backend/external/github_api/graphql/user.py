@@ -1,6 +1,6 @@
 # import json
 from typing import Dict, List, Union
-from datetime import date, timedelta
+from datetime import datetime, timedelta
 
 from external.github_api.graphql.template import get_template
 
@@ -32,8 +32,8 @@ def get_user_contribution_years(user_id: str) -> List[int]:
 
 def get_user_contribution_calendar(
     user_id: str,
-    start_date: date = date.today() - timedelta(days=365),
-    end_date: date = date.today(),
+    start_date: datetime = datetime.now() - timedelta(days=365),
+    end_date: datetime = datetime.now(),
 ) -> RawCalendar:
     """Gets contribution calendar for a given time period (max one year)"""
     if (end_date - start_date).days > 365:
@@ -41,8 +41,8 @@ def get_user_contribution_calendar(
     query = {
         "variables": {
             "login": user_id,
-            "startDate": str(start_date) + "T00:00:00.000Z",
-            "endDate": str(end_date) + "T00:00:00.000Z",
+            "startDate": start_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "endDate": end_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
         },
         "query": """
         query getUser($login: String!, $startDate: DateTime!, $endDate: DateTime!){
@@ -72,8 +72,8 @@ def get_user_contribution_calendar(
 
 def get_user_contribution_events(
     user_id: str,
-    start_date: date = date.today() - timedelta(365),
-    end_date: date = date.today(),
+    start_date: datetime = datetime.now() - timedelta(365),
+    end_date: datetime = datetime.now(),
     max_repos: int = 100,
     first: int = 100,
     after: str = "",
@@ -84,8 +84,8 @@ def get_user_contribution_events(
     query = {
         "variables": {
             "login": user_id,
-            "startDate": str(start_date) + "T00:00:00.000Z",
-            "endDate": str(end_date) + "T00:00:00.000Z",
+            "startDate": start_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "endDate": end_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
             "maxRepos": max_repos,
             "first": first,
             "after": after,
