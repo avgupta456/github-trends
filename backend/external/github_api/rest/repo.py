@@ -1,4 +1,5 @@
-from typing import Any, Dict
+from datetime import datetime
+from typing import Any, Dict, Optional
 
 from external.github_api.rest.template import get_template
 
@@ -49,3 +50,21 @@ def get_repo_weekly_commits(owner: str, repo: str) -> Dict[str, Any]:
 def get_repo_hourly_commits(owner: str, repo: str) -> Dict[str, Any]:
     """Returns contributions by day, hour for repository"""
     return get_template(BASE_URL + owner + "/" + repo + "/stats/punch_card")
+
+
+def get_repo_commits(
+    owner: str,
+    repo: str,
+    user: Optional[str],
+    since: Optional[datetime],
+    until: Optional[datetime],
+    page: int = 1,
+) -> Dict[str, Any]:
+    """Returns most recent commits including commit message"""
+    user = user if user is not None else owner
+    query = BASE_URL + owner + "/" + repo + "/commits?author=" + user
+    if since is not None:
+        query += "&since=" + str(since)
+    if until is not None:
+        query += "&until=" + str(until)
+    return get_template(query, page=page, plural=True)
