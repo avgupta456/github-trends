@@ -20,7 +20,7 @@ class RawCalendar(BaseModel):
 
 
 class RawEventsRepoName(BaseModel):
-    name: str
+    name: str = Field(alias="nameWithOwner")
 
 
 class RawEventsCount(BaseModel):

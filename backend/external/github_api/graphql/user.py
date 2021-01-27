@@ -96,7 +96,7 @@ def get_user_contribution_events(
                 contributionsCollection(from: $startDate, to: $endDate){
                     commitContributionsByRepository(maxRepositories: $maxRepos){
                         repository{
-                            name,
+                            nameWithOwner,
                         },
                         totalCount:contributions(first: 1){
                             totalCount
@@ -114,7 +114,7 @@ def get_user_contribution_events(
                     }
                     issueContributionsByRepository(maxRepositories: $maxRepos){
                         repository{
-                            name
+                            nameWithOwner
                         },
                         totalCount:contributions(first: 1){
                             totalCount
@@ -131,7 +131,7 @@ def get_user_contribution_events(
                     }
                     pullRequestContributionsByRepository(maxRepositories: $maxRepos){
                         repository{
-                            name
+                            nameWithOwner
                         },
                         totalCount:contributions(first: 1){
                             totalCount
@@ -148,7 +148,7 @@ def get_user_contribution_events(
                     }
                     pullRequestReviewContributionsByRepository(maxRepositories: $maxRepos){
                         repository{
-                            name
+                            nameWithOwner
                         },
                         totalCount:contributions(first: 1){
                             totalCount
@@ -167,7 +167,7 @@ def get_user_contribution_events(
                         totalCount
                         nodes{
                             repository{
-                                name,
+                                nameWithOwner,
                             }
                             occurredAt,
                         }
@@ -179,7 +179,6 @@ def get_user_contribution_events(
     }
 
     output = get_template(query)["data"]["user"]["contributionsCollection"]
-    # print(json.dumps(output, indent=2))
     return RawEvents.parse_obj(output)
 
 
