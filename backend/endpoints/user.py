@@ -3,7 +3,13 @@ from typing import Any
 
 from packaging.user import main as get_data
 
-from analytics.user.contribs_per_day import get_contribs_per_day
+from analytics.user.contribs_per_day import (
+    get_contribs_per_day,
+    get_contribs_per_repo_per_day,
+)
+
+
+from helper.gather import gather
 
 
 def main(
@@ -14,6 +20,12 @@ def main(
 ) -> Any:
     data = get_data(user_id, start_date, end_date, timezone_str)
 
-    contribs_per_day = get_contribs_per_day(data)
+    [contribs_per_day, contribs_per_repo_per_day] = gather(
+        funcs=[get_contribs_per_day, get_contribs_per_repo_per_day],
+        args_dicts=[{"data": data} for _ in range(2)],
+    )
 
-    return {"contribs_per_day": contribs_per_day}
+    return {
+        "contribs_per_day": contribs_per_day,
+        "contribs_per_repo_per_day": contribs_per_repo_per_day,
+    }
