@@ -8,12 +8,7 @@ import Button from '@material-ui/core/Button';
 // import IconButton from '@material-ui/core/IconButton';
 // import MenuIcon from '@material-ui/icons/Menu';
 
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,7 +28,6 @@ export default function ButtonAppBar() {
   return (
     <Router>
       <div className={classes.root}>
-
         <AppBar position="static">
           <Toolbar>
             {/*
@@ -44,8 +38,12 @@ export default function ButtonAppBar() {
             <Typography variant="h6" className={classes.title}>
               GitHub Trends
             </Typography>
-            <Button color="inherit" component={Link} to="/user">User</Button>
-            <Button color="inherit" component={Link} to="/octoverse">Octoverse</Button>
+            <Button color="inherit" component={Link} to="/user">
+              User
+            </Button>
+            <Button color="inherit" component={Link} to="/octoverse">
+              Octoverse
+            </Button>
           </Toolbar>
         </AppBar>
       </div>
@@ -58,7 +56,6 @@ export default function ButtonAppBar() {
           <Octoverse />
         </Route>
       </Switch>
-
     </Router>
   );
 }
