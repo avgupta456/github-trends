@@ -12,8 +12,8 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
-} from "react-router-dom";
+  Link,
+} from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,34 +32,34 @@ export default function ButtonAppBar() {
 
   return (
     <Router>
-    <div className={classes.root}>
-      
-      <AppBar position="static">
-        <Toolbar>
-          {/*
+      <div className={classes.root}>
+
+        <AppBar position="static">
+          <Toolbar>
+            {/*
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />
           </IconButton>
           */}
-          <Typography variant="h6" className={classes.title}>
-            GitHub Trends
-          </Typography>
-          <Button color="inherit" component={Link} to={"/user"}>User</Button>
-          <Button color="inherit" component={Link} to={"/octoverse"}>Octoverse</Button>
-        </Toolbar>
-      </AppBar>
-    </div>
+            <Typography variant="h6" className={classes.title}>
+              GitHub Trends
+            </Typography>
+            <Button color="inherit" component={Link} to="/user">User</Button>
+            <Button color="inherit" component={Link} to="/octoverse">Octoverse</Button>
+          </Toolbar>
+        </AppBar>
+      </div>
 
-<Switch>
-<Route path="/user">
-  <User />
-</Route>
-<Route path="/octoverse">
-  <Octoverse />
-</Route>
-</Switch>
+      <Switch>
+        <Route path="/user">
+          <User />
+        </Route>
+        <Route path="/octoverse">
+          <Octoverse />
+        </Route>
+      </Switch>
 
-</Router>
+    </Router>
   );
 }
 
