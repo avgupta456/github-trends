@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -10,60 +9,49 @@ import Button from '@material-ui/core/Button';
 
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-}));
+import User from '../User';
+import Octoverse from '../Octoverse';
 
-export default function ButtonAppBar() {
-  const classes = useStyles();
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
-  return (
-    <Router>
-      <div className={classes.root}>
-        <AppBar position="static">
-          <Toolbar>
-            {/*
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton>
-          */}
-            <Typography variant="h6" className={classes.title}>
-              GitHub Trends
-            </Typography>
-            <Button color="inherit" component={Link} to="/user">
-              User
-            </Button>
-            <Button color="inherit" component={Link} to="/octoverse">
-              Octoverse
-            </Button>
-          </Toolbar>
-        </AppBar>
-      </div>
+  render() {
+    return (
+      <Router>
+        <div style={{ flexGrow: 1 }}>
+          <AppBar position="static">
+            <Toolbar>
+              {/*
+              <IconButton edge="start" style={{ marginRight: 16 }}>
+                <MenuIcon />
+              </IconButton>
+              */}
+              <Typography variant="h6" style={{ flexGrow: 1 }}>
+                GitHub Trends
+              </Typography>
+              <Button color="inherit" component={Link} to="/user">
+                User
+              </Button>
+              <Button color="inherit" component={Link} to="/octoverse">
+                Octoverse
+              </Button>
+            </Toolbar>
+          </AppBar>
+        </div>
 
-      <Switch>
-        <Route path="/user">
-          <User />
-        </Route>
-        <Route path="/octoverse">
-          <Octoverse />
-        </Route>
-      </Switch>
-    </Router>
-  );
+        <Switch>
+          <Route path="/user">
+            <User />
+          </Route>
+          <Route path="/octoverse">
+            <Octoverse />
+          </Route>
+        </Switch>
+      </Router>
+    );
+  }
 }
 
-function User() {
-  return <h2>User</h2>;
-}
-
-function Octoverse() {
-  return <h2>Octoverse</h2>;
-}
+export default App;
