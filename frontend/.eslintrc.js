@@ -13,6 +13,13 @@ module.exports = {
   },
   plugins: ['react', 'prettier'],
   rules: {
+    'react/prefer-stateless-function': 'off',
     'react/jsx-filename-extension': 'off',
+    'react/destructuring-assignment': 'off',
+    'react/no-did-update-set-state': 'off',
+    'react/forbid-prop-types': 'off',
+    'import/prefer-default-export': 'off',
+    'no-useless-constructor': 'off',
+    'no-console': 'off',
   },
 };
