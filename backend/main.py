@@ -5,12 +5,25 @@ from typing import Any, Callable, Dict, List
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, Response, status
+from fastapi.middleware.cors import CORSMiddleware
 
 from endpoints.user import main as _get_user
 
 load_dotenv()
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/")
