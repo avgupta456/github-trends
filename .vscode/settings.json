@@ -9,8 +9,8 @@
 
     "files.exclude": {
         "**/.git": true,
-        "**/__pycache__": true,
+        "**/__pycache__": true
     },
 
-    "editor.formatOnSave": true,
+    "editor.formatOnSave": true
 }
