@@ -1,0 +1,21 @@
+name: CI-Frontend
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install modules
+      run: |
+        cd frontend
+        yarn
+    - name: Run ESLint
+      run: |
+        cd frontend
+        yarn eslint .
