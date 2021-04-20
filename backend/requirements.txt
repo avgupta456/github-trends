@@ -33,7 +33,7 @@ rsa==4.7; python_version >= "3.6"
 six==1.15.0
 starlette==0.13.6
 typing-extensions==3.7.4.3
-urllib3==1.26.3
+urllib3==1.26.4
 uvicorn==0.13.3
 uvloop==0.14.0; sys_platform != "win32" and sys_platform != "cygwin" and platform_python_implementation != "PyPy"
 watchgod==0.6
