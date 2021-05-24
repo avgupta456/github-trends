@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from typing import Any
+from typing import Any, Dict
 
 from packaging.user import main as get_data
 
@@ -17,7 +17,7 @@ def main(
     start_date: date = date.today() - timedelta(365),
     end_date: date = date.today(),
     timezone_str: str = "US/Eastern",
-) -> Any:
+) -> Dict[str, Any]:
     data = get_data(user_id, start_date, end_date, timezone_str)
 
     [contribs_per_day, contribs_per_repo_per_day] = gather(

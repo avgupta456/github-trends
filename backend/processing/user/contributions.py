@@ -1,6 +1,6 @@
 from collections import defaultdict
 from datetime import date, datetime, timedelta
-from typing import Any, DefaultDict, Dict, List, Optional, Union
+from typing import Any, DefaultDict, Dict, List, Optional, Set, Union
 
 import pytz
 from pytz import timezone
@@ -80,7 +80,8 @@ def get_all_commit_times(
 ) -> List[datetime]:
     """Gets all user's commit times for a given repository"""
     owner, repo = name_with_owner.split("/")
-    data, index = [], 0
+    data: List[Any] = []
+    index = 0
     while (index == 0 or (index > 0 and len(data) % 100 == 0)) and index < 10:
         data.extend(
             get_repo_commits(
@@ -159,11 +160,11 @@ def get_contributions(
         ],
     )
 
-    repos = set()
+    repos_set: Set[str] = set()
     for events_year in all_events:
         for repo in events_year:
-            repos.add(repo)
-    repos = list(repos)
+            repos_set.add(repo)
+    repos = list(repos_set)
 
     commit_times = gather(
         funcs=[get_all_commit_times for _ in repos],
@@ -194,7 +195,7 @@ def get_contributions(
             "other_count": 0,
         }
 
-    def get_lists():
+    def get_lists() -> Dict[str, Any]:
         return {
             "commits": [],
             "issues": [],
@@ -253,7 +254,7 @@ def get_contributions(
                     repositories[repo][date_str]["date"] = datetime_obj.date()
                     if isinstance(event, RawEventsCommit):
                         # get timestamps
-                        timestamps = []
+                        timestamps: List[datetime] = []
                         for _ in range(event.count):
                             if len(commit_times_dict[repo]) > 0:
                                 raw_time = commit_times_dict[repo][0]

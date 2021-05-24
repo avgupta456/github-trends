@@ -1,9 +1,9 @@
-from typing import Any, Dict
+from typing import Any, Dict, List, Union
 
 from external.github_api.graphql.template import get_template
 
 
-def get_repo(owner: str, repo: str) -> Dict[str, Any]:
+def get_repo(owner: str, repo: str) -> Union[Dict[str, Any], List[Any]]:
     """gets all repository data from graphql"""
     query = {
         "variables": {"owner": owner, "repo": repo},
