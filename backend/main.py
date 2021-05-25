@@ -9,6 +9,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from endpoints.user import main as _get_user
 
+from processing.commit.commits import get_commit_languages
+
 load_dotenv()
 
 app = FastAPI()
@@ -54,3 +56,11 @@ def fail_gracefully(func: Callable[..., Any]):
 @fail_gracefully
 def get_user(response: Response, user_id: str) -> Any:
     return _get_user(user_id)
+
+
+@app.get("/test", status_code=status.HTTP_200_OK)
+@fail_gracefully
+def test(response: Response) -> Any:
+    return get_commit_languages(
+        "avgupta456", "github-trends", "3d7a5093f7e1f35b843c313915c054e85dfe7208"
+    )
