@@ -55,9 +55,9 @@ def get_repo_hourly_commits(owner: str, repo: str) -> Dict[str, Any]:
 def get_repo_commits(
     owner: str,
     repo: str,
-    user: Optional[str],
-    since: Optional[datetime],
-    until: Optional[datetime],
+    user: Optional[str] = None,
+    since: Optional[datetime] = None,
+    until: Optional[datetime] = None,
     page: int = 1,
 ) -> Dict[str, Any]:
     """Returns most recent commits including commit message"""
