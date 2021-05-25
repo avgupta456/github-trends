@@ -24,6 +24,8 @@ from helper.gather import gather
 
 from utils import date_to_datetime
 
+from processing.commit import get_commits_languages
+
 t = DefaultDict[str, Dict[str, List[Union[RawEventsEvent, RawEventsCommit]]]]
 
 
@@ -72,7 +74,8 @@ def get_user_all_contribution_events(
     return repo_contribs
 
 
-def get_all_commit_times(
+# gets commit time and sha (for language breakdown)
+def get_all_commit_info(
     user_id: str,
     name_with_owner: str,
     start_date: datetime = datetime.now(),
@@ -97,15 +100,18 @@ def get_all_commit_times(
 
     data = list(
         map(
-            lambda x: datetime.strptime(
-                x["commit"]["committer"]["date"], "%Y-%m-%dT%H:%M:%SZ"
-            ),
+            lambda x: [
+                datetime.strptime(
+                    x["commit"]["committer"]["date"], "%Y-%m-%dT%H:%M:%SZ"
+                ),
+                x["node_id"],
+            ],
             data,
         )
     )
 
     # sort ascending
-    data = sorted(data)
+    data = sorted(data, key=lambda x: x[0])
     return data
 
 
@@ -166,8 +172,8 @@ def get_contributions(
             repos_set.add(repo)
     repos = list(repos_set)
 
-    commit_times = gather(
-        funcs=[get_all_commit_times for _ in repos],
+    commit_info = gather(
+        funcs=[get_all_commit_info for _ in repos],
         args_dicts=[
             {
                 "user_id": user_id,
@@ -180,11 +186,23 @@ def get_contributions(
         max_threads=100,
     )
 
-    commit_times_dict: Dict[str, List[datetime]] = {}
-    for repo, item in zip(repos, commit_times):
-        commit_times_dict[repo] = item
+    commit_times = [[commit_info[0] for commit_info in repo] for repo in commit_info]
+    commit_node_ids = [[commit_info[1] for commit_info in repo] for repo in commit_info]
 
-    def get_stats():
+    # TODO: avoid triggering abuse detection
+    commit_languages = gather(
+        funcs=[get_commits_languages for _ in repos],
+        args_dicts=[{"node_ids": repo_node_ids} for repo_node_ids in commit_node_ids],
+        max_threads=10,
+    )
+
+    commit_times_dict: Dict[str, List[datetime]] = {}
+    for repo, times, languages in zip(repos, commit_times, commit_languages):
+        commit_times_dict[repo] = times
+
+    # TODO: process languages
+
+    def get_stats() -> Dict[str, Union[int, Dict[str, int]]]:
         return {
             "contribs_count": 0,
             "commits_count": 0,
@@ -193,6 +211,7 @@ def get_contributions(
             "reviews_count": 0,
             "repos_count": 0,
             "other_count": 0,
+            "languages": {},
         }
 
     def get_lists() -> Dict[str, Any]:
@@ -204,11 +223,13 @@ def get_contributions(
             "repos": [],
         }
 
-    total_stats: Dict[str, int] = get_stats()
+    total_stats = get_stats()
     total: DefaultDict[str, Dict[str, Any]] = defaultdict(
         lambda: {"date": "", "weekday": 0, "stats": get_stats(), "lists": get_lists()}
     )
-    repo_stats: DefaultDict[str, Dict[str, int]] = defaultdict(get_stats)
+    repo_stats: DefaultDict[str, Dict[str, Union[int, Dict[str, int]]]] = defaultdict(
+        get_stats
+    )
     repositories: DefaultDict[str, DefaultDict[str, Dict[str, Any]]] = defaultdict(
         lambda: defaultdict(
             lambda: {
@@ -227,22 +248,22 @@ def get_contributions(
                 total[str(day.date)]["weekday"] = day.weekday
                 total[str(day.date)]["stats"]["contribs_count"] = day.count
                 total[str(day.date)]["stats"]["other_count"] = day.count
-                total_stats["contribs_count"] += day.count
-                total_stats["other_count"] += day.count
+                total_stats["contribs_count"] += day.count  # type: ignore
+                total_stats["other_count"] += day.count  # type: ignore
 
     def update(date_str: str, repo: str, event: str, count: int):
         # update global counts for this event
         total[date_str]["stats"][event + "_count"] += count
-        total_stats[event + "_count"] += count
+        total_stats[event + "_count"] += count  # type: ignore
         # update repo counts for this event
         repositories[repo][date_str]["stats"][event + "_count"] += count
-        repo_stats[repo][event + "_count"] += count
+        repo_stats[repo][event + "_count"] += count  # type: ignore
         # update total other stats by subtracting
         total[date_str]["stats"]["other_count"] -= count
-        total_stats["other_count"] -= count
+        total_stats["other_count"] -= count  # type: ignore
         # update repo total stats by adding
         repositories[repo][date_str]["stats"]["contribs_count"] += count
-        repo_stats[repo]["contribs_count"] += count
+        repo_stats[repo]["contribs_count"] += count  # type: ignore
 
     for events_year in all_events:
         for repo, repo_events in events_year.items():
