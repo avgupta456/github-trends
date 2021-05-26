@@ -15,8 +15,7 @@ def get_commits(node_ids: List[str]) -> Union[Dict[str, Any], List[Any]]:
                     deletions
                     changedFiles
                     repository{
-                        languages(first: 10, orderBy: {field:SIZE, direction:DESC}){
-                            totalSize
+                        languages(first: 5, orderBy: {field:SIZE, direction:DESC}){
                             edges{
                                 size
                                 node{

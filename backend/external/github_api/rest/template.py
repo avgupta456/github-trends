@@ -29,16 +29,21 @@ def get_template(
     params: Dict[str, str] = (
         {"per_page": str(per_page), "page": str(page)} if plural else {}
     )
+    # print(query, params, headers)
     r = s.get(query, params=params, headers=headers)  # type: ignore
     if r.status_code == 200:
         print("REST API", datetime.now() - start)
         return r.json()  # type: ignore
+    # print(r.status_code)
 
-    raise RESTError(
-        "Invalid status code "
-        + str(r.status_code)
-        + ": "
-        + str(r.json()["message"])  # type: ignore
-        + " Documentation at "
-        + str(r.json()["documentation_url"])  # type: ignore
-    )
+    try:
+        raise RESTError(
+            "Invalid status code "
+            + str(r.status_code)
+            + ": "
+            + str(r.json()["message"])  # type: ignore
+            + " Documentation at "
+            + str(r.json()["documentation_url"])  # type: ignore
+        )
+    except Exception:
+        raise RESTError("Unknown Error")
