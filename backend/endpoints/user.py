@@ -26,6 +26,7 @@ def main(
     )
 
     return {
+        "raw": data,
         "contribs_per_day": contribs_per_day,
         "contribs_per_repo_per_day": contribs_per_repo_per_day,
     }
