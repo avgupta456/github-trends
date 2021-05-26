@@ -92,6 +92,11 @@ class RawEvents(BaseModel):
     repo_contribs: RawEventsRepoContribs = Field(alias="repositoryContributions")
 
 
+class CommitContribution(BaseModel):
+    timestamp: datetime
+    languages: Dict[str, Dict[str, int]]
+
+
 class ContributionStats(BaseModel):
     contribs_count: int
     commits_count: int
@@ -100,10 +105,11 @@ class ContributionStats(BaseModel):
     reviews_count: int
     repos_count: int
     other_count: int
+    languages: Dict[str, Dict[str, int]]
 
 
 class ContributionLists(BaseModel):
-    commits: List[datetime]
+    commits: List[CommitContribution]
     issues: List[datetime]
     prs: List[datetime]
     reviews: List[datetime]
