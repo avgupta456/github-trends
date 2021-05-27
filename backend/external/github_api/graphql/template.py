@@ -7,7 +7,11 @@ import requests
 s = requests.session()
 
 
-class GraphQlError(Exception):
+class GraphQLError(Exception):
+    pass
+
+
+class GraphQLError403(Exception):
     pass
 
 
@@ -23,7 +27,10 @@ def get_template(query: Dict[str, Any]) -> Dict[str, Any]:
     if r.status_code == 200:
         data = r.json()  # type: ignore
         if "errors" in data:
-            raise GraphQlError("GraphQL Error: " + str(data["errors"]))
+            raise GraphQLError("GraphQL Error: " + str(data["errors"]))
         return data
 
-    raise GraphQlError("GraphQL Error" + str(r.status_code))
+    if r.status_code == 403:
+        raise GraphQLError403("GraphQL Error 403: Unauthorized")
+
+    raise GraphQLError("GraphQL Error " + str(r.status_code))

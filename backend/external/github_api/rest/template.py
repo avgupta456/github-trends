@@ -25,7 +25,7 @@ def _get_template(query: str, params: Dict[str, Any], accept_header: str) -> Any
         "Authorization": "bearer " + os.getenv("AUTH_TOKEN", ""),
     }
 
-    r = s.get(query, params={}, headers=headers)
+    r = s.get(query, params=params, headers=headers)
 
     if r.status_code == 200:
         print("REST API", datetime.now() - start)
@@ -35,7 +35,7 @@ def _get_template(query: str, params: Dict[str, Any], accept_header: str) -> Any
         print("REST ERROR 409")
         raise RESTError409()
 
-    raise RESTError("Unknown Error" + str(r.status_code))
+    raise RESTError("REST Error " + str(r.status_code))
 
 
 def get_template(

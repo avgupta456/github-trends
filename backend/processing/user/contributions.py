@@ -18,13 +18,11 @@ from external.github_api.graphql.user import (
     get_user_contribution_events,
 )
 
-from external.github_api.rest.repo import get_repo_commits
-
 from helper.gather import gather
 
 from utils import date_to_datetime
 
-from processing.commit import get_commits_languages
+from processing.commit import get_all_commit_info, get_commits_languages
 
 t = DefaultDict[str, Dict[str, List[Union[RawEventsEvent, RawEventsCommit]]]]
 
@@ -72,47 +70,6 @@ def get_user_all_contribution_events(
         index += 1
 
     return repo_contribs
-
-
-# gets commit time and sha (for language breakdown)
-def get_all_commit_info(
-    user_id: str,
-    name_with_owner: str,
-    start_date: datetime = datetime.now(),
-    end_date: datetime = datetime.now(),
-) -> List[datetime]:
-    """Gets all user's commit times for a given repository"""
-    owner, repo = name_with_owner.split("/")
-    data: List[Any] = []
-    index = 0
-    while (index == 0 or (index > 0 and len(data) % 100 == 0)) and index < 10:
-        data.extend(
-            get_repo_commits(
-                owner=owner,
-                repo=repo,
-                user=user_id,
-                since=start_date,
-                until=end_date,
-                page=index + 1,
-            )
-        )
-        index += 1
-
-    data = list(
-        map(
-            lambda x: [
-                datetime.strptime(
-                    x["commit"]["committer"]["date"], "%Y-%m-%dT%H:%M:%SZ"
-                ),
-                x["node_id"],
-            ],
-            data,
-        )
-    )
-
-    # sort ascending
-    data = sorted(data, key=lambda x: x[0])
-    return data
 
 
 def get_contributions(

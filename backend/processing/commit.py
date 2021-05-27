@@ -1,13 +1,56 @@
+from datetime import datetime
 from typing import Any, Dict, List
 
+from external.github_api.rest.repo import get_repo_commits
 from external.github_api.graphql.commit import get_commits
 
 
-blacklist = ["Jupyter Notebook"]
+BLACKLIST = ["Jupyter Notebook"]
+CUTOFF = 1000
+
+
+def get_all_commit_info(
+    user_id: str,
+    name_with_owner: str,
+    start_date: datetime = datetime.now(),
+    end_date: datetime = datetime.now(),
+) -> List[datetime]:
+    """Gets all user's commit times for a given repository"""
+    owner, repo = name_with_owner.split("/")
+    data: List[Any] = []
+    index = 0
+    while index in range(10) and len(data) == 100 * index:
+        data.extend(
+            get_repo_commits(
+                owner=owner,
+                repo=repo,
+                user=user_id,
+                since=start_date,
+                until=end_date,
+                page=index + 1,
+            )
+        )
+        index += 1
+
+    data = list(
+        map(
+            lambda x: [
+                datetime.strptime(
+                    x["commit"]["committer"]["date"], "%Y-%m-%dT%H:%M:%SZ"
+                ),
+                x["node_id"],
+            ],
+            data,
+        )
+    )
+
+    # sort ascending
+    data = sorted(data, key=lambda x: x[0])
+    return data
 
 
 def get_commits_languages(
-    node_ids: List[str], cutoff: int = 1000
+    node_ids: List[str], cutoff: int = CUTOFF
 ) -> List[Dict[str, Dict[str, int]]]:
     out: List[Dict[str, Dict[str, int]]] = []
     all_data: List[Dict[str, Any]] = []
@@ -27,7 +70,7 @@ def get_commits_languages(
             languages = [
                 x
                 for x in commit["repository"]["languages"]["edges"]
-                if x["node"]["name"] not in blacklist
+                if x["node"]["name"] not in BLACKLIST
             ]
             num_langs = min(len(languages), commit["changedFiles"])
             total_repo_size = sum(
