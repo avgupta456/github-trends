@@ -1,7 +1,11 @@
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
-from external.github_api.rest.template import get_template
+from external.github_api.rest.template import (
+    RESTError409,
+    get_template,
+    get_template_plural,
+)
 
 BASE_URL = "https://api.github.com/repos/"
 
@@ -11,16 +15,17 @@ def get_repo(owner: str, repo: str) -> Dict[str, Any]:
     return get_template(BASE_URL + owner + "/" + repo)
 
 
-def get_repo_languages(owner: str, repo: str) -> Dict[str, Any]:
+def get_repo_languages(owner: str, repo: str) -> List[Dict[str, Any]]:
     """Returns repository language breakdown"""
-    return get_template(BASE_URL + owner + "/" + repo + "/languages", plural=True)
+    return get_template_plural(BASE_URL + owner + "/" + repo + "/languages")
 
 
-def get_repo_stargazers(owner: str, repo: str, per_page: int = 100) -> Dict[str, Any]:
+def get_repo_stargazers(
+    owner: str, repo: str, per_page: int = 100
+) -> List[Dict[str, Any]]:
     """Returns stargazers with timestamp for repository"""
-    return get_template(
+    return get_template_plural(
         BASE_URL + owner + "/" + repo + "/stargazers",
-        plural=True,
         per_page=per_page,
         accept_header="applicaiton/vnd.github.v3.star+json",
     )
@@ -59,7 +64,7 @@ def get_repo_commits(
     since: Optional[datetime] = None,
     until: Optional[datetime] = None,
     page: int = 1,
-) -> Dict[str, Any]:
+) -> List[Dict[str, Any]]:
     """Returns most recent commits including commit message"""
     user = user if user is not None else owner
     query = BASE_URL + owner + "/" + repo + "/commits?author=" + user
@@ -67,4 +72,7 @@ def get_repo_commits(
         query += "&since=" + str(since)
     if until is not None:
         query += "&until=" + str(until)
-    return get_template(query, page=page, plural=True)
+    try:
+        return get_template_plural(query, page=page)
+    except RESTError409:
+        return []

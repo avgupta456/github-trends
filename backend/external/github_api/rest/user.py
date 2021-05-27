@@ -1,6 +1,6 @@
-from typing import Any, Dict
+from typing import Any, Dict, List
 
-from external.github_api.rest.template import get_template
+from external.github_api.rest.template import get_template, get_template_plural
 
 BASE_URL = "https://api.github.com/users/"
 
@@ -10,11 +10,10 @@ def get_user(user_id: str) -> Dict[str, Any]:
     return get_template(BASE_URL + user_id)
 
 
-def get_user_starred_repos(user_id: str, per_page: int = 100) -> Dict[str, Any]:
+def get_user_starred_repos(user_id: str, per_page: int = 100) -> List[Dict[str, Any]]:
     """Returns list of starred repos"""
-    return get_template(
+    return get_template_plural(
         BASE_URL + user_id + "/starred",
-        plural=True,
         per_page=per_page,
         accept_header="application/vnd.github.v3.star+json",
     )
