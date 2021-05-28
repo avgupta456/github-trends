@@ -7,9 +7,11 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 
-from endpoints.user import main as _get_user
-
 load_dotenv()
+
+# flake8: noqa E402
+
+from endpoints.user import main as _get_user
 
 app = FastAPI()
 

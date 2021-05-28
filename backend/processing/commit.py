@@ -1,12 +1,15 @@
 from datetime import datetime
 from typing import Any, Dict, List
 
+from external.github_api.graphql.template import (
+    GraphQLErrorAuth,
+    GraphQLErrorTimeout,
+    GraphQLErrorMissingNode,
+)
+
 from external.github_api.rest.repo import get_repo_commits
 from external.github_api.graphql.commit import get_commits
-
-
-BLACKLIST = ["Jupyter Notebook"]
-CUTOFF = 1000
+from constants import NODE_CHUNK_SIZE, CUTOFF, BLACKLIST
 
 
 def get_all_commit_info(
@@ -49,24 +52,51 @@ def get_all_commit_info(
     return data
 
 
-def get_commits_languages(
-    node_ids: List[str], cutoff: int = CUTOFF
-) -> List[Dict[str, Dict[str, int]]]:
-    out: List[Dict[str, Dict[str, int]]] = []
+def _get_commits_languages(
+    node_ids: List[str], per_page: int = NODE_CHUNK_SIZE
+) -> List[Dict[str, Any]]:
     all_data: List[Dict[str, Any]] = []
-    for i in range(0, len(node_ids), 100):
-        # TODO: handle exception to get_commits
-        # ideally would alert users somehow that data is incomplete
+    for i in range(0, len(node_ids), per_page):
+        # TODO: alert user/display if some nodes omitted
+        # TODO: figure out why Auth error code appears
+        cutoff = min(len(node_ids), i + per_page)
         try:
-            raw_data = get_commits(node_ids[i : min(len(node_ids), i + 100)])
+            raw_data = get_commits(node_ids[i:cutoff])
             data: List[Dict[str, Any]] = raw_data["data"]["nodes"]  # type: ignore
             all_data.extend(data)
-        except Exception:
-            print("Commit Exception")
+        except GraphQLErrorMissingNode as e:
+            curr = node_ids[i:cutoff]
+            curr.pop(e.node)
+            all_data.extend(_get_commits_languages(curr))
+        except GraphQLErrorTimeout:
+            length = cutoff - i
+            if length == per_page:
+                midpoint = i + int(per_page / 2)
+                all_data.extend(_get_commits_languages(node_ids[i:midpoint]))
+                all_data.extend(_get_commits_languages(node_ids[midpoint:cutoff]))
+            else:
+                print("Commit Timeout Exception:", length, " nodes lost")
+                all_data.extend([{} for _ in range(length)])
+        except GraphQLErrorAuth:
+            length = cutoff - i
+            print("Commit Auth Exception:", length, " nodes lost")
+            all_data.extend([{} for _ in range(length)])
 
+    return all_data
+
+
+def get_commits_languages(node_ids: List[str], cutoff: int = CUTOFF):
+    all_data = _get_commits_languages(node_ids, per_page=NODE_CHUNK_SIZE)
+
+    out: List[Dict[str, Dict[str, int]]] = []
     for commit in all_data:
         out.append({})
-        if commit["additions"] + commit["deletions"] < cutoff:
+        if (
+            "additions" in commit
+            and "deletions" in commit
+            and "changedFiles" in commit
+            and commit["additions"] + commit["deletions"] < cutoff
+        ):
             languages = [
                 x
                 for x in commit["repository"]["languages"]["edges"]

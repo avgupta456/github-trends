@@ -21,18 +21,20 @@ from external.github_api.graphql.user import (
 from helper.gather import gather
 
 from utils import date_to_datetime
+from constants import NODE_CHUNK_SIZE, NODE_THREADS
 
 from processing.commit import get_all_commit_info, get_commits_languages
 
-t = DefaultDict[str, Dict[str, List[Union[RawEventsEvent, RawEventsCommit]]]]
+t_stats = DefaultDict[str, Dict[str, List[Union[RawEventsEvent, RawEventsCommit]]]]
+t_commits = List[Dict[str, Union[Dict[str, Dict[str, int]], datetime]]]
 
 
 def get_user_all_contribution_events(
     user_id: str,
     start_date: datetime = datetime.now() - timedelta(365),
     end_date: datetime = datetime.now(),
-) -> t:
-    repo_contribs: t = defaultdict(
+) -> t_stats:
+    repo_contribs: t_stats = defaultdict(
         lambda: {"commits": [], "issues": [], "prs": [], "reviews": [], "repos": []}
     )
     after: Optional[str] = ""
@@ -111,7 +113,7 @@ def get_contributions(
         ],
     )
 
-    all_events: List[t] = gather(
+    all_events: List[t_stats] = gather(
         funcs=[get_user_all_contribution_events for _ in years],
         args_dicts=[
             {
@@ -156,13 +158,15 @@ def get_contributions(
             all_node_ids.append(node_id)
 
     node_id_chunks: List[List[str]] = []
-    for i in range(0, len(all_node_ids), 50):
-        node_id_chunks.append(all_node_ids[i : min(len(all_node_ids), i + 50)])
+    for i in range(0, len(all_node_ids), NODE_CHUNK_SIZE):
+        node_id_chunks.append(
+            all_node_ids[i : min(len(all_node_ids), i + NODE_CHUNK_SIZE)]
+        )
 
     commit_language_chunks = gather(
-        funcs=[get_commits_languages for _ in repos],
+        funcs=[get_commits_languages for _ in node_id_chunks],
         args_dicts=[{"node_ids": node_id_chunk} for node_id_chunk in node_id_chunks],
-        max_threads=30,
+        max_threads=NODE_THREADS,
     )
 
     commit_languages: List[List[Dict[str, Dict[str, int]]]] = [
@@ -259,6 +263,10 @@ def get_contributions(
 
     for events_year in all_events:
         for repo, repo_events in events_year.items():
+            if repo == "coursetable/ferry" or repo == "kevinhu/cancer_data":
+                print(repo)
+                print(commit_times_dict[repo])
+                print(commit_languages_dict[repo])
             for event_type in ["commits", "issues", "prs", "reviews", "repos"]:
                 events = sorted(repo_events[event_type], key=lambda x: x.occurred_at)
                 for event in events:
@@ -266,22 +274,16 @@ def get_contributions(
                     date_str = str(datetime_obj.date())
                     repositories[repo][date_str]["date"] = datetime_obj.date()
                     if isinstance(event, RawEventsCommit):
-                        # get timestamps
-                        commit_info: List[
-                            Dict[str, Union[Dict[str, Dict[str, int]], datetime]]
-                        ] = []
+                        commit_info: t_commits = []
                         langs_list: List[Dict[str, Dict[str, int]]] = []
-                        for _ in range(event.count):
-                            if len(commit_times_dict[repo]) > 0:
-                                raw_time = commit_times_dict[repo][0]
-                                time = pytz.utc.localize(raw_time).astimezone(tz)
-                                if (str(time.date())) == date_str:
-                                    commit_times_dict[repo].pop(0)
-                                    langs = commit_languages_dict[repo].pop(0)
-                                    langs_list.append(langs)
-                                    commit_info.append(
-                                        {"timestamp": time, "languages": langs}
-                                    )
+                        count = 0
+                        while len(commit_times_dict[repo]) > 0 and count < event.count:
+                            raw_time = commit_times_dict[repo].pop(0)
+                            langs = commit_languages_dict[repo].pop(0)
+                            langs_list.append(langs)
+                            time = pytz.utc.localize(raw_time).astimezone(tz)
+                            commit_info.append({"timestamp": time, "languages": langs})
+                            count += 1
 
                         # record timestamps
                         total[date_str]["lists"]["commits"].extend(commit_info)
