@@ -263,10 +263,6 @@ def get_contributions(
 
     for events_year in all_events:
         for repo, repo_events in events_year.items():
-            if repo == "coursetable/ferry" or repo == "kevinhu/cancer_data":
-                print(repo)
-                print(commit_times_dict[repo])
-                print(commit_languages_dict[repo])
             for event_type in ["commits", "issues", "prs", "reviews", "repos"]:
                 events = sorted(repo_events[event_type], key=lambda x: x.occurred_at)
                 for event in events:
