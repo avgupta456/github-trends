@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from external.github_api.rest.template import (
-    RESTError409,
+    RESTErrorEmptyRepo,
     get_template,
     get_template_plural,
 )
@@ -74,5 +74,5 @@ def get_repo_commits(
         query += "&until=" + str(until)
     try:
         return get_template_plural(query, page=page)
-    except RESTError409:
+    except RESTErrorEmptyRepo:
         return []
