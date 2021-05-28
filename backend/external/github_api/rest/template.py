@@ -1,18 +1,24 @@
-import os
 from datetime import datetime
 from typing import Any, Dict, List
 
 import requests
+from requests.exceptions import ReadTimeout
+
+from constants import TIMEOUT, TOKEN
 
 
 s = requests.session()
 
 
-class RESTError409(Exception):
+class RESTError(Exception):
     pass
 
 
-class RESTError(Exception):
+class RESTErrorEmptyRepo(Exception):
+    pass
+
+
+class RESTErrorTimeout(Exception):
     pass
 
 
@@ -22,20 +28,22 @@ def _get_template(query: str, params: Dict[str, Any], accept_header: str) -> Any
 
     headers: Dict[str, str] = {
         "Accept": str(accept_header),
-        "Authorization": "bearer " + os.getenv("AUTH_TOKEN", ""),
+        "Authorization": "bearer " + TOKEN,
     }
 
-    r = s.get(query, params=params, headers=headers)
+    try:
+        r = s.get(query, params=params, headers=headers, timeout=TIMEOUT)
+    except ReadTimeout:
+        raise RESTErrorTimeout("REST Error: Request Timeout")
 
     if r.status_code == 200:
         print("REST API", datetime.now() - start)
         return r.json()  # type: ignore
 
     if r.status_code == 409:
-        print("REST ERROR 409")
-        raise RESTError409()
+        raise RESTErrorEmptyRepo("REST Error: Empty Repository")
 
-    raise RESTError("REST Error " + str(r.status_code))
+    raise RESTError("REST Error: " + str(r.status_code))
 
 
 def get_template(
