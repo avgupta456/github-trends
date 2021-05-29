@@ -1,5 +1,6 @@
 from datetime import date, timedelta
 from typing import Any, Dict
+from analytics.user.commits import get_top_languages
 
 from packaging.user import main as get_data
 
@@ -20,13 +21,13 @@ def main(
 ) -> Dict[str, Any]:
     data = get_data(user_id, start_date, end_date, timezone_str)
 
-    [contribs_per_day, contribs_per_repo_per_day] = gather(
-        funcs=[get_contribs_per_day, get_contribs_per_repo_per_day],
-        args_dicts=[{"data": data} for _ in range(2)],
+    funcs = [get_top_languages, get_contribs_per_day, get_contribs_per_repo_per_day]
+    [top_languages, contribs_per_day, contribs_per_repo_per_day] = gather(
+        funcs=funcs, args_dicts=[{"data": data} for _ in range(len(funcs))]
     )
 
     return {
-        "raw": data,
+        "top_languages": top_languages,
         "contribs_per_day": contribs_per_day,
         "contribs_per_repo_per_day": contribs_per_repo_per_day,
     }

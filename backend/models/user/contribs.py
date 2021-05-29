@@ -97,6 +97,11 @@ class CommitContribution(BaseModel):
     languages: Dict[str, Dict[str, int]]
 
 
+class Language(BaseModel):
+    additions: int
+    deletions: int
+
+
 class ContributionStats(BaseModel):
     contribs_count: int
     commits_count: int
@@ -105,7 +110,7 @@ class ContributionStats(BaseModel):
     reviews_count: int
     repos_count: int
     other_count: int
-    languages: Dict[str, Dict[str, int]]
+    languages: Dict[str, Language]
 
 
 class ContributionLists(BaseModel):
