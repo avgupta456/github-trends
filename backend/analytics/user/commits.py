@@ -1,4 +1,4 @@
-from typing import Dict, List, Union
+from typing import Any, Dict, List, Union
 
 from models.user.package import UserPackage
 
@@ -43,3 +43,23 @@ def get_top_languages(data: UserPackage) -> List[dict_type]:
         lang["percent"] = float(round(100 * lang["changed"] / total_changed, 2))
 
     return languages_list
+
+
+def get_top_repos(data: UserPackage) -> List[Any]:
+    repos: List[Any] = [
+        {
+            repo: repo,
+            "languages": [lang for lang in repo_stats.languages],
+            "additions": sum([x.additions for x in repo_stats.languages.values()]),
+            "deletions": sum([x.deletions for x in repo_stats.languages.values()]),
+        }
+        for repo, repo_stats in data.contribs.repo_stats.items()
+    ]
+
+    for repo in repos:
+        repo["added"] = int(repo["additions"]) - int(repo["deletions"])
+        repo["changed"] = int(repo["additions"]) + int(repo["deletions"])
+
+    repos = sorted(repos, key=lambda x: x["changed"], reverse=True)
+
+    return repos[:5]
