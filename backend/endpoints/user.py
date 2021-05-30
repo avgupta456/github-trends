@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+from functools import lru_cache
 from typing import Any, Dict
 
 from packaging.user import main as get_data
@@ -13,6 +14,7 @@ from analytics.user.contribs_per_day import (
 from helper.gather import gather
 
 
+@lru_cache(maxsize=1024)
 def main(
     user_id: str,
     start_date: date = date.today() - timedelta(365),
