@@ -5,3 +5,5 @@ backend/.env
 backend/.venv
 backend/poetry.lock
 backend/.coverage
+
+frontend/.env
