@@ -11,7 +11,13 @@ load_dotenv()
 
 # flake8: noqa E402
 
+# add endpoints here (after load dotenv)
 from endpoints.user import main as _get_user
+from endpoints.github_auth import get_access_token
+
+"""
+SETUP
+"""
 
 app = FastAPI()
 
@@ -26,6 +32,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+"""
+HELPER FUNCTIONS
+"""
 
 
 @app.get("/")
@@ -50,6 +60,22 @@ def fail_gracefully(func: Callable[..., Any]):
             }
 
     return wrapper
+
+
+"""
+USER LOGIN
+"""
+
+
+@app.post("/login/{code}", status_code=status.HTTP_200_OK)
+@fail_gracefully
+def login(response: Response, code: str) -> Any:
+    return get_access_token(code)
+
+
+"""
+ENDPOINTS
+"""
 
 
 @app.get("/user/{user_id}", status_code=status.HTTP_200_OK)

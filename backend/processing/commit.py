@@ -14,6 +14,7 @@ from constants import NODE_CHUNK_SIZE, CUTOFF, BLACKLIST
 
 def get_all_commit_info(
     user_id: str,
+    access_token: str,
     name_with_owner: str,
     start_date: datetime = datetime.now(),
     end_date: datetime = datetime.now(),
@@ -25,6 +26,7 @@ def get_all_commit_info(
     while index in range(10) and len(data) == 100 * index:
         data.extend(
             get_repo_commits(
+                access_token=access_token,
                 owner=owner,
                 repo=repo,
                 user=user_id,
@@ -53,7 +55,7 @@ def get_all_commit_info(
 
 
 def _get_commits_languages(
-    node_ids: List[str], per_page: int = NODE_CHUNK_SIZE
+    access_token: str, node_ids: List[str], per_page: int = NODE_CHUNK_SIZE
 ) -> List[Dict[str, Any]]:
     all_data: List[Dict[str, Any]] = []
     for i in range(0, len(node_ids), per_page):
@@ -61,19 +63,23 @@ def _get_commits_languages(
         # TODO: figure out why Auth error code appears
         cutoff = min(len(node_ids), i + per_page)
         try:
-            raw_data = get_commits(node_ids[i:cutoff])
+            raw_data = get_commits(access_token, node_ids[i:cutoff])
             data: List[Dict[str, Any]] = raw_data["data"]["nodes"]  # type: ignore
             all_data.extend(data)
         except GraphQLErrorMissingNode as e:
             curr = node_ids[i:cutoff]
             curr.pop(e.node)
-            all_data.extend(_get_commits_languages(curr))
+            all_data.extend(_get_commits_languages(access_token, curr))
         except GraphQLErrorTimeout:
             length = cutoff - i
             if length == per_page:
                 midpoint = i + int(per_page / 2)
-                all_data.extend(_get_commits_languages(node_ids[i:midpoint]))
-                all_data.extend(_get_commits_languages(node_ids[midpoint:cutoff]))
+                all_data.extend(
+                    _get_commits_languages(access_token, node_ids[i:midpoint])
+                )
+                all_data.extend(
+                    _get_commits_languages(access_token, node_ids[midpoint:cutoff])
+                )
             else:
                 print("Commit Timeout Exception:", length, " nodes lost")
                 all_data.extend([{} for _ in range(length)])
@@ -85,8 +91,8 @@ def _get_commits_languages(
     return all_data
 
 
-def get_commits_languages(node_ids: List[str], cutoff: int = CUTOFF):
-    all_data = _get_commits_languages(node_ids, per_page=NODE_CHUNK_SIZE)
+def get_commits_languages(access_token: str, node_ids: List[str], cutoff: int = CUTOFF):
+    all_data = _get_commits_languages(access_token, node_ids, per_page=NODE_CHUNK_SIZE)
 
     out: List[Dict[str, Dict[str, int]]] = []
     for commit in all_data:

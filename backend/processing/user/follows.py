@@ -7,7 +7,7 @@ from external.github_api.graphql.user import (
 from models.user.follows import User, UserFollows
 
 
-def get_user_follows(user_id: str) -> UserFollows:
+def get_user_follows(user_id: str, access_token: str) -> UserFollows:
     """get user followers and users following for given user"""
 
     followers: List[User] = []
@@ -20,7 +20,7 @@ def get_user_follows(user_id: str) -> UserFollows:
         index, cont = 0, True  # initialize variables
         while cont and index < 10:
             after_str: str = after if isinstance(after, str) else ""
-            data = get_func(user_id, after=after_str)
+            data = get_func(user_id, access_token, after=after_str)
 
             cont = False
 

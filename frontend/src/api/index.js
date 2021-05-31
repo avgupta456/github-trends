@@ -1,3 +1,3 @@
-import { getUserData } from './user';
+import { getAccessToken } from './user';
 
-export { getUserData };
+export { getAccessToken };

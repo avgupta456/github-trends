@@ -3,7 +3,9 @@ from typing import Any, Dict, List, Union
 from external.github_api.graphql.template import get_template
 
 
-def get_repo(owner: str, repo: str) -> Union[Dict[str, Any], List[Any]]:
+def get_repo(
+    access_token: str, owner: str, repo: str
+) -> Union[Dict[str, Any], List[Any]]:
     """gets all repository data from graphql"""
     query = {
         "variables": {"owner": owner, "repo": repo},
@@ -42,4 +44,4 @@ def get_repo(owner: str, repo: str) -> Union[Dict[str, Any], List[Any]]:
         """,
     }
 
-    return get_template(query)
+    return get_template(query, access_token)

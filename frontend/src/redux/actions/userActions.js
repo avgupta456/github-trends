@@ -1,10 +1,10 @@
-export const SET_USER_ID = 'SET_USER_ID';
-export const SET_USER_DATA = 'SET_USER_DATA';
+export const LOGIN = 'LOGIN';
+export const LOGOUT = 'LOGOUT';
 
-export function setUserId(userId) {
-  return { type: SET_USER_ID, payload: { userId } };
+export function login(userId) {
+  return { type: LOGIN, payload: { userId } };
 }
 
-export function setUserData(userData) {
-  return { type: SET_USER_DATA, payload: { userData } };
+export function logout() {
+  return { type: LOGOUT, payload: {} };
 }

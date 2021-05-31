@@ -1,21 +1,26 @@
 import * as types from '../actions/userActions';
 
 const initialState = {
-  userId: '',
-  userData: {},
+  isLoggedIn: JSON.parse(localStorage.getItem('isLoggedIn')) || false,
+  userId: JSON.parse(localStorage.getItem('userId')) || null,
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case types.SET_USER_ID:
+    case types.LOGIN:
+      localStorage.setItem('isLoggedIn', JSON.stringify(true));
+      localStorage.setItem('userId', JSON.stringify(action.payload.userId));
       return {
         ...state,
+        isLoggedIn: true,
         userId: action.payload.userId,
       };
-    case types.SET_USER_DATA:
+    case types.LOGOUT:
+      localStorage.clear();
       return {
         ...state,
-        userData: action.payload.userData,
+        isLoggedIn: false,
+        userId: null,
       };
     default:
       return state;

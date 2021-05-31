@@ -4,7 +4,7 @@ from typing import Any, Dict, List
 import requests
 from requests.exceptions import ReadTimeout
 
-from constants import TIMEOUT, TOKEN
+from constants import TIMEOUT
 
 
 s = requests.session()
@@ -22,13 +22,15 @@ class RESTErrorTimeout(Exception):
     pass
 
 
-def _get_template(query: str, params: Dict[str, Any], accept_header: str) -> Any:
+def _get_template(
+    query: str, params: Dict[str, Any], access_token: str, accept_header: str
+) -> Any:
     """Internal template for interacting with the GitHub REST API"""
     start = datetime.now()
 
     headers: Dict[str, str] = {
         "Accept": str(accept_header),
-        "Authorization": "bearer " + TOKEN,
+        "Authorization": "bearer " + access_token,
     }
 
     try:
@@ -48,18 +50,20 @@ def _get_template(query: str, params: Dict[str, Any], accept_header: str) -> Any
 
 def get_template(
     query: str,
+    access_token: str,
     accept_header: str = "application/vnd.github.v3+json",
 ) -> Dict[str, Any]:
     """Template for interacting with the GitHub REST API (singular)"""
 
     try:
-        return _get_template(query, {}, accept_header)
+        return _get_template(query, {}, access_token, accept_header)
     except Exception as e:
         raise e
 
 
 def get_template_plural(
     query: str,
+    access_token: str,
     per_page: int = 100,
     page: int = 1,
     accept_header: str = "application/vnd.github.v3+json",
@@ -67,6 +71,6 @@ def get_template_plural(
     """Template for interacting with the GitHub REST API (plural)"""
     params: Dict[str, str] = {"per_page": str(per_page), "page": str(page)}
     try:
-        return _get_template(query, params, accept_header)
+        return _get_template(query, params, access_token, accept_header)
     except Exception as e:
         raise e

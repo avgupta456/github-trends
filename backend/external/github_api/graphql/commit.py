@@ -3,7 +3,9 @@ from typing import Any, Dict, List, Union
 from external.github_api.graphql.template import get_template
 
 
-def get_commits(node_ids: List[str]) -> Union[Dict[str, Any], List[Any]]:
+def get_commits(
+    access_token: str, node_ids: List[str]
+) -> Union[Dict[str, Any], List[Any]]:
     """gets all repository data from graphql"""
     query = {
         "variables": {"ids": node_ids},
@@ -30,4 +32,4 @@ def get_commits(node_ids: List[str]) -> Union[Dict[str, Any], List[Any]]:
         """,
     }
 
-    return get_template(query)
+    return get_template(query, access_token)

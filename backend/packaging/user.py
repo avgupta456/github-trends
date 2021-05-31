@@ -10,6 +10,7 @@ from helper.gather import gather
 
 def main(
     user_id: str,
+    access_token: str,
     start_date: date = date.today() - timedelta(365),
     end_date: date = date.today(),
     timezone_str: str = "US/Eastern",
@@ -20,11 +21,12 @@ def main(
         args_dicts=[
             {
                 "user_id": user_id,
+                "access_token": access_token,
                 "start_date": start_date,
                 "end_date": end_date,
                 "timezone_str": timezone_str,
             },
-            {"user_id": user_id},
+            {"user_id": user_id, "access_token": access_token},
         ],
     )
 
