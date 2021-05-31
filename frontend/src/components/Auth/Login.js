@@ -12,7 +12,7 @@ import {
 } from '../../redux/actions/userActions';
 import { CLIENT_ID, REDIRECT_URI } from '../../constants';
 
-const GitHubAuthURL = `https://github.com/login/oauth/authorize?scope=user&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}`;
+const GitHubAuthURL = `https://github.com/login/oauth/authorize?scope=repo:status&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}`;
 
 const LoginScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
