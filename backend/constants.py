@@ -9,3 +9,7 @@ NODE_THREADS = 30  # number of node queries simultaneously (avoid blacklisting)
 
 BLACKLIST = ["Jupyter Notebook", "HTML"]  # languages to ignore
 CUTOFF = 1000  # if > cutoff lines, assume imported, don't count
+
+OAUTH_CLIENT_ID = os.getenv("OAUTH_CLIENT_ID", "")  # client ID for GitHub OAuth App
+OAUTH_CLIENT_SECRET = os.getenv("OAUTH_CLIENT_SECRET", "")  # client secret for App
+OAUTH_REDIRECT_URI = os.getenv("OAUTH_REDIRECT_URI", "")  # redirect uri for App
