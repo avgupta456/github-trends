@@ -1,3 +1,3 @@
-import A from './Auth';
+import LoginScreen from './Login';
 
-export default A;
+export default LoginScreen;
