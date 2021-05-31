@@ -93,7 +93,7 @@ class RawEvents(BaseModel):
 
 
 class CommitContribution(BaseModel):
-    timestamp: datetime
+    timestamp: str
     languages: Dict[str, Dict[str, int]]
 
 
@@ -115,14 +115,14 @@ class ContributionStats(BaseModel):
 
 class ContributionLists(BaseModel):
     commits: List[CommitContribution]
-    issues: List[datetime]
-    prs: List[datetime]
-    reviews: List[datetime]
-    repos: List[datetime]
+    issues: List[str]
+    prs: List[str]
+    reviews: List[str]
+    repos: List[str]
 
 
 class ContributionDay(BaseModel):
-    date: date
+    date: str
     weekday: int
     stats: ContributionStats
     lists: ContributionLists

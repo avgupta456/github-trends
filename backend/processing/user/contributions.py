@@ -26,7 +26,7 @@ from constants import NODE_CHUNK_SIZE, NODE_THREADS
 from processing.commit import get_all_commit_info, get_commits_languages
 
 t_stats = DefaultDict[str, Dict[str, List[Union[RawEventsEvent, RawEventsCommit]]]]
-t_commits = List[Dict[str, Union[Dict[str, Dict[str, int]], datetime]]]
+t_commits = List[Dict[str, Union[Dict[str, Dict[str, int]], str]]]
 
 
 def get_user_all_contribution_events(
@@ -236,7 +236,7 @@ def get_contributions(
     for calendar_year in calendars:
         for week in calendar_year.weeks:
             for day in week.contribution_days:
-                total[str(day.date)]["date"] = day.date
+                total[str(day.date)]["date"] = day.date.isoformat()
                 total[str(day.date)]["weekday"] = day.weekday
                 total[str(day.date)]["stats"]["contribs_count"] = day.count
                 total[str(day.date)]["stats"]["other_count"] = day.count
@@ -279,8 +279,9 @@ def get_contributions(
                 events = sorted(repo_events[event_type], key=lambda x: x.occurred_at)
                 for event in events:
                     datetime_obj = event.occurred_at.astimezone(tz)
-                    date_str = str(datetime_obj.date())
-                    repositories[repo][date_str]["date"] = datetime_obj.date()
+                    date_str = datetime_obj.date().isoformat()
+                    datetime_str = datetime_obj.isoformat()
+                    repositories[repo][date_str]["date"] = date_str
                     if isinstance(event, RawEventsCommit):
                         commit_info: t_commits = []
                         langs_list: List[Dict[str, Dict[str, int]]] = []
@@ -290,7 +291,9 @@ def get_contributions(
                             langs = commit_languages_dict[repo].pop(0)
                             langs_list.append(langs)
                             time = pytz.utc.localize(raw_time).astimezone(tz)
-                            commit_info.append({"timestamp": time, "languages": langs})
+                            commit_info.append(
+                                {"timestamp": time.isoformat(), "languages": langs}
+                            )
                             count += 1
 
                         # record timestamps
@@ -307,9 +310,9 @@ def get_contributions(
                         update(date_str, repo, event_type, 1)
 
                         # record timestamps
-                        total[date_str]["lists"][event_type].append(datetime_obj)
+                        total[date_str]["lists"][event_type].append(datetime_str)
                         repositories[repo][date_str]["lists"][event_type].append(
-                            datetime_obj
+                            datetime_str
                         )
 
     total_list = list(total.values())
