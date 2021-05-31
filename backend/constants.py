@@ -1,6 +1,6 @@
 import os
 
-
+USER_ID = "AshishGupta938"  # for testing, previously "avgupta456"
 TOKEN = os.getenv("AUTH_TOKEN", "")  # for authentication
 TIMEOUT = 3  # max seconds to wait for api response
 

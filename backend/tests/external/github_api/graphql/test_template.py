@@ -1,13 +1,13 @@
 import unittest
 
 from external.github_api.graphql.template import get_template
-from constants import TOKEN
+from constants import USER_ID, TOKEN
 
 
 class TestTemplate(unittest.TestCase):
     def test_get_template(self):
         query = {
-            "variables": {"login": "avgupta456"},
+            "variables": {"login": USER_ID},
             "query": """
             query getUser($login: String!) {
                 user(login: $login){
