@@ -24,7 +24,7 @@ protobuf==3.14.0
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycparser==2.20; python_version >= "3.5"
-pydantic==1.7.3
+pydantic==1.7.4
 python-dotenv==0.15.0
 pytz==2020.5
 pyyaml==5.4.1
