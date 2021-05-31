@@ -1,6 +1,7 @@
 import unittest
 
 from external.github_api.graphql.template import get_template
+from constants import TOKEN
 
 
 class TestTemplate(unittest.TestCase):
@@ -19,7 +20,7 @@ class TestTemplate(unittest.TestCase):
             }
             """,
         }
-        response = get_template(query)
+        response = get_template(query, TOKEN)
 
         self.assertIn("data", response)
         data = response["data"]

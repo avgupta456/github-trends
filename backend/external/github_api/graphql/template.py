@@ -4,7 +4,7 @@ from typing import Any, Dict, Tuple
 import requests
 from requests.exceptions import ReadTimeout
 
-from constants import TIMEOUT, TOKEN
+from constants import TIMEOUT
 
 s = requests.session()
 
@@ -27,10 +27,10 @@ class GraphQLErrorTimeout(Exception):
     pass
 
 
-def get_template(query: Dict[str, Any]) -> Dict[str, Any]:
+def get_template(query: Dict[str, Any], access_token: str) -> Dict[str, Any]:
     """Template for interacting with the GitHub GraphQL API"""
     start = datetime.now()
-    headers: Dict[str, str] = {"Authorization": "bearer " + TOKEN}
+    headers: Dict[str, str] = {"Authorization": "bearer " + access_token}
 
     try:
         r = s.post(  # type: ignore

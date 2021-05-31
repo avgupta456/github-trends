@@ -31,6 +31,7 @@ t_commits = List[Dict[str, Union[Dict[str, Dict[str, int]], datetime]]]
 
 def get_user_all_contribution_events(
     user_id: str,
+    access_token: str,
     start_date: datetime = datetime.now() - timedelta(365),
     end_date: datetime = datetime.now(),
 ) -> t_stats:
@@ -42,7 +43,11 @@ def get_user_all_contribution_events(
     while index < 10 and cont:
         after_str = after if isinstance(after, str) else ""
         response = get_user_contribution_events(
-            user_id=user_id, start_date=start_date, end_date=end_date, after=after_str
+            user_id=user_id,
+            access_token=access_token,
+            start_date=start_date,
+            end_date=end_date,
+            after=after_str,
         )
 
         cont = False
@@ -76,6 +81,7 @@ def get_user_all_contribution_events(
 
 def get_contributions(
     user_id: str,
+    access_token: str,
     start_date: date = date.today() - timedelta(365),
     end_date: date = date.today(),
     timezone_str: str = "US/Eastern",
@@ -86,7 +92,7 @@ def get_contributions(
     years = sorted(
         filter(
             lambda x: start_date.year <= x <= end_date.year,
-            get_user_contribution_years(user_id),
+            get_user_contribution_years(user_id, access_token),
         )
     )
 
@@ -106,6 +112,7 @@ def get_contributions(
         args_dicts=[
             {
                 "user_id": user_id,
+                "access_token": access_token,
                 "start_date": dates[i][0],
                 "end_date": dates[i][1],
             }
@@ -118,6 +125,7 @@ def get_contributions(
         args_dicts=[
             {
                 "user_id": user_id,
+                "access_token": access_token,
                 "start_date": dates[i][0],
                 "end_date": dates[i][1],
             }
@@ -136,6 +144,7 @@ def get_contributions(
         args_dicts=[
             {
                 "user_id": user_id,
+                "access_token": access_token,
                 "name_with_owner": repo,
                 "start_date": dates[0][0],  # first start
                 "end_date": dates[-1][1],  # last end
@@ -165,7 +174,10 @@ def get_contributions(
 
     commit_language_chunks = gather(
         funcs=[get_commits_languages for _ in node_id_chunks],
-        args_dicts=[{"node_ids": node_id_chunk} for node_id_chunk in node_id_chunks],
+        args_dicts=[
+            {"access_token": access_token, "node_ids": node_id_chunk}
+            for node_id_chunk in node_id_chunks
+        ],
         max_threads=NODE_THREADS,
     )
 

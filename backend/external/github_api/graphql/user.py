@@ -8,7 +8,7 @@ from models.user.contribs import RawCalendar, RawEvents
 from models.user.follows import RawFollows
 
 
-def get_user_contribution_years(user_id: str) -> List[int]:
+def get_user_contribution_years(user_id: str, access_token: str) -> List[int]:
     """Gets years where the user had activity"""
     query = {
         "variables": {"login": user_id},
@@ -23,15 +23,14 @@ def get_user_contribution_years(user_id: str) -> List[int]:
         """,
     }
 
-    years = get_template(query)["data"]["user"]["contributionsCollection"][
-        "contributionYears"
-    ]
-
+    raw_data = get_template(query, access_token)
+    years = raw_data["data"]["user"]["contributionsCollection"]["contributionYears"]
     return years
 
 
 def get_user_contribution_calendar(
     user_id: str,
+    access_token: str,
     start_date: datetime = datetime.now() - timedelta(days=365),
     end_date: datetime = datetime.now(),
 ) -> RawCalendar:
@@ -64,14 +63,14 @@ def get_user_contribution_calendar(
         """,
     }
 
-    output = get_template(query)["data"]["user"]["contributionsCollection"][
-        "contributionCalendar"
-    ]
+    raw_data = get_template(query, access_token)
+    output = raw_data["data"]["user"]["contributionsCollection"]["contributionCalendar"]
     return RawCalendar.parse_obj(output)
 
 
 def get_user_contribution_events(
     user_id: str,
+    access_token: str,
     start_date: datetime = datetime.now() - timedelta(365),
     end_date: datetime = datetime.now(),
     max_repos: int = 100,
@@ -178,11 +177,14 @@ def get_user_contribution_events(
         """,
     }
 
-    output = get_template(query)["data"]["user"]["contributionsCollection"]
+    raw_data = get_template(query, access_token)
+    output = raw_data["data"]["user"]["contributionsCollection"]
     return RawEvents.parse_obj(output)
 
 
-def get_user_followers(user_id: str, first: int = 100, after: str = "") -> RawFollows:
+def get_user_followers(
+    user_id: str, access_token: str, first: int = 100, after: str = ""
+) -> RawFollows:
     """gets user's followers and users following'"""
 
     variables: Dict[str, Union[str, int]] = (
@@ -234,11 +236,13 @@ def get_user_followers(user_id: str, first: int = 100, after: str = "") -> RawFo
         "query": query_str,
     }
 
-    output_dict = get_template(query)["data"]["user"]["followers"]
+    output_dict = get_template(query, access_token)["data"]["user"]["followers"]
     return RawFollows.parse_obj(output_dict)
 
 
-def get_user_following(user_id: str, first: int = 10, after: str = "") -> RawFollows:
+def get_user_following(
+    user_id: str, access_token: str, first: int = 10, after: str = ""
+) -> RawFollows:
     """gets user's followers and users following'"""
 
     variables: Dict[str, Union[str, int]] = (
@@ -290,5 +294,5 @@ def get_user_following(user_id: str, first: int = 10, after: str = "") -> RawFol
         "query": query_str,
     }
 
-    output_dict = get_template(query)["data"]["user"]["following"]
+    output_dict = get_template(query, access_token)["data"]["user"]["following"]
     return RawFollows.parse_obj(output_dict)
