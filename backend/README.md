@@ -22,6 +22,8 @@ poetry run coverage -m unittest
 poetry run coverage report
 ```
 
+View coverage with GitHub badge or on coveralls.io
+
 ## Build
 
 If a new requirement has been added, make sure to update the requirements.txt
