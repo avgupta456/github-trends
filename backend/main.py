@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 
+from external.google_datastore.datastore import get_all_user_ids
+
 load_dotenv()
 
 # flake8: noqa E402
@@ -103,3 +105,15 @@ ENDPOINTS
 @async_fail_gracefully
 async def get_user(response: Response, user_id: str) -> Any:
     return await _get_user(user_id)
+
+
+@app.get("/user_refresh", status_code=status.HTTP_200_OK)
+@async_fail_gracefully
+async def get_user_refresh(response: Response) -> Any:
+    data = get_all_user_ids()
+    for user_id in data:
+        try:
+            await _get_user(user_id, use_cache=False)
+        except Exception as e:
+            print(e)
+    return "Successfully Updated"
