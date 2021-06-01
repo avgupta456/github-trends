@@ -79,7 +79,7 @@ def get_user_all_contribution_events(
     return repo_contribs
 
 
-def get_contributions(
+async def get_contributions(
     user_id: str,
     access_token: str,
     start_date: date = date.today() - timedelta(365),
@@ -107,7 +107,7 @@ def get_contributions(
     ]
 
     # async get contribution calendars
-    calendars: List[RawCalendar] = gather(
+    calendars: List[RawCalendar] = await gather(
         funcs=[get_user_contribution_calendar for _ in years],
         args_dicts=[
             {
@@ -120,7 +120,7 @@ def get_contributions(
         ],
     )
 
-    all_events: List[t_stats] = gather(
+    all_events: List[t_stats] = await gather(
         funcs=[get_user_all_contribution_events for _ in years],
         args_dicts=[
             {
@@ -139,7 +139,7 @@ def get_contributions(
             repos_set.add(repo)
     repos = list(repos_set)
 
-    commit_infos = gather(
+    commit_infos = await gather(
         funcs=[get_all_commit_info for _ in repos],
         args_dicts=[
             {
@@ -172,7 +172,7 @@ def get_contributions(
             all_node_ids[i : min(len(all_node_ids), i + NODE_CHUNK_SIZE)]
         )
 
-    commit_language_chunks = gather(
+    commit_language_chunks = await gather(
         funcs=[get_commits_languages for _ in node_id_chunks],
         args_dicts=[
             {"access_token": access_token, "node_ids": node_id_chunk}

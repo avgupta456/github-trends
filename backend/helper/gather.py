@@ -25,35 +25,18 @@ async def gather_with_concurrency(
     return await asyncio.gather(*(sem_task(task) for task in tasks))  # type: ignore
 
 
-async def _gather(
+async def gather(
     funcs: List[Callable[..., Any]],
     args_dicts: List[Dict[str, Any]],
     max_threads: int = 5,
 ) -> List[Any]:
     """runs the given functions asynchronously"""
-
-    async_funcs = [async_function(func) for func in funcs]
 
     output: List[Any] = list(
         await gather_with_concurrency(
             max_threads,
-            *(
-                async_func(**kwargs)
-                for async_func, kwargs in zip(async_funcs, args_dicts)
-            )
+            *(async_function(func)(**kwargs) for func, kwargs in zip(funcs, args_dicts))
         )
     )
 
     return output
-
-
-def gather(
-    funcs: List[Callable[..., Any]],
-    args_dicts: List[Dict[str, Any]],
-    max_threads: int = 5,
-) -> List[Any]:
-    """runs the given functions asynchronously"""
-
-    return asyncio.run(
-        _gather(funcs=funcs, args_dicts=args_dicts, max_threads=max_threads)
-    )

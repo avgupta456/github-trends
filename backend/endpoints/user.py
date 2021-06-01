@@ -17,36 +17,30 @@ from analytics.user.contribs_per_day import (
 )
 
 
-from helper.gather import gather
-
-
 @lru_cache(maxsize=1024)
-def main(
+async def main(
     user_id: str,
     start_date: date = date.today() - timedelta(365),
     end_date: date = date.today(),
     timezone_str: str = "US/Eastern",
+    use_cache: bool = True,
 ) -> Dict[str, Any]:
 
     access_token = get_access_token(user_id)
     if access_token == "":
         raise LookupError("Invalid UserId")
 
-    output = get_user_endpoint(user_id)
-    if output is not None:
-        return output
+    if use_cache:
+        output = get_user_endpoint(user_id)
+        if output is not None:
+            return output
 
-    data = get_data(user_id, access_token, start_date, end_date, timezone_str)
+    data = await get_data(user_id, access_token, start_date, end_date, timezone_str)
 
-    funcs = [
-        get_top_languages,
-        get_top_repos,
-        get_contribs_per_day,
-        get_contribs_per_repo_per_day,
-    ]
-    [top_languages, top_repos, contribs_per_day, contribs_per_repo_per_day] = gather(
-        funcs=funcs, args_dicts=[{"data": data} for _ in range(len(funcs))]
-    )
+    top_languages = get_top_languages(data)
+    top_repos = get_top_repos(data)
+    contribs_per_day = get_contribs_per_day(data)
+    contribs_per_repo_per_day = get_contribs_per_repo_per_day(data)
 
     output = {
         "top_languages": top_languages,
