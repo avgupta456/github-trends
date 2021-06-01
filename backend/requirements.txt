@@ -1,3 +1,4 @@
+aiounittest==1.4.0
 cachetools==4.2.0
 certifi==2020.12.5
 cffi==1.14.4; python_version >= "3.5"
@@ -43,3 +44,4 @@ uvicorn==0.13.3
 uvloop==0.14.0; sys_platform != "win32" and sys_platform != "cygwin" and platform_python_implementation != "PyPy"
 watchgod==0.6
 websockets==8.1
+wrapt==1.12.1
