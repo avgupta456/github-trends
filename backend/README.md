@@ -30,4 +30,4 @@ If a new requirement has been added, make sure to update the requirements.txt
 poetry export -f requirements.txt --output requirements.txt --without-hashes # generate requirements.txt
 ```
 
-TODO
+Then, just commit on the main branch (Google Cloud Run takes care of the rest)
