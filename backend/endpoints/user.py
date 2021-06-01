@@ -1,5 +1,4 @@
 from datetime import date, timedelta
-from functools import lru_cache
 from typing import Any, Dict
 
 from external.google_datastore.datastore import (
@@ -17,7 +16,7 @@ from analytics.user.contribs_per_day import (
 )
 
 
-@lru_cache(maxsize=1024)
+# TODO: asyncio lru_cache (functools doesn't work here)
 async def main(
     user_id: str,
     start_date: date = date.today() - timedelta(365),
