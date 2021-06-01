@@ -17,6 +17,7 @@ google-crc32c==1.1.2; python_version >= "3.5"
 google-resumable-media==1.2.0
 googleapis-common-protos==1.52.0
 grpcio==1.38.0
+gunicorn==20.1.0
 h11==0.12.0
 httptools==0.1.1; sys_platform != "win32" and sys_platform != "cygwin" and platform_python_implementation != "PyPy"
 idna==2.10
