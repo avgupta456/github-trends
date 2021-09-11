@@ -3,7 +3,6 @@ __pycache__
 
 backend/.env
 backend/.venv
-backend/poetry.lock
 backend/.coverage
 backend/external/google_datastore/service-account.json
 
