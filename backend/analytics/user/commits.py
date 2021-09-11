@@ -49,7 +49,7 @@ def get_top_repos(data: UserPackage) -> List[Any]:
     repos: List[Any] = [
         {
             repo: repo,
-            "languages": [lang for lang in repo_stats.languages],
+            "languages": list(repo_stats.languages.keys()),
             "additions": sum([x.additions for x in repo_stats.languages.values()]),
             "deletions": sum([x.deletions for x in repo_stats.languages.values()]),
         }
