@@ -43,5 +43,5 @@ urllib3==1.26.5
 uvicorn==0.13.3
 uvloop==0.14.0; sys_platform != "win32" and sys_platform != "cygwin" and platform_python_implementation != "PyPy"
 watchgod==0.6
-websockets==8.1
+websockets==9.1
 wrapt==1.12.1
