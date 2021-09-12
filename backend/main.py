@@ -4,7 +4,7 @@ from functools import wraps
 from typing import Any, Callable, Dict, List
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, Response, status
+from fastapi import FastAPI, Response, status, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from external.google_datastore.datastore import get_all_user_ids
@@ -14,6 +14,8 @@ load_dotenv()
 # flake8: noqa E402
 
 # add endpoints here (after load dotenv)
+from constants import PUBSUB_PUB
+
 from endpoints.user import main as _get_user
 from endpoints.github_auth import get_access_token
 
@@ -93,6 +95,8 @@ USER LOGIN
 @app.post("/login/{code}", status_code=status.HTTP_200_OK)
 @fail_gracefully
 def login(response: Response, code: str) -> Any:
+    if not PUBSUB_PUB:
+        raise HTTPException(500, "Login using PUB Server, not SUB Server")
     return get_access_token(code)
 
 
