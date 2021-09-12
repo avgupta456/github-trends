@@ -16,3 +16,4 @@ resources:
 
 env_variables:
   PROD: true
+  PUBSUB_PUB: false

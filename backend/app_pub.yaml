@@ -1,0 +1,19 @@
+runtime: python37
+entrypoint: gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
+
+#smallest instance class
+instance_class: F2
+
+#prevents creating additional instances
+automatic_scaling:  
+  max_instances: 5
+  
+#set to minimums
+resources:
+  cpu: 1
+  memory_gb: 0.5
+  disk_size_gb: 10
+
+env_variables:
+  PROD: true
+  PUBSUB_PUB: true
