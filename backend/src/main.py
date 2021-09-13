@@ -24,6 +24,10 @@ from src.constants import PUBSUB_PUB, PUBSUB_TOKEN
 from src.endpoints.user import main as _get_user
 from src.endpoints.github_auth import get_access_token
 
+from src.db.models.users import UserModel as DBUserModel
+from src.db.functions.users import create_user
+from src.db.functions.get import get_user
+
 """
 SETUP
 """
@@ -92,6 +96,20 @@ def async_fail_gracefully(func: Callable[..., Any]):
     return wrapper
 
 
+@app.get("/user/create/{user_id}/{access_token}", status_code=status.HTTP_200_OK)
+@async_fail_gracefully
+async def create_user_endpoint(
+    response: Response, user_id: str, access_token: str
+) -> str:
+    return await create_user(user_id, access_token)
+
+
+@app.get("/user/get/{user_id}", status_code=status.HTTP_200_OK)
+@async_fail_gracefully
+async def get_user_endpoint(response: Response, user_id: str) -> DBUserModel:
+    return await get_user(user_id)
+
+
 count: int = 0
 
 publisher = pubsub_v1.PublisherClient()
@@ -148,11 +166,12 @@ def login(response: Response, code: str) -> Any:
 ENDPOINTS
 """
 
-
+"""
 @app.get("/user/{user_id}", status_code=status.HTTP_200_OK)
 @async_fail_gracefully
 async def get_user(response: Response, user_id: str) -> Any:
     return await _get_user(user_id)
+"""
 
 
 @app.get("/user_refresh", status_code=status.HTTP_200_OK)

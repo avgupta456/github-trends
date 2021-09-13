@@ -6,6 +6,7 @@ click==7.1.2
 colorama==0.4.4; sys_platform == "win32"
 coverage==5.5
 coveralls==3.2.0
+dnspython==1.16.0
 docopt==0.6.2
 fastapi==0.65.3
 google-api-core==2.0.1
