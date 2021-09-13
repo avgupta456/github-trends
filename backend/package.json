@@ -5,7 +5,7 @@
     "scripts": {
       "start-pub": "set PUBSUB_PUB=true && poetry run uvicorn src.main:app --reload --port=8000",
       "start-sub": "set PUBSUB_PUB=false && poetry run uvicorn src.main:app --reload --port=8001",
-      "set-reqs": "poetry export -f requirements.txt --output requirements.txt --without-hashes",
+      "set-reqs": "poetry lock && poetry export -f requirements.txt --output requirements.txt --without-hashes",
       "create-env": "printenv > .env"
     }
   }

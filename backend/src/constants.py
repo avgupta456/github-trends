@@ -21,6 +21,9 @@ OAUTH_REDIRECT_URI = os.getenv("OAUTH_REDIRECT_URI", "")  # redirect uri for App
 PUBSUB_PUB = os.getenv("PUBSUB_PUB", "False") == "True"
 PUBSUB_TOKEN = os.getenv("PUBSUB_TOKEN", "")
 
+# MONGODB
+MONGODB_PASSWORD = os.getenv("MONGODB_PASSWORD", "")
+
 # TESTING
 TEST_USER_ID = "AshishGupta938"  # for testing, previously "avgupta456"
 TEST_TOKEN = os.getenv("AUTH_TOKEN", "")  # for authentication

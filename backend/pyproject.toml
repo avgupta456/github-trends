@@ -20,6 +20,7 @@ aiounittest = "^1.4.0"
 google-cloud-pubsub = "^2.8.0"
 google-cloud-datastore = "^2.1.6"
 pytz = "^2021.1"
+motor = "^2.5.1"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.8.4"
