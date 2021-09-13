@@ -122,6 +122,7 @@ async def test_pubsub(response: Response, token: str, request: Request) -> Any:
         raise HTTPException(400, "Incorrect Token")
 
     data = await request.json()
+    data = data["message"]["data"].decode("utf-8")
 
     print(data)
 
