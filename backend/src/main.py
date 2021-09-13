@@ -1,3 +1,4 @@
+import base64
 import json
 import logging
 
@@ -91,7 +92,7 @@ def async_fail_gracefully(func: Callable[..., Any]):
     return wrapper
 
 
-count = 0
+count: int = 0
 
 publisher = pubsub_v1.PublisherClient()
 
@@ -122,7 +123,7 @@ async def test_pubsub(response: Response, token: str, request: Request) -> Any:
         raise HTTPException(400, "Incorrect Token")
 
     data = await request.json()
-    data = data["message"]["data"].decode("utf-8")
+    data = json.loads(base64.b64decode(data["message"]["data"]))
 
     print(data)
 
