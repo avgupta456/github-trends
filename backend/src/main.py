@@ -107,7 +107,7 @@ def test(response: Response) -> Any:
 def test_post(response: Response, update: str) -> Any:
     topic_path = publisher.topic_path("github-298920", "test")  # type: ignore
 
-    data = json.dumps(int(update)).encode("utf-8")
+    data = json.dumps({"num": int(update)}).encode("utf-8")
 
     publisher.publish(topic_path, data=data)  # type: ignore
 
@@ -115,17 +115,18 @@ def test_post(response: Response, update: str) -> Any:
 
 
 @app.post("/pubsub/push/{token}", status_code=status.HTTP_200_OK)
-@fail_gracefully
+@async_fail_gracefully
 async def test_pubsub(response: Response, token: str, request: Request) -> Any:
+    print(PUBSUB_TOKEN)
     if token != PUBSUB_TOKEN:
-        return HTTPException(400, "Incorrect Token")
+        raise HTTPException(400, "Incorrect Token")
 
     data = await request.json()
 
     print(data)
 
     global count
-    count += data
+    count += data["num"]
 
 
 """
