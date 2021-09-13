@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from external.github_api.rest.template import (
+from src.external.github_api.rest.template import (
     RESTErrorEmptyRepo,
     get_template,
     get_template_plural,

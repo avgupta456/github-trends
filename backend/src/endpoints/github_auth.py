@@ -3,9 +3,9 @@ from typing import Any
 
 import requests
 
-from constants import OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_REDIRECT_URI
-from external.github_auth.auth import get_unknown_user
-from external.google_datastore.datastore import set_access_token
+from src.constants import OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_REDIRECT_URI
+from src.external.github_auth.auth import get_unknown_user
+from src.external.google_datastore.datastore import set_access_token
 
 
 s = requests.session()

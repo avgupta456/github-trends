@@ -5,25 +5,25 @@ from typing import Any, DefaultDict, Dict, List, Optional, Set, Union
 import pytz
 from pytz import timezone
 
-from models.user.contribs import (
+from src.models.user.contribs import (
     RawCalendar,
     RawEventsCommit,
     RawEventsEvent,
     UserContributions,
 )
 
-from external.github_api.graphql.user import (
+from src.external.github_api.graphql.user import (
     get_user_contribution_years,
     get_user_contribution_calendar,
     get_user_contribution_events,
 )
 
-from helper.gather import gather
+from src.helper.gather import gather
 
-from utils import date_to_datetime
-from constants import NODE_CHUNK_SIZE, NODE_THREADS
+from src.utils import date_to_datetime
+from src.constants import NODE_CHUNK_SIZE, NODE_THREADS
 
-from processing.commit import get_all_commit_info, get_commits_languages
+from src.processing.commit import get_all_commit_info, get_commits_languages
 
 t_stats = DefaultDict[str, Dict[str, List[Union[RawEventsEvent, RawEventsCommit]]]]
 t_commits = List[Dict[str, Union[Dict[str, Dict[str, int]], str]]]

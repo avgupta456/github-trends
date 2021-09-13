@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
-from models.user.contribs import UserContributions
-from models.user.follows import UserFollows
+from src.models.user.contribs import UserContributions
+from src.models.user.follows import UserFollows
 
 
 class UserPackage(BaseModel):

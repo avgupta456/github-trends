@@ -4,7 +4,7 @@ from typing import Any, Dict, Tuple
 import requests
 from requests.exceptions import ReadTimeout
 
-from constants import TIMEOUT
+from src.constants import TIMEOUT
 
 s = requests.session()
 

@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Union
 
-from models.user.package import UserPackage
+from src.models.user.package import UserPackage
 
 dict_type = Dict[str, Union[str, int, float]]
 

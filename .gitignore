@@ -4,6 +4,6 @@ __pycache__
 backend/.env
 backend/.venv
 backend/.coverage
-backend/external/google_datastore/service-account.json
+backend/src/external/google_datastore/service-account.json
 
 frontend/.env

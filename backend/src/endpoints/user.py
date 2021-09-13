@@ -1,16 +1,16 @@
 from datetime import date, timedelta
 from typing import Any, Dict
 
-from external.google_datastore.datastore import (
+from src.external.google_datastore.datastore import (
     get_access_token,
     get_user_endpoint,
     set_user_endpoint,
 )
 
-from packaging.user import main as get_data
+from src.packaging.user import main as get_data
 
-from analytics.user.commits import get_top_languages, get_top_repos
-from analytics.user.contribs_per_day import (
+from src.analytics.user.commits import get_top_languages, get_top_repos
+from src.analytics.user.contribs_per_day import (
     get_contribs_per_day,
     get_contribs_per_repo_per_day,
 )

@@ -1,15 +1,15 @@
 from datetime import datetime
 from typing import Any, Dict, List
 
-from external.github_api.graphql.template import (
+from src.external.github_api.graphql.template import (
     GraphQLErrorAuth,
     GraphQLErrorTimeout,
     GraphQLErrorMissingNode,
 )
 
-from external.github_api.rest.repo import get_repo_commits
-from external.github_api.graphql.commit import get_commits
-from constants import NODE_CHUNK_SIZE, CUTOFF, BLACKLIST
+from src.external.github_api.rest.repo import get_repo_commits
+from src.external.github_api.graphql.commit import get_commits
+from src.constants import NODE_CHUNK_SIZE, CUTOFF, BLACKLIST
 
 
 def get_all_commit_info(

@@ -1,9 +1,9 @@
 from datetime import date, timedelta
 
-from processing.user.contributions import get_contributions
-from processing.user.follows import get_user_follows
+from src.processing.user.contributions import get_contributions
+from src.processing.user.follows import get_user_follows
 
-from models.user.package import UserPackage
+from src.models.user.package import UserPackage
 
 
 async def main(

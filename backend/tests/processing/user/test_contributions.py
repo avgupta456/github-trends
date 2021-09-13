@@ -1,10 +1,10 @@
 import aiounittest
 
-from models.user.contribs import UserContributions
+from src.models.user.contribs import UserContributions
 
-from processing.user.contributions import get_contributions
+from src.processing.user.contributions import get_contributions
 
-from constants import TEST_USER_ID as USER_ID, TOKEN
+from src.constants import TEST_USER_ID as USER_ID, TOKEN
 
 
 class TestTemplate(aiounittest.AsyncTestCase):

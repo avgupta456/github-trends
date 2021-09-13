@@ -2,10 +2,10 @@
 from typing import Dict, List, Union
 from datetime import datetime, timedelta
 
-from external.github_api.graphql.template import get_template
+from src.external.github_api.graphql.template import get_template
 
-from models.user.contribs import RawCalendar, RawEvents
-from models.user.follows import RawFollows
+from src.models.user.contribs import RawCalendar, RawEvents
+from src.models.user.follows import RawFollows
 
 
 def get_user_contribution_years(user_id: str, access_token: str) -> List[int]:

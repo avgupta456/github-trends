@@ -1,10 +1,10 @@
 import unittest
 
-from models.user.follows import UserFollows
+from src.models.user.follows import UserFollows
 
-from processing.user.follows import get_user_follows
+from src.processing.user.follows import get_user_follows
 
-from constants import TEST_USER_ID as USER_ID, TOKEN
+from src.constants import TEST_USER_ID as USER_ID, TOKEN
 
 
 class TestTemplate(unittest.TestCase):

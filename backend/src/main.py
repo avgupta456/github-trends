@@ -10,17 +10,17 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from google.cloud import pubsub_v1  # type: ignore
 
-from external.google_datastore.datastore import get_all_user_ids
+from src.external.google_datastore.datastore import get_all_user_ids
 
 load_dotenv()
 
 # flake8: noqa E402
 
 # add endpoints here (after load dotenv)
-from constants import PUBSUB_PUB, PUBSUB_TOKEN
+from src.constants import PUBSUB_PUB, PUBSUB_TOKEN
 
-from endpoints.user import main as _get_user
-from endpoints.github_auth import get_access_token
+from src.endpoints.user import main as _get_user
+from src.endpoints.github_auth import get_access_token
 
 """
 SETUP
