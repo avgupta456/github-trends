@@ -5,7 +5,7 @@ steps:
   secretEnv: ['AUTH_TOKEN', 'PUBSUB_TOKEN']
 availableSecrets:
   secretManager:
-  - versionName: projects/258842989118/secrets/AUTH_TOKEN
+  - versionName: projects/github-298920/secrets/AUTH_TOKEN/versions/1
     env: 'AUTH_TOKEN'
-  - versionName: projects/258842989118/secrets/PUBSUB_TOKEN
+  - versionName: projects/github-298920/secrets/PUBSUB_TOKEN/versions/1
     env: 'PUBSUB_TOKEN'
