@@ -2,6 +2,7 @@ import os
 
 # GLOBAL
 PROD = os.getenv("PROD", "False") == "True"
+PROJECT_ID = "github-298920"
 
 # API
 TIMEOUT = 3  # max seconds to wait for api response
