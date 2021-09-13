@@ -1,8 +1,15 @@
 steps:
+- name: node:10.15.1
+  entrypoint: npm
+  args: ["install"]
+- name: node:10.15.1
+  entrypoint: npm
+  args: ["run", "create-env"]
+  env:
+    - 'PUBSUB_TOKEN=${_PUBSUB_TOKEN}'
 - name: "gcr.io/cloud-builders/gcloud"
-  args: ["AUTH_TOKEN=$$AUTH_TOKEN", "PUBSUB_TOKEN=$$PUBSUB_TOKEN", "app", "deploy",  "--appyaml", "./app_pub.yaml"]
+  args: ["app", "deploy",  "--appyaml", "./app_pub.yaml"]
   dir: 'backend'
-  secretEnv: ['AUTH_TOKEN', 'PUBSUB_TOKEN']
 availableSecrets:
   secretManager:
   - versionName: projects/github-298920/secrets/AUTH_TOKEN/versions/1
