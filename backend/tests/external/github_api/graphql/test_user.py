@@ -10,7 +10,7 @@ from src.external.github_api.graphql.user import (
     get_user_following,
 )
 
-from src.constants import TEST_USER_ID as USER_ID, TOKEN
+from src.constants import TEST_USER_ID as USER_ID, TEST_TOKEN as TOKEN
 
 
 class TestTemplate(unittest.TestCase):

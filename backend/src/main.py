@@ -19,7 +19,7 @@ load_dotenv()
 # flake8: noqa E402
 
 # add endpoints here (after load dotenv)
-from src.constants import PUBSUB_PUB, PUBSUB_TOKEN, OAUTH_CLIENT_SECRET
+from src.constants import PUBSUB_PUB, PUBSUB_TOKEN
 
 from src.endpoints.user import main as _get_user
 from src.endpoints.github_auth import get_access_token
@@ -49,7 +49,7 @@ HELPER FUNCTIONS
 
 @app.get("/")
 async def read_root():
-    return {"Hello World": [PUBSUB_TOKEN, OAUTH_CLIENT_SECRET]}
+    return {"Hello": "World"}
 
 
 def fail_gracefully(func: Callable[..., Any]):

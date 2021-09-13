@@ -4,7 +4,7 @@ from src.models.user.contribs import UserContributions
 
 from src.processing.user.contributions import get_contributions
 
-from src.constants import TEST_USER_ID as USER_ID, TOKEN
+from src.constants import TEST_USER_ID as USER_ID, TEST_TOKEN as TOKEN
 
 
 class TestTemplate(aiounittest.AsyncTestCase):

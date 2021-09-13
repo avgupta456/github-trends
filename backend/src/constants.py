@@ -2,7 +2,6 @@ import os
 
 # GLOBAL
 PROD = os.getenv("PROD", "False") == "True"
-TOKEN = os.getenv("AUTH_TOKEN", "")  # for authentication
 
 # API
 TIMEOUT = 3  # max seconds to wait for api response
@@ -24,3 +23,4 @@ PUBSUB_TOKEN = os.getenv("PUBSUB_TOKEN", "")
 
 # TESTING
 TEST_USER_ID = "AshishGupta938"  # for testing, previously "avgupta456"
+TEST_TOKEN = os.getenv("AUTH_TOKEN", "")  # for authentication
