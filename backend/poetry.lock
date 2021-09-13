@@ -213,10 +213,6 @@ requests = ">=2.18.0,<3.0.0dev"
 setuptools = ">=40.3.0"
 six = ">=1.13.0"
 
-[package.dependencies.grpcio]
-optional = true
-version = ">=1.29.0,<2.0dev"
-
 [package.extras]
 grpc = ["grpcio (>=1.29.0,<2.0dev)"]
 grpcgcp = ["grpcio-gcp (>=0.2.2)"]
@@ -364,10 +360,6 @@ version = "1.53.0"
 
 [package.dependencies]
 protobuf = ">=3.12.0"
-
-[package.dependencies.grpcio]
-optional = true
-version = ">=1.0.0"
 
 [package.extras]
 grpc = ["grpcio (>=1.0.0)"]
@@ -933,7 +925,7 @@ docs = ["sphinx", "jaraco.packaging (>=8.2)", "rst.linker (>=1.9)"]
 testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-cov", "pytest-enabler (>=1.0.1)", "jaraco.itertools", "func-timeout", "pytest-black (>=0.3.7)", "pytest-mypy"]
 
 [metadata]
-content-hash = "c802e790209cddd46407d95a6e41a7528796090b36e2982407f91a6ddb2a298e"
+content-hash = "537e18835eaceabd9deaa357e5f1c8725de11783fb1ee74e78767d36cd6307b8"
 lock-version = "1.0"
 python-versions = "^3.7"
 
