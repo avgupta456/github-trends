@@ -2,9 +2,11 @@ steps:
 - name: node:10.15.1
   entrypoint: npm
   args: ["install"]
+  dir: 'backend'
 - name: node:10.15.1
   entrypoint: npm
   args: ["run", "create-env"]
+  dir: 'backend'
   env:
     - 'PUBSUB_TOKEN=${_PUBSUB_TOKEN}'
 - name: "gcr.io/cloud-builders/gcloud"
@@ -12,7 +14,5 @@ steps:
   dir: 'backend'
 availableSecrets:
   secretManager:
-  - versionName: projects/github-298920/secrets/AUTH_TOKEN/versions/1
-    env: 'AUTH_TOKEN'
   - versionName: projects/github-298920/secrets/PUBSUB_TOKEN/versions/1
     env: 'PUBSUB_TOKEN'
