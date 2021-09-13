@@ -3,7 +3,6 @@ from datetime import date, datetime, timedelta
 from typing import Any, DefaultDict, Dict, List, Optional, Set, Union
 
 import pytz
-from pytz import timezone
 
 from src.models.user.contribs import (
     RawCalendar,
@@ -86,7 +85,7 @@ async def get_contributions(
     end_date: date = date.today(),
     timezone_str: str = "US/Eastern",
 ) -> UserContributions:
-    tz = timezone(timezone_str)
+    tz = pytz.timezone(timezone_str)
 
     # get years for contribution calendar
     years = sorted(
