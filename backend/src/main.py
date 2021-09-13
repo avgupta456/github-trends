@@ -114,7 +114,7 @@ def test_post(response: Response, update: str) -> Any:
     return update
 
 
-@app.post("/pubsub/push/{token}", status_code=status.HTTP_200_OK)
+@app.post("/push/{token}", status_code=status.HTTP_200_OK)
 @async_fail_gracefully
 async def test_pubsub(response: Response, token: str, request: Request) -> Any:
     print(PUBSUB_TOKEN)
