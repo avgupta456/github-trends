@@ -101,7 +101,7 @@ def test(response: Response) -> Any:
     return {"test": count}
 
 
-@app.post("/pubsub/{update}", status_code=status.HTTP_200_OK)
+@app.get("/pubsub/{update}", status_code=status.HTTP_200_OK)
 @fail_gracefully
 def test_post(response: Response, update: str) -> Any:
     topic_path = publisher.topic_path("github-298920", "test")  # type: ignore
