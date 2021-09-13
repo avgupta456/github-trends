@@ -12,7 +12,3 @@ steps:
 - name: "gcr.io/cloud-builders/gcloud"
   args: ["app", "deploy",  "--appyaml", "./app_pub.yaml"]
   dir: 'backend'
-availableSecrets:
-  secretManager:
-  - versionName: projects/github-298920/secrets/PUBSUB_TOKEN/versions/1
-    env: 'PUBSUB_TOKEN'
