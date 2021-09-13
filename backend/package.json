@@ -1,0 +1,11 @@
+{
+    "name": "github-trends",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+      "start-pub": "set PUBSUB_PUB=true && poetry run uvicorn main:app --reload --port=8000",
+      "start-sub": "set PUBSUB_PUB=false && poetry run uvicorn main:app --reload --port=8001",
+      "set-reqs": "poetry export -f requirements.txt --output requirements.txt --without-hashes"
+    }
+  }
+  

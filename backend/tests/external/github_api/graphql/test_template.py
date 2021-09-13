@@ -1,7 +1,7 @@
 import unittest
 
 from external.github_api.graphql.template import get_template
-from constants import USER_ID, TOKEN
+from constants import TEST_USER_ID as USER_ID, TOKEN
 
 
 class TestTemplate(unittest.TestCase):

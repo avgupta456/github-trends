@@ -1,11 +1,14 @@
 import logging
+
 from datetime import datetime
 from functools import wraps
 from typing import Any, Callable, Dict, List
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, Response, status, HTTPException
+from fastapi import FastAPI, Response, Request, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
+
+from google.cloud import pubsub_v1  # type: ignore
 
 from external.google_datastore.datastore import get_all_user_ids
 
@@ -14,7 +17,7 @@ load_dotenv()
 # flake8: noqa E402
 
 # add endpoints here (after load dotenv)
-from constants import PUBSUB_PUB
+from constants import PUBSUB_PUB, PUBSUB_TOKEN
 
 from endpoints.user import main as _get_user
 from endpoints.github_auth import get_access_token
@@ -85,6 +88,41 @@ def async_fail_gracefully(func: Callable[..., Any]):
             }
 
     return wrapper
+
+
+count = 0
+
+publisher = pubsub_v1.PublisherClient()
+
+
+@app.get("/test", status_code=status.HTTP_200_OK)
+@fail_gracefully
+def test(response: Response) -> Any:
+    return {"test": count}
+
+
+@app.post("/pubsub/{update}", status_code=status.HTTP_200_OK)
+@fail_gracefully
+def test_post(response: Response, update: str) -> Any:
+    topic_path = publisher.topic_path("github-298920", "test")  # type: ignore
+
+    data = int(update)
+
+    publisher.publish(topic_path, data=data)  # type: ignore
+
+
+@app.post("/pubsub/push/{token}", status_code=status.HTTP_200_OK)
+@fail_gracefully
+async def test_pubsub(response: Response, token: str, request: Request) -> Any:
+    if token != PUBSUB_TOKEN:
+        return HTTPException(400, "Incorrect Token")
+
+    data = await request.json()
+
+    print(data)
+
+    global count
+    count += data
 
 
 """

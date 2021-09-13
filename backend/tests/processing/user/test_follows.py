@@ -4,7 +4,7 @@ from models.user.follows import UserFollows
 
 from processing.user.follows import get_user_follows
 
-from constants import USER_ID, TOKEN
+from constants import TEST_USER_ID as USER_ID, TOKEN
 
 
 class TestTemplate(unittest.TestCase):
