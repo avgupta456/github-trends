@@ -7,7 +7,7 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.7"
-fastapi = "^0.63.0"
+fastapi = "^0.65.3"
 requests = "^2.25.1"
 uvicorn = {extras = ["standard"], version = "^0.13.3"}
 python-dotenv = "^0.15.0"
@@ -19,7 +19,6 @@ gunicorn = "^20.1.0"
 aiounittest = "^1.4.0"
 google-cloud-pubsub = "^2.8.0"
 google-cloud-datastore = "^2.1.6"
-packaging = "^21.0"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.8.4"

@@ -7,10 +7,10 @@ colorama==0.4.4; sys_platform == "win32"
 coverage==5.5
 coveralls==3.2.0
 docopt==0.6.2
-fastapi==0.63.0
-google-api-core==1.31.2
-google-auth==1.35.0
-google-cloud-core==1.7.2
+fastapi==0.65.3
+google-api-core==2.0.1
+google-auth==2.0.2
+google-cloud-core==2.0.0
 google-cloud-datastore==2.1.6
 google-cloud-pubsub==2.8.0
 googleapis-common-protos==1.53.0
@@ -30,12 +30,11 @@ pyasn1-modules==0.2.8
 pydantic==1.8.2
 pyparsing==2.4.7
 python-dotenv==0.15.0
-pytz==2021.1
 pyyaml==5.4.1
 requests==2.26.0
-rsa==4.7.2; python_version >= "3.6"
+rsa==4.7.2
 six==1.16.0
-starlette==0.13.6
+starlette==0.14.2
 typing-extensions==3.10.0.2
 typing-inspect==0.7.1
 urllib3==1.26.6
