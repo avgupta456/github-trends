@@ -8,7 +8,7 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = "^3.7"
 google-cloud-bigquery = "^2.6.1"
-fastapi = "^0.65.2"
+fastapi = "^0.63.0"
 requests = "^2.25.1"
 uvicorn = {extras = ["standard"], version = "^0.13.3"}
 python-dotenv = "^0.15.0"

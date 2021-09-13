@@ -7,7 +7,7 @@ colorama==0.4.4; sys_platform == "win32"
 coverage==5.5
 coveralls==3.2.0
 docopt==0.6.2
-fastapi==0.65.3
+fastapi==0.63.0
 google-api-core==1.31.2
 google-auth==1.35.0
 google-cloud-bigquery==2.6.1
@@ -38,7 +38,7 @@ pyyaml==5.4.1
 requests==2.26.0
 rsa==4.7.2; python_version >= "3.6"
 six==1.16.0
-starlette==0.14.2
+starlette==0.13.6
 typing-extensions==3.10.0.2
 typing-inspect==0.7.1
 urllib3==1.26.6
