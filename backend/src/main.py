@@ -48,7 +48,7 @@ HELPER FUNCTIONS
 
 @app.get("/")
 async def read_root():
-    return {"Hello": "World"}
+    return {"Hello World": PUBSUB_TOKEN}
 
 
 def fail_gracefully(func: Callable[..., Any]):
