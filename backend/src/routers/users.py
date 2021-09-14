@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 from fastapi import APIRouter, Response, status
 
 from src.db.models.users import UserModel as DBUserModel
-from src.db.functions.users import create_user, update_user
+from src.db.functions.users import login_user, update_user
 from src.db.functions.get import get_user_by_user_id
 
 from src.packaging.user import main as get_data
@@ -24,7 +24,7 @@ router = APIRouter()
 async def create_user_endpoint(
     response: Response, user_id: str, access_token: str
 ) -> str:
-    return await create_user(user_id, access_token)
+    return await login_user(user_id, access_token)
 
 
 @router.get("/db/get/{user_id}", status_code=status.HTTP_200_OK)
@@ -42,17 +42,18 @@ async def get_user(
     end_date: date = date.today(),
     timezone_str: str = "US/Eastern",
 ) -> Dict[str, Any]:
-    access_token = (await get_user_by_user_id(user_id)).access_token
-    if access_token == "":
+    db_user = await get_user_by_user_id(user_id)
+    if db_user is None or db_user.access_token == "":
         raise LookupError("Invalid UserId")
 
-    db_user = await get_user_by_user_id(user_id)
     if db_user.raw_data is not None and (
         datetime.now() - db_user.last_updated
     ) < timedelta(hours=6):
         return db_user.raw_data
 
-    data = await get_data(user_id, access_token, start_date, end_date, timezone_str)
+    data = await get_data(
+        user_id, db_user.access_token, start_date, end_date, timezone_str
+    )
 
     top_languages = get_top_languages(data)
     top_repos = get_top_repos(data)

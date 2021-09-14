@@ -5,7 +5,7 @@ import requests
 
 from fastapi import APIRouter, Response, status
 
-from src.db.functions.users import create_user
+from src.db.functions.users import login_user
 from src.external.github_auth.auth import get_unknown_user
 from src.constants import OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_REDIRECT_URI
 from src.utils import async_fail_gracefully
@@ -36,7 +36,7 @@ async def login(response: Response, code: str) -> Any:
     if r.status_code == 200:
         access_token = r.text.split("&")[0].split("=")[1]
         user_id = get_unknown_user(access_token)
-        await create_user(user_id, access_token)
+        await login_user(user_id, access_token)
         print("OAuth API", datetime.now() - start)
         return user_id
 

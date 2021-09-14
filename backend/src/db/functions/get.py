@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from src.db.models.users import UserModel
 
@@ -9,11 +9,17 @@ Raw Get Methods
 """
 
 
-async def get_user_by_user_id(user_id: str) -> UserModel:
-    user: Dict[str, Any] = await USERS.find_one({"user_id": user_id})  # type: ignore
+async def get_user_by_user_id(user_id: str) -> Optional[UserModel]:
+    user: Optional[Dict[str, Any]] = await USERS.find_one({"user_id": user_id})  # type: ignore
+    if user is None:
+        return None
     return UserModel.parse_obj(user)
 
 
-async def get_user_by_access_token(access_token: str) -> UserModel:
-    user: Dict[str, Any] = await USERS.find_one({"access_token": access_token})  # type: ignore
+async def get_user_by_access_token(access_token: str) -> Optional[UserModel]:
+    user: Optional[Dict[str, Any]] = await USERS.find_one(  # type: ignore
+        {"access_token": access_token}
+    )
+    if user is None:
+        return None
     return UserModel.parse_obj(user)
