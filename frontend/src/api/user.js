@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const URL_PREFIX = 'http://localhost:8000/';
+const URL_PREFIX = 'http://localhost:8000/auth/';
 
 const getAccessToken = async (code) => {
   try {

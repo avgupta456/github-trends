@@ -3,10 +3,14 @@ from typing import Any
 
 import requests
 
-from src.constants import OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_REDIRECT_URI
+from fastapi import APIRouter, Response, status
+
 from src.db.functions.users import create_user
 from src.external.github_auth.auth import get_unknown_user
+from src.constants import OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_REDIRECT_URI
+from src.utils import async_fail_gracefully
 
+router = APIRouter()
 
 s = requests.session()
 
@@ -15,8 +19,9 @@ class OAuthError(Exception):
     pass
 
 
-async def get_access_token(code: str) -> Any:
-    """Request a user's access token using code"""
+@router.post("/login/{code}", status_code=status.HTTP_200_OK)
+@async_fail_gracefully
+async def login(response: Response, code: str) -> Any:
     start = datetime.now()
 
     params = {
