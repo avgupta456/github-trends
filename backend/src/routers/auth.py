@@ -3,10 +3,14 @@ from typing import Any
 
 import requests
 
-from src.constants import OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_REDIRECT_URI
-from src.external.github_auth.auth import get_unknown_user
-from src.external.google_datastore.datastore import set_access_token
+from fastapi import APIRouter, Response, status
 
+from src.db.functions.users import login_user
+from src.external.github_auth.auth import get_unknown_user
+from src.constants import OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_REDIRECT_URI
+from src.utils import async_fail_gracefully
+
+router = APIRouter()
 
 s = requests.session()
 
@@ -15,9 +19,9 @@ class OAuthError(Exception):
     pass
 
 
-def get_access_token(code: str) -> Any:
-    """Request a user's access token using code"""
-
+@router.post("/login/{code}", status_code=status.HTTP_200_OK)
+@async_fail_gracefully
+async def login(response: Response, code: str) -> Any:
     start = datetime.now()
 
     params = {
@@ -32,7 +36,7 @@ def get_access_token(code: str) -> Any:
     if r.status_code == 200:
         access_token = r.text.split("&")[0].split("=")[1]
         user_id = get_unknown_user(access_token)
-        set_access_token(user_id, access_token)
+        await login_user(user_id, access_token)
         print("OAuth API", datetime.now() - start)
         return user_id
 

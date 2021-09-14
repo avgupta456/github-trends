@@ -6,12 +6,11 @@ click==7.1.2
 colorama==0.4.4; sys_platform == "win32"
 coverage==5.5
 coveralls==3.2.0
+dnspython==1.16.0
 docopt==0.6.2
 fastapi==0.65.3
 google-api-core==2.0.1
 google-auth==2.0.2
-google-cloud-core==2.0.0
-google-cloud-datastore==2.1.6
 google-cloud-pubsub==2.8.0
 googleapis-common-protos==1.53.0
 grpc-google-iam-v1==0.12.3
@@ -21,6 +20,7 @@ h11==0.12.0
 httptools==0.1.2; sys_platform != "win32" and sys_platform != "cygwin" and platform_python_implementation != "PyPy"
 idna==3.2; python_version >= "3"
 libcst==0.3.20
+motor==2.5.1
 mypy-extensions==0.4.3
 packaging==21.0
 proto-plus==1.19.0
@@ -28,6 +28,7 @@ protobuf==3.17.3
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pydantic==1.8.2
+pymongo==3.12.0
 pyparsing==2.4.7
 python-dotenv==0.15.0
 pytz==2021.1
