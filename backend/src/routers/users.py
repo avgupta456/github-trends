@@ -2,7 +2,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Response, status
 
-from utils import async_fail_gracefully
+from src.utils import async_fail_gracefully
 
 from src.db.models.users import UserModel as DBUserModel
 from src.db.functions.users import create_user
