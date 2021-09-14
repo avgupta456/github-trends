@@ -6,7 +6,7 @@ from src.utils import async_fail_gracefully
 
 from src.db.models.users import UserModel as DBUserModel
 from src.db.functions.users import create_user
-from src.db.functions.get import get_user
+from src.db.functions.get import get_user_by_user_id
 
 router = APIRouter()
 
@@ -22,4 +22,4 @@ async def create_user_endpoint(
 @router.get("/user/get/{user_id}", status_code=status.HTTP_200_OK)
 @async_fail_gracefully
 async def get_user_endpoint(response: Response, user_id: str) -> Optional[DBUserModel]:
-    return await get_user(user_id)
+    return await get_user_by_user_id(user_id)

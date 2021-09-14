@@ -4,8 +4,8 @@ from typing import Any
 import requests
 
 from src.constants import OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_REDIRECT_URI
+from src.db.functions.users import create_user
 from src.external.github_auth.auth import get_unknown_user
-from src.external.google_datastore.datastore import set_access_token
 
 
 s = requests.session()
@@ -15,9 +15,8 @@ class OAuthError(Exception):
     pass
 
 
-def get_access_token(code: str) -> Any:
+async def get_access_token(code: str) -> Any:
     """Request a user's access token using code"""
-
     start = datetime.now()
 
     params = {
@@ -32,7 +31,7 @@ def get_access_token(code: str) -> Any:
     if r.status_code == 200:
         access_token = r.text.split("&")[0].split("=")[1]
         user_id = get_unknown_user(access_token)
-        set_access_token(user_id, access_token)
+        await create_user(user_id, access_token)
         print("OAuth API", datetime.now() - start)
         return user_id
 
