@@ -1,10 +1,10 @@
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from typing import Any, Dict, Optional
 
 from fastapi import APIRouter, Response, status
 
 from src.db.models.users import UserModel as DBUserModel
-from src.db.functions.users import create_user
+from src.db.functions.users import create_user, update_user
 from src.db.functions.get import get_user_by_user_id
 
 from src.packaging.user import main as get_data
@@ -46,6 +46,12 @@ async def get_user(
     if access_token == "":
         raise LookupError("Invalid UserId")
 
+    db_user = await get_user_by_user_id(user_id)
+    if db_user.raw_data is not None and (
+        datetime.now() - db_user.last_updated
+    ) < timedelta(hours=6):
+        return db_user.raw_data
+
     data = await get_data(user_id, access_token, start_date, end_date, timezone_str)
 
     top_languages = get_top_languages(data)
@@ -59,5 +65,7 @@ async def get_user(
         "contribs_per_day": contribs_per_day,
         "contribs_per_repo_per_day": contribs_per_repo_per_day,
     }
+
+    await update_user(user_id, output)
 
     return output
