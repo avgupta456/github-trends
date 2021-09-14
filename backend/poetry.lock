@@ -252,38 +252,6 @@ reauth = ["pyu2f (>=0.1.5)"]
 
 [[package]]
 category = "main"
-description = "Google Cloud API client core library"
-name = "google-cloud-core"
-optional = false
-python-versions = ">=3.6"
-version = "2.0.0"
-
-[package.dependencies]
-google-api-core = ">=1.21.0,<3.0.0dev"
-google-auth = ">=1.24.0,<3.0dev"
-
-[package.extras]
-grpc = ["grpcio (>=1.8.2,<2.0dev)"]
-
-[[package]]
-category = "main"
-description = "Google Cloud Datastore API client library"
-name = "google-cloud-datastore"
-optional = false
-python-versions = ">=3.6"
-version = "2.1.6"
-
-[package.dependencies]
-google-cloud-core = ">=1.4.0,<3.0.0dev"
-libcst = ">=0.2.5"
-proto-plus = ">=1.4.0"
-
-[package.dependencies.google-api-core]
-extras = ["grpc"]
-version = ">=1.22.2,<3.0.0dev"
-
-[[package]]
-category = "main"
 description = "Google Cloud Pub/Sub API client library"
 name = "google-cloud-pubsub"
 optional = false
@@ -916,7 +884,7 @@ docs = ["sphinx", "jaraco.packaging (>=8.2)", "rst.linker (>=1.9)"]
 testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-cov", "pytest-enabler (>=1.0.1)", "jaraco.itertools", "func-timeout", "pytest-black (>=0.3.7)", "pytest-mypy"]
 
 [metadata]
-content-hash = "6152b309bbb0458ba2df77f1197531d189f7e02a59acdb0a8ba4e334617ff057"
+content-hash = "2c07a1d0c473a9070208cb57fe22afab1e1025ccaf01e30851d614b064492e17"
 lock-version = "1.0"
 python-versions = "^3.7"
 
@@ -1048,14 +1016,6 @@ google-api-core = [
 google-auth = [
     {file = "google-auth-2.0.2.tar.gz", hash = "sha256:104475dc4d57bbae49017aea16fffbb763204fa2d6a70f1f3cc79962c1a383a4"},
     {file = "google_auth-2.0.2-py2.py3-none-any.whl", hash = "sha256:cde472372e030e1e0bc64dac00fb53e6c095d7ab641f4281e2c995e85e205d8b"},
-]
-google-cloud-core = [
-    {file = "google-cloud-core-2.0.0.tar.gz", hash = "sha256:90ee99648ccf9e11a16781a7fc58d13e58f662b439c737d48c24ef18662c2702"},
-    {file = "google_cloud_core-2.0.0-py2.py3-none-any.whl", hash = "sha256:31785d1e1d02f90ad3f1b020d4aed63db4865c3394ff7c128a296b6995eef31f"},
-]
-google-cloud-datastore = [
-    {file = "google-cloud-datastore-2.1.6.tar.gz", hash = "sha256:df53c11d69d4d0a6d7f3298587bf9d3f4b956cce8159ec5d6ae98c5506c13baa"},
-    {file = "google_cloud_datastore-2.1.6-py2.py3-none-any.whl", hash = "sha256:3ed4f3e3963beedcaa3ab9bb55ddff86780b2af18772e941e9d52daa4d158f9d"},
 ]
 google-cloud-pubsub = [
     {file = "google-cloud-pubsub-2.8.0.tar.gz", hash = "sha256:2653c11615480141d359938a4efe9d131425171ec9cec26b6bf1c1231e1ac470"},
