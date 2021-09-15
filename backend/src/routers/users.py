@@ -2,18 +2,14 @@ from datetime import date, datetime, timedelta
 from typing import Any, Dict, Optional
 
 from fastapi import APIRouter, Response, status
+from fastapi.exceptions import HTTPException
 
 from src.db.models.users import UserModel as DBUserModel
-from src.db.functions.users import login_user, update_user
+from src.db.functions.users import login_user
 from src.db.functions.get import get_user_by_user_id
 
-from src.packaging.user import main as get_data
-from src.analytics.user.commits import get_top_languages, get_top_repos
-from src.analytics.user.contribs_per_day import (
-    get_contribs_per_day,
-    get_contribs_per_repo_per_day,
-)
-
+from src.constants import PUBSUB_PUB
+from src.external.pubsub.templates import publish_to_topic
 from src.utils import async_fail_gracefully
 
 router = APIRouter()
@@ -42,6 +38,9 @@ async def get_user(
     end_date: date = date.today(),
     timezone_str: str = "US/Eastern",
 ) -> Dict[str, Any]:
+    if not PUBSUB_PUB:
+        raise HTTPException(400, "")
+
     db_user = await get_user_by_user_id(user_id)
     if db_user is None or db_user.access_token == "":
         raise LookupError("Invalid UserId")
@@ -51,22 +50,15 @@ async def get_user(
     ) < timedelta(hours=6):
         return db_user.raw_data
 
-    data = await get_data(
-        user_id, db_user.access_token, start_date, end_date, timezone_str
+    publish_to_topic(
+        "user",
+        {
+            "user_id": user_id,
+            "access_token": db_user.access_token,
+            "start_date": str(start_date),
+            "end_date": str(end_date),
+            "timezone_str": timezone_str,
+        },
     )
 
-    top_languages = get_top_languages(data)
-    top_repos = get_top_repos(data)
-    contribs_per_day = get_contribs_per_day(data)
-    contribs_per_repo_per_day = get_contribs_per_repo_per_day(data)
-
-    output = {
-        "top_languages": top_languages,
-        "top_repos": top_repos,
-        "contribs_per_day": contribs_per_day,
-        "contribs_per_repo_per_day": contribs_per_repo_per_day,
-    }
-
-    await update_user(user_id, output)
-
-    return output
+    return {}

@@ -1,32 +1,53 @@
-from typing import Any
+from typing import Any, Dict
+from datetime import date, timedelta, datetime
 
 from fastapi import APIRouter, Response, Request, status
+
+from src.analytics.user.main import get_user as analytics_get_user
+from src.db.functions.users import update_user
 
 from src.external.pubsub.templates import publish_to_topic, parse_request
 from src.utils import fail_gracefully, async_fail_gracefully
 
 router = APIRouter()
 
-count: int = 0
+"""
+USER PUBSUB
+"""
 
 
-@router.get("/test", status_code=status.HTTP_200_OK)
+@router.get("/pub/user/{user_id}/{access_token}", status_code=status.HTTP_200_OK)
 @fail_gracefully
-def test(response: Response) -> Any:
-    return {"test": count}
+def pub_user(response: Response, user_id: str, access_token: str) -> str:
+    publish_to_topic(
+        "user",
+        {
+            "user_id": user_id,
+            "access_token": access_token,
+            "start_date": str(date.today() - timedelta(365)),
+            "end_date": str(date.today()),
+            "timezone_str": "US/Eastern",
+        },
+    )
+
+    return user_id
 
 
-@router.get("/pub/test/{update}", status_code=status.HTTP_200_OK)
-@fail_gracefully
-def test_post(response: Response, update: str) -> Any:
-    publish_to_topic("test", {"num": int(update)})
-    return update
-
-
-@router.post("/sub/test/{token}", status_code=status.HTTP_200_OK)
+@router.post("/sub/user/{token}", status_code=status.HTTP_200_OK)
 @async_fail_gracefully
-async def test_pubsub(response: Response, token: str, request: Request) -> Any:
-    data = await parse_request(token, request)
+async def sub_user(response: Response, token: str, request: Request) -> Any:
+    data: Dict[str, Any] = await parse_request(token, request)
 
-    global count
-    count += data["num"]
+    print(data)
+
+    output = await analytics_get_user(
+        data["user_id"],
+        data["access_token"],
+        datetime.strptime(data["start_date"], "%Y-%m-%d").date(),
+        datetime.strptime(data["end_date"], "%Y-%m-%d").date(),
+        data["timezone_str"],
+    )
+
+    await update_user(data["user_id"], output)
+
+    return output
