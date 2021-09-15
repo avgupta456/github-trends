@@ -21,7 +21,7 @@ OAUTH_REDIRECT_URI = os.getenv("OAUTH_REDIRECT_URI", "")  # redirect uri for App
 # PUBSUB
 PUBSUB_PUB = os.getenv("PUBSUB_PUB", "False") == "True"
 PUBSUB_TOKEN = os.getenv("PUBSUB_TOKEN", "")
-LOCAL_SUBSCRIBER = "localhost:8001/pubsub/"
+LOCAL_SUBSCRIBER = "http://localhost:8001/pubsub/sub/"
 
 # MONGODB
 MONGODB_PASSWORD = os.getenv("MONGODB_PASSWORD", "")

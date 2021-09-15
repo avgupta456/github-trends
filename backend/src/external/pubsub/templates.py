@@ -16,10 +16,10 @@ publisher = pubsub_v1.PublisherClient()
 def publish_to_topic(topic: str, message: Dict[str, Any]) -> None:
     if PROD and not PUBSUB_PUB:
         raise HTTPException(400, "Publishing is disabled")
-    topic_path = publisher.topic_path(PROJECT_ID, topic)  # type: ignore
-    data = json.dumps(message).encode("utf-8")
 
+    data = json.dumps(message).encode("utf-8")
     if PROD:
+        topic_path = publisher.topic_path(PROJECT_ID, topic)  # type: ignore
         publisher.publish(topic_path, data=data)  # type: ignore
     else:
         requests.post(LOCAL_SUBSCRIBER + topic + "/" + PUBSUB_TOKEN, data=data)
