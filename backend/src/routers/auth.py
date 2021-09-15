@@ -4,10 +4,16 @@ from typing import Any
 import requests
 
 from fastapi import APIRouter, Response, status
+from fastapi.exceptions import HTTPException
 
 from src.db.functions.users import login_user
 from src.external.github_auth.auth import get_unknown_user
-from src.constants import OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_REDIRECT_URI
+from src.constants import (
+    OAUTH_CLIENT_ID,
+    OAUTH_CLIENT_SECRET,
+    OAUTH_REDIRECT_URI,
+    PUBSUB_PUB,
+)
 from src.utils import async_fail_gracefully
 
 router = APIRouter()
@@ -22,6 +28,9 @@ class OAuthError(Exception):
 @router.post("/login/{code}", status_code=status.HTTP_200_OK)
 @async_fail_gracefully
 async def login(response: Response, code: str) -> Any:
+    if not PUBSUB_PUB:
+        raise HTTPException(400, "Incorrect Server, must use Publisher")
+
     start = datetime.now()
 
     params = {

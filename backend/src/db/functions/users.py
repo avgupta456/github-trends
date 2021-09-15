@@ -23,5 +23,5 @@ async def update_user(user_id: str, raw_data: Optional[Dict[str, Any]] = None) -
     if raw_data is not None:
         await USERS.update_one(  # type: ignore
             {"user_id": user_id},
-            {"$set": {"raw_data": raw_data}},
+            {"$set": {"last_updated": datetime.now(), "raw_data": raw_data}},
         )
