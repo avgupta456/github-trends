@@ -13,15 +13,13 @@ router = APIRouter()
 count: int = 0
 
 
-@router.get("/test", status_code=status.HTTP_200_OK)
+@router.get("/pub/test", status_code=status.HTTP_200_OK)
 @fail_gracefully
 def test(response: Response) -> Any:
-    if PUBSUB_PUB:
-        raise HTTPException(400, "Incorrect server, only Subscriber can access")
     return {"test": count}
 
 
-@router.get("/update/{update}", status_code=status.HTTP_200_OK)
+@router.get("/pub/test/{update}", status_code=status.HTTP_200_OK)
 @fail_gracefully
 def test_post(response: Response, update: str) -> Any:
     if not PUBSUB_PUB:
@@ -30,7 +28,7 @@ def test_post(response: Response, update: str) -> Any:
     return update
 
 
-@router.post("/push/{token}", status_code=status.HTTP_200_OK)
+@router.post("/sub/test/{token}", status_code=status.HTTP_200_OK)
 @async_fail_gracefully
 async def test_pubsub(response: Response, token: str, request: Request) -> Any:
     if PUBSUB_PUB:
