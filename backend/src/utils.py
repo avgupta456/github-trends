@@ -50,6 +50,7 @@ def async_fail_gracefully(func: Callable[..., Any]):
     return wrapper
 
 
+# NOTE: implied async, sync not implemented yet
 def svg_fail_gracefully(func: Callable[..., Any]):
     @wraps(func)  # needed to play nice with FastAPI decorator
     async def wrapper(

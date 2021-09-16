@@ -5,14 +5,13 @@ from fastapi import APIRouter, Response, status
 from fastapi.exceptions import HTTPException
 from fastapi.responses import HTMLResponse
 
-import svgwrite  # type: ignore
-
 from src.db.models.users import UserModel as DBUserModel
 from src.db.functions.users import login_user
 from src.db.functions.get import get_user_by_user_id
 
 from src.constants import PUBSUB_PUB
 from src.external.pubsub.templates import publish_to_topic
+from src.svg.top_langs import get_top_langs_svg
 from src.utils import async_fail_gracefully, svg_fail_gracefully
 
 router = APIRouter()
@@ -87,7 +86,7 @@ async def get_user_svg(
     end_date: date = date.today(),
     timezone_str: str = "US/Eastern",
 ) -> Any:
-    # output = await _get_user(user_id, start_date, end_date, timezone_str)
+    output = await _get_user(user_id, start_date, end_date, timezone_str)
     old = """
     <svg width="300" height="285">
         <rect
@@ -120,38 +119,4 @@ async def get_user_svg(
 
     print(old)
 
-    style = """
-        .header {
-            font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
-            fill: #2f80ed;
-            animation: fadeInAnimation 0.8s ease-in-out forwards;
-        }
-        .lang-name {
-            font: 400 11px 'Segoe UI', Ubuntu, Sans-Serif;
-            fill: #333;
-        }
-
-        @keyframes fadeInAnimation {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-    """
-
-    d = svgwrite.Drawing(size=(300, 285))
-    d.defs.add(d.style(style))  # type: ignore
-    d.add(  # type: ignore
-        d.rect(  # type: ignore
-            size=(299, 284),
-            insert=(0.5, 0.5),
-            rx=4.5,
-            stroke="#e4e2e2",
-            fill="#fffefe",
-        )
-    )
-    d.add(d.text("Most Used Languages", insert=(25, 35), class_="header"))  # type: ignore
-
-    return d
+    return get_top_langs_svg(output)
