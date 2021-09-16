@@ -1,9 +1,13 @@
+import io
+
 from datetime import date, datetime, timedelta
 from typing import Any, Dict, Optional
 
 from fastapi import APIRouter, Response, status
 from fastapi.exceptions import HTTPException
-from starlette.responses import HTMLResponse
+from fastapi.responses import HTMLResponse
+
+import svgwrite  # type: ignore
 
 from src.db.models.users import UserModel as DBUserModel
 from src.db.functions.users import login_user
@@ -85,28 +89,8 @@ async def get_user_svg(
     timezone_str: str = "US/Eastern",
 ) -> Any:
     # output = await _get_user(user_id, start_date, end_date, timezone_str)
-    return """
+    old = """
     <svg width="300" height="285">
-        <style>
-            .header {
-                font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
-                fill: #2f80ed;
-                animation: fadeInAnimation 0.8s ease-in-out forwards;
-            }
-            .lang-name {
-                font: 400 11px 'Segoe UI', Ubuntu, Sans-Serif;
-                fill: #333;
-            }
-
-            @keyframes fadeInAnimation {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-        </style>
         <rect
           x="0.5"
           y="0.5"
@@ -134,3 +118,44 @@ async def get_user_svg(
         </g>
     </svg>
     """
+
+    print(old)
+
+    style = """
+        .header {
+            font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
+            fill: #2f80ed;
+            animation: fadeInAnimation 0.8s ease-in-out forwards;
+        }
+        .lang-name {
+            font: 400 11px 'Segoe UI', Ubuntu, Sans-Serif;
+            fill: #333;
+        }
+
+        @keyframes fadeInAnimation {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    """
+
+    d = svgwrite.Drawing(size=(300, 285))
+    d.defs.add(d.style(style))  # type: ignore
+    d.add(  # type: ignore
+        d.rect(  # type: ignore
+            size=(299, 284),
+            insert=(0.5, 0.5),
+            rx=4.5,
+            stroke="#e4e2e2",
+            fill="#fffefe",
+        )
+    )
+    d.add(d.text("Most Used Languages", insert=(25, 35), class_="header"))  # type: ignore
+
+    sio = io.StringIO()
+    d.write(sio)  # type: ignore
+
+    return Response(sio.getvalue(), media_type="image/svg+xml")
