@@ -268,7 +268,7 @@ async def get_contributions(
                     repo_stats[repo]["languages"],
                 ]:
                     if lang not in store:  # type: ignore
-                        store[lang] = {"additions": 0, "deletions": 0}  # type: ignore
+                        store[lang] = {"color": lang_data["color"], "additions": 0, "deletions": 0}  # type: ignore
                     store[lang]["additions"] += lang_data["additions"]  # type: ignore
                     store[lang]["deletions"] += lang_data["deletions"]  # type: ignore
 

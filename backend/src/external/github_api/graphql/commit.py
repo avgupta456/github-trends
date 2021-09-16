@@ -22,6 +22,7 @@ def get_commits(
                                 size
                                 node{
                                     name
+                                    color
                                 }
                             }
                         }
