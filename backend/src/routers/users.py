@@ -87,36 +87,4 @@ async def get_user_svg(
     timezone_str: str = "US/Eastern",
 ) -> Any:
     output = await _get_user(user_id, start_date, end_date, timezone_str)
-    old = """
-    <svg width="300" height="285">
-        <rect
-          x="0.5"
-          y="0.5"
-          rx="4.5"
-          height="99%"
-          stroke="#e4e2e2"
-          width="299"
-          fill="#fffefe"
-          stroke-opacity="1"
-        />
-        <g transform="translate(25, 35)">
-            <text x="0" y="0" class="header">Most Used Languages</text>
-        </g>
-        <g transform="translate(0, 55)">
-            <svg x="25">
-                <g transform="translate(0, 0)">
-                    <text x="2" y="15" class="lang-name">Jupyter Notebook</text>
-                    <text x="215" y="34" class="lang-name">73.16%</text>
-                    <svg width="205" x="0" y="25">
-                        <rect rx="5" ry="5" x="0" y="0" width="205" height="8" fill="#ddd" />
-                        <rect height="8" fill="#DA5B0B" rx="5" ry="5" x="0" width="73.16%" />
-                    </svg>
-                </g>
-            </svg>
-        </g>
-    </svg>
-    """
-
-    print(old)
-
     return get_top_langs_svg(output)
