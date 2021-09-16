@@ -1,5 +1,3 @@
-import io
-
 from datetime import date, datetime, timedelta
 from typing import Any, Dict, Optional
 
@@ -15,7 +13,7 @@ from src.db.functions.get import get_user_by_user_id
 
 from src.constants import PUBSUB_PUB
 from src.external.pubsub.templates import publish_to_topic
-from src.utils import async_fail_gracefully
+from src.utils import async_fail_gracefully, svg_fail_gracefully
 
 router = APIRouter()
 
@@ -81,6 +79,7 @@ async def get_user(
 @router.get(
     "/{user_id}/svg", status_code=status.HTTP_200_OK, response_class=HTMLResponse
 )
+@svg_fail_gracefully
 async def get_user_svg(
     response: Response,
     user_id: str,
@@ -155,7 +154,4 @@ async def get_user_svg(
     )
     d.add(d.text("Most Used Languages", insert=(25, 35), class_="header"))  # type: ignore
 
-    sio = io.StringIO()
-    d.write(sio)  # type: ignore
-
-    return Response(sio.getvalue(), media_type="image/svg+xml")
+    return d
