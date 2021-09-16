@@ -1,7 +1,8 @@
+aiofiles==0.7.0
 aiounittest==1.4.0
 cachetools==4.2.2
 certifi==2021.5.30
-charset-normalizer==2.0.4; python_version >= "3"
+charset-normalizer==2.0.5; python_version >= "3"
 click==7.1.2
 colorama==0.4.4; sys_platform == "win32"
 coverage==5.5
@@ -10,7 +11,7 @@ dnspython==1.16.0
 docopt==0.6.2
 fastapi==0.65.3
 google-api-core==2.0.1
-google-auth==2.0.2
+google-auth==2.1.0
 google-cloud-pubsub==2.8.0
 googleapis-common-protos==1.53.0
 grpc-google-iam-v1==0.12.3
@@ -24,7 +25,7 @@ motor==2.5.1
 mypy-extensions==0.4.3
 packaging==21.0
 proto-plus==1.19.0
-protobuf==3.17.3
+protobuf==3.18.0
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pydantic==1.8.2
@@ -37,6 +38,7 @@ requests==2.26.0
 rsa==4.7.2
 six==1.16.0
 starlette==0.14.2
+svgwrite==1.4.1
 typing-extensions==3.10.0.2
 typing-inspect==0.7.1
 urllib3==1.26.6

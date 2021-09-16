@@ -3,6 +3,7 @@ from typing import Any, Dict, Optional
 
 from fastapi import APIRouter, Response, status
 from fastapi.exceptions import HTTPException
+from fastapi.responses import HTMLResponse
 
 from src.db.models.users import UserModel as DBUserModel
 from src.db.functions.users import login_user
@@ -10,7 +11,8 @@ from src.db.functions.get import get_user_by_user_id
 
 from src.constants import PUBSUB_PUB
 from src.external.pubsub.templates import publish_to_topic
-from src.utils import async_fail_gracefully
+from src.svg.top_langs import get_top_langs_svg
+from src.utils import async_fail_gracefully, svg_fail_gracefully
 
 router = APIRouter()
 
@@ -29,10 +31,7 @@ async def get_user_endpoint(response: Response, user_id: str) -> Optional[DBUser
     return await get_user_by_user_id(user_id)
 
 
-@router.get("/{user_id}", status_code=status.HTTP_200_OK)
-@async_fail_gracefully
-async def get_user(
-    response: Response,
+async def _get_user(
     user_id: str,
     start_date: date = date.today() - timedelta(365),
     end_date: date = date.today(),
@@ -62,3 +61,30 @@ async def get_user(
     )
 
     return {}
+
+
+@router.get("/{user_id}", status_code=status.HTTP_200_OK)
+@async_fail_gracefully
+async def get_user(
+    response: Response,
+    user_id: str,
+    start_date: date = date.today() - timedelta(365),
+    end_date: date = date.today(),
+    timezone_str: str = "US/Eastern",
+) -> Dict[str, Any]:
+    return await _get_user(user_id, start_date, end_date, timezone_str)
+
+
+@router.get(
+    "/{user_id}/svg", status_code=status.HTTP_200_OK, response_class=HTMLResponse
+)
+@svg_fail_gracefully
+async def get_user_svg(
+    response: Response,
+    user_id: str,
+    start_date: date = date.today() - timedelta(365),
+    end_date: date = date.today(),
+    timezone_str: str = "US/Eastern",
+) -> Any:
+    output = await _get_user(user_id, start_date, end_date, timezone_str)
+    return get_top_langs_svg(output)

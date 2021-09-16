@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 
 from pydantic import BaseModel, Field
 
@@ -94,10 +94,11 @@ class RawEvents(BaseModel):
 
 class CommitContribution(BaseModel):
     timestamp: str
-    languages: Dict[str, Dict[str, int]]
+    languages: Dict[str, Dict[str, Union[int, str]]]
 
 
 class Language(BaseModel):
+    color: str
     additions: int
     deletions: int
 

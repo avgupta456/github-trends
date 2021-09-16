@@ -10,6 +10,7 @@ def get_top_languages(data: UserPackage) -> List[dict_type]:
     languages_list: List[dict_type] = [
         {
             "lang": lang,
+            "color": stats.color,
             "additions": stats.additions,
             "deletions": stats.deletions,
         }

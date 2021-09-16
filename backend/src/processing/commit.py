@@ -114,6 +114,7 @@ def get_commits_languages(access_token: str, node_ids: List[str], cutoff: int = 
             )
             for language in languages[:num_langs]:
                 lang_name = language["node"]["name"]
+                lang_color = language["node"]["color"]
                 additions = round(
                     commit["additions"] * language["size"] / total_repo_size
                 )
@@ -124,6 +125,7 @@ def get_commits_languages(access_token: str, node_ids: List[str], cutoff: int = 
                     out[-1][lang_name] = {
                         "additions": additions,
                         "deletions": deletions,
+                        "color": lang_color,
                     }
 
     return out
