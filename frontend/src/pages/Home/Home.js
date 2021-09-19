@@ -12,9 +12,10 @@ const HomeScreen = () => {
           </h1>
           <p className="mb-8 leading-relaxed">
             Discover and display in-depth statistics about your code
-            contributions! Generate insights on lines written by language,
-            commit frequency by date and time, repository contribution rankings,
-            and more.
+            contributions!
+            <br />
+            Generate insights on lines written by language, commit frequency by
+            date and time, repository contribution rankings, and more.
           </p>
           <div className="flex justify-center">
             <Button className="text-white bg-blue-500 hover:bg-blue-600">

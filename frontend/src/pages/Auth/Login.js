@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // import GithubIcon from 'mdi-react/GithubIcon';
 
+import { Button } from '../../components';
 import { getAccessToken } from '../../api';
 import {
   login as _login,
@@ -44,25 +45,26 @@ const LoginScreen = () => {
   }, []);
 
   return (
-    <div>
+    <section className="px-8 py-8">
       <h1>{`Welcome ${userId}!`}</h1>
       <span>Super amazing app</span>
-      <div>
-        {!isLoading && (
-          <div>
-            <button type="button">
-              <a href={GitHubAuthURL}>
-                {/* <GithubIcon /> */}
-                <span>Login with GitHub</span>
-              </a>
-            </button>
-            <button type="button" onClick={logout}>
-              <span>Logout</span>
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
+      {!isLoading && (
+        <div className="flex justify-center">
+          <Button className="text-white bg-blue-500 hover:bg-blue-600">
+            <a href={GitHubAuthURL}>
+              {/* <GithubIcon /> */}
+              Login with GitHub
+            </a>
+          </Button>
+          <Button
+            onClick={logout}
+            className="ml-4 text-gray-700 bg-gray-100 hover:bg-gray-200"
+          >
+            <span>Logout</span>
+          </Button>
+        </div>
+      )}
+    </section>
   );
 };
 
