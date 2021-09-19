@@ -1,5 +1,6 @@
 /* eslint-disable react/button-has-type */
 import React from 'react';
+import { Button } from '../../components';
 
 const HomeScreen = () => {
   return (
@@ -16,12 +17,12 @@ const HomeScreen = () => {
             and more.
           </p>
           <div className="flex justify-center">
-            <button className="inline-flex text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded text-lg">
+            <Button className="text-white bg-blue-500 hover:bg-blue-600">
               Get Started
-            </button>
-            <button className="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg">
+            </Button>
+            <Button className="ml-4 text-gray-700 bg-gray-100 hover:bg-gray-200">
               Examples
-            </button>
+            </Button>
           </div>
         </div>
         <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
