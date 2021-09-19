@@ -12,13 +12,13 @@ import { LightningSVG } from '../../assets';
 function App() {
   return (
     <Router>
-      <header className="text-gray-100 body-font bg-blue-500">
-        <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-          <a className="flex title-font font-medium items-center text-gray-100 mb-4 md:mb-0">
+      <header className="text-gray-100 body-font bg-blue-500 w-screen fixed">
+        <div className="container mx-auto flex flex-wrap p-5 flex-row items-center">
+          <a className="flex title-font font-medium items-center text-gray-100 mb-0">
             <LightningSVG />
             <span className="ml-3 text-xl">GitHub Trends</span>
           </a>
-          <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
+          <nav className="ml-auto flex flex-wrap items-center text-base justify-center">
             <Link to="/login" className="mr-5 hover:text-gray-300">
               Login
             </Link>
@@ -28,6 +28,9 @@ function App() {
           </nav>
         </div>
       </header>
+      <br />
+      <br />
+      <br />
       <Switch>
         <Route path="/login" component={LoginScreen} />
         <Route path="/" component={HomeScreen} />
