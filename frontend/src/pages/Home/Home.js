@@ -1,40 +1,67 @@
-/* eslint-disable react/button-has-type */
-import React from 'react';
-import { Button } from '../../components';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import BounceLoader from 'react-spinners/BounceLoader';
+
+import { getAccessToken } from '../../api';
+import { login as _login } from '../../redux/actions/userActions';
 
 const HomeScreen = () => {
-  return (
-    <section className="text-gray-600 body-font">
-      <div className="container mx-auto flex px-5 py-16 md:flex-row flex-col items-center">
-        <div className="lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
-          <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
-            GitHub Trends
+  const [isLoading, setIsLoading] = useState(false);
+
+  // const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const userId = useSelector((state) => state.user.userId);
+
+  const isAuthenticated = userId && userId.length > 0;
+
+  const dispatch = useDispatch();
+
+  const login = (newUserId) => dispatch(_login(newUserId));
+
+  console.log(isLoading, userId);
+
+  useEffect(async () => {
+    // After requesting Github access, Github redirects back to your app with a code parameter
+    const url = window.location.href;
+    const hasCode = url.includes('?code=');
+
+    // If Github API returns the code parameter
+    if (hasCode) {
+      const newUrl = url.split('?code=');
+      window.history.pushState({}, null, newUrl[0]);
+      setIsLoading(true);
+      const result = await getAccessToken(newUrl[1]);
+      login(result);
+      setIsLoading(false);
+    }
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="h-full py-8 flex justify-center items-center">
+        <BounceLoader color="#3B82F6" />
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="h-full py-8 flex justify-center items-center">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold">
+            Please sign in to access this page
           </h1>
-          <p className="mb-8 leading-relaxed">
-            Discover and display in-depth statistics about your code
-            contributions!
-            <br />
-            Generate insights on lines written by language, commit frequency by
-            date and time, repository contribution rankings, and more.
-          </p>
-          <div className="flex justify-center">
-            <Button className="text-white bg-blue-500 hover:bg-blue-600">
-              Get Started
-            </Button>
-            <Button className="ml-4 text-gray-700 bg-gray-100 hover:bg-gray-200">
-              Examples
-            </Button>
-          </div>
-        </div>
-        <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
-          <img
-            className="object-cover object-center rounded"
-            alt="hero"
-            src="https://dummyimage.com/720x600"
-          />
         </div>
       </div>
-    </section>
+    );
+  }
+
+  return (
+    <div className="h-full py-8 flex justify-center items-center">
+      <div className="text-center">
+        <h1 className="text-3xl font-bold">{`Welcome ${userId}!`}</h1>
+      </div>
+    </div>
   );
 };
 
