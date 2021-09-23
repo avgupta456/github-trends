@@ -10,6 +10,7 @@ import { LoginScreen, SignUpScreen } from '../Auth';
 import HomeScreen from '../Home';
 
 import { logout as _logout } from '../../redux/actions/userActions';
+import { PROD } from '../../constants';
 
 import { LightningSVG } from '../../assets';
 
@@ -21,6 +22,8 @@ function App() {
   const dispatch = useDispatch();
 
   const logout = () => dispatch(_logout());
+
+  console.log(PROD);
 
   return (
     <div className="h-screen flex flex-col">
