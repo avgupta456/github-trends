@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const Card = ({ title, description, imageSrc }) => {
   return (
     <div className="p-2 md:w-1/3 sm:mb-0 mb-6">
-      <div className="p-4 rounded-lg bg-gray-100">
+      <div className="p-4 rounded-lg bg-gray-50 hover:bg-gray-100">
         <img
           alt="content"
           className="object-cover h-full w-full"
