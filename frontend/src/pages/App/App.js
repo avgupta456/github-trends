@@ -29,7 +29,7 @@ function App() {
   return (
     <div className="h-screen flex flex-col">
       <Router>
-        <div className="text-gray-100 bg-white shadow-md body-font sticky top-0">
+        <div className="text-gray-100 bg-white shadow-md body-font sticky top-0 z-50">
           <div className="container mx-auto flex flex-wrap p-5 flex-row items-center">
             <a className="title-font font-medium text-gray-700 mb-0">
               <Link to="/" className="flex items-center">
