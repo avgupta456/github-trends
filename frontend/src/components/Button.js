@@ -4,18 +4,20 @@ import PropTypes from 'prop-types';
 
 import { classnames } from '../utils';
 
-export const Button = (props) => (
-  <button
-    type="button"
-    {...props}
-    className={classnames(
-      props.className,
-      'border-0 py-2 px-6 inline-flex focus:outline-none rounded text-lg',
-    )}
-  >
-    {props.children}
-  </button>
-);
+const Button = (props) => {
+  return (
+    <button
+      type="button"
+      {...props}
+      className={classnames(
+        props.className,
+        'border-0 py-2 px-6 inline-flex focus:outline-none rounded text-lg',
+      )}
+    >
+      {props.children}
+    </button>
+  );
+};
 
 Button.propTypes = {
   className: PropTypes.string,
@@ -25,3 +27,5 @@ Button.propTypes = {
 Button.defaultProps = {
   className: '',
 };
+
+export default Button;

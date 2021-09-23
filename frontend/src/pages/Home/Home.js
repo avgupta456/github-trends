@@ -1,7 +1,10 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import BounceLoader from 'react-spinners/BounceLoader';
+
+import { Card } from '../../components';
 
 import { getAccessToken } from '../../api';
 import { login as _login } from '../../redux/actions/userActions';
@@ -57,9 +60,28 @@ const HomeScreen = () => {
   }
 
   return (
-    <div className="h-full py-8 flex justify-center items-center">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold">{`Welcome ${userId}!`}</h1>
+    <div className="h-full py-8 px-8 text-gray-600 body-font">
+      <div className="flex flex-col">
+        <div className="h-1 bg-gray-200 rounded overflow-hidden">
+          <div className="w-24 h-full bg-blue-500" />
+        </div>
+        <div className="flex flex-wrap sm:flex-row flex-col py-6 mb-12">
+          <h1 className="sm:w-2/5 text-gray-900 font-medium title-font text-2xl mb-2 sm:mb-0">
+            GitHub README SVG Gallery
+          </h1>
+          <p className="sm:w-3/5 leading-relaxed text-base sm:pl-10 pl-0">
+            Scroll through the list of images and see which ones you like.
+            Simply click on the image to copy the embeddable link. Each image
+            can be customized via the edit button. Enjoy!
+          </p>
+        </div>
+      </div>
+      <div className="flex flex-wrap -mt-8">
+        <Card
+          title="Language Contributions"
+          description="See your language breakdown based on your commits, across all repositories you contribute to, not just ones you own."
+          imageSrc={`https://pub-dot-github-298920.uc.r.appspot.com/user/${userId}/svg`}
+        />
       </div>
     </div>
   );
