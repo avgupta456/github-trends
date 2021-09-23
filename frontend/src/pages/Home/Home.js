@@ -6,6 +6,7 @@ import BounceLoader from 'react-spinners/BounceLoader';
 
 import { Card } from '../../components';
 
+import { BACKEND_URL } from '../../constants';
 import { getAccessToken } from '../../api';
 import { login as _login } from '../../redux/actions/userActions';
 
@@ -79,7 +80,7 @@ const HomeScreen = () => {
         <Card
           title="Language Contributions"
           description="See your language breakdown based on your commits, across all repositories you contribute to, not just ones you own."
-          imageSrc={`https://pub-dot-github-298920.uc.r.appspot.com/user/${userId}/svg`}
+          imageSrc={`${BACKEND_URL}/user/${userId}/svg`}
         />
       </div>
     </div>
