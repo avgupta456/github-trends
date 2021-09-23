@@ -1,10 +1,16 @@
 /* eslint-disable react/button-has-type */
 import React from 'react';
+import { useSelector } from 'react-redux';
+
 import { Link } from 'react-router-dom';
 
 import { Button } from '../../components';
 
 const LandingScreen = () => {
+  const userId = useSelector((state) => state.user.userId);
+
+  const isAuthenticated = userId && userId.length > 0;
+
   return (
     <section className="text-gray-600 body-font">
       <div className="container mx-auto flex px-5 py-16 md:flex-row flex-col items-center">
@@ -20,9 +26,9 @@ const LandingScreen = () => {
             date and time, repository contribution rankings, and more.
           </p>
           <div className="flex justify-center">
-            <Link to="/signup">
+            <Link to={isAuthenticated ? '/user' : '/signup'}>
               <Button className="text-white bg-blue-500 hover:bg-blue-600">
-                Get Started
+                {isAuthenticated ? 'Visit Dashboard' : 'Get Started'}
               </Button>
             </Link>
             <a

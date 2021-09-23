@@ -12,7 +12,6 @@ import { login as _login } from '../../redux/actions/userActions';
 const HomeScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
 
-  // const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const userId = useSelector((state) => state.user.userId);
 
   const isAuthenticated = userId && userId.length > 0;

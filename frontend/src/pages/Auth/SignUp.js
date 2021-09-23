@@ -7,7 +7,6 @@ import { Button } from '../../components';
 import { GITHUB_AUTH_URL } from '../../constants';
 
 const SignUpScreen = () => {
-  // const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const userId = useSelector((state) => state.user.userId);
 
   console.log(userId);
