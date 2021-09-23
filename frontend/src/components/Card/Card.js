@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import CopyIcon from 'mdi-react/ContentCopyIcon';
 
-import { classnames } from '../utils';
+import { classnames } from '../../utils';
 
 import './card.css';
 

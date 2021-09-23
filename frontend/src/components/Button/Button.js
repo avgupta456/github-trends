@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { classnames } from '../utils';
+import { classnames } from '../../utils';
 
 const Button = (props) => {
   return (

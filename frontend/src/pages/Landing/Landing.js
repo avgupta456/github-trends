@@ -37,7 +37,7 @@ const LandingScreen = () => {
               rel="noopener noreferrer"
             >
               <Button className="ml-4 text-gray-700 bg-gray-100 hover:bg-gray-200">
-                Examples
+                Fork on GitHub
               </Button>
             </a>
           </div>
