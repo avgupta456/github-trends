@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const URL_PREFIX = 'http://localhost:8000/auth/';
+import { BACKEND_URL } from '../constants';
+
+const URL_PREFIX = `${BACKEND_URL}/auth/`;
 
 const getAccessToken = async (code) => {
   try {
