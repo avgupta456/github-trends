@@ -43,7 +43,7 @@ app.add_middleware(
 
 sentry_sdk.init(
     SENTRY_DSN,
-    traces_sample_rate=(0.01 if PROD else 1.0),
+    traces_sample_rate=(1.0 if PROD else 1.0),
 )
 
 app.add_middleware(
