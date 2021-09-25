@@ -3,6 +3,11 @@ import os
 # GLOBAL
 PROD = os.getenv("PROD", "False") == "True"
 PROJECT_ID = "github-298920"
+BACKEND_URL = (
+    "https://pub-dot-github-298920.uc.r.appspot.com/"
+    if PROD
+    else "http://localhost:8000/"
+)
 
 # API
 TIMEOUT = 3  # max seconds to wait for api response
