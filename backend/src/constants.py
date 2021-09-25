@@ -26,6 +26,9 @@ LOCAL_SUBSCRIBER = "http://localhost:8001/pubsub/sub/"
 # MONGODB
 MONGODB_PASSWORD = os.getenv("MONGODB_PASSWORD", "")
 
+# SENTRY
+SENTRY_DSN = os.getenv("SENTRY_DSN", "")
+
 # TESTING
 TEST_USER_ID = "AshishGupta938"  # for testing, previously "avgupta456"
 TEST_TOKEN = os.getenv("AUTH_TOKEN", "")  # for authentication

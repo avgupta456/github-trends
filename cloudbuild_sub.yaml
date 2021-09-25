@@ -13,6 +13,7 @@ steps:
     - 'OAUTH_CLIENT_SECRET=${_OAUTH_CLIENT_SECRET}'
     - 'OAUTH_REDIRECT_URI=${_OAUTH_REDIRECT_URI}'
     - 'MONGODB_PASSWORD=${_MONGODB_PASSWORD}'
+    - 'SENTRY_DSN=${_SENTRY_DSN}'
 - name: "gcr.io/cloud-builders/gcloud"
   args: ["app", "deploy",  "--appyaml", "./app_sub.yaml"]
   dir: 'backend'

@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+import sentry_sdk
+from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 
 load_dotenv()
 
@@ -16,7 +18,7 @@ from src.routers.users import router as user_router
 from src.routers.pubsub import router as pubsub_router
 from src.routers.auth import router as auth_router
 
-from src.constants import PROD, PUBSUB_PUB
+from src.constants import PROD, PUBSUB_PUB, SENTRY_DSN
 
 """
 SETUP
@@ -36,6 +38,15 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+)
+
+sentry_sdk.init(
+    SENTRY_DSN,
+    traces_sample_rate=(0.01 if PROD else 1.0),
+)
+
+app.add_middleware(
+    SentryAsgiMiddleware,
 )
 
 
