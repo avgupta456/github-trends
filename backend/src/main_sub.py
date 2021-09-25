@@ -17,6 +17,7 @@ os.environ["PUBSUB_PUB"] = "False"
 from src.routers.users import router as user_router
 from src.routers.pubsub import router as pubsub_router
 from src.routers.auth import router as auth_router
+from src.routers.assets import router as asset_router
 
 from src.constants import PROD, PUBSUB_PUB, SENTRY_DSN
 
@@ -63,3 +64,4 @@ def get_info():
 app.include_router(user_router, prefix="/user", tags=["Users"])
 app.include_router(pubsub_router, prefix="/pubsub", tags=["PubSub"])
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
+app.include_router(asset_router, prefix="/assets", tags=["Assets"])

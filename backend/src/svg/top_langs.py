@@ -10,10 +10,10 @@ from src.svg.style import style
 
 def get_top_langs_svg(data: Dict[str, Any]) -> Drawing:
     d = Drawing(size=(300, 285))
-    d.defs.add(d.style(style))  # type: ignore
+    d.defs.add(d.style(style))
 
-    d.add(  # type: ignore
-        d.rect(  # type: ignore
+    d.add(
+        d.rect(
             size=(299, 284),
             insert=(0.5, 0.5),
             rx=4.5,

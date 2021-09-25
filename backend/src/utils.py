@@ -9,6 +9,8 @@ from fastapi import Response, status
 
 from svgwrite.drawing import Drawing  # type: ignore
 
+from src.svg.error import get_error_svg
+
 
 def fail_gracefully(func: Callable[..., Any]):
     @wraps(func)  # needed to play nice with FastAPI decorator
@@ -63,9 +65,8 @@ def svg_fail_gracefully(func: Callable[..., Any]):
             status_code = status.HTTP_200_OK
         except Exception as e:
             logging.exception(e)
-            d = Drawing()
-            d.add(d.text("Unknown Error"))  # type: ignore
-            status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+            d = get_error_svg()
+            status_code = status.HTTP_200_OK
 
         sio = io.StringIO()
         d.write(sio)  # type: ignore
