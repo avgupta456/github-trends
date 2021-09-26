@@ -7,7 +7,7 @@ from src.svg.style import style
 
 
 def get_error_svg() -> Drawing:
-    d = Drawing(viewBox=("0 0 300 285"), class_="svg")
+    d = Drawing(size=(300, 285))
     d.defs.add(d.style(style))
 
     d.add(
