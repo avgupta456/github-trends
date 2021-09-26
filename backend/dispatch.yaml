@@ -1,0 +1,9 @@
+dispatch:
+- url: "*/pub/*"
+  service: pub
+
+- url: "*/sub/*"
+  service: sub
+
+- url: "*/.*"
+  service: default
