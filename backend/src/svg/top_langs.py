@@ -8,7 +8,18 @@ from src.models.user.analytics import RawDataModel
 from src.svg.style import style
 
 
-def get_top_langs_svg(data: RawDataModel) -> Drawing:
+def format_number(num: int) -> str:
+    if num > 10000:
+        return "~" + str(int(num / 1000)) + "k lines"
+    elif num > 1000:
+        return "~" + str(int(num / 100) / 10) + "k lines"
+    elif num > 100:
+        return "~" + str(int(num / 100) * 100) + " lines"
+    else:
+        return "<100 lines"
+
+
+def get_top_langs_svg(data: RawDataModel, use_percent: bool = True) -> Drawing:
     d = Drawing(size=(300, 285))
     d.defs.add(d.style(style))
 
@@ -31,15 +42,34 @@ def get_top_langs_svg(data: RawDataModel) -> Drawing:
     data_langs = data.top_languages[1:]
     for i in range(min(5, len(data_langs))):
         translate = "translate(0, " + str(40 * i) + ")"
-        percent = data_langs[i].percent
+        percent = (
+            data_langs[i].percent
+            if use_percent
+            else 100 * data_langs[i].changed / data_langs[0].changed
+        )
         color = data_langs[i].color or "#ededed"
         lang = Group(transform=translate)
         lang.add(d.text(data_langs[i].lang, insert=(2, 15), class_="lang-name"))
-        lang.add(d.text(str(percent) + "%", insert=(215, 33), class_="lang-name"))
+        if use_percent:
+            lang.add(d.text(str(percent) + "%", insert=(215, 33), class_="lang-name"))
+        else:
+            lang.add(
+                d.text(
+                    format_number(data_langs[i].changed),
+                    insert=(215, 33),
+                    class_="lang-name",
+                )
+            )
         progress = Drawing(width="205", x="0", y="25")
         progress.add(d.rect(size=(205, 8), insert=(0, 0), rx=5, ry=5, fill="#ddd"))
         progress.add(
-            d.rect(size=(2.05 * percent, 8), insert=(0, 0), rx=5, ry=5, fill=color)
+            d.rect(
+                size=(2.05 * percent, 8),
+                insert=(0, 0),
+                rx=5,
+                ry=5,
+                fill=color,
+            )
         )
         lang.add(progress)
         langs.add(lang)

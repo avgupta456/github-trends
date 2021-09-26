@@ -78,9 +78,14 @@ const HomeScreen = () => {
       </div>
       <div className="flex flex-wrap -mt-8">
         <Card
-          title="Language Contributions"
+          title="Language Contributions - Percent"
           description="See your language breakdown based on your commits, across all repositories you contribute to, not just ones you own."
-          imageSrc={`${BACKEND_URL}/user/${userId}/svg`}
+          imageSrc={`${BACKEND_URL}/user/${userId}/svg/langs`}
+        />
+        <Card
+          title="Language Contributions - Lines"
+          description="See your language breakdown based on your commits, across all repositories you contribute to, not just ones you own."
+          imageSrc={`${BACKEND_URL}/user/${userId}/svg/langs?use_percent=False`}
         />
       </div>
     </div>

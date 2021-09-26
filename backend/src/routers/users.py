@@ -94,7 +94,7 @@ async def get_user(
 
 
 @router.get(
-    "/{user_id}/svg", status_code=status.HTTP_200_OK, response_class=HTMLResponse
+    "/{user_id}/svg/langs", status_code=status.HTTP_200_OK, response_class=HTMLResponse
 )
 @svg_fail_gracefully
 async def get_user_svg(
@@ -103,8 +103,9 @@ async def get_user_svg(
     start_date: date = date.today() - timedelta(365),
     end_date: date = date.today(),
     timezone_str: str = "US/Eastern",
+    use_percent: bool = True,
 ) -> Any:
     output = await _get_user(user_id, start_date, end_date, timezone_str)
     if not validate_raw_data(output):
         return get_loading_svg()
-    return get_top_langs_svg(output)  # type: ignore
+    return get_top_langs_svg(output, use_percent)  # type: ignore
