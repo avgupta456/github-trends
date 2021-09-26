@@ -4,9 +4,9 @@ import os
 PROD = os.getenv("PROD", "False") == "True"
 PROJECT_ID = "github-298920"
 BACKEND_URL = (
-    "https://pub-dot-github-298920.uc.r.appspot.com/"
+    "https://pub-dot-github-298920.uc.r.appspot.com"
     if PROD
-    else "http://localhost:8000/"
+    else "http://localhost:8000"
 )
 
 # API

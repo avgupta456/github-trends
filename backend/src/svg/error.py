@@ -1,12 +1,13 @@
 # type: ignore
 
 from svgwrite import Drawing
+from src.constants import BACKEND_URL
 
 from src.svg.style import style
 
 
 def get_error_svg() -> Drawing:
-    d = Drawing(size=(300, 285))
+    d = Drawing(viewBox=("0 0 300 285"))
     d.defs.add(d.style(style))
 
     d.add(
@@ -29,6 +30,8 @@ def get_error_svg() -> Drawing:
         )
     )
 
-    d.add(d.image("../../assets/error", insert=(85, 100), style="opacity: 50%"))
+    d.add(
+        d.image(BACKEND_URL + "/assets/error", insert=(85, 100), style="opacity: 50%")
+    )
 
     return d
