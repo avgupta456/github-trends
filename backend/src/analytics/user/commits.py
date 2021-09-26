@@ -19,7 +19,7 @@ def get_top_languages(data: UserPackage) -> List[dict_type]:
 
     total_additions = sum([int(lang["additions"]) for lang in languages_list])
     total_deletions = sum([int(lang["deletions"]) for lang in languages_list])
-    total_changed = total_additions + total_deletions
+    total_changed = total_additions + total_deletions + 1  # avoids division by zero
     total: dict_type = {
         "lang": "Total",
         "additions": total_additions,
@@ -31,19 +31,27 @@ def get_top_languages(data: UserPackage) -> List[dict_type]:
         key=lambda x: int(x["additions"]) + int(x["deletions"]),
         reverse=True,
     )
-    other: dict_type = {"lang": "Other", "additions": 0, "deletions": 0}
-    for language in languages_list[5:]:
+    other: dict_type = {
+        "lang": "Other",
+        "additions": 0,
+        "deletions": 0,
+        "color": "#ededed",
+    }
+    for language in languages_list[4:]:
         other["additions"] = int(other["additions"]) + int(language["additions"])
         other["deletions"] = int(other["deletions"]) + int(language["deletions"])
 
-    languages_list = [total] + languages_list[:5] + [other]
+    languages_list = [total] + languages_list[:4] + [other]
 
+    new_languages_list: List[dict_type] = []
     for lang in languages_list:
         lang["added"] = int(lang["additions"]) - int(lang["deletions"])
         lang["changed"] = int(lang["additions"]) + int(lang["deletions"])
         lang["percent"] = float(round(100 * lang["changed"] / total_changed, 2))
+        if lang["percent"] > 0:
+            new_languages_list.append(lang)
 
-    return languages_list
+    return new_languages_list
 
 
 def get_top_repos(data: UserPackage) -> List[Any]:
