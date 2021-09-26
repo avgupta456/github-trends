@@ -1,4 +1,8 @@
 style = """
+    .svg {
+        max-width: 300px;
+        max-height: 285px;
+    }
     .header {
         font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
         fill: #2f80ed;
