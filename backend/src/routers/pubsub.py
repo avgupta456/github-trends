@@ -7,7 +7,7 @@ from src.analytics.user.main import get_user as analytics_get_user
 from src.db.functions.users import update_user
 
 from src.external.pubsub.templates import publish_to_topic, parse_request
-from src.utils import fail_gracefully, async_fail_gracefully
+from src.utils import fail_gracefully, pubsub_fail_gracefully
 
 router = APIRouter()
 
@@ -34,11 +34,9 @@ def pub_user(response: Response, user_id: str, access_token: str) -> str:
 
 
 @router.post("/sub/user/{token}", status_code=status.HTTP_200_OK)
-@async_fail_gracefully
+@pubsub_fail_gracefully
 async def sub_user(response: Response, token: str, request: Request) -> Any:
     data: Dict[str, Any] = await parse_request(token, request)
-
-    print(data)
 
     output = await analytics_get_user(
         data["user_id"],
