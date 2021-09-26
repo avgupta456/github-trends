@@ -4,7 +4,7 @@ from datetime import date, timedelta, datetime
 from fastapi import APIRouter, Response, Request, status
 
 from src.analytics.user.main import get_user as analytics_get_user
-from src.db.functions.users import update_user
+from src.db.functions.users import lock_user, unlock_user, update_user
 
 from src.external.pubsub.templates import publish_to_topic, parse_request
 from src.utils import fail_gracefully, pubsub_fail_gracefully
@@ -38,6 +38,8 @@ def pub_user(response: Response, user_id: str, access_token: str) -> str:
 async def sub_user(response: Response, token: str, request: Request) -> Any:
     data: Dict[str, Any] = await parse_request(token, request)
 
+    await lock_user(data["user_id"])
+
     output = await analytics_get_user(
         data["user_id"],
         data["access_token"],
@@ -47,5 +49,7 @@ async def sub_user(response: Response, token: str, request: Request) -> Any:
     )
 
     await update_user(data["user_id"], output)
+
+    await unlock_user(data["user_id"])
 
     return output

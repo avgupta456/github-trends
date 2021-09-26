@@ -62,16 +62,17 @@ async def _get_user(
 
     time_diff = datetime.now() - db_user.last_updated
     if time_diff > timedelta(hours=6) or not validate_raw_data(db_user.raw_data):
-        publish_to_topic(
-            "user",
-            {
-                "user_id": user_id,
-                "access_token": db_user.access_token,
-                "start_date": str(start_date),
-                "end_date": str(end_date),
-                "timezone_str": timezone_str,
-            },
-        )
+        if not db_user.lock:
+            publish_to_topic(
+                "user",
+                {
+                    "user_id": user_id,
+                    "access_token": db_user.access_token,
+                    "start_date": str(start_date),
+                    "end_date": str(end_date),
+                    "timezone_str": timezone_str,
+                },
+            )
 
     if validate_raw_data(db_user.raw_data):
         return db_user.raw_data  # type: ignore

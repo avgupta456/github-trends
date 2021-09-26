@@ -23,3 +23,4 @@ class UserModel(BaseModel):
     access_token: str
     last_updated: datetime
     raw_data: Optional[Dict[str, Any]]
+    lock: bool

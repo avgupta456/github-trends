@@ -10,6 +10,7 @@ async def login_user(user_id: str, access_token: str) -> str:
     if curr_user is None:
         raw_user["last_updated"] = datetime.now()
         raw_user["raw_data"] = None
+        raw_user["lock"] = False
 
     await USERS.update_one(  # type: ignore
         {"user_id": user_id},
@@ -17,6 +18,20 @@ async def login_user(user_id: str, access_token: str) -> str:
         upsert=True,
     )
     return user_id
+
+
+async def lock_user(user_id: str) -> None:
+    await USERS.update_one(  # type: ignore
+        {"user_id": user_id},
+        {"$set": {"lock": True}},
+    )
+
+
+async def unlock_user(user_id: str) -> None:
+    await USERS.update_one(  # type: ignore
+        {"user_id": user_id},
+        {"$set": {"lock": False}},
+    )
 
 
 async def update_user(user_id: str, raw_data: Optional[Dict[str, Any]] = None) -> None:
