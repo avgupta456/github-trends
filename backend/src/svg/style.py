@@ -1,7 +1,8 @@
 style = """
     .svg {
+        display: inline-block;
         max-width: 300px;
-        max-height: 285px;
+        height: auto;
     }
     .header {
         font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
