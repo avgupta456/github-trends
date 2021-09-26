@@ -57,8 +57,11 @@ def get_top_languages(data: UserPackage) -> List[dict_type]:
 def get_top_repos(data: UserPackage) -> List[Any]:
     repos: List[Any] = [
         {
-            repo: repo,
-            "languages": list(repo_stats.languages.keys()),
+            "repo": repo,
+            "languages": [
+                {"lang": x[0], "additions": x[1].additions, "deletions": x[1].deletions}
+                for x in list(repo_stats.languages.items())
+            ],
             "additions": sum([x.additions for x in repo_stats.languages.values()]),
             "deletions": sum([x.deletions for x in repo_stats.languages.values()]),
         }

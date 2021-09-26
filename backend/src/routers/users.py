@@ -1,5 +1,5 @@
 from datetime import date, datetime, timedelta
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from fastapi import APIRouter, Response, status
 from fastapi.exceptions import HTTPException
@@ -11,6 +11,7 @@ from src.db.functions.get import get_user_by_user_id
 
 from src.constants import PUBSUB_PUB
 from src.external.pubsub.templates import publish_to_topic
+from src.models.user.analytics import RawDataModel
 from src.svg.top_langs import get_top_langs_svg
 from src.svg.error import get_loading_svg
 from src.utils import async_fail_gracefully, svg_fail_gracefully
@@ -42,9 +43,9 @@ ANALYTICS/SVG SECTION
 """
 
 
-def validate_raw_data(data: Optional[Dict[str, Any]]) -> bool:
+def validate_raw_data(data: Optional[RawDataModel]) -> bool:
     # NOTE: add more validation as more fields are required
-    return data is not None and "top_languages" in data
+    return data is not None and data.top_languages is not None
 
 
 async def _get_user(
@@ -52,7 +53,7 @@ async def _get_user(
     start_date: date = date.today() - timedelta(365),
     end_date: date = date.today(),
     timezone_str: str = "US/Eastern",
-) -> Dict[str, Any]:
+) -> Optional[RawDataModel]:
     if not PUBSUB_PUB:
         raise HTTPException(400, "")
 
@@ -77,7 +78,7 @@ async def _get_user(
     if validate_raw_data(db_user.raw_data):
         return db_user.raw_data  # type: ignore
 
-    return {}
+    return None
 
 
 @router.get("/{user_id}", status_code=status.HTTP_200_OK)
@@ -88,7 +89,7 @@ async def get_user(
     start_date: date = date.today() - timedelta(365),
     end_date: date = date.today(),
     timezone_str: str = "US/Eastern",
-) -> Dict[str, Any]:
+) -> Optional[RawDataModel]:
     return await _get_user(user_id, start_date, end_date, timezone_str)
 
 
@@ -106,4 +107,4 @@ async def get_user_svg(
     output = await _get_user(user_id, start_date, end_date, timezone_str)
     if not validate_raw_data(output):
         return get_loading_svg()
-    return get_top_langs_svg(output)
+    return get_top_langs_svg(output)  # type: ignore
