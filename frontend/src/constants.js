@@ -9,5 +9,5 @@ export const REDIRECT_URI = PROD
 export const GITHUB_AUTH_URL = `https://github.com/login/oauth/authorize?scope=user,repo&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}`;
 
 export const BACKEND_URL = PROD
-  ? 'https://pub-dot-github-298920.uc.r.appspot.com'
+  ? 'api.githubtrends.io'
   : 'http://localhost:8000';
