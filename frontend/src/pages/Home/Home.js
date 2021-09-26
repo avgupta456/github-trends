@@ -80,7 +80,7 @@ const HomeScreen = () => {
         <Card
           title="Language Contributions"
           description="See your language breakdown based on your commits, across all repositories you contribute to, not just ones you own."
-          imageSrc={`${BACKEND_URL}/user/${userId}1/svg`}
+          imageSrc={`${BACKEND_URL}/user/${userId}/svg`}
         />
       </div>
     </div>
