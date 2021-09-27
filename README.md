@@ -8,6 +8,8 @@ GitHub Trends dives deep into the GitHub API to bring you exciting and impactful
 
 [![GitHub Trends SVG](https://api.githubtrends.io/user/avgupta456/svg/langs?use_percent=False)](https://githubtrends.io)
 
+[![GitHub Trends SVG](https://api.githubtrends.io/user/avgupta456/svg/repos)](https://githubtrends.io)
+
 ## How to use
 
 Visit [githubtrends.io](https://www.githubtrends.io) to create an account and get started!
