@@ -17,12 +17,14 @@ from src.external.github_api.graphql.user import (
     get_user_contribution_events,
 )
 
+from src.external.github_api.graphql.repo import get_repo
+
 from src.helper.gather import gather
 
 from src.utils import date_to_datetime
 from src.constants import NODE_CHUNK_SIZE, NODE_THREADS
 
-from src.processing.commit import get_all_commit_info, get_commits_languages
+from src.processing.user.commit import get_all_commit_info, get_commits_languages
 
 t_stats = DefaultDict[str, Dict[str, List[Union[RawEventsEvent, RawEventsCommit]]]]
 t_commits = List[Dict[str, Union[Dict[str, Dict[str, int]], str]]]
@@ -153,29 +155,58 @@ async def get_contributions(
         max_threads=100,
     )
 
-    commit_times = [[commit_info[0] for commit_info in repo] for repo in commit_infos]
-    commit_node_ids = [
-        [commit_info[1] for commit_info in repo] for repo in commit_infos
-    ]
+    _repo_infos = await gather(
+        funcs=[get_repo for _ in repos],
+        args_dicts=[
+            {
+                "access_token": access_token,
+                "owner": repo.split("/")[0],
+                "repo": repo.split("/")[1],
+            }
+            for repo in repos
+        ],
+        max_threads=100,
+    )
+
+    repo_infos = {
+        repo: repo_info["languages"]["edges"]
+        for repo, repo_info in zip(repos, _repo_infos)
+    }
+
+    commit_times = [[x[0] for x in repo] for repo in commit_infos]
+    commit_node_ids = [[x[1] for x in repo] for repo in commit_infos]
 
     id_mapping: Dict[str, List[int]] = {}
+    repo_mapping: Dict[str, str] = {}
     all_node_ids: List[str] = []
     for i, repo_node_ids in enumerate(commit_node_ids):
         for j, node_id in enumerate(repo_node_ids):
             id_mapping[node_id] = [i, j]
+            repo_mapping[node_id] = repos[i]
             all_node_ids.append(node_id)
 
     node_id_chunks: List[List[str]] = []
+    commit_repo_chunks: List[List[str]] = []
     for i in range(0, len(all_node_ids), NODE_CHUNK_SIZE):
         node_id_chunks.append(
             all_node_ids[i : min(len(all_node_ids), i + NODE_CHUNK_SIZE)]
+        )
+        commit_repo_chunks.append(
+            [repo_mapping[node_id] for node_id in node_id_chunks[-1]]
         )
 
     commit_language_chunks = await gather(
         funcs=[get_commits_languages for _ in node_id_chunks],
         args_dicts=[
-            {"access_token": access_token, "node_ids": node_id_chunk}
-            for node_id_chunk in node_id_chunks
+            {
+                "access_token": access_token,
+                "node_ids": node_id_chunk,
+                "commit_repos": commit_repo_chunk,
+                "repo_infos": repo_infos,
+            }
+            for (node_id_chunk, commit_repo_chunk) in zip(
+                node_id_chunks, commit_repo_chunks
+            )
         ],
         max_threads=NODE_THREADS,
     )

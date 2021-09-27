@@ -23,7 +23,7 @@ def get_all_commit_info(
     owner, repo = name_with_owner.split("/")
     data: List[Any] = []
     index = 0
-    while index in range(10) and len(data) == 100 * index:
+    while index < 10 and len(data) == 100 * index:
         data.extend(
             get_repo_commits(
                 access_token=access_token,
@@ -59,30 +59,17 @@ def _get_commits_languages(
 ) -> List[Dict[str, Any]]:
     all_data: List[Dict[str, Any]] = []
     for i in range(0, len(node_ids), per_page):
-        # TODO: alert user/display if some nodes omitted
-        # TODO: figure out why Auth error code appears
         cutoff = min(len(node_ids), i + per_page)
         try:
-            raw_data = get_commits(access_token, node_ids[i:cutoff])
-            data: List[Dict[str, Any]] = raw_data["data"]["nodes"]  # type: ignore
-            all_data.extend(data)
+            all_data.extend(get_commits(access_token, node_ids[i:cutoff]))  # type: ignore
         except GraphQLErrorMissingNode as e:
             curr = node_ids[i:cutoff]
             curr.pop(e.node)
             all_data.extend(_get_commits_languages(access_token, curr))
         except GraphQLErrorTimeout:
             length = cutoff - i
-            if length == per_page:
-                midpoint = i + int(per_page / 2)
-                all_data.extend(
-                    _get_commits_languages(access_token, node_ids[i:midpoint])
-                )
-                all_data.extend(
-                    _get_commits_languages(access_token, node_ids[midpoint:cutoff])
-                )
-            else:
-                print("Commit Timeout Exception:", length, " nodes lost")
-                all_data.extend([{} for _ in range(length)])
+            print("Commit Timeout Exception:", length, " nodes lost")
+            all_data.extend([{} for _ in range(length)])
         except GraphQLErrorAuth:
             length = cutoff - i
             print("Commit Auth Exception:", length, " nodes lost")
@@ -91,11 +78,17 @@ def _get_commits_languages(
     return all_data
 
 
-def get_commits_languages(access_token: str, node_ids: List[str], cutoff: int = CUTOFF):
+def get_commits_languages(
+    access_token: str,
+    node_ids: List[str],
+    commit_repos: List[str],
+    repo_infos: Dict[str, Any],
+    cutoff: int = CUTOFF,
+):
     all_data = _get_commits_languages(access_token, node_ids, per_page=NODE_CHUNK_SIZE)
 
     out: List[Dict[str, Dict[str, int]]] = []
-    for commit in all_data:
+    for commit, commit_repo in zip(all_data, commit_repos):
         out.append({})
         if (
             "additions" in commit
@@ -103,11 +96,8 @@ def get_commits_languages(access_token: str, node_ids: List[str], cutoff: int = 
             and "changedFiles" in commit
             and commit["additions"] + commit["deletions"] < cutoff
         ):
-            languages = [
-                x
-                for x in commit["repository"]["languages"]["edges"]
-                if x["node"]["name"] not in BLACKLIST
-            ]
+            repo_info = repo_infos[commit_repo]
+            languages = [x for x in repo_info if x["node"]["name"] not in BLACKLIST]
             num_langs = min(len(languages), commit["changedFiles"])
             total_repo_size = sum(
                 [language["size"] for language in languages[:num_langs]]

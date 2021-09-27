@@ -16,21 +16,10 @@ def get_commits(
                     additions
                     deletions
                     changedFiles
-                    repository{
-                        languages(first: 5, orderBy: {field:SIZE, direction:DESC}){
-                            edges{
-                                size
-                                node{
-                                    name
-                                    color
-                                }
-                            }
-                        }
-                    }
                 }
             }
         }
         """,
     }
 
-    return get_template(query, access_token)
+    return get_template(query, access_token)["data"]["nodes"]
