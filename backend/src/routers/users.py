@@ -13,6 +13,7 @@ from src.constants import PUBSUB_PUB
 from src.external.pubsub.templates import publish_to_topic
 from src.models.user.analytics import RawDataModel
 from src.svg.top_langs import get_top_langs_svg
+from src.svg.top_repos import get_top_repos_svg
 from src.svg.error import get_loading_svg
 from src.utils import async_fail_gracefully, svg_fail_gracefully
 
@@ -97,7 +98,7 @@ async def get_user(
     "/{user_id}/svg/langs", status_code=status.HTTP_200_OK, response_class=HTMLResponse
 )
 @svg_fail_gracefully
-async def get_user_svg(
+async def get_user_lang_svg(
     response: Response,
     user_id: str,
     start_date: date = date.today() - timedelta(365),
@@ -109,3 +110,20 @@ async def get_user_svg(
     if not validate_raw_data(output):
         return get_loading_svg()
     return get_top_langs_svg(output, use_percent)  # type: ignore
+
+
+@router.get(
+    "/{user_id}/svg/repos", status_code=status.HTTP_200_OK, response_class=HTMLResponse
+)
+@svg_fail_gracefully
+async def get_user_repo_svg(
+    response: Response,
+    user_id: str,
+    start_date: date = date.today() - timedelta(365),
+    end_date: date = date.today(),
+    timezone_str: str = "US/Eastern",
+) -> Any:
+    output = await _get_user(user_id, start_date, end_date, timezone_str)
+    if not validate_raw_data(output):
+        return get_loading_svg()
+    return get_top_repos_svg(output)  # type: ignore
