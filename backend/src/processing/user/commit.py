@@ -59,8 +59,6 @@ def _get_commits_languages(
 ) -> List[Dict[str, Any]]:
     all_data: List[Dict[str, Any]] = []
     for i in range(0, len(node_ids), per_page):
-        # TODO: alert user/display if some nodes omitted
-        # TODO: figure out why Auth error code appears
         cutoff = min(len(node_ids), i + per_page)
         try:
             all_data.extend(get_commits(access_token, node_ids[i:cutoff]))  # type: ignore
