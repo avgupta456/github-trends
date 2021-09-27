@@ -58,8 +58,13 @@ def get_top_repos(data: UserPackage) -> List[Any]:
     repos: List[Any] = [
         {
             "repo": repo,
-            "languages": [
-                {"lang": x[0], "additions": x[1].additions, "deletions": x[1].deletions}
+            "langs": [
+                {
+                    "lang": x[0],
+                    "color": x[1].color,
+                    "additions": x[1].additions,
+                    "deletions": x[1].deletions,
+                }
                 for x in list(repo_stats.languages.items())
             ],
             "additions": sum([x.additions for x in repo_stats.languages.values()]),
@@ -71,7 +76,14 @@ def get_top_repos(data: UserPackage) -> List[Any]:
     for repo in repos:
         repo["added"] = int(repo["additions"]) - int(repo["deletions"])
         repo["changed"] = int(repo["additions"]) + int(repo["deletions"])
+        repo["langs"] = [
+            x
+            for x in repo["langs"]
+            if x["additions"] + x["deletions"] > 0.05 * repo["changed"]
+        ]
 
     repos = sorted(repos, key=lambda x: x["changed"], reverse=True)
+
+    repos = [x for x in repos if x["changed"] > 0.05 * repos[0]["changed"]]
 
     return repos[:5]

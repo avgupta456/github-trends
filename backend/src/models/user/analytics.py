@@ -15,13 +15,14 @@ class LanguageStats(BaseModel):
 
 class RepoLanguage(BaseModel):
     lang: str
+    color: str
     additions: int
     deletions: int
 
 
 class RepoStats(BaseModel):
     repo: str
-    languages: List[RepoLanguage]
+    langs: List[RepoLanguage]
     additions: int
     deletions: int
     added: int
