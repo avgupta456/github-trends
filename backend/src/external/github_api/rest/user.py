@@ -5,6 +5,9 @@ from src.external.github_api.rest.template import get_template, get_template_plu
 BASE_URL = "https://api.github.com/users/"
 
 
+# TODO: create return classes
+
+
 def get_user(user_id: str, access_token: str) -> Dict[str, Any]:
     """Returns raw user data"""
     return get_template(BASE_URL + user_id, access_token)

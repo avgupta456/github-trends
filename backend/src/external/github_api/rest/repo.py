@@ -10,6 +10,9 @@ from src.external.github_api.rest.template import (
 BASE_URL = "https://api.github.com/repos/"
 
 
+# TODO: create return classes
+
+
 def get_repo(access_token: str, owner: str, repo: str) -> Dict[str, Any]:
     """Returns raw repository data"""
     return get_template(BASE_URL + owner + "/" + repo, access_token)
