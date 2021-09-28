@@ -27,8 +27,3 @@ class RepoStats(BaseModel):
     deletions: int
     added: int
     changed: int
-
-
-class RawDataModel(BaseModel):
-    top_languages: Optional[List[LanguageStats]]
-    top_repos: Optional[List[RepoStats]]

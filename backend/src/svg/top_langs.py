@@ -1,9 +1,9 @@
 # type: ignore
 
+from typing import Any
+
 from svgwrite import Drawing
 from svgwrite.container import Group
-
-from src.models.user.analytics import RawDataModel
 
 from src.svg.style import style
 
@@ -19,7 +19,7 @@ def format_number(num: int) -> str:
         return "<100 lines"
 
 
-def get_top_langs_svg(data: RawDataModel, use_percent: bool = True) -> Drawing:
+def get_top_langs_svg(data: Any, use_percent: bool = True) -> Drawing:
     d = Drawing(size=(300, 285))
     d.defs.add(d.style(style))
 
