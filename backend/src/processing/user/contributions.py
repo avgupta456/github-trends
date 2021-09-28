@@ -22,7 +22,7 @@ from src.external.github_api.graphql.repo import get_repo
 from src.helper.gather import gather
 
 from src.utils import date_to_datetime
-from src.constants import NODE_CHUNK_SIZE, NODE_THREADS, REPOSITORIES
+from src.constants import NODE_CHUNK_SIZE, NODE_THREADS
 
 from src.processing.user.commit import get_all_commit_info, get_commits_languages
 
@@ -349,27 +349,12 @@ async def get_contributions(
         name: list(repo.values()) for name, repo in repositories.items()
     }
 
-    # Filter top repositories for space, query time considerations
-    top_repos = sorted(
-        list(repo_stats.items()), key=lambda x: -int(x[1]["contribs_count"])  # type: ignore
-    )[:REPOSITORIES]
-    top_repos = [x[0] for x in top_repos]
-
-    filtered_repo_stats = {  # type: ignore
-        name: repo for name, repo in repo_stats.items() if name in top_repos
-    }
-    filtered_repos = {  # type: ignore
-        name: repo for name, repo in repositories_list.items() if name in top_repos
-    }
-
-    # TODO: keep track of "Other" repositories as a repository record
-
     output = UserContributions.parse_obj(
         {
             "total_stats": total_stats,
             "total": total_list,
-            "repo_stats": filtered_repo_stats,
-            "repos": filtered_repos,
+            "repo_stats": repo_stats,
+            "repos": repositories_list,
         }
     )
 
