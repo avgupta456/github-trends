@@ -82,6 +82,7 @@ def svg_fail_gracefully(func: Callable[..., Any]):
     ) -> Any:
         d: Drawing
         status_code: int
+        start = datetime.now()
         try:
             d = await func(response, *args, **kwargs)
             status_code = status.HTTP_200_OK
@@ -92,6 +93,8 @@ def svg_fail_gracefully(func: Callable[..., Any]):
 
         sio = io.StringIO()
         d.write(sio)  # type: ignore
+
+        print(datetime.now() - start)
 
         return Response(
             sio.getvalue(), media_type="image/svg+xml", status_code=status_code
