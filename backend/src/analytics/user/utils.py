@@ -1,5 +1,5 @@
 from typing import Any, Dict, List, Tuple, Union
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 
 from src.models.user.contribs import ContributionDay, RepoContributionDay
 from src.models.user.package import UserPackage
@@ -7,8 +7,8 @@ from src.models.user.package import UserPackage
 
 def trim_contribs(
     contribs: Union[List[ContributionDay], List[RepoContributionDay]],
-    start_date: date = date.today() - timedelta(365),
-    end_date: date = date.today(),
+    start_date: date,
+    end_date: date,
 ) -> Tuple[List[Union[ContributionDay, RepoContributionDay]], Dict[str, Any]]:
     new_total = list(
         filter(
@@ -53,18 +53,16 @@ def trim_contribs(
     return new_total, new_total_stats
 
 
-def trim_package(
-    data: UserPackage,
-    start_date: date = date.today() - timedelta(365),
-    end_date: date = date.today(),
-) -> UserPackage:
+def trim_package(data: UserPackage, start_date: date, end_date: date) -> UserPackage:
 
-    new_total, new_total_stats = trim_contribs(data.contribs.total)
+    new_total, new_total_stats = trim_contribs(
+        data.contribs.total, start_date, end_date
+    )
 
     new_repos = {}
     new_repo_stats = {}
     for repo_name, repo in data.contribs.repos.items():
-        new_repo_total, new_repo_total_stats = trim_contribs(repo)
+        new_repo_total, new_repo_total_stats = trim_contribs(repo, start_date, end_date)
         if len(new_repo_total) > 0:
             new_repos[repo_name] = new_repo_total
             new_repo_stats[repo_name] = new_repo_total_stats
