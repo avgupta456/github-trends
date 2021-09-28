@@ -345,7 +345,10 @@ async def get_contributions(
                             datetime_str
                         )
 
-    total_list = list(total.values())
+    print(list(total.values())[0])
+    total_list = list(
+        filter(lambda x: x["stats"]["contribs_count"] > 0, list(total.values()))
+    )
     repositories_list = {
         name: list(repo.values()) for name, repo in repositories.items()
     }
