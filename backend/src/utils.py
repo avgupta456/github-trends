@@ -1,9 +1,9 @@
 import logging
 import io
 
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from functools import wraps
-from typing import Any, Callable, Dict, List
+from typing import Any, Callable, Dict, List, Tuple
 
 from fastapi import Response, status
 
@@ -105,3 +105,25 @@ def date_to_datetime(
 ) -> datetime:
 
     return datetime(dt.year, dt.month, dt.day, hour, minute, second)
+
+
+def alru_cache(max_size: int = 128, ttl: timedelta = timedelta(hours=1)):
+    def decorator(func: Callable[..., Any]) -> Any:
+        cache: Dict[Any, Tuple[datetime, Any]] = {}
+        keys: List[Any] = []
+
+        @wraps(func)
+        async def wrapper(*args: List[Any], **kwargs: Dict[str, Any]) -> Any:
+            now = datetime.now()
+            key = tuple(args), frozenset(kwargs.items())
+            if key not in cache or now - cache[key][0] > ttl:
+                value = await func(*args, **kwargs)
+                cache[key] = (now, value)
+                keys.append(key)
+                if len(keys) > max_size:
+                    del cache[keys.pop(0)]
+            return cache[key][1]
+
+        return wrapper
+
+    return decorator
