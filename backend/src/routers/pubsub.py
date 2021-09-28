@@ -48,7 +48,7 @@ async def sub_user(response: Response, token: str, request: Request) -> Any:
         timezone_str,
     )
 
-    await update_user(data["user_id"], output.dict())
+    await update_user(data["user_id"], output)
 
     await unlock_user(data["user_id"])
 

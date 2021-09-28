@@ -1,6 +1,6 @@
 # import json
 from typing import Dict, List, Union
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from src.external.github_api.graphql.template import get_template
 
@@ -31,8 +31,8 @@ def get_user_contribution_years(user_id: str, access_token: str) -> List[int]:
 def get_user_contribution_calendar(
     user_id: str,
     access_token: str,
-    start_date: datetime = datetime.now() - timedelta(days=365),
-    end_date: datetime = datetime.now(),
+    start_date: datetime,
+    end_date: datetime,
 ) -> RawCalendar:
     """Gets contribution calendar for a given time period (max one year)"""
     if (end_date - start_date).days > 365:
@@ -71,8 +71,8 @@ def get_user_contribution_calendar(
 def get_user_contribution_events(
     user_id: str,
     access_token: str,
-    start_date: datetime = datetime.now() - timedelta(365),
-    end_date: datetime = datetime.now(),
+    start_date: datetime,
+    end_date: datetime,
     max_repos: int = 100,
     first: int = 100,
     after: str = "",

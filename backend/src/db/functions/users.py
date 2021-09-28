@@ -1,7 +1,9 @@
 from datetime import datetime
 from typing import Any, Dict, Optional
 
+from src.models.user.package import UserPackage
 from src.db.mongodb import USERS
+from src.db.functions.compression import compress
 
 
 async def login_user(user_id: str, access_token: str) -> str:
@@ -34,9 +36,10 @@ async def unlock_user(user_id: str) -> None:
     )
 
 
-async def update_user(user_id: str, raw_data: Optional[Dict[str, Any]] = None) -> None:
+async def update_user(user_id: str, raw_data: Optional[UserPackage] = None) -> None:
     if raw_data is not None:
+        compressed_data = compress(raw_data.dict())
         await USERS.update_one(  # type: ignore
             {"user_id": user_id},
-            {"$set": {"last_updated": datetime.now(), "raw_data": raw_data}},
+            {"$set": {"last_updated": datetime.now(), "raw_data": compressed_data}},
         )

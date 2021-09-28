@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date
 
 from src.processing.user.contributions import get_contributions
 
@@ -10,8 +10,8 @@ from src.models.user.package import UserPackage
 async def main(
     user_id: str,
     access_token: str,
-    start_date: date = date.today() - timedelta(365),
-    end_date: date = date.today(),
+    start_date: date,
+    end_date: date,
     timezone_str: str = "US/Eastern",
 ) -> UserPackage:
     """packages all processing steps for the user query"""

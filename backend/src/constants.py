@@ -10,6 +10,7 @@ TIMEOUT = 15  # max seconds to wait for api response
 NODE_CHUNK_SIZE = 40  # number of nodes (commits) to query (max 100)
 NODE_THREADS = 40  # number of node queries simultaneously (avoid blacklisting)
 CUTOFF = 500  # if > cutoff lines, assume imported, don't count
+REPOSITORIES = 20  # Filter top 20 repositories for space, query time considerations
 
 # CUSTOMIZATION
 BLACKLIST = ["Jupyter Notebook", "HTML"]  # languages to ignore

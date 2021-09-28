@@ -22,7 +22,7 @@ from src.external.github_api.graphql.repo import get_repo
 from src.helper.gather import gather
 
 from src.utils import date_to_datetime
-from src.constants import NODE_CHUNK_SIZE, NODE_THREADS
+from src.constants import NODE_CHUNK_SIZE, NODE_THREADS, REPOSITORIES
 
 from src.processing.user.commit import get_all_commit_info, get_commits_languages
 
@@ -31,10 +31,7 @@ t_commits = List[Dict[str, Union[Dict[str, Dict[str, int]], str]]]
 
 
 def get_user_all_contribution_events(
-    user_id: str,
-    access_token: str,
-    start_date: datetime = datetime.now() - timedelta(365),
-    end_date: datetime = datetime.now(),
+    user_id: str, access_token: str, start_date: datetime, end_date: datetime
 ) -> t_stats:
     repo_contribs: t_stats = defaultdict(
         lambda: {"commits": [], "issues": [], "prs": [], "reviews": [], "repos": []}
@@ -345,7 +342,6 @@ async def get_contributions(
                             datetime_str
                         )
 
-    print(list(total.values())[0])
     total_list = list(
         filter(lambda x: x["stats"]["contribs_count"] > 0, list(total.values()))
     )
@@ -353,12 +349,27 @@ async def get_contributions(
         name: list(repo.values()) for name, repo in repositories.items()
     }
 
+    # Filter top repositories for space, query time considerations
+    top_repos = sorted(
+        list(repo_stats.items()), key=lambda x: -int(x[1]["contribs_count"])  # type: ignore
+    )[:REPOSITORIES]
+    top_repos = [x[0] for x in top_repos]
+
+    filtered_repo_stats = {  # type: ignore
+        name: repo for name, repo in repo_stats.items() if name in top_repos
+    }
+    filtered_repos = {  # type: ignore
+        name: repo for name, repo in repositories_list.items() if name in top_repos
+    }
+
+    # TODO: keep track of "Other" repositories as a repository record
+
     output = UserContributions.parse_obj(
         {
             "total_stats": total_stats,
             "total": total_list,
-            "repo_stats": repo_stats,
-            "repos": repositories_list,
+            "repo_stats": filtered_repo_stats,
+            "repos": filtered_repos,
         }
     )
 

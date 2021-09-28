@@ -120,7 +120,8 @@ async def get_user_lang_svg(
     if output is None:
         return get_loading_svg()
     processed = get_top_languages(output)
-    return get_top_langs_svg(processed, use_percent)
+    out = get_top_langs_svg(processed, use_percent)
+    return out
 
 
 @router.get(
