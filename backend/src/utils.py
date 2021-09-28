@@ -107,6 +107,7 @@ def date_to_datetime(
     return datetime(dt.year, dt.month, dt.day, hour, minute, second)
 
 
+# NOTE: return None to avoid caching
 def alru_cache(max_size: int = 128, ttl: timedelta = timedelta(hours=1)):
     def decorator(func: Callable[..., Any]) -> Any:
         cache: Dict[Any, Tuple[datetime, Any]] = {}
@@ -118,6 +119,8 @@ def alru_cache(max_size: int = 128, ttl: timedelta = timedelta(hours=1)):
             key = tuple(args), frozenset(kwargs.items())
             if key not in cache or now - cache[key][0] > ttl:
                 value = await func(*args, **kwargs)
+                if not value:
+                    return None
                 cache[key] = (now, value)
                 keys.append(key)
                 if len(keys) > max_size:

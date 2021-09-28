@@ -4,6 +4,7 @@ from typing import Any, Optional
 from fastapi import APIRouter, Response, status
 from fastapi.exceptions import HTTPException
 from fastapi.responses import HTMLResponse
+from src.analytics.user.utils import trim_package
 
 from src.db.models.users import UserModel as DBUserModel
 from src.db.functions.users import login_user
@@ -15,7 +16,7 @@ from src.models.user.package import UserPackage
 from src.svg.top_langs import get_top_langs_svg
 from src.svg.top_repos import get_top_repos_svg
 from src.svg.error import get_loading_svg
-from src.utils import async_fail_gracefully, svg_fail_gracefully, alru_cache
+from src.utils import async_fail_gracefully, svg_fail_gracefully  # , alru_cache
 
 router = APIRouter()
 
@@ -49,7 +50,8 @@ def validate_raw_data(data: Optional[UserPackage]) -> bool:
     return data is not None and data.contribs is not None
 
 
-@alru_cache()
+# TODO: add cache to this endpoint
+# @alru_cache(ttl=timedelta(minutes=5))
 async def _get_user(user_id: str) -> Optional[UserPackage]:
     if not PUBSUB_PUB:
         raise HTTPException(400, "")
@@ -74,7 +76,14 @@ async def _get_user(user_id: str) -> Optional[UserPackage]:
 @router.get("/{user_id}", status_code=status.HTTP_200_OK)
 @async_fail_gracefully
 async def get_user(response: Response, user_id: str) -> Optional[UserPackage]:
-    return await _get_user(user_id)
+    output = await _get_user(user_id)
+
+    if output is None:
+        return None
+
+    output = trim_package(output)
+
+    return output
 
 
 @router.get(
