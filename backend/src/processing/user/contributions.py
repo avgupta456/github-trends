@@ -31,10 +31,7 @@ t_commits = List[Dict[str, Union[Dict[str, Dict[str, int]], str]]]
 
 
 def get_user_all_contribution_events(
-    user_id: str,
-    access_token: str,
-    start_date: datetime = datetime.now() - timedelta(365),
-    end_date: datetime = datetime.now(),
+    user_id: str, access_token: str, start_date: datetime, end_date: datetime
 ) -> t_stats:
     repo_contribs: t_stats = defaultdict(
         lambda: {"commits": [], "issues": [], "prs": [], "reviews": [], "repos": []}
@@ -345,7 +342,9 @@ async def get_contributions(
                             datetime_str
                         )
 
-    total_list = list(total.values())
+    total_list = list(
+        filter(lambda x: x["stats"]["contribs_count"] > 0, list(total.values()))
+    )
     repositories_list = {
         name: list(repo.values()) for name, repo in repositories.items()
     }

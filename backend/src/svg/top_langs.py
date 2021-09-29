@@ -1,9 +1,11 @@
 # type: ignore
 
+from typing import List
+
 from svgwrite import Drawing
 from svgwrite.container import Group
 
-from src.models.user.analytics import RawDataModel
+from src.models.user.analytics import LanguageStats
 
 from src.svg.style import style
 
@@ -19,7 +21,7 @@ def format_number(num: int) -> str:
         return "<100 lines"
 
 
-def get_top_langs_svg(data: RawDataModel, use_percent: bool = True) -> Drawing:
+def get_top_langs_svg(data: List[LanguageStats], use_percent: bool = True) -> Drawing:
     d = Drawing(size=(300, 285))
     d.defs.add(d.style(style))
 
@@ -37,9 +39,7 @@ def get_top_langs_svg(data: RawDataModel, use_percent: bool = True) -> Drawing:
 
     langs = Group(transform="translate(25, 55)")
 
-    if data.top_languages is None:
-        raise ValueError("No language data available")
-    data_langs = data.top_languages[1:]
+    data_langs = data[1:]  # exclude "Total"
     for i in range(min(5, len(data_langs))):
         translate = "translate(0, " + str(40 * i) + ")"
         percent = (

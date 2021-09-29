@@ -3,6 +3,9 @@ from typing import Any, Dict, List, Union
 from src.external.github_api.graphql.template import get_template
 
 
+# TODO: create return class
+
+
 def get_repo(
     access_token: str, owner: str, repo: str
 ) -> Union[Dict[str, Any], List[Any]]:

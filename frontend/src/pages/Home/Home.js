@@ -87,6 +87,11 @@ const HomeScreen = () => {
           description="See your language breakdown based on your commits, across all repositories you contribute to, not just ones you own."
           imageSrc={`${BACKEND_URL}/user/${userId}/svg/langs?use_percent=False`}
         />
+        <Card
+          title="Repository Contributions - Lines"
+          description="See your repository breakdown based on total lines, separated by language."
+          imageSrc={`${BACKEND_URL}/user/${userId}/svg/repos`}
+        />
       </div>
     </div>
   );

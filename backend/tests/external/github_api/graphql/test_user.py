@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import unittest
 
 from src.models.user.contribs import RawCalendar, RawEvents
@@ -21,11 +22,21 @@ class TestTemplate(unittest.TestCase):
         self.assertIsInstance(response, list)
 
     def test_get_user_contribution_calendar(self):
-        response = get_user_contribution_calendar(user_id=USER_ID, access_token=TOKEN)
+        response = get_user_contribution_calendar(
+            user_id=USER_ID,
+            access_token=TOKEN,
+            start_date=datetime.today() - timedelta(days=365),
+            end_date=datetime.today(),
+        )
         self.assertIsInstance(response, RawCalendar)
 
     def test_get_user_contribution_events(self):
-        response = get_user_contribution_events(user_id=USER_ID, access_token=TOKEN)
+        response = get_user_contribution_events(
+            user_id=USER_ID,
+            access_token=TOKEN,
+            start_date=datetime.today() - timedelta(days=365),
+            end_date=datetime.today(),
+        )
         self.assertIsInstance(response, RawEvents)
 
         # TODO: Add more validation here

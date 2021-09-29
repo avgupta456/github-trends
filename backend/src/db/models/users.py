@@ -3,7 +3,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from src.models.user.analytics import RawDataModel
+from src.models.user.package import UserPackage
 
 """
 Input Models
@@ -24,5 +24,5 @@ class UserModel(BaseModel):
     user_id: str
     access_token: str
     last_updated: datetime
-    raw_data: Optional[RawDataModel]
+    raw_data: Optional[UserPackage]
     lock: bool
