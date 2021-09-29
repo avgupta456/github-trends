@@ -54,8 +54,6 @@ def validate_raw_data(data: Optional[UserPackage]) -> bool:
     return data is not None and data.contribs is not None
 
 
-# TODO: add cache to this endpoint
-# @alru_cache(ttl=timedelta(minutes=5))
 async def __get_user(user_id: str) -> Optional[UserPackage]:
     if not PUBSUB_PUB:
         raise HTTPException(400, "")

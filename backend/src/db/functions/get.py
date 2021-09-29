@@ -4,32 +4,51 @@ from src.db.mongodb import USERS
 from src.db.functions.compression import decompress
 from src.db.models.users import UserModel
 
+from src.helper.alru_cache import alru_cache
+
 
 """
 Raw Get Methods
 """
 
 
-def _get_user(user: Optional[Dict[str, Any]]) -> Optional[UserModel]:
-    if user is None:
-        return None
-
-    if "raw_data" not in user:
-        return UserModel.parse_obj(user)
-
-    raw_data = decompress(user["raw_data"])
-    return UserModel.parse_obj({**user, "raw_data": raw_data})
-
-
+@alru_cache(max_size=128)
 async def get_user_by_user_id(user_id: str) -> Optional[UserModel]:
     user: Optional[Dict[str, Any]] = await USERS.find_one({"user_id": user_id})  # type: ignore
-    output = _get_user(user)
-    return output
+
+    # (flag, value) output through decorator returns value
+
+    if user is None:
+        # flag is false, don't cache
+        return (False, None)  # type: ignore
+
+    if "raw_data" not in user:
+        # flag is false, don't cache
+        return (False, UserModel.parse_obj(user))  # type: ignore
+
+    raw_data = decompress(user["raw_data"])
+
+    # flag is true, do cache
+    return (True, UserModel.parse_obj({**user, "raw_data": raw_data}))  # type: ignore
 
 
+@alru_cache(max_size=128)
 async def get_user_by_access_token(access_token: str) -> Optional[UserModel]:
     user: Optional[Dict[str, Any]] = await USERS.find_one(  # type: ignore
         {"access_token": access_token}
     )
-    output = _get_user(user)
-    return output
+
+    # (flag, value) output through decorator returns value
+
+    if user is None:
+        # flag is false, don't cache
+        return (False, None)  # type: ignore
+
+    if "raw_data" not in user:
+        # flag is false, don't cache
+        return (False, UserModel.parse_obj(user))  # type: ignore
+
+    raw_data = decompress(user["raw_data"])
+
+    # flag is true, do cache
+    return (True, UserModel.parse_obj({**user, "raw_data": raw_data}))  # type: ignore
