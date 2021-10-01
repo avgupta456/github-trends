@@ -12,7 +12,7 @@ import { classnames } from '../../utils';
 import './card.css';
 import SVG from './SVG';
 
-const Card = ({ title, description, imageSrc }) => {
+export const Image = ({ imageSrc }) => {
   const [loaded, setLoaded] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -58,15 +58,27 @@ const Card = ({ title, description, imageSrc }) => {
   );
 
   return (
-    <div className="p-2 md:w-1/3 sm:mb-0 mb-6">
+    <div>
+      <img
+        alt="content"
+        className="h-0 w-0"
+        src={imageSrc}
+        onLoad={() => setLoaded(true)}
+      />
+      {loaded ? image : <Skeleton style={{ paddingBottom: '95%' }} />}
+    </div>
+  );
+};
+
+Image.propTypes = {
+  imageSrc: PropTypes.string.isRequired,
+};
+
+export const Card = ({ title, description, imageSrc }) => {
+  return (
+    <div>
       <div className="p-4 rounded-lg bg-gray-50 hover:bg-gray-100">
-        <img
-          alt="content"
-          className="h-0 w-0"
-          src={imageSrc}
-          onLoad={() => setLoaded(true)}
-        />
-        {loaded ? image : <Skeleton style={{ paddingBottom: '95%' }} />}
+        <Image imageSrc={imageSrc} />
         <h2 className="text-xl font-medium title-font text-gray-900 mt-5">
           {title}
         </h2>
@@ -98,5 +110,3 @@ Card.propTypes = {
   description: PropTypes.string.isRequired,
   imageSrc: PropTypes.string.isRequired,
 };
-
-export default Card;
