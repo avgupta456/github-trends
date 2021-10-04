@@ -21,8 +21,6 @@ const HomeScreen = () => {
 
   const login = (newUserId) => dispatch(_login(newUserId));
 
-  console.log(isLoading, userId);
-
   useEffect(async () => {
     // After requesting Github access, Github redirects back to your app with a code parameter
     const url = window.location.href;

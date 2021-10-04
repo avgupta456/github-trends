@@ -11,7 +11,6 @@ import HomeScreen from '../Home';
 import CustomizeScreen from '../Customize';
 
 import { logout as _logout } from '../../redux/actions/userActions';
-import { PROD, CLIENT_ID, REDIRECT_URI } from '../../constants';
 
 import { LightningSVG } from '../../assets';
 
@@ -24,19 +23,17 @@ function App() {
 
   const logout = () => dispatch(_logout());
 
-  console.log(PROD, CLIENT_ID, REDIRECT_URI);
-
   return (
     <div className="h-screen flex flex-col">
       <Router>
         <div className="text-gray-100 bg-white shadow-md body-font sticky top-0 z-50">
           <div className="container mx-auto flex flex-wrap p-5 flex-row items-center">
-            <a className="title-font font-medium text-gray-700 mb-0">
+            <div className="title-font font-medium text-gray-700 mb-0">
               <Link to="/" className="flex items-center">
                 <LightningSVG />
                 <span className="ml-3 text-xl">GitHub Trends</span>
               </Link>
-            </a>
+            </div>
             <nav className="ml-auto flex flex-wrap items-center text-base justify-center">
               {isAuthenticated ? (
                 <>

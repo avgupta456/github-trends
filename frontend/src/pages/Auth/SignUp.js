@@ -7,9 +7,8 @@ import { Button } from '../../components';
 import { GITHUB_AUTH_URL } from '../../constants';
 
 const SignUpScreen = () => {
+  // eslint-disable-next-line no-unused-vars
   const userId = useSelector((state) => state.user.userId);
-
-  console.log(userId);
 
   return (
     <div className="h-full py-8">
