@@ -1,12 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Image, Section } from '../../components';
-
 import { BACKEND_URL } from '../../constants';
+import { classnames } from '../../utils';
 
 const Customize = () => {
   const userId = useSelector((state) => state.user.userId);
+
+  const timeRangeOptions = [
+    { id: 1, name: 'Past 1 Month', disabled: false },
+    { id: 2, name: 'Past 6 Months', disabled: false },
+    { id: 3, name: 'Past 1 Year', disabled: false },
+    { id: 4, name: 'Past 5 Years', disabled: false },
+  ];
+
+  const [selectedTimeRange, setSelectedTimeRange] = useState(
+    timeRangeOptions[2].name,
+  );
+
+  console.log(selectedTimeRange);
 
   const isAuthenticated = userId && userId.length > 0;
 
@@ -40,6 +53,23 @@ const Customize = () => {
         <div className="w-2/5 pr-10 p-10 rounded bg-gray-200">
           <Section title="Date Range">
             <p>Select the date range for statistics.</p>
+            <select
+              className="select select-sm w-40 rounded mt-2"
+              value={selectedTimeRange}
+              onChange={(e) => setSelectedTimeRange(e.target.value)}
+            >
+              {timeRangeOptions.map((option) => (
+                <option
+                  key={option.name}
+                  disabled={option.disabled}
+                  className={classnames(
+                    option.name === selectedTimeRange && 'bg-blue-200',
+                  )}
+                >
+                  {option.name}
+                </option>
+              ))}
+            </select>
           </Section>
           <Section />
           <Section />
