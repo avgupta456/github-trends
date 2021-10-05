@@ -1,3 +1,5 @@
 import Section from './Section';
+import DateRangeSection from './DateRangeSection';
+import UsePercentSection from './UsePercentSection';
 
-export default Section;
+export { Section, DateRangeSection, UsePercentSection };

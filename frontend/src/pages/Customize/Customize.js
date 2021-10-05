@@ -4,50 +4,28 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
 
-import { Image, Section } from '../../components';
-import { classnames } from '../../utils';
+import {
+  Image,
+  Section,
+  DateRangeSection,
+  UsePercentSection,
+} from '../../components';
 
 const Customize = () => {
   const { suffix } = useParams();
 
   const userId = useSelector((state) => state.user.userId);
 
-  const timeRangeOptions = [
-    {
-      id: 1,
-      name: 'Past 1 Month',
-      disabled: false,
-      startDate: moment(new Date()).subtract(1, 'month'),
-    },
-    {
-      id: 2,
-      name: 'Past 6 Months',
-      disabled: false,
-      startDate: moment(new Date()).subtract(6, 'month'),
-    },
-    {
-      id: 3,
-      name: 'Past 1 Year',
-      disabled: false,
-      startDate: moment(new Date()).subtract(1, 'year'),
-    },
-    {
-      id: 4,
-      name: 'Past 5 Years',
-      disabled: false,
-      startDate: moment(new Date()).subtract(5, 'year'),
-    },
-  ];
-
-  const [selectedTimeRange, setSelectedTimeRange] = useState(
-    timeRangeOptions[2].name,
-  );
+  const [selectedTimeRange, setSelectedTimeRange] = useState({
+    id: 3,
+    name: 'Past 1 Year',
+    disabled: false,
+    startDate: moment(new Date()).subtract(1, 'year'),
+  });
 
   const [usePercent, setUsePercent] = useState(false);
 
-  const startDate = timeRangeOptions
-    .find((option) => option.name === selectedTimeRange)
-    .startDate.format('YYYY-MM-DD');
+  const startDate = selectedTimeRange.startDate.format('YYYY-MM-DD');
   // eslint-disable-next-line no-unused-vars
   const endDate = moment(new Date()).format('YYYY-MM-DD');
 
@@ -87,40 +65,16 @@ const Customize = () => {
           </p>
         </div>
         <div className="w-2/5 pr-10 p-10 rounded bg-gray-200">
-          <Section title="Date Range">
-            <p>Select the date range for statistics.</p>
-            <select
-              className="select select-sm w-40 rounded mt-4"
-              value={selectedTimeRange}
-              onChange={(e) => setSelectedTimeRange(e.target.value)}
-            >
-              {timeRangeOptions.map((option) => (
-                <option
-                  key={option.name}
-                  disabled={option.disabled}
-                  className={classnames(
-                    option.name === selectedTimeRange && 'bg-blue-200',
-                  )}
-                >
-                  {option.name}
-                </option>
-              ))}
-            </select>
-          </Section>
-          <Section title="Use Percent?">
-            <p>Use lines of code or percents.</p>
-            <div className="flex inline-row mt-4">
-              <input
-                type="checkbox"
-                checked={usePercent ? 'checked' : ''}
-                className="checkbox mr-2"
-                onChange={() => setUsePercent(!usePercent)}
-              />
-              Use Percent?
-            </div>
-          </Section>
-          <Section />
-          <Section />
+          <DateRangeSection
+            selectedTimeRange={selectedTimeRange}
+            setSelectedTimeRange={setSelectedTimeRange}
+          />
+          {suffix === 'langs' && (
+            <UsePercentSection
+              usePercent={usePercent}
+              setUsePercent={setUsePercent}
+            />
+          )}
           <Section />
         </div>
         <div className="lg:w-3/5 md:w-1/2 object-center">
