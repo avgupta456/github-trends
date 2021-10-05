@@ -6,17 +6,11 @@ import PropTypes from 'prop-types';
 
 const SvgInline = (props) => {
   const [svg, setSvg] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [isErrored, setIsErrored] = useState(false);
-
-  console.log(isLoaded, isErrored);
 
   useEffect(() => {
     fetch(props.url)
       .then((res) => res.text())
-      .then(setSvg)
-      .catch(setIsErrored)
-      .then(() => setIsLoaded(true));
+      .then(setSvg);
   }, [props.url]);
 
   return (

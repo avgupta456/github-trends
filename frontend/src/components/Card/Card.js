@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
@@ -8,13 +9,18 @@ import Skeleton from 'react-loading-skeleton';
 import CopyIcon from 'mdi-react/ContentCopyIcon';
 
 import { classnames } from '../../utils';
+import { BACKEND_URL } from '../../constants';
 
 import './card.css';
 import SVG from './SVG';
 
-const Card = ({ title, description, imageSrc }) => {
+export const Image = ({ imageSrc }) => {
+  const userId = useSelector((state) => state.user.userId);
+
   const [loaded, setLoaded] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  const fullImageSrc = `${BACKEND_URL}/user/${userId}/svg/${imageSrc}`;
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -29,7 +35,7 @@ const Card = ({ title, description, imageSrc }) => {
       <div className="h-full w-full relative">
         <SVG
           className={classnames('object-cover h-full w-full', 'image')}
-          url={imageSrc}
+          url={fullImageSrc}
         />
       </div>
       <button
@@ -40,7 +46,7 @@ const Card = ({ title, description, imageSrc }) => {
         )}
         onClick={() => {
           navigator.clipboard.writeText(
-            `[![GitHub Trends SVG](${imageSrc})](https://githubtrends.io)`,
+            `[![GitHub Trends SVG](${fullImageSrc})](https://githubtrends.io)`,
           );
           setCopied(true);
         }}
@@ -58,22 +64,34 @@ const Card = ({ title, description, imageSrc }) => {
   );
 
   return (
-    <div className="p-2 md:w-1/3 sm:mb-0 mb-6">
+    <div>
+      <img
+        alt="content"
+        className="h-0 w-0"
+        src={fullImageSrc}
+        onLoad={() => setLoaded(true)}
+      />
+      {loaded ? image : <Skeleton style={{ paddingBottom: '95%' }} />}
+    </div>
+  );
+};
+
+Image.propTypes = {
+  imageSrc: PropTypes.string.isRequired,
+};
+
+export const Card = ({ title, description, imageSrc }) => {
+  return (
+    <div>
       <div className="p-4 rounded-lg bg-gray-50 hover:bg-gray-100">
-        <img
-          alt="content"
-          className="h-0 w-0"
-          src={imageSrc}
-          onLoad={() => setLoaded(true)}
-        />
-        {loaded ? image : <Skeleton style={{ paddingBottom: '95%' }} />}
+        <Image imageSrc={imageSrc} />
         <h2 className="text-xl font-medium title-font text-gray-900 mt-5">
           {title}
         </h2>
         <p className="text-base leading-relaxed mt-2">{description}</p>
         <Link
           className="text-blue-500 inline-flex items-center p-2 pl-0"
-          to="/customize"
+          to={`/customize/${imageSrc}`}
         >
           Customize
           <svg
@@ -98,5 +116,3 @@ Card.propTypes = {
   description: PropTypes.string.isRequired,
   imageSrc: PropTypes.string.isRequired,
 };
-
-export default Card;

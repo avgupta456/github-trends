@@ -6,7 +6,6 @@ import BounceLoader from 'react-spinners/BounceLoader';
 
 import { Card } from '../../components';
 
-import { BACKEND_URL } from '../../constants';
 import { getAccessToken } from '../../api';
 import { login as _login } from '../../redux/actions/userActions';
 
@@ -20,8 +19,6 @@ const HomeScreen = () => {
   const dispatch = useDispatch();
 
   const login = (newUserId) => dispatch(_login(newUserId));
-
-  console.log(isLoading, userId);
 
   useEffect(async () => {
     // After requesting Github access, Github redirects back to your app with a code parameter
@@ -77,21 +74,20 @@ const HomeScreen = () => {
         </div>
       </div>
       <div className="flex flex-wrap -mt-8">
-        <Card
-          title="Language Contributions - Percent"
-          description="See your language breakdown based on your commits, across all repositories you contribute to, not just ones you own."
-          imageSrc={`${BACKEND_URL}/user/${userId}/svg/langs`}
-        />
-        <Card
-          title="Language Contributions - Lines"
-          description="See your language breakdown based on your commits, across all repositories you contribute to, not just ones you own."
-          imageSrc={`${BACKEND_URL}/user/${userId}/svg/langs?use_percent=False`}
-        />
-        <Card
-          title="Repository Contributions - Lines"
-          description="See your repository breakdown based on total lines, separated by language."
-          imageSrc={`${BACKEND_URL}/user/${userId}/svg/repos`}
-        />
+        <div className="p-2 md:w-1/3 sm:mb-0 mb-6">
+          <Card
+            title="Language Contributions - Percent"
+            description="See your language breakdown based on your commits, across all repositories you contribute to, not just ones you own."
+            imageSrc="langs"
+          />
+        </div>
+        <div className="p-2 md:w-1/3 sm:mb-0 mb-6">
+          <Card
+            title="Repository Contributions - Lines"
+            description="See your repository breakdown based on total lines, separated by language."
+            imageSrc="repos"
+          />
+        </div>
       </div>
     </div>
   );
