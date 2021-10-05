@@ -75,7 +75,7 @@ function App() {
             <Route path="/login" component={LoginScreen} />
             <Route path="/signup" component={SignUpScreen} />
             <Route path="/user" component={HomeScreen} />
-            <Route path="/customize" component={CustomizeScreen} />
+            <Route path="/customize/:suffix" component={CustomizeScreen} />
             <Route path="/" component={LandingScreen} />
           </Switch>
         </section>

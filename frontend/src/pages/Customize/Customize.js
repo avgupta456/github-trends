@@ -1,25 +1,55 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
+import { useParams } from 'react-router-dom';
+import moment from 'moment';
+
 import { Image, Section } from '../../components';
-import { BACKEND_URL } from '../../constants';
 import { classnames } from '../../utils';
 
 const Customize = () => {
+  const { suffix } = useParams();
+
   const userId = useSelector((state) => state.user.userId);
 
   const timeRangeOptions = [
-    { id: 1, name: 'Past 1 Month', disabled: false },
-    { id: 2, name: 'Past 6 Months', disabled: false },
-    { id: 3, name: 'Past 1 Year', disabled: false },
-    { id: 4, name: 'Past 5 Years', disabled: false },
+    {
+      id: 1,
+      name: 'Past 1 Month',
+      disabled: false,
+      startDate: moment(new Date()).subtract(1, 'month'),
+    },
+    {
+      id: 2,
+      name: 'Past 6 Months',
+      disabled: false,
+      startDate: moment(new Date()).subtract(6, 'month'),
+    },
+    {
+      id: 3,
+      name: 'Past 1 Year',
+      disabled: false,
+      startDate: moment(new Date()).subtract(1, 'year'),
+    },
+    {
+      id: 4,
+      name: 'Past 5 Years',
+      disabled: false,
+      startDate: moment(new Date()).subtract(5, 'year'),
+    },
   ];
 
   const [selectedTimeRange, setSelectedTimeRange] = useState(
     timeRangeOptions[2].name,
   );
 
-  console.log(selectedTimeRange);
+  const startDate = timeRangeOptions
+    .find((option) => option.name === selectedTimeRange)
+    .startDate.format('YYYY-MM-DD');
+  // eslint-disable-next-line no-unused-vars
+  const endDate = moment(new Date()).format('YYYY-MM-DD');
+
+  const fullSuffix = `${suffix}?start_date=${startDate}`;
 
   const isAuthenticated = userId && userId.length > 0;
 
@@ -78,7 +108,7 @@ const Customize = () => {
         </div>
         <div className="lg:w-3/5 md:w-1/2 object-center">
           <div className="w-3/5 mx-auto h-full flex flex-col justify-center">
-            <Image imageSrc={`${BACKEND_URL}/user/${userId}/svg/langs`} />
+            <Image imageSrc={fullSuffix} />
           </div>
         </div>
       </div>

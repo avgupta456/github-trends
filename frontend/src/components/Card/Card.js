@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
@@ -8,13 +9,18 @@ import Skeleton from 'react-loading-skeleton';
 import CopyIcon from 'mdi-react/ContentCopyIcon';
 
 import { classnames } from '../../utils';
+import { BACKEND_URL } from '../../constants';
 
 import './card.css';
 import SVG from './SVG';
 
 export const Image = ({ imageSrc }) => {
+  const userId = useSelector((state) => state.user.userId);
+
   const [loaded, setLoaded] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  const fullImageSrc = `${BACKEND_URL}/user/${userId}/svg/${imageSrc}`;
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -29,7 +35,7 @@ export const Image = ({ imageSrc }) => {
       <div className="h-full w-full relative">
         <SVG
           className={classnames('object-cover h-full w-full', 'image')}
-          url={imageSrc}
+          url={fullImageSrc}
         />
       </div>
       <button
@@ -40,7 +46,7 @@ export const Image = ({ imageSrc }) => {
         )}
         onClick={() => {
           navigator.clipboard.writeText(
-            `[![GitHub Trends SVG](${imageSrc})](https://githubtrends.io)`,
+            `[![GitHub Trends SVG](${fullImageSrc})](https://githubtrends.io)`,
           );
           setCopied(true);
         }}
@@ -62,7 +68,7 @@ export const Image = ({ imageSrc }) => {
       <img
         alt="content"
         className="h-0 w-0"
-        src={imageSrc}
+        src={fullImageSrc}
         onLoad={() => setLoaded(true)}
       />
       {loaded ? image : <Skeleton style={{ paddingBottom: '95%' }} />}
@@ -85,7 +91,7 @@ export const Card = ({ title, description, imageSrc }) => {
         <p className="text-base leading-relaxed mt-2">{description}</p>
         <Link
           className="text-blue-500 inline-flex items-center p-2 pl-0"
-          to="/customize"
+          to={`/customize/${imageSrc}`}
         >
           Customize
           <svg
