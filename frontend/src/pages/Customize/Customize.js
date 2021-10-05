@@ -43,13 +43,19 @@ const Customize = () => {
     timeRangeOptions[2].name,
   );
 
+  const [usePercent, setUsePercent] = useState(false);
+
   const startDate = timeRangeOptions
     .find((option) => option.name === selectedTimeRange)
     .startDate.format('YYYY-MM-DD');
   // eslint-disable-next-line no-unused-vars
   const endDate = moment(new Date()).format('YYYY-MM-DD');
 
-  const fullSuffix = `${suffix}?start_date=${startDate}`;
+  let fullSuffix = `${suffix}?start_date=${startDate}`;
+
+  if (usePercent) {
+    fullSuffix += '&use_percent=True';
+  }
 
   const isAuthenticated = userId && userId.length > 0;
 
@@ -84,7 +90,7 @@ const Customize = () => {
           <Section title="Date Range">
             <p>Select the date range for statistics.</p>
             <select
-              className="select select-sm w-40 rounded mt-2"
+              className="select select-sm w-40 rounded mt-4"
               value={selectedTimeRange}
               onChange={(e) => setSelectedTimeRange(e.target.value)}
             >
@@ -101,7 +107,18 @@ const Customize = () => {
               ))}
             </select>
           </Section>
-          <Section />
+          <Section title="Use Percent?">
+            <p>Use lines of code or percents.</p>
+            <div className="flex inline-row mt-4">
+              <input
+                type="checkbox"
+                checked={usePercent ? 'checked' : ''}
+                className="checkbox mr-2"
+                onChange={() => setUsePercent(!usePercent)}
+              />
+              Use Percent?
+            </div>
+          </Section>
           <Section />
           <Section />
           <Section />

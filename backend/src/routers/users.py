@@ -112,7 +112,7 @@ async def get_user_lang_svg(
     start_date: date = date.today() - timedelta(365),
     end_date: date = date.today(),
     timezone_str: str = "US/Eastern",
-    use_percent: bool = True,
+    use_percent: bool = False,
 ) -> Any:
     output = await _get_user(user_id, start_date, end_date)
     if output is None:

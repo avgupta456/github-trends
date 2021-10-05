@@ -83,13 +83,6 @@ const HomeScreen = () => {
         </div>
         <div className="p-2 md:w-1/3 sm:mb-0 mb-6">
           <Card
-            title="Language Contributions - Lines"
-            description="See your language breakdown based on your commits, across all repositories you contribute to, not just ones you own."
-            imageSrc="langs?use_percent=False"
-          />
-        </div>
-        <div className="p-2 md:w-1/3 sm:mb-0 mb-6">
-          <Card
             title="Repository Contributions - Lines"
             description="See your repository breakdown based on total lines, separated by language."
             imageSrc="repos"
