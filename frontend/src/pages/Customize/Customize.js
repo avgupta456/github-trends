@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useParams } from 'react-router-dom';
-import moment from 'moment';
 
 import {
   Image,
@@ -20,16 +19,13 @@ const Customize = () => {
     id: 3,
     name: 'Past 1 Year',
     disabled: false,
-    startDate: moment(new Date()).subtract(1, 'year'),
+    timeRange: 'one_year',
   });
 
   const [usePercent, setUsePercent] = useState(false);
 
-  const startDate = selectedTimeRange.startDate.format('YYYY-MM-DD');
-  // eslint-disable-next-line no-unused-vars
-  const endDate = moment(new Date()).format('YYYY-MM-DD');
-
-  let fullSuffix = `${suffix}?start_date=${startDate}`;
+  const time = selectedTimeRange.timeRange;
+  let fullSuffix = `${suffix}?time_range=${time}`;
 
   if (usePercent) {
     fullSuffix += '&use_percent=True';

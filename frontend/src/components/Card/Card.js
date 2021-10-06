@@ -20,7 +20,7 @@ export const Image = ({ imageSrc }) => {
   const [loaded, setLoaded] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const fullImageSrc = `${BACKEND_URL}/user/${userId}/svg/${imageSrc}`;
+  const fullImageSrc = `${BACKEND_URL}/user/svg/${userId}/${imageSrc}`;
 
   useEffect(() => {
     const timeout = setTimeout(() => {
