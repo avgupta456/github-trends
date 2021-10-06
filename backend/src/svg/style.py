@@ -4,6 +4,10 @@ style = """
         fill: #2f80ed;
         animation: fadeInAnimation 0.8s ease-in-out forwards;
     }
+    .subheader {
+        font: 500 14px 'Segoe UI', Ubuntu, San-Serif;
+        fill: #888;
+    }
     .lang-name {
         font: 400 11px 'Segoe UI', Ubuntu, Sans-Serif;
         fill: #333;

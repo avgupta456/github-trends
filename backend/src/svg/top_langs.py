@@ -21,7 +21,9 @@ def format_number(num: int) -> str:
         return "<100 lines"
 
 
-def get_top_langs_svg(data: List[LanguageStats], use_percent: bool = True) -> Drawing:
+def get_top_langs_svg(
+    data: List[LanguageStats], time_str: str, use_percent: bool = True
+) -> Drawing:
     d = Drawing(size=(300, 285))
     d.defs.add(d.style(style))
 
@@ -36,8 +38,9 @@ def get_top_langs_svg(data: List[LanguageStats], use_percent: bool = True) -> Dr
     )
 
     d.add(d.text("Most Used Languages", insert=(25, 35), class_="header"))
+    d.add(d.text(time_str, insert=(25, 55), class_="subheader"))
 
-    langs = Group(transform="translate(25, 55)")
+    langs = Group(transform="translate(25, 75)")
 
     data_langs = data[1:]  # exclude "Total"
     for i in range(min(5, len(data_langs))):

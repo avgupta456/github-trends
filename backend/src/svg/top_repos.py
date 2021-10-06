@@ -21,7 +21,7 @@ def format_number(num: int) -> str:
         return "<100 lines"
 
 
-def get_top_repos_svg(data: List[RepoStats]) -> Drawing:
+def get_top_repos_svg(data: List[RepoStats], time_str: str) -> Drawing:
     d = Drawing(size=(300, 285))
     d.defs.add(d.style(style))
 
@@ -36,8 +36,9 @@ def get_top_repos_svg(data: List[RepoStats]) -> Drawing:
     )
 
     d.add(d.text("Most Contributed Repositories", insert=(25, 35), class_="header"))
+    d.add(d.text(time_str, insert=(25, 55), class_="subheader"))
 
-    repos = Group(transform="translate(25, 55)")
+    repos = Group(transform="translate(25, 75)")
     for i in range(min(5, len(data))):
         translate = "translate(0, " + str(40 * i) + ")"
         total = data[0].changed

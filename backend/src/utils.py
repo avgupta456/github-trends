@@ -1,9 +1,9 @@
 import logging
 import io
 
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from functools import wraps
-from typing import Any, Callable, Dict, List
+from typing import Any, Callable, Dict, List, Tuple
 
 from fastapi import Response, status
 
@@ -108,3 +108,28 @@ def date_to_datetime(
 ) -> datetime:
 
     return datetime(dt.year, dt.month, dt.day, hour, minute, second)
+
+
+# returns start date, end date, string representing time range
+def use_time_range(
+    time_range: str, start_date: date, end_date: date
+) -> Tuple[date, date, str]:
+    duration_options = {
+        "one_month": (30, "Past 1 Month"),
+        "six_months": (180, "Past 6 Months"),
+        "one_year": (365, "Past 1 Year"),
+        "five_years": (365 * 5, "Past 5 Years"),
+    }
+
+    start_str = start_date.strftime("X%m/X%d/%Y").replace("X0", "X").replace("X", "")
+    end_str = end_date.strftime("X%m/X%d/%Y").replace("X0", "X").replace("X", "")
+    if end_date == date.today():
+        end_str = "Present"
+    time_str = start_str + " - " + end_str
+
+    if time_range in duration_options:
+        days, time_str = duration_options[time_range]
+        end_date = date.today()
+        start_date = date.today() - timedelta(days)
+
+    return start_date, end_date, time_str
