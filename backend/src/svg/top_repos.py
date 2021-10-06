@@ -1,73 +1,36 @@
 # type: ignore
 
-from typing import List
+from typing import List, Tuple
 
 from svgwrite import Drawing
-from svgwrite.container import Group
 
 from src.models.user.analytics import RepoStats
 
-from src.svg.style import style
-
-
-def format_number(num: int) -> str:
-    if num > 10000:
-        return "~" + str(int(num / 1000)) + "k lines"
-    elif num > 1000:
-        return "~" + str(int(num / 100) / 10) + "k lines"
-    elif num > 100:
-        return "~" + str(int(num / 100) * 100) + " lines"
-    else:
-        return "<100 lines"
+from src.svg.template import get_template, get_bar_section, format_number
 
 
 def get_top_repos_svg(data: List[RepoStats], time_str: str) -> Drawing:
-    d = Drawing(size=(300, 285))
-    d.defs.add(d.style(style))
-
-    d.add(
-        d.rect(
-            size=(299, 284),
-            insert=(0.5, 0.5),
-            rx=4.5,
-            stroke="#e4e2e2",
-            fill="#fffefe",
-        )
+    d, dp = get_template(
+        width=300,
+        height=285,
+        padding=20,
+        header_text="Most Contributed Repositories",
+        subheader_text=time_str,
+        debug=False,
     )
 
-    d.add(d.text("Most Contributed Repositories", insert=(25, 35), class_="header"))
-    d.add(d.text(time_str, insert=(25, 55), class_="subheader"))
-
-    repos = Group(transform="translate(25, 75)")
-    for i in range(min(5, len(data))):
-        translate = "translate(0, " + str(40 * i) + ")"
-        total = data[0].changed
-        repo = Group(transform=translate)
-        repo.add(d.text(data[i].repo, insert=(2, 15), class_="lang-name"))
-        repo.add(
-            d.text(format_number(data[i].changed), insert=(215, 33), class_="lang-name")
-        )
-        progress = Drawing(width="205", x="0", y="25")
-        progress.add(d.rect(size=(205, 8), insert=(0, 0), rx=5, ry=5, fill="#ddd"))
-        total_percent = 0
-        for j, lang in enumerate(data[i].langs):
-            percent, color = 100 * (lang.additions + lang.deletions) / total, lang.color
-            box_size, box_insert = (2.05 * percent, 8), (2.05 * total_percent, 0)
-            progress.add(
-                d.rect(size=box_size, insert=box_insert, rx=5, ry=5, fill=color)
+    dataset: List[Tuple[str, str, List[Tuple[float, str]]]] = []
+    total = data[0].changed
+    for x in data[:5]:
+        data_row = []
+        for j, lang in enumerate(x.langs):
+            data_row.append(
+                (100 * (lang.additions + lang.deletions) / total, lang.color)
             )
+        dataset.append((x.repo, format_number(x.changed), data_row))
 
-            box_left, box_right = j > 0, j < len(data[i].langs) - 1
-            box_size = 2.05 * percent - (0 if box_left else 5) - (0 if box_right else 5)
-            box_insert = 2.05 * total_percent + (5 if not box_left else 0)
-            progress.add(
-                d.rect(size=(max(box_size, 3), 8), insert=(box_insert, 0), fill=color)
-            )
+    section = get_bar_section(d=d, dataset=dataset, padding=45, bar_width=195)
 
-            total_percent += percent
-
-        repo.add(progress)
-        repos.add(repo)
-    d.add(repos)
-
+    dp.add(section)
+    d.add(dp)
     return d
