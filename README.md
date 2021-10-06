@@ -17,3 +17,7 @@ Visit [githubtrends.io](https://www.githubtrends.io) to create an account and ge
 ## FAQ
 
 (In Progress)
+
+## Contributing
+
+See `CONTRIBUTING.md`.
