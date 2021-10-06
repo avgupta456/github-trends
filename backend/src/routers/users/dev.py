@@ -11,7 +11,7 @@ from src.utils import async_fail_gracefully
 router = APIRouter()
 
 
-@router.get("/{user_id}/raw", status_code=status.HTTP_200_OK)
+@router.get("/{user_id}", status_code=status.HTTP_200_OK)
 @async_fail_gracefully
 async def get_user_raw(
     response: Response,
