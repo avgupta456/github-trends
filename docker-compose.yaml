@@ -24,7 +24,6 @@ services:
       - ./backend:/backend
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/backend/gcloud_key.json
-      - CHOKIDAR_USEPOLLING=true
 
   frontend:
     container_name: frontend
