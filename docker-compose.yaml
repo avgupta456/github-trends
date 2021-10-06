@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  publisher:
+    container_name: publisher
+    build:
+      context: "./backend"
+      dockerfile: pub.Dockerfile
+    ports:
+      - 8000:8000
+    volumes:
+      - ./backend:/backend
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/backend/gcloud_key.json
+
+  subscriber:
+    container_name: subscriber
+    build:
+      context: "./backend"
+      dockerfile: sub.Dockerfile
+    ports:
+      - 8001:8001
+    volumes:
+      - ./backend:/backend
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/backend/gcloud_key.json
+      - CHOKIDAR_USEPOLLING=true
+
+  frontend:
+    container_name: frontend
+    build:
+      context: "./frontend"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/frontend
+    environment:
+      - CHOKIDAR_USEPOLLING=true
