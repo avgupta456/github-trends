@@ -22,6 +22,7 @@ class RepoLanguage(BaseModel):
 
 class RepoStats(BaseModel):
     repo: str
+    private: bool
     langs: List[RepoLanguage]
     additions: int
     deletions: int

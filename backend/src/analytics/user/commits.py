@@ -72,6 +72,7 @@ def get_top_repos(
     repos: List[Any] = [
         {
             "repo": repo,
+            "private": repo_stats.private,
             "langs": [
                 {
                     "lang": x[0],

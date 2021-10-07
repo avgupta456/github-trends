@@ -33,7 +33,8 @@ def get_top_repos_svg(
             data_row.append(
                 (100 * (lang.additions + lang.deletions) / total, lang.color)
             )
-        dataset.append((x.repo, format_number(x.changed), data_row))
+        name = "Private Repository" if x.private else x.repo
+        dataset.append((name, format_number(x.changed), data_row))
 
     section = get_bar_section(d=d, dataset=dataset, padding=45, bar_width=195)
 
