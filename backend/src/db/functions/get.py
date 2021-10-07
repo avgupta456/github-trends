@@ -28,12 +28,11 @@ async def get_user_by_user_id(user_id: str) -> Optional[UserModel]:
         # flag is false, don't cache
         return (False, UserModel.parse_obj(user))  # type: ignore
 
-    raw_data = decompress(user["raw_data"])
-
-    # flag is true, do cache
     try:
+        raw_data = decompress(user["raw_data"])
+        # flag is true, do cache
         return (True, UserModel.parse_obj({**user, "raw_data": raw_data}))  # type: ignore
-    except ValidationError:
+    except (KeyError, ValidationError):
         return (False, UserModel.parse_obj({**user, "raw_data": None}))  # type: ignore
 
 
@@ -53,7 +52,9 @@ async def get_user_by_access_token(access_token: str) -> Optional[UserModel]:
         # flag is false, don't cache
         return (False, UserModel.parse_obj(user))  # type: ignore
 
-    raw_data = decompress(user["raw_data"])
-
-    # flag is true, do cache
-    return (True, UserModel.parse_obj({**user, "raw_data": raw_data}))  # type: ignore
+    try:
+        raw_data = decompress(user["raw_data"])
+        # flag is true, do cache
+        return (True, UserModel.parse_obj({**user, "raw_data": raw_data}))  # type: ignore
+    except (KeyError, ValidationError):
+        return (False, UserModel.parse_obj({**user, "raw_data": None}))  # type: ignore
