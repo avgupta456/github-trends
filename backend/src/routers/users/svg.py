@@ -30,13 +30,14 @@ async def get_user_lang_svg(
     time_range: str = "one_year",
     timezone_str: str = "US/Eastern",
     use_percent: bool = False,
+    include_private: bool = True,
 ) -> Any:
     start_date, end_date, time_str = use_time_range(time_range, start_date, end_date)
     output = await get_user(user_id, start_date, end_date)
     if output is None:
         return get_loading_svg()
-    processed = get_top_languages(output)
-    out = get_top_langs_svg(processed, time_str, use_percent)
+    processed = get_top_languages(output, include_private)
+    out = get_top_langs_svg(processed, time_str, use_percent, include_private)
     return out
 
 
@@ -51,10 +52,11 @@ async def get_user_repo_svg(
     end_date: date = date.today(),
     time_range: str = "one_year",
     timezone_str: str = "US/Eastern",
+    include_private: bool = True,
 ) -> Any:
     start_date, end_date, time_str = use_time_range(time_range, start_date, end_date)
     output = await get_user(user_id, start_date, end_date)
     if output is None:
         return get_loading_svg()
-    processed = get_top_repos(output)
-    return get_top_repos_svg(processed, time_str)
+    processed = get_top_repos(output, include_private)
+    return get_top_repos_svg(processed, time_str, include_private)

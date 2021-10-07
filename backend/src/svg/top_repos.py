@@ -9,7 +9,9 @@ from src.models.user.analytics import RepoStats
 from src.svg.template import get_template, get_bar_section, format_number
 
 
-def get_top_repos_svg(data: List[RepoStats], time_str: str) -> Drawing:
+def get_top_repos_svg(
+    data: List[RepoStats], time_str: str, include_private: bool
+) -> Drawing:
     d, dp = get_template(
         width=300,
         height=285,

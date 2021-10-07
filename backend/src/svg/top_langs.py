@@ -10,7 +10,7 @@ from src.svg.template import get_template, get_bar_section, format_number
 
 
 def get_top_langs_svg(
-    data: List[LanguageStats], time_str: str, use_percent: bool = False
+    data: List[LanguageStats], time_str: str, use_percent: bool, include_private: bool
 ) -> Drawing:
     d, dp = get_template(
         width=300,
