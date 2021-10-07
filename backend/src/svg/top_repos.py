@@ -10,14 +10,18 @@ from src.svg.template import get_template, get_bar_section, format_number
 
 
 def get_top_repos_svg(
-    data: List[RepoStats], time_str: str, include_private: bool
+    data: List[RepoStats], time_str: str, commits_excluded: int
 ) -> Drawing:
+    subheader = time_str
+    if commits_excluded > 50:
+        subheader += " | " + str(commits_excluded) + " commits excluded"
+
     d, dp = get_template(
         width=300,
         height=285,
         padding=20,
         header_text="Most Contributed Repositories",
-        subheader_text=time_str,
+        subheader_text=subheader,
         debug=False,
     )
 

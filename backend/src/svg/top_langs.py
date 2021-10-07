@@ -10,14 +10,18 @@ from src.svg.template import get_template, get_bar_section, format_number
 
 
 def get_top_langs_svg(
-    data: List[LanguageStats], time_str: str, use_percent: bool, include_private: bool
+    data: List[LanguageStats], time_str: str, use_percent: bool, commits_excluded: int
 ) -> Drawing:
+    subheader = time_str
+    if commits_excluded > 50:
+        subheader += " | " + str(commits_excluded) + " commits excluded"
+
     d, dp = get_template(
         width=300,
         height=285,
         padding=20,
         header_text="Most Used Languages",
-        subheader_text=time_str,
+        subheader_text=subheader,
         debug=False,
     )
 

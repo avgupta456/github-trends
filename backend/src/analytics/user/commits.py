@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Tuple, Union
 
 from src.models.user.analytics import LanguageStats, RepoStats
 from src.models.user.package import UserPackage
@@ -6,7 +6,9 @@ from src.models.user.package import UserPackage
 dict_type = Dict[str, Union[str, int, float]]
 
 
-def get_top_languages(data: UserPackage, include_private: bool) -> List[LanguageStats]:
+def get_top_languages(
+    data: UserPackage, include_private: bool
+) -> Tuple[List[LanguageStats], int]:
     raw_languages = (
         data.contribs.total_stats.languages
         if include_private
@@ -57,10 +59,16 @@ def get_top_languages(data: UserPackage, include_private: bool) -> List[Language
         if lang["percent"] > 0:
             new_languages_list.append(LanguageStats.parse_obj(lang))
 
-    return new_languages_list
+    commits_excluded = data.contribs.public_stats.other_count
+    if include_private:
+        commits_excluded = data.contribs.total_stats.other_count
+
+    return new_languages_list, commits_excluded
 
 
-def get_top_repos(data: UserPackage, include_private: bool) -> List[RepoStats]:
+def get_top_repos(
+    data: UserPackage, include_private: bool
+) -> Tuple[List[RepoStats], int]:
     repos: List[Any] = [
         {
             "repo": repo,
@@ -97,4 +105,8 @@ def get_top_repos(data: UserPackage, include_private: bool) -> List[RepoStats]:
         if x["changed"] > 0.01 * repos[0]["changed"]
     ]
 
-    return new_repos[:5]
+    commits_excluded = data.contribs.public_stats.other_count
+    if include_private:
+        commits_excluded = data.contribs.total_stats.other_count
+
+    return new_repos[:5], commits_excluded
