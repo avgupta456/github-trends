@@ -94,7 +94,7 @@ def get_top_repos(data: UserPackage, include_private: bool) -> List[RepoStats]:
     new_repos = [
         RepoStats.parse_obj(x)
         for x in repos
-        if x["changed"] > 0.05 * repos[0]["changed"]
+        if x["changed"] > 0.01 * repos[0]["changed"]
     ]
 
     return new_repos[:5]
