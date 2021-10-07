@@ -6,8 +6,13 @@ from src.models.user.package import UserPackage
 dict_type = Dict[str, Union[str, int, float]]
 
 
-def get_top_languages(data: UserPackage) -> List[LanguageStats]:
-    raw_languages = data.contribs.total_stats.languages
+def get_top_languages(data: UserPackage, include_private: bool) -> List[LanguageStats]:
+    raw_languages = (
+        data.contribs.total_stats.languages
+        if include_private
+        else data.contribs.public_stats.languages
+    )
+
     languages_list: List[dict_type] = [
         {
             "lang": lang,
@@ -55,7 +60,7 @@ def get_top_languages(data: UserPackage) -> List[LanguageStats]:
     return new_languages_list
 
 
-def get_top_repos(data: UserPackage) -> List[RepoStats]:
+def get_top_repos(data: UserPackage, include_private: bool) -> List[RepoStats]:
     repos: List[Any] = [
         {
             "repo": repo,
@@ -72,6 +77,7 @@ def get_top_repos(data: UserPackage) -> List[RepoStats]:
             "deletions": sum([x.deletions for x in repo_stats.languages.values()]),
         }
         for repo, repo_stats in data.contribs.repo_stats.items()
+        if include_private or not repo_stats.private
     ]
 
     for repo in repos:
