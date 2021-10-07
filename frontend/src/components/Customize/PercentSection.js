@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 
 import Section from './Section';
 
-const UsePercentSection = ({ usePercent, setUsePercent }) => {
+const PercentSection = ({ usePercent, setUsePercent }) => {
   return (
-    <Section title="Use Percent?">
-      <p>Use lines of code or percents.</p>
+    <Section title="Use Percent or Lines of Code (LOC)?">
       <div className="flex inline-row mt-4">
         <input
           type="checkbox"
@@ -20,9 +19,9 @@ const UsePercentSection = ({ usePercent, setUsePercent }) => {
   );
 };
 
-UsePercentSection.propTypes = {
+PercentSection.propTypes = {
   usePercent: PropTypes.bool.isRequired,
   setUsePercent: PropTypes.func.isRequired,
 };
 
-export default UsePercentSection;
+export default PercentSection;

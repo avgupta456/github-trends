@@ -7,7 +7,8 @@ import {
   Image,
   Section,
   DateRangeSection,
-  UsePercentSection,
+  PercentSection,
+  PrivateSection,
 } from '../../components';
 
 const Customize = () => {
@@ -23,6 +24,7 @@ const Customize = () => {
   });
 
   const [usePercent, setUsePercent] = useState(false);
+  const [usePrivate, setUsePrivate] = useState(false);
 
   const time = selectedTimeRange.timeRange;
   let fullSuffix = `${suffix}?time_range=${time}`;
@@ -30,6 +32,12 @@ const Customize = () => {
   if (usePercent) {
     fullSuffix += '&use_percent=True';
   }
+
+  if (usePrivate) {
+    fullSuffix += '&include_private=True';
+  }
+
+  console.log(fullSuffix);
 
   const isAuthenticated = userId && userId.length > 0;
 
@@ -66,11 +74,15 @@ const Customize = () => {
             setSelectedTimeRange={setSelectedTimeRange}
           />
           {suffix === 'langs' && (
-            <UsePercentSection
+            <PercentSection
               usePercent={usePercent}
               setUsePercent={setUsePercent}
             />
           )}
+          <PrivateSection
+            usePrivate={usePrivate}
+            setUsePrivate={setUsePrivate}
+          />
           <Section />
         </div>
         <div className="lg:w-3/5 md:w-1/2 object-center">

@@ -44,7 +44,7 @@ const DateRangeSection = ({ selectedTimeRange, setSelectedTimeRange }) => {
 };
 
 DateRangeSection.propTypes = {
-  selectedTimeRange: PropTypes.string.isRequired,
+  selectedTimeRange: PropTypes.object.isRequired,
   setSelectedTimeRange: PropTypes.func.isRequired,
 };
 
