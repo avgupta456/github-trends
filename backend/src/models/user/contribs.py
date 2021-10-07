@@ -126,19 +126,28 @@ class ContributionDay(BaseModel):
     date: str
     weekday: int
     stats: ContributionStats
-    lists: ContributionLists
+
+    # temporarily remove list from total to reduce storage
+    # TODO: improve compression so this is not necessary
+    # lists: ContributionLists
 
 
-class RepoContributionDay(BaseModel):
-    date: str
-    weekday: int
-    stats: ContributionStats
+class RepoContributionStats(BaseModel):
+    private: bool
+    contribs_count: int
+    commits_count: int
+    issues_count: int
+    prs_count: int
+    reviews_count: int
+    repos_count: int
+    other_count: int
+    languages: Dict[str, Language]
 
 
 class UserContributions(BaseModel):
     total_stats: ContributionStats
-    # temporarily remove list from total to reduce storage
-    # TODO: improve compression so this is not necessary
-    total: List[RepoContributionDay]
-    repo_stats: Dict[str, ContributionStats]
-    repos: Dict[str, List[RepoContributionDay]]
+    public_stats: ContributionStats
+    total: List[ContributionDay]
+    public: List[ContributionDay]
+    repo_stats: Dict[str, RepoContributionStats]
+    repos: Dict[str, List[ContributionDay]]

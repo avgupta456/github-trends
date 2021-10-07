@@ -15,6 +15,7 @@ def get_repo(
         "query": """
         query getRepo($owner: String!, $repo: String!) {
             repository(owner: $owner, name: $repo) {
+                isPrivate,
                 forkCount,
                 stargazerCount,
                 languages(first: 5){

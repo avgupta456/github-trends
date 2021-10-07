@@ -1,15 +1,13 @@
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Tuple
 from datetime import date, datetime
 
-from src.models.user.contribs import ContributionDay, RepoContributionDay
+from src.models.user.contribs import ContributionDay
 from src.models.user.package import UserPackage
 
 
 def trim_contribs(
-    contribs: Union[List[ContributionDay], List[RepoContributionDay]],
-    start_date: date,
-    end_date: date,
-) -> Tuple[List[Union[ContributionDay, RepoContributionDay]], Dict[str, Any]]:
+    contribs: List[ContributionDay], start_date: date, end_date: date
+) -> Tuple[List[ContributionDay], Dict[str, Any]]:
     new_total = list(
         filter(
             lambda x: datetime.strptime(x.date, "%Y-%m-%d").date() >= start_date

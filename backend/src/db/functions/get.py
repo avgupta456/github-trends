@@ -1,5 +1,7 @@
 from typing import Any, Dict, Optional
 
+from pydantic.error_wrappers import ValidationError
+
 from src.db.mongodb import USERS
 from src.db.functions.compression import decompress
 from src.db.models.users import UserModel
@@ -29,7 +31,10 @@ async def get_user_by_user_id(user_id: str) -> Optional[UserModel]:
     raw_data = decompress(user["raw_data"])
 
     # flag is true, do cache
-    return (True, UserModel.parse_obj({**user, "raw_data": raw_data}))  # type: ignore
+    try:
+        return (True, UserModel.parse_obj({**user, "raw_data": raw_data}))  # type: ignore
+    except ValidationError:
+        return (False, UserModel.parse_obj({**user, "raw_data": None}))  # type: ignore
 
 
 @alru_cache(max_size=128)

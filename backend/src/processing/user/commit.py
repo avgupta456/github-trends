@@ -96,7 +96,7 @@ def get_commits_languages(
             and "changedFiles" in commit
             and commit["additions"] + commit["deletions"] < cutoff
         ):
-            repo_info = repo_infos[commit_repo]
+            repo_info = repo_infos[commit_repo]["languages"]["edges"]
             languages = [x for x in repo_info if x["node"]["name"] not in BLACKLIST]
             num_langs = min(len(languages), commit["changedFiles"])
             total_repo_size = sum(
