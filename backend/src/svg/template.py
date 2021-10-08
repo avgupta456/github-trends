@@ -4,8 +4,15 @@ from typing import List, Tuple
 
 from svgwrite import Drawing
 from svgwrite.container import Group
+from svgwrite.shapes import Circle
+
+
+from src.models.user.analytics import RepoLanguage
 
 from src.svg.style import style
+
+
+DEFAULT_COLOR = "#858585"
 
 
 def format_number(num: int) -> str:
@@ -74,7 +81,7 @@ def get_bar_section(
         )
         total_percent, total_items = 0, len(data_row)
         for j, (percent, color) in enumerate(data_row):
-            color = color or "#ededed"
+            color = color or DEFAULT_COLOR
             bar_percent = bar_width * percent / 100
             bar_total = bar_width * total_percent / 100
             box_size, insert = (bar_percent, 8), (bar_total, 0)
@@ -94,4 +101,22 @@ def get_bar_section(
             total_percent += percent
         row.add(progress)
         section.add(row)
+    return section
+
+
+def get_lang_name_section(d: Drawing, data: List[RepoLanguage]) -> Group:
+    section = Group(transform="translate(0, 80)")
+    for i, x in enumerate(data):
+        x_translate = str(130 * (i % 2))
+        y_translate = str(25 * (i // 2))
+        lang = Group(transform="translate(" + x_translate + ", " + y_translate + ")")
+        lang.add(Circle(center=(5, 5), r=5, fill=(data[i].color or DEFAULT_COLOR)))
+        lang.add(
+            d.text(
+                data[i].lang + " " + str(data[i].percent) + "%",
+                insert=(14, 9),
+                class_="lang-name",
+            )
+        )
+        section.add(lang)
     return section

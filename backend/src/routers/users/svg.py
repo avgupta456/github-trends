@@ -32,6 +32,7 @@ async def get_user_lang_svg(
     use_percent: bool = False,
     include_private: bool = False,
     loc_metric: str = "added",
+    compact: bool = False,
 ) -> Any:
     start_date, end_date, time_str = use_time_range(time_range, start_date, end_date)
     output = await get_user(user_id, start_date, end_date)
@@ -39,7 +40,7 @@ async def get_user_lang_svg(
         return get_loading_svg()
     processed, commits_excluded = get_top_languages(output, loc_metric, include_private)
     out = get_top_langs_svg(
-        processed, time_str, use_percent, loc_metric, commits_excluded
+        processed, time_str, use_percent, loc_metric, commits_excluded, compact
     )
     return out
 

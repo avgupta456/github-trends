@@ -20,6 +20,7 @@ const Customize = () => {
   const [usePercent, setUsePercent] = useState(false);
   const [usePrivate, setUsePrivate] = useState(false);
   const [useLocChanged, setUseLocChanged] = useState(false);
+  const [useCompact, setUseCompact] = useState(false);
 
   const time = selectedTimeRange.timeRange;
   let fullSuffix = `${suffix}?time_range=${time}`;
@@ -34,6 +35,10 @@ const Customize = () => {
 
   if (useLocChanged) {
     fullSuffix += '&loc_metric=changed';
+  }
+
+  if (useCompact) {
+    fullSuffix += '&compact=True';
   }
 
   console.log(fullSuffix);
@@ -72,20 +77,29 @@ const Customize = () => {
             selectedTimeRange={selectedTimeRange}
             setSelectedTimeRange={setSelectedTimeRange}
           />
+          {suffix === 'langs' && (
+            <CheckboxSection
+              title="Compact View"
+              text="Use default view or compact view."
+              question="Use compact view?"
+              variable={useCompact}
+              setVariable={setUseCompact}
+            />
+          )}
           <CheckboxSection
             title="Include Private Repositories?"
             text="By default, private commits are hidden. We will never reveal private repository information."
-            question="Use Private Commits?"
+            question="Use private commits?"
             variable={usePrivate}
             setVariable={setUsePrivate}
           />
-          {suffix === 'langs' && (
+          {suffix === 'langs' && !useCompact && (
             <CheckboxSection
               title="Percent vs LOC"
               text={`Use absolute LOC (default) or percent to rank your top ${
                 suffix === 'langs' ? 'languages' : 'repositories'
               }.`}
-              question="Use Percent?"
+              question="Use percent?"
               variable={usePercent}
               setVariable={setUsePercent}
             />
@@ -95,7 +109,7 @@ const Customize = () => {
             <CheckboxSection
               title="LOC Metric"
               text="By default, LOC are measured as Added: (+) - (-). Alternatively, you can use Changed: (+) + (-)"
-              question="Use LOC Changed?"
+              question="Use LOC changed?"
               variable={useLocChanged}
               setVariable={setUseLocChanged}
             />

@@ -6,7 +6,12 @@ from svgwrite import Drawing
 
 from src.models.user.analytics import LanguageStats
 
-from src.svg.template import get_template, get_bar_section, format_number
+from src.svg.template import (
+    get_lang_name_section,
+    get_template,
+    get_bar_section,
+    format_number,
+)
 
 
 def get_top_langs_svg(
@@ -15,6 +20,7 @@ def get_top_langs_svg(
     use_percent: bool,
     loc_metric: str,
     commits_excluded: int,
+    compact: bool,
 ) -> Drawing:
     subheader = time_str
     if not use_percent:
@@ -24,7 +30,7 @@ def get_top_langs_svg(
 
     d, dp = get_template(
         width=300,
-        height=285,
+        height=185 if compact else 285,
         padding=20,
         header_text="Most Used Languages",
         subheader_text=subheader,
@@ -32,17 +38,26 @@ def get_top_langs_svg(
     )
 
     dataset: List[Tuple[str, str, List[Tuple[float, str]]]] = []
-    for x in data[1:6]:
-        if use_percent:
-            dataset.append((x.lang, str(x.percent) + "%", [(x.percent, x.color)]))
-        else:
-            percent = 100 * x.loc / data[1].loc
-            dataset.append((x.lang, format_number(x.loc), [(percent, x.color)]))
+    padding, width = 0, 0
+    if compact:
+        data_row = []
+        for x in data[1:6]:
+            data_row.append((x.percent, x.color))
+        dataset.append(("", "", data_row))
+        padding, width = 30, 260
+    else:
+        for x in data[1:6]:
+            if use_percent:
+                dataset.append((x.lang, str(x.percent) + "%", [(x.percent, x.color)]))
+            else:
+                percent = 100 * x.loc / data[1].loc
+                dataset.append((x.lang, format_number(x.loc), [(percent, x.color)]))
+        padding, width = 45, 210 if use_percent else 195
 
-    section = get_bar_section(
-        d=d, dataset=dataset, padding=45, bar_width=210 if use_percent else 195
-    )
+    dp.add(get_bar_section(d=d, dataset=dataset, padding=padding, bar_width=width))
 
-    dp.add(section)
+    if compact:
+        dp.add(get_lang_name_section(d=d, data=data[1:6]))
+
     d.add(dp)
     return d
