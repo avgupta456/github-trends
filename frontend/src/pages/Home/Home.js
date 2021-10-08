@@ -76,14 +76,14 @@ const HomeScreen = () => {
       <div className="flex flex-wrap -mt-8">
         <div className="p-2 md:w-1/3 sm:mb-0 mb-6">
           <Card
-            title="Language Contributions - Percent"
+            title="Language Contributions"
             description="See your language breakdown based on your commits, across all repositories you contribute to, not just ones you own."
             imageSrc="langs"
           />
         </div>
         <div className="p-2 md:w-1/3 sm:mb-0 mb-6">
           <Card
-            title="Repository Contributions - Lines"
+            title="Repository Contributions"
             description="See your repository breakdown based on total lines, separated by language."
             imageSrc="repos"
           />

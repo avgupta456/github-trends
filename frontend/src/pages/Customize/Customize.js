@@ -2,14 +2,8 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useParams } from 'react-router-dom';
-import moment from 'moment';
 
-import {
-  Image,
-  Section,
-  DateRangeSection,
-  UsePercentSection,
-} from '../../components';
+import { Image, DateRangeSection, CheckboxSection } from '../../components';
 
 const Customize = () => {
   const { suffix } = useParams();
@@ -20,20 +14,34 @@ const Customize = () => {
     id: 3,
     name: 'Past 1 Year',
     disabled: false,
-    startDate: moment(new Date()).subtract(1, 'year'),
+    timeRange: 'one_year',
   });
 
   const [usePercent, setUsePercent] = useState(false);
+  const [usePrivate, setUsePrivate] = useState(false);
+  const [useLocChanged, setUseLocChanged] = useState(false);
+  const [useCompact, setUseCompact] = useState(false);
 
-  const startDate = selectedTimeRange.startDate.format('YYYY-MM-DD');
-  // eslint-disable-next-line no-unused-vars
-  const endDate = moment(new Date()).format('YYYY-MM-DD');
-
-  let fullSuffix = `${suffix}?start_date=${startDate}`;
+  const time = selectedTimeRange.timeRange;
+  let fullSuffix = `${suffix}?time_range=${time}`;
 
   if (usePercent) {
     fullSuffix += '&use_percent=True';
   }
+
+  if (usePrivate) {
+    fullSuffix += '&include_private=True';
+  }
+
+  if (useLocChanged) {
+    fullSuffix += '&loc_metric=changed';
+  }
+
+  if (useCompact) {
+    fullSuffix += '&compact=True';
+  }
+
+  console.log(fullSuffix);
 
   const isAuthenticated = userId && userId.length > 0;
 
@@ -64,22 +72,52 @@ const Customize = () => {
             specific languages or repositories, control the theme, and more!
           </p>
         </div>
-        <div className="w-2/5 pr-10 p-10 rounded bg-gray-200">
+        <div className="min-h-screen w-2/5 pr-10 p-10 rounded bg-gray-200">
           <DateRangeSection
             selectedTimeRange={selectedTimeRange}
             setSelectedTimeRange={setSelectedTimeRange}
           />
           {suffix === 'langs' && (
-            <UsePercentSection
-              usePercent={usePercent}
-              setUsePercent={setUsePercent}
+            <CheckboxSection
+              title="Compact View"
+              text="Use default view or compact view."
+              question="Use compact view?"
+              variable={useCompact}
+              setVariable={setUseCompact}
             />
           )}
-          <Section />
+          <CheckboxSection
+            title="Include Private Repositories?"
+            text="By default, private commits are hidden. We will never reveal private repository information."
+            question="Use private commits?"
+            variable={usePrivate}
+            setVariable={setUsePrivate}
+          />
+          {suffix === 'langs' && !useCompact && (
+            <CheckboxSection
+              title="Percent vs LOC"
+              text={`Use absolute LOC (default) or percent to rank your top ${
+                suffix === 'langs' ? 'languages' : 'repositories'
+              }.`}
+              question="Use percent?"
+              variable={usePercent}
+              setVariable={setUsePercent}
+            />
+          )}
+          {(suffix === 'repos' ||
+            (suffix === 'langs' && usePercent === false)) && (
+            <CheckboxSection
+              title="LOC Metric"
+              text="By default, LOC are measured as Added: (+) - (-). Alternatively, you can use Changed: (+) + (-)"
+              question="Use LOC changed?"
+              variable={useLocChanged}
+              setVariable={setUseLocChanged}
+            />
+          )}
         </div>
         <div className="lg:w-3/5 md:w-1/2 object-center">
           <div className="w-3/5 mx-auto h-full flex flex-col justify-center">
-            <Image imageSrc={fullSuffix} />
+            <Image imageSrc={fullSuffix} compact={useCompact} />
           </div>
         </div>
       </div>

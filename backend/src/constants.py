@@ -2,6 +2,7 @@ import os
 
 # GLOBAL
 PROD = os.getenv("PROD", "False") == "True"
+DOCKER = os.getenv("DOCKER", "False") == "True"
 PROJECT_ID = "github-298920"
 BACKEND_URL = "https://api.githubtrends.io" if PROD else "http://localhost:8000"
 
@@ -22,7 +23,10 @@ OAUTH_REDIRECT_URI = os.getenv("OAUTH_REDIRECT_URI", "")  # redirect uri for App
 # PUBSUB
 PUBSUB_PUB = os.getenv("PUBSUB_PUB", "False") == "True"
 PUBSUB_TOKEN = os.getenv("PUBSUB_TOKEN", "")
-LOCAL_SUBSCRIBER = "http://localhost:8001/pubsub/sub/"
+LOCAL_SUBSCRIBER = (  # based on name of Docker container
+    "http://" + ("subscriber" if DOCKER else "localhost") + ":8001/pubsub/sub/"
+)
+
 
 # MONGODB
 MONGODB_PASSWORD = os.getenv("MONGODB_PASSWORD", "")

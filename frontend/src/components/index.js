@@ -1,5 +1,5 @@
 import Button from './Button';
 import { Card, Image } from './Card';
-import { Section, DateRangeSection, UsePercentSection } from './Customize';
+import { Section, DateRangeSection, CheckboxSection } from './Customize';
 
-export { Button, Card, Image, Section, DateRangeSection, UsePercentSection };
+export { Button, Card, Image, Section, DateRangeSection, CheckboxSection };

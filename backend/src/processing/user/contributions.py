@@ -165,10 +165,7 @@ async def get_contributions(
         max_threads=100,
     )
 
-    repo_infos = {
-        repo: repo_info["languages"]["edges"]
-        for repo, repo_info in zip(repos, _repo_infos)
-    }
+    repo_infos = {repo: repo_info for repo, repo_info in zip(repos, _repo_infos)}
 
     commit_times = [[x[0] for x in repo] for repo in commit_infos]
     commit_node_ids = [[x[1] for x in repo] for repo in commit_infos]
@@ -243,13 +240,17 @@ async def get_contributions(
         }
 
     total_stats = get_stats()
-    total: DefaultDict[str, Dict[str, Any]] = defaultdict(
+    public_stats = get_stats()
+    total: Dict[str, Dict[str, Any]] = defaultdict(
         lambda: {"date": "", "weekday": 0, "stats": get_stats(), "lists": get_lists()}
     )
-    repo_stats: DefaultDict[str, Dict[str, Union[int, Dict[str, int]]]] = defaultdict(
+    public: Dict[str, Dict[str, Any]] = defaultdict(
+        lambda: {"date": "", "weekday": 0, "stats": get_stats(), "lists": get_lists()}
+    )
+    repo_stats: Dict[str, Dict[str, Union[int, Dict[str, int]]]] = defaultdict(
         get_stats
     )
-    repositories: DefaultDict[str, DefaultDict[str, Dict[str, Any]]] = defaultdict(
+    repositories: Dict[str, Dict[str, Dict[str, Any]]] = defaultdict(
         lambda: defaultdict(
             lambda: {
                 "date": "",
@@ -263,38 +264,54 @@ async def get_contributions(
     for calendar_year in calendars:
         for week in calendar_year.weeks:
             for day in week.contribution_days:
-                total[str(day.date)]["date"] = day.date.isoformat()
-                total[str(day.date)]["weekday"] = day.weekday
-                total[str(day.date)]["stats"]["contribs_count"] = day.count
-                total[str(day.date)]["stats"]["other_count"] = day.count
+                day_str = str(day.date)
+                total[day_str]["date"] = day.date.isoformat()
+                total[day_str]["weekday"] = day.weekday
+                total[day_str]["stats"]["contribs_count"] = day.count
+                total[day_str]["stats"]["other_count"] = day.count
+                public[day_str]["date"] = day.date.isoformat()
+                public[day_str]["weekday"] = day.weekday
+                public[day_str]["stats"]["contribs_count"] = day.count
+                public[day_str]["stats"]["other_count"] = day.count
                 total_stats["contribs_count"] += day.count  # type: ignore
                 total_stats["other_count"] += day.count  # type: ignore
+                public_stats["contribs_count"] += day.count  # type: ignore
+                public_stats["other_count"] += day.count  # type: ignore
 
     def update(date_str: str, repo: str, event: str, count: int):
         # update global counts for this event
         total[date_str]["stats"][event + "_count"] += count
+        total[date_str]["stats"]["other_count"] -= count
         total_stats[event + "_count"] += count  # type: ignore
+        total_stats["other_count"] -= count  # type: ignore
+        is_private = repo_infos[repo]["isPrivate"]
+        if not is_private:
+            public[date_str]["stats"][event + "_count"] += count
+            public[date_str]["stats"]["other_count"] -= count
+            public_stats[event + "_count"] += count  # type: ignore
+            public_stats["other_count"] -= count  # type: ignore
         # update repo counts for this event
         repositories[repo][date_str]["stats"][event + "_count"] += count
-        repo_stats[repo][event + "_count"] += count  # type: ignore
-        # update total other stats by subtracting
-        total[date_str]["stats"]["other_count"] -= count
-        total_stats["other_count"] -= count  # type: ignore
-        # update repo total stats by adding
         repositories[repo][date_str]["stats"]["contribs_count"] += count
+        repo_stats[repo][event + "_count"] += count  # type: ignore
         repo_stats[repo]["contribs_count"] += count  # type: ignore
 
     def update_langs(
         date_str: str, repo: str, langs_list: List[Dict[str, Dict[str, int]]]
     ):
+        is_private = repo_infos[repo]["isPrivate"]
         for langs in langs_list:
             for lang, lang_data in langs.items():
-                for store in [
+                stores = [
                     total[date_str]["stats"]["languages"],
                     total_stats["languages"],
                     repositories[repo][date_str]["stats"]["languages"],
                     repo_stats[repo]["languages"],
-                ]:
+                ]
+                if not is_private:
+                    stores.append(public[date_str]["stats"]["languages"])
+                    stores.append(public_stats["languages"])
+                for store in stores:
                     if lang not in store:  # type: ignore
                         store[lang] = {"color": lang_data["color"], "additions": 0, "deletions": 0}  # type: ignore
                     store[lang]["additions"] += lang_data["additions"]  # type: ignore
@@ -328,31 +345,43 @@ async def get_contributions(
                         repositories[repo][date_str]["lists"]["commits"].extend(
                             commit_info
                         )
+                        if not repo_infos[repo]["isPrivate"]:
+                            public[date_str]["lists"]["commits"].extend(commit_info)
 
                         # update stats
                         update(date_str, repo, "commits", event.count)
                         update_langs(date_str, repo, langs_list)
                     else:
-                        # update stats
-                        update(date_str, repo, event_type, 1)
-
                         # record timestamps
                         total[date_str]["lists"][event_type].append(datetime_str)
                         repositories[repo][date_str]["lists"][event_type].append(
                             datetime_str
                         )
+                        if not repo_infos[repo]["isPrivate"]:
+                            public[date_str]["lists"]["commits"].append(datetime_str)
+
+                        # update stats
+                        update(date_str, repo, event_type, 1)
 
     total_list = list(
         filter(lambda x: x["stats"]["contribs_count"] > 0, list(total.values()))
+    )
+    public_list = list(
+        filter(lambda x: x["stats"]["contribs_count"] > 0, list(public.values()))
     )
     repositories_list = {
         name: list(repo.values()) for name, repo in repositories.items()
     }
 
+    for repo in repo_stats:
+        repo_stats[repo]["private"] = repo_infos[repo]["isPrivate"]
+
     output = UserContributions.parse_obj(
         {
             "total_stats": total_stats,
+            "public_stats": public_stats,
             "total": total_list,
+            "public": public_list,
             "repo_stats": repo_stats,
             "repos": repositories_list,
         }

@@ -1,15 +1,13 @@
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Tuple
 from datetime import date, datetime
 
-from src.models.user.contribs import ContributionDay, RepoContributionDay
+from src.models.user.contribs import ContributionDay
 from src.models.user.package import UserPackage
 
 
 def trim_contribs(
-    contribs: Union[List[ContributionDay], List[RepoContributionDay]],
-    start_date: date,
-    end_date: date,
-) -> Tuple[List[Union[ContributionDay, RepoContributionDay]], Dict[str, Any]]:
+    contribs: List[ContributionDay], start_date: date, end_date: date
+) -> Tuple[List[ContributionDay], Dict[str, Any]]:
     new_total = list(
         filter(
             lambda x: datetime.strptime(x.date, "%Y-%m-%d").date() >= start_date
@@ -59,17 +57,26 @@ def trim_package(data: UserPackage, start_date: date, end_date: date) -> UserPac
         data.contribs.total, start_date, end_date
     )
 
-    new_repos = {}
-    new_repo_stats = {}
+    new_public, new_public_stats = trim_contribs(
+        data.contribs.public, start_date, end_date
+    )
+
+    new_repos: Dict[str, Any] = {}
+    new_repo_stats: Dict[str, Any] = {}
     for repo_name, repo in data.contribs.repos.items():
         new_repo_total, new_repo_total_stats = trim_contribs(repo, start_date, end_date)
         if len(new_repo_total) > 0:
             new_repos[repo_name] = new_repo_total
             new_repo_stats[repo_name] = new_repo_total_stats
 
+    for repo in new_repo_stats:
+        new_repo_stats[repo]["private"] = data.contribs.repo_stats[repo].private
+
     new_data = {
         "total_stats": new_total_stats,
+        "public_stats": new_public_stats,
         "total": new_total,
+        "public": new_public,
         "repo_stats": new_repo_stats,
         "repos": new_repos,
     }

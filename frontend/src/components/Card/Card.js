@@ -14,13 +14,13 @@ import { BACKEND_URL } from '../../constants';
 import './card.css';
 import SVG from './SVG';
 
-export const Image = ({ imageSrc }) => {
+export const Image = ({ imageSrc, compact }) => {
   const userId = useSelector((state) => state.user.userId);
 
   const [loaded, setLoaded] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const fullImageSrc = `${BACKEND_URL}/user/${userId}/svg/${imageSrc}`;
+  const fullImageSrc = `${BACKEND_URL}/user/svg/${userId}/${imageSrc}`;
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -36,6 +36,7 @@ export const Image = ({ imageSrc }) => {
         <SVG
           className={classnames('object-cover h-full w-full', 'image')}
           url={fullImageSrc}
+          compact={compact}
         />
       </div>
       <button
@@ -78,13 +79,18 @@ export const Image = ({ imageSrc }) => {
 
 Image.propTypes = {
   imageSrc: PropTypes.string.isRequired,
+  compact: PropTypes.bool,
 };
 
-export const Card = ({ title, description, imageSrc }) => {
+Image.defaultProps = {
+  compact: false,
+};
+
+export const Card = ({ title, description, imageSrc, compact }) => {
   return (
     <div>
       <div className="p-4 rounded-lg bg-gray-50 hover:bg-gray-100">
-        <Image imageSrc={imageSrc} />
+        <Image imageSrc={imageSrc} compact={compact} />
         <h2 className="text-xl font-medium title-font text-gray-900 mt-5">
           {title}
         </h2>
@@ -115,4 +121,9 @@ Card.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   imageSrc: PropTypes.string.isRequired,
+  compact: PropTypes.bool,
+};
+
+Card.defaultProps = {
+  compact: false,
 };

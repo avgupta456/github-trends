@@ -2,7 +2,7 @@ from typing import Any, Dict
 
 
 def compress_stats(data: Dict[str, Any]) -> Dict[str, Any]:
-    return {
+    out = {
         "counts": (
             data["contribs_count"],
             data["commits_count"],
@@ -18,9 +18,15 @@ def compress_stats(data: Dict[str, Any]) -> Dict[str, Any]:
         ],
     }
 
+    if "private" in data:
+        out["private"] = data["private"]
+
+    return out
+
 
 def compress(data: Dict[str, Any]) -> Dict[str, Any]:
     new_total_stats = compress_stats(data["contribs"]["total_stats"])
+    new_public_stats = compress_stats(data["contribs"]["public_stats"])
 
     new_total = list(
         map(
@@ -30,6 +36,17 @@ def compress(data: Dict[str, Any]) -> Dict[str, Any]:
                 "stats": compress_stats(x["stats"]),
             },
             data["contribs"]["total"],
+        )
+    )
+
+    new_public = list(
+        map(
+            lambda x: {
+                "date": x["date"],
+                "weekday": x["weekday"],
+                "stats": compress_stats(x["stats"]),
+            },
+            data["contribs"]["public"],
         )
     )
 
@@ -55,7 +72,9 @@ def compress(data: Dict[str, Any]) -> Dict[str, Any]:
     new_data = {
         "contribs": {
             "total_stats": new_total_stats,
+            "public_stats": new_public_stats,
             "total": new_total,
+            "public": new_public,
             "repo_stats": new_repo_stats,
             "repos": new_repos,
         }
@@ -65,7 +84,7 @@ def compress(data: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def decompress_stats(data: Dict[str, Any]) -> Dict[str, Any]:
-    return {
+    out = {
         "contribs_count": data["counts"][0],
         "commits_count": data["counts"][1],
         "issues_count": data["counts"][2],
@@ -79,9 +98,15 @@ def decompress_stats(data: Dict[str, Any]) -> Dict[str, Any]:
         },
     }
 
+    if "private" in data:
+        out["private"] = data["private"]
+
+    return out
+
 
 def decompress(data: Dict[str, Any]) -> Dict[str, Any]:
     new_total_stats = decompress_stats(data["contribs"]["total_stats"])
+    new_public_stats = decompress_stats(data["contribs"]["public_stats"])
 
     new_total = list(
         map(
@@ -91,6 +116,17 @@ def decompress(data: Dict[str, Any]) -> Dict[str, Any]:
                 "stats": decompress_stats(x["stats"]),
             },
             data["contribs"]["total"],
+        )
+    )
+
+    new_public = list(
+        map(
+            lambda x: {
+                "date": x["date"],
+                "weekday": x["weekday"],
+                "stats": decompress_stats(x["stats"]),
+            },
+            data["contribs"]["public"],
         )
     )
 
@@ -116,7 +152,9 @@ def decompress(data: Dict[str, Any]) -> Dict[str, Any]:
     new_data = {
         "contribs": {
             "total_stats": new_total_stats,
+            "public_stats": new_public_stats,
             "total": new_total,
+            "public": new_public,
             "repo_stats": new_repo_stats,
             "repos": new_repos,
         }

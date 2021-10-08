@@ -1,5 +1,5 @@
 import Section from './Section';
 import DateRangeSection from './DateRangeSection';
-import UsePercentSection from './UsePercentSection';
+import CheckboxSection from './CheckboxSection';
 
-export { Section, DateRangeSection, UsePercentSection };
+export { Section, DateRangeSection, CheckboxSection };

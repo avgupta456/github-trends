@@ -1,38 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import moment from 'moment';
-
 import Section from './Section';
 
 import { classnames } from '../../utils';
 
 const DateRangeSection = ({ selectedTimeRange, setSelectedTimeRange }) => {
   const timeRangeOptions = [
-    {
-      id: 1,
-      name: 'Past 1 Month',
-      disabled: false,
-      startDate: moment(new Date()).subtract(1, 'month'),
-    },
-    {
-      id: 2,
-      name: 'Past 6 Months',
-      disabled: false,
-      startDate: moment(new Date()).subtract(6, 'month'),
-    },
-    {
-      id: 3,
-      name: 'Past 1 Year',
-      disabled: false,
-      startDate: moment(new Date()).subtract(1, 'year'),
-    },
-    {
-      id: 4,
-      name: 'Past 5 Years',
-      disabled: false,
-      startDate: moment(new Date()).subtract(5, 'year'),
-    },
+    { id: 1, name: 'Past 1 Month', disabled: false, timeRange: 'one_month' },
+    { id: 2, name: 'Past 6 Months', disabled: false, timeRange: 'six_months' },
+    { id: 3, name: 'Past 1 Year', disabled: false, timeRange: 'one_year' },
+    { id: 4, name: 'Past 5 Years', disabled: false, timeRange: 'five_years' },
   ];
 
   const selectedOption = selectedTimeRange || timeRangeOptions[2];
@@ -66,7 +44,7 @@ const DateRangeSection = ({ selectedTimeRange, setSelectedTimeRange }) => {
 };
 
 DateRangeSection.propTypes = {
-  selectedTimeRange: PropTypes.string.isRequired,
+  selectedTimeRange: PropTypes.object.isRequired,
   setSelectedTimeRange: PropTypes.func.isRequired,
 };
 
