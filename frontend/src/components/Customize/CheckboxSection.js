@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/interactive-supports-focus */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -7,7 +10,11 @@ const CheckboxSection = ({ title, text, question, variable, setVariable }) => {
   return (
     <Section title={title}>
       <p>{text}</p>
-      <div className="flex inline-row mt-4">
+      <div
+        className="flex inline-row mt-4"
+        onClick={() => setVariable(!variable)}
+        role="button"
+      >
         <input
           type="checkbox"
           checked={variable ? 'checked' : ''}
