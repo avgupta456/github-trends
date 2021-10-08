@@ -3,13 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { useParams } from 'react-router-dom';
 
-import {
-  Image,
-  Section,
-  DateRangeSection,
-  PercentSection,
-  PrivateSection,
-} from '../../components';
+import { Image, DateRangeSection, CheckboxSection } from '../../components';
 
 const Customize = () => {
   const { suffix } = useParams();
@@ -25,6 +19,7 @@ const Customize = () => {
 
   const [usePercent, setUsePercent] = useState(false);
   const [usePrivate, setUsePrivate] = useState(false);
+  const [useLocChanged, setUseLocChanged] = useState(false);
 
   const time = selectedTimeRange.timeRange;
   let fullSuffix = `${suffix}?time_range=${time}`;
@@ -35,6 +30,10 @@ const Customize = () => {
 
   if (usePrivate) {
     fullSuffix += '&include_private=True';
+  }
+
+  if (useLocChanged) {
+    fullSuffix += '&loc_metric=changed';
   }
 
   console.log(fullSuffix);
@@ -68,22 +67,39 @@ const Customize = () => {
             specific languages or repositories, control the theme, and more!
           </p>
         </div>
-        <div className="w-2/5 pr-10 p-10 rounded bg-gray-200">
+        <div className="min-h-screen w-2/5 pr-10 p-10 rounded bg-gray-200">
           <DateRangeSection
             selectedTimeRange={selectedTimeRange}
             setSelectedTimeRange={setSelectedTimeRange}
           />
+          <CheckboxSection
+            title="Include Private Repositories?"
+            text="By default, private commits are hidden. We will never reveal private repository information."
+            question="Use Private Commits?"
+            variable={usePrivate}
+            setVariable={setUsePrivate}
+          />
           {suffix === 'langs' && (
-            <PercentSection
-              usePercent={usePercent}
-              setUsePercent={setUsePercent}
+            <CheckboxSection
+              title="Percent vs LOC"
+              text={`Use absolute LOC (default) or percent to rank your top ${
+                suffix === 'langs' ? 'languages' : 'repositories'
+              }.`}
+              question="Use Percent?"
+              variable={usePercent}
+              setVariable={setUsePercent}
             />
           )}
-          <PrivateSection
-            usePrivate={usePrivate}
-            setUsePrivate={setUsePrivate}
-          />
-          <Section />
+          {(suffix === 'repos' ||
+            (suffix === 'langs' && usePercent === false)) && (
+            <CheckboxSection
+              title="LOC Metric"
+              text="By default, LOC are measured as Added: (+) - (-). Alternatively, you can use Changed: (+) + (-)"
+              question="Use LOC Changed?"
+              variable={useLocChanged}
+              setVariable={setUseLocChanged}
+            />
+          )}
         </div>
         <div className="lg:w-3/5 md:w-1/2 object-center">
           <div className="w-3/5 mx-auto h-full flex flex-col justify-center">
