@@ -10,6 +10,7 @@ from src.models.user.package import UserPackage
 
 from src.analytics.user.utils import trim_package
 
+from src.helper.alru_cache import alru_cache
 from src.constants import PUBSUB_PUB
 
 
@@ -39,16 +40,17 @@ async def _get_user(user_id: str) -> Optional[UserPackage]:
     return None
 
 
+@alru_cache(max_size=128)
 async def get_user(
     user_id: str, start_date: date, end_date: date
 ) -> Optional[UserPackage]:
     output = await _get_user(user_id)
 
     if output is None:
-        return None
+        return (False, None)  # type: ignore
 
     output = trim_package(output, start_date, end_date)
 
     # TODO: handle timezone_str here
 
-    return output
+    return (True, output)  # type: ignore
