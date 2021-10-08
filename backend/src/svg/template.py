@@ -6,9 +6,6 @@ from svgwrite import Drawing
 from svgwrite.container import Group
 from svgwrite.shapes import Circle
 
-
-from src.models.user.analytics import RepoLanguage
-
 from src.svg.style import style
 
 
@@ -104,19 +101,15 @@ def get_bar_section(
     return section
 
 
-def get_lang_name_section(d: Drawing, data: List[RepoLanguage]) -> Group:
-    section = Group(transform="translate(0, 80)")
+def get_lang_name_section(
+    d: Drawing, data: List[Tuple[str, str]], columns: int = 2, padding: int = 80
+) -> Group:
+    section = Group(transform="translate(0, " + str(padding) + ")")
     for i, x in enumerate(data):
-        x_translate = str(130 * (i % 2))
-        y_translate = str(25 * (i // 2))
+        x_translate = str((260 / columns) * (i % columns))
+        y_translate = str(20 * (i // columns))
         lang = Group(transform="translate(" + x_translate + ", " + y_translate + ")")
-        lang.add(Circle(center=(5, 5), r=5, fill=(data[i].color or DEFAULT_COLOR)))
-        lang.add(
-            d.text(
-                data[i].lang + " " + str(data[i].percent) + "%",
-                insert=(14, 9),
-                class_="lang-name",
-            )
-        )
+        lang.add(Circle(center=(5, 5), r=5, fill=(data[i][1] or DEFAULT_COLOR)))
+        lang.add(d.text(data[i][0], insert=(14, 9), class_="lang-name"))
         section.add(lang)
     return section

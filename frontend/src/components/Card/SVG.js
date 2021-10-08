@@ -17,7 +17,7 @@ const SvgInline = (props) => {
     return (
       <div
         dangerouslySetInnerHTML={{
-          __html: `<svg viewBox="0 0 300 185">${svg}</svg>`,
+          __html: `<svg viewBox="0 0 300 175">${svg}</svg>`,
         }}
         {...props}
       />

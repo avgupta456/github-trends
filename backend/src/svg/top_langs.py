@@ -30,7 +30,7 @@ def get_top_langs_svg(
 
     d, dp = get_template(
         width=300,
-        height=185 if compact else 285,
+        height=175 if compact else 285,
         padding=20,
         header_text="Most Used Languages",
         subheader_text=subheader,
@@ -56,8 +56,9 @@ def get_top_langs_svg(
 
     dp.add(get_bar_section(d=d, dataset=dataset, padding=padding, bar_width=width))
 
+    langs = [(x.lang + " " + str(x.percent) + "%", x.color) for x in data[1:6]]
     if compact:
-        dp.add(get_lang_name_section(d=d, data=data[1:6]))
+        dp.add(get_lang_name_section(d=d, data=langs))
 
     d.add(dp)
     return d
