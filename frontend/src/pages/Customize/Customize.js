@@ -117,7 +117,7 @@ const Customize = () => {
         </div>
         <div className="lg:w-3/5 md:w-1/2 object-center">
           <div className="w-3/5 mx-auto h-full flex flex-col justify-center">
-            <Image imageSrc={fullSuffix} />
+            <Image imageSrc={fullSuffix} compact={useCompact} />
           </div>
         </div>
       </div>

@@ -13,6 +13,17 @@ const SvgInline = (props) => {
       .then(setSvg);
   }, [props.url]);
 
+  if (props.compact) {
+    return (
+      <div
+        dangerouslySetInnerHTML={{
+          __html: `<svg viewBox="0 0 300 185">${svg}</svg>`,
+        }}
+        {...props}
+      />
+    );
+  }
+
   return (
     <div
       dangerouslySetInnerHTML={{
@@ -25,6 +36,11 @@ const SvgInline = (props) => {
 
 SvgInline.propTypes = {
   url: PropTypes.string.isRequired,
+  compact: PropTypes.bool,
+};
+
+SvgInline.defaultProps = {
+  compact: false,
 };
 
 export default SvgInline;
