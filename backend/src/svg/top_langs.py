@@ -10,9 +10,15 @@ from src.svg.template import get_template, get_bar_section, format_number
 
 
 def get_top_langs_svg(
-    data: List[LanguageStats], time_str: str, use_percent: bool, commits_excluded: int
+    data: List[LanguageStats],
+    time_str: str,
+    use_percent: bool,
+    loc_metric: str,
+    commits_excluded: int,
 ) -> Drawing:
     subheader = time_str
+    if not use_percent:
+        subheader += " | " + ("LOC Changed" if loc_metric == "changed" else "LOC Added")
     if commits_excluded > 50:
         subheader += " | " + str(commits_excluded) + " commits excluded"
 
@@ -30,8 +36,8 @@ def get_top_langs_svg(
         if use_percent:
             dataset.append((x.lang, str(x.percent) + "%", [(x.percent, x.color)]))
         else:
-            percent = 100 * x.changed / data[1].changed
-            dataset.append((x.lang, format_number(x.changed), [(percent, x.color)]))
+            percent = 100 * x.loc / data[1].loc
+            dataset.append((x.lang, format_number(x.loc), [(percent, x.color)]))
 
     section = get_bar_section(
         d=d, dataset=dataset, padding=45, bar_width=210 if use_percent else 195

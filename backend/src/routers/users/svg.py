@@ -31,13 +31,16 @@ async def get_user_lang_svg(
     timezone_str: str = "US/Eastern",
     use_percent: bool = False,
     include_private: bool = False,
+    loc_metric: str = "added",
 ) -> Any:
     start_date, end_date, time_str = use_time_range(time_range, start_date, end_date)
     output = await get_user(user_id, start_date, end_date)
     if output is None:
         return get_loading_svg()
-    processed, commits_excluded = get_top_languages(output, include_private)
-    out = get_top_langs_svg(processed, time_str, use_percent, commits_excluded)
+    processed, commits_excluded = get_top_languages(output, loc_metric, include_private)
+    out = get_top_langs_svg(
+        processed, time_str, use_percent, loc_metric, commits_excluded
+    )
     return out
 
 
@@ -53,10 +56,11 @@ async def get_user_repo_svg(
     time_range: str = "one_year",
     timezone_str: str = "US/Eastern",
     include_private: bool = False,
+    loc_metric: str = "added",
 ) -> Any:
     start_date, end_date, time_str = use_time_range(time_range, start_date, end_date)
     output = await get_user(user_id, start_date, end_date)
     if output is None:
         return get_loading_svg()
-    processed, commits_excluded = get_top_repos(output, include_private)
-    return get_top_repos_svg(processed, time_str, commits_excluded)
+    processed, commits_excluded = get_top_repos(output, loc_metric, include_private)
+    return get_top_repos_svg(processed, time_str, loc_metric, commits_excluded)

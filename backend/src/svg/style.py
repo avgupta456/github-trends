@@ -5,7 +5,7 @@ style = """
         animation: fadeInAnimation 0.8s ease-in-out forwards;
     }
     .subheader {
-        font: 500 13px 'Segoe UI', Ubuntu, San-Serif;
+        font: 500 10px 'Segoe UI', Ubuntu, San-Serif;
         fill: #666;
         animation: fadeInAnimation 0.8s ease-in-out forwards;
     }

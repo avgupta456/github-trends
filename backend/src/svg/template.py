@@ -51,7 +51,7 @@ def get_template(
     dp = Group(transform="translate(" + str(padding) + ", " + str(padding) + ")")
 
     dp.add(d.text(header_text, insert=(0, 13), class_="header"))
-    dp.add(d.text(subheader_text, insert=(0, 33), class_="subheader"))
+    dp.add(d.text(subheader_text, insert=(0, 31), class_="subheader"))
 
     return d, dp
 
