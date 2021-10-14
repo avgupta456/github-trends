@@ -27,10 +27,26 @@ class GraphQLErrorTimeout(Exception):
     pass
 
 
-def get_template(query: Dict[str, Any], access_token: str) -> Dict[str, Any]:
+def get_template(
+    query: Dict[str, Any], access_token: str, calc_rate_limit: bool = False
+) -> Dict[str, Any]:
     """Template for interacting with the GitHub GraphQL API"""
     start = datetime.now()
     headers: Dict[str, str] = {"Authorization": "bearer " + access_token}
+
+    if calc_rate_limit:
+        query_rate_limit = """
+            rateLimit {
+                limit
+                cost
+                remaining
+                resetAt
+        """
+
+        query_split = query["query"].split("}")
+        query["query"] = "}".join(
+            query_split[:-2] + [query_rate_limit] + query_split[-2:]
+        )
 
     try:
         r = s.post(  # type: ignore
@@ -56,6 +72,10 @@ def get_template(query: Dict[str, Any], access_token: str) -> Dict[str, Any]:
             ):
                 raise GraphQLErrorMissingNode(node=int(data["errors"][0]["path"][1]))  # type: ignore
             raise GraphQLError("GraphQL Error: " + str(data["errors"]))
+
+        if calc_rate_limit:
+            print(data["data"]["rateLimit"])
+
         return data
 
     if r.status_code in [401, 403]:
@@ -65,3 +85,17 @@ def get_template(query: Dict[str, Any], access_token: str) -> Dict[str, Any]:
         raise GraphQLErrorTimeout("GraphQL Error: Request Timeout")
 
     raise GraphQLError("GraphQL Error: " + str(r.status_code))
+
+
+def get_query_limit(access_token: str) -> int:
+    """Get the current rate limit for the GitHub GraphQL API"""
+
+    try:
+        data = get_template(
+            {"query": "query { rateLimit { remaining } }"},
+            access_token,
+            calc_rate_limit=False,
+        )
+        return data["data"]["rateLimit"]["remaining"]
+    except Exception:
+        return -1

@@ -4,6 +4,7 @@ from typing import Optional
 from fastapi import APIRouter, Response, status
 
 from src.db.functions.get import get_user_by_user_id
+from src.external.github_api.graphql.template import get_query_limit
 from src.packaging.user import main as get_data
 from src.models.user.package import UserPackage
 
@@ -30,8 +31,12 @@ async def get_user_raw(
             raise LookupError("Invalid UserId")
         new_access_token = db_user.access_token
 
+    start_query_limit = get_query_limit(access_token=new_access_token)
     start_date, end_date, _ = use_time_range(time_range, start_date, end_date)
     print(start_date, end_date, user_id, new_access_token, timezone_str)
     data = await get_data(user_id, new_access_token, start_date, end_date, timezone_str)
+    end_query_limit = get_query_limit(access_token=new_access_token)
+    print("query limit used", start_query_limit - end_query_limit)
+    print("query limit remaining", end_query_limit)
 
     return data
