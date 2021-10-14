@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import GithubIcon from 'mdi-react/GithubIcon';
 
 import { Button } from '../../components';
-import { GITHUB_AUTH_URL } from '../../constants';
+import { GITHUB_PUBLIC_AUTH_URL } from '../../constants';
 
 const LoginScreen = () => {
   // eslint-disable-next-line no-unused-vars
@@ -22,7 +22,7 @@ const LoginScreen = () => {
             can optionally give read access to private repositories.
           </div>
           <div className="mt-4 flex justify-center">
-            <a href={GITHUB_AUTH_URL} className="inline-flex">
+            <a href={GITHUB_PUBLIC_AUTH_URL} className="inline-flex">
               <Button className="text-white bg-blue-500 hover:bg-blue-600">
                 <span className="mr-2">Login with GitHub</span>
                 <GithubIcon />

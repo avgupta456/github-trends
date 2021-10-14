@@ -4,7 +4,10 @@ import { useSelector } from 'react-redux';
 import GithubIcon from 'mdi-react/GithubIcon';
 
 import { Button } from '../../components';
-import { GITHUB_AUTH_URL } from '../../constants';
+import {
+  GITHUB_PUBLIC_AUTH_URL,
+  GITHUB_PRIVATE_AUTH_URL,
+} from '../../constants';
 
 const SignUpScreen = () => {
   // eslint-disable-next-line no-unused-vars
@@ -23,8 +26,18 @@ const SignUpScreen = () => {
           </div>
           <div className="mt-4 flex justify-center">
             <Button className="text-white bg-blue-500 hover:bg-blue-600">
-              <a href={GITHUB_AUTH_URL} className="inline-flex">
+              <a href={GITHUB_PUBLIC_AUTH_URL} className="inline-flex">
                 <span className="mr-2">Sign up with GitHub</span>
+                <GithubIcon />
+              </a>
+            </Button>
+          </div>
+          <div className="mt-4 flex justify-center">
+            <Button className="text-white bg-blue-500 hover:bg-blue-600">
+              <a href={GITHUB_PRIVATE_AUTH_URL} className="inline-flex">
+                <span className="mr-2">
+                  Sign up with GitHub (Private Commits Included)
+                </span>
                 <GithubIcon />
               </a>
             </Button>

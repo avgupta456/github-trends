@@ -2,11 +2,11 @@ import axios from 'axios';
 
 import { BACKEND_URL } from '../constants';
 
-const URL_PREFIX = `${BACKEND_URL}/auth/`;
+const URL_PREFIX = `${BACKEND_URL}/auth`;
 
-const getAccessToken = async (code) => {
+const authenticate = async (code) => {
   try {
-    const fullUrl = `${URL_PREFIX}login/${code}`;
+    const fullUrl = `${URL_PREFIX}/login/${code}`;
     const result = await axios.post(fullUrl);
     return result.data.data;
   } catch (error) {
@@ -15,4 +15,4 @@ const getAccessToken = async (code) => {
   }
 };
 
-export { getAccessToken };
+export { authenticate };

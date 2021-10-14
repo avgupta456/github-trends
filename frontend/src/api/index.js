@@ -1,3 +1,3 @@
-import { getAccessToken } from './user';
+import { authenticate } from './user';
 
-export { getAccessToken };
+export { authenticate };

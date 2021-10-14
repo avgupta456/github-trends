@@ -6,7 +6,7 @@ import BounceLoader from 'react-spinners/BounceLoader';
 
 import { Card } from '../../components';
 
-import { getAccessToken } from '../../api';
+import { authenticate } from '../../api';
 import { login as _login } from '../../redux/actions/userActions';
 
 const HomeScreen = () => {
@@ -30,8 +30,8 @@ const HomeScreen = () => {
       const newUrl = url.split('?code=');
       window.history.pushState({}, null, newUrl[0]);
       setIsLoading(true);
-      const result = await getAccessToken(newUrl[1]);
-      login(result);
+      const newUserId = await authenticate(newUrl[1]);
+      login(newUserId);
       setIsLoading(false);
     }
   }, []);
