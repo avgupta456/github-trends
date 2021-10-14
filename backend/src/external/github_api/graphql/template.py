@@ -58,7 +58,7 @@ def get_template(query: Dict[str, Any], access_token: str) -> Dict[str, Any]:
             raise GraphQLError("GraphQL Error: " + str(data["errors"]))
         return data
 
-    if r.status_code == 403:
+    if r.status_code in [401, 403]:
         raise GraphQLErrorAuth("GraphQL Error: Unauthorized")
 
     if r.status_code == 502:

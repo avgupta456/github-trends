@@ -11,6 +11,9 @@ def alru_cache(max_size: int = 128, ttl: timedelta = timedelta(hours=1)):
 
         @wraps(func)
         async def wrapper(*args: List[Any], **kwargs: Dict[str, Any]) -> Any:
+            if "use_cache" in kwargs and kwargs["use_cache"] is False:
+                (flag, value) = await func(*args, **kwargs)
+                return value
             now = datetime.now()
             key = tuple(args), frozenset(kwargs.items())
             if key not in cache or now - cache[key][0] > ttl:

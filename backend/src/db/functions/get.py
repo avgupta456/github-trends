@@ -15,7 +15,9 @@ Raw Get Methods
 
 
 @alru_cache(max_size=128)
-async def get_user_by_user_id(user_id: str) -> Optional[UserModel]:
+async def get_user_by_user_id(
+    user_id: str, use_cache: bool = True
+) -> Optional[UserModel]:
     user: Optional[Dict[str, Any]] = await USERS.find_one({"user_id": user_id})  # type: ignore
 
     # (flag, value) output through decorator returns value
@@ -32,12 +34,14 @@ async def get_user_by_user_id(user_id: str) -> Optional[UserModel]:
         raw_data = decompress(user["raw_data"])
         # flag is true, do cache
         return (True, UserModel.parse_obj({**user, "raw_data": raw_data}))  # type: ignore
-    except (KeyError, ValidationError):
+    except (TypeError, KeyError, ValidationError):
         return (False, UserModel.parse_obj({**user, "raw_data": None}))  # type: ignore
 
 
 @alru_cache(max_size=128)
-async def get_user_by_access_token(access_token: str) -> Optional[UserModel]:
+async def get_user_by_access_token(
+    access_token: str, use_cache: bool = True
+) -> Optional[UserModel]:
     user: Optional[Dict[str, Any]] = await USERS.find_one(  # type: ignore
         {"access_token": access_token}
     )
@@ -56,5 +60,5 @@ async def get_user_by_access_token(access_token: str) -> Optional[UserModel]:
         raw_data = decompress(user["raw_data"])
         # flag is true, do cache
         return (True, UserModel.parse_obj({**user, "raw_data": raw_data}))  # type: ignore
-    except (KeyError, ValidationError):
+    except (TypeError, KeyError, ValidationError):
         return (False, UserModel.parse_obj({**user, "raw_data": None}))  # type: ignore
