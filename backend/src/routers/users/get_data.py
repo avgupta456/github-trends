@@ -42,7 +42,7 @@ async def _get_user(user_id: str) -> Optional[UserPackage]:
 
 @alru_cache(max_size=128)
 async def get_user(
-    user_id: str, start_date: date, end_date: date
+    user_id: str, start_date: date, end_date: date, use_cache: bool = True
 ) -> Optional[UserPackage]:
     output = await _get_user(user_id)
 

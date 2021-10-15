@@ -27,11 +27,10 @@ class OAuthError(Exception):
 
 @router.post("/login/{code}", status_code=status.HTTP_200_OK)
 @async_fail_gracefully
-async def login(response: Response, code: str) -> Any:
+async def authenticate(response: Response, code: str) -> Any:
+    start = datetime.now()
     if not PUBSUB_PUB:
         raise HTTPException(400, "Incorrect Server, must use Publisher")
-
-    start = datetime.now()
 
     params = {
         "client_id": OAUTH_CLIENT_ID,
@@ -40,13 +39,15 @@ async def login(response: Response, code: str) -> Any:
         "redirect_uri": OAUTH_REDIRECT_URI,
     }
 
-    r = s.post("https://github.com/login/oauth/access_token", params=params)  # type: ignore
+    r = s.post("https://github.com/login/oauth/access_token", params=params)
 
-    if r.status_code == 200:
-        access_token = r.text.split("&")[0].split("=")[1]
-        user_id = get_unknown_user(access_token)
-        await login_user(user_id, access_token)
-        print("OAuth API", datetime.now() - start)
-        return user_id
+    if r.status_code != 200:
+        raise OAuthError("OAuth Error: " + str(r.status_code))
 
-    raise OAuthError("OAuth Error: " + str(r.status_code))
+    access_token = r.text.split("&")[0].split("=")[1]
+    user_id = get_unknown_user(access_token)
+
+    await login_user(user_id, access_token)
+
+    print("OAuth SignUp", datetime.now() - start)
+    return user_id
