@@ -16,6 +16,7 @@ const SvgInline = (props) => {
   if (props.compact) {
     return (
       <div
+        className={props.className}
         dangerouslySetInnerHTML={{
           __html: `<svg viewBox="0 0 300 175">${svg}</svg>`,
         }}
@@ -25,6 +26,7 @@ const SvgInline = (props) => {
 
   return (
     <div
+      className={props.className}
       dangerouslySetInnerHTML={{
         __html: `<svg viewBox="0 0 300 285">${svg}</svg>`,
       }}
@@ -33,11 +35,13 @@ const SvgInline = (props) => {
 };
 
 SvgInline.propTypes = {
+  className: PropTypes.any,
   url: PropTypes.string.isRequired,
   compact: PropTypes.bool,
 };
 
 SvgInline.defaultProps = {
+  className: '',
   compact: false,
 };
 
