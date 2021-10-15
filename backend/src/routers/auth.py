@@ -4,6 +4,7 @@ from typing import Any
 import requests
 
 from fastapi import APIRouter, Response, status
+from fastapi.responses import RedirectResponse
 from fastapi.exceptions import HTTPException
 
 from src.db.functions.users import login_user
@@ -51,3 +52,32 @@ async def authenticate(response: Response, code: str) -> Any:
 
     print("OAuth SignUp", datetime.now() - start)
     return user_id
+
+
+@router.get("/signup/public")
+async def redirect_public() -> Any:
+    url = (
+        "https://github.com/login/oauth/authorize?client_id="
+        + OAUTH_CLIENT_ID
+        + "&redirect_uri="
+        + OAUTH_REDIRECT_URI
+        + "/redirect_backend"
+    )
+    return RedirectResponse(url)
+
+
+@router.get("/singup/private")
+async def redirect_private() -> Any:
+    url = (
+        "https://github.com/login/oauth/authorize?scope=user,repo&client_id="
+        + OAUTH_CLIENT_ID
+        + "&redirect_uri="
+        + OAUTH_REDIRECT_URI
+        + "/redirect_backend"
+    )
+    return RedirectResponse(url)
+
+
+@router.get("/success")
+async def redirect_success() -> Any:
+    return "Authentication Success! Wait a couple seconds to allow data to load, then follow steps in ReadME"
