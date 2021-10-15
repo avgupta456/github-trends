@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any
+from typing import Any, Optional
 
 import requests
 
@@ -15,7 +15,8 @@ from src.constants import (
     OAUTH_REDIRECT_URI,
     PUBSUB_PUB,
 )
-from src.utils import async_fail_gracefully
+from src.decorators import async_fail_gracefully
+from src.utils import get_redirect_url
 
 router = APIRouter()
 
@@ -55,29 +56,15 @@ async def authenticate(response: Response, code: str) -> Any:
 
 
 @router.get("/signup/public")
-async def redirect_public() -> Any:
-    url = (
-        "https://github.com/login/oauth/authorize?client_id="
-        + OAUTH_CLIENT_ID
-        + "&redirect_uri="
-        + OAUTH_REDIRECT_URI
-        + "/redirect_backend"
-    )
-    return RedirectResponse(url)
+def redirect_public(user_id: Optional[str] = None) -> Any:
+    return RedirectResponse(get_redirect_url(private=False, user_id=user_id))
 
 
 @router.get("/singup/private")
-async def redirect_private() -> Any:
-    url = (
-        "https://github.com/login/oauth/authorize?scope=user,repo&client_id="
-        + OAUTH_CLIENT_ID
-        + "&redirect_uri="
-        + OAUTH_REDIRECT_URI
-        + "/redirect_backend"
-    )
-    return RedirectResponse(url)
+def redirect_private(user_id: Optional[str] = None) -> Any:
+    return RedirectResponse(get_redirect_url(private=True, user_id=user_id))
 
 
 @router.get("/success")
-async def redirect_success() -> Any:
+def redirect_success() -> Any:
     return "Authentication Success! Wait a couple seconds to allow data to load, then follow steps in ReadME"

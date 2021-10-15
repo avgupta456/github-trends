@@ -1,106 +1,22 @@
-import logging
-import io
-
 from datetime import datetime, date, timedelta
-from functools import wraps
-from typing import Any, Callable, Dict, List, Tuple
+from typing import Tuple, Optional
 
-from fastapi import Response, status
-
-from svgwrite.drawing import Drawing  # type: ignore
-
-from src.svg.error import get_error_svg
+from src.constants import OAUTH_CLIENT_ID, OAUTH_REDIRECT_URI
 
 
-def fail_gracefully(func: Callable[..., Any]):
-    @wraps(func)  # needed to play nice with FastAPI decorator
-    def wrapper(response: Response, *args: List[Any], **kwargs: Dict[str, Any]) -> Any:
-        start = datetime.now()
-        try:
-            data = func(response, *args, **kwargs)
-            return {"data": data, "message": "200 OK", "time": datetime.now() - start}
-        except Exception as e:
-            logging.exception(e)
-            response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-            return {
-                "data": [],
-                "message": "Error " + str(e),
-                "time": datetime.now() - start,
-            }
-
-    return wrapper
-
-
-def async_fail_gracefully(func: Callable[..., Any]):
-    @wraps(func)  # needed to play nice with FastAPI decorator
-    async def wrapper(
-        response: Response, *args: List[Any], **kwargs: Dict[str, Any]
-    ) -> Any:
-        start = datetime.now()
-        try:
-            data = await func(response, *args, **kwargs)
-            return {"data": data, "message": "200 OK", "time": datetime.now() - start}
-        except Exception as e:
-            logging.exception(e)
-            response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-            return {
-                "data": [],
-                "message": "Error " + str(e),
-                "time": datetime.now() - start,
-            }
-
-    return wrapper
-
-
-# NOTE: returns HTTP_200_OK regardless to avoid retrying PubSub API
-def pubsub_fail_gracefully(func: Callable[..., Any]):
-    @wraps(func)  # needed to play nice with FastAPI decorator
-    async def wrapper(
-        response: Response, *args: List[Any], **kwargs: Dict[str, Any]
-    ) -> Any:
-        start = datetime.now()
-        try:
-            data = await func(response, *args, **kwargs)
-            return {"data": data, "message": "200 OK", "time": datetime.now() - start}
-        except Exception as e:
-            logging.exception(e)
-            response.status_code = status.HTTP_200_OK
-            return {
-                "data": [],
-                "message": "Error " + str(e),
-                "time": datetime.now() - start,
-            }
-
-    return wrapper
-
-
-# NOTE: implied async, sync not implemented yet
-def svg_fail_gracefully(func: Callable[..., Any]):
-    @wraps(func)  # needed to play nice with FastAPI decorator
-    async def wrapper(
-        response: Response, *args: List[Any], **kwargs: Dict[str, Any]
-    ) -> Any:
-        d: Drawing
-        status_code: int
-        start = datetime.now()
-        try:
-            d = await func(response, *args, **kwargs)
-            status_code = status.HTTP_200_OK
-        except Exception as e:
-            logging.exception(e)
-            d = get_error_svg()
-            status_code = status.HTTP_200_OK
-
-        sio = io.StringIO()
-        d.write(sio)  # type: ignore
-
-        print(datetime.now() - start)
-
-        return Response(
-            sio.getvalue(), media_type="image/svg+xml", status_code=status_code
-        )
-
-    return wrapper
+def get_redirect_url(private: bool = False, user_id: Optional[str] = None) -> str:
+    url = (
+        "https://github.com/login/oauth/authorize?client_id="
+        + OAUTH_CLIENT_ID
+        + "&redirect_uri="
+        + OAUTH_REDIRECT_URI
+        + "/redirect_backend"
+    )
+    if private:
+        url += "&scope=user,repo"
+    if user_id is not None:
+        url += "&login=" + user_id
+    return url
 
 
 def date_to_datetime(
