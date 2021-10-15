@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
+import GithubIcon from 'mdi-react/GithubIcon';
 
 import { Button } from '../../components';
 import previewImage from '../../assets/preview.png';
@@ -37,8 +38,9 @@ const LandingScreen = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button className="ml-4 text-gray-700 bg-gray-100 hover:bg-gray-200">
-                Star on GitHub
+              <Button className="ml-4 text-gray-700 bg-gray-100 hover:bg-gray-200 flex items-center">
+                Star on
+                <GithubIcon className="ml-2 w-6 h-6" />
               </Button>
             </a>
           </div>

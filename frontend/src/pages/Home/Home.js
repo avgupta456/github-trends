@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import BounceLoader from 'react-spinners/BounceLoader';
+import GithubIcon from 'mdi-react/GithubIcon';
 
 import { Card } from '../../components';
 
@@ -77,17 +78,32 @@ const HomeScreen = () => {
         <div className="p-2 md:w-1/3 sm:mb-0 mb-6">
           <Card
             title="Language Contributions"
-            description="See your language breakdown based on your commits, across all repositories you contribute to, not just ones you own."
+            description="See your language breakdown across all repositories you contribute to."
             imageSrc="langs"
           />
         </div>
         <div className="p-2 md:w-1/3 sm:mb-0 mb-6">
           <Card
             title="Repository Contributions"
-            description="See your repository breakdown based on total lines, separated by language."
+            description="See your repository breakdown sorted by LOC and separated by language."
             imageSrc="repos"
           />
         </div>
+      </div>
+      <div className="fixed bottom-8 right-8">
+        <a
+          href="https://www.github.com/avgupta456/github-trends"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <button
+            type="button"
+            className="rounded-full bg-gray-700 hover:bg-gray-800 text-gray-50 text-md px-3 py-2 flex items-center"
+          >
+            Star on
+            <GithubIcon className="ml-1.5 w-5 h-5" />
+          </button>
+        </a>
       </div>
     </div>
   );

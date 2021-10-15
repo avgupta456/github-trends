@@ -34,7 +34,7 @@ const SignUpScreen = () => {
           </a>
           <div className="mt-4" />
           <a href={GITHUB_PRIVATE_AUTH_URL} className="w-full">
-            <Button className="w-full h-12 flex justify-center items-center text-black border-2 border-black bg-white hover:bg-gray-100">
+            <Button className="w-full h-12 flex justify-center items-center text-black border border-black bg-white hover:bg-gray-100">
               <GithubIcon className="w-4 h-4" />
               <span className="ml-2">GitHub Private Access</span>
             </Button>
