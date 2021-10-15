@@ -75,7 +75,7 @@ function App() {
           <Switch>
             <Route path="/login" component={LoginScreen} />
             <Route path="/signup" component={SignUpScreen} />
-            <Route path="/user/redirect_backend" component={RedirectScreen} />
+            <Route path="/user/redirect" component={RedirectScreen} />
             <Route path="/user" component={HomeScreen} />
             <Route path="/customize/:suffix" component={CustomizeScreen} />
             <Route exact path="/" component={LandingScreen} />

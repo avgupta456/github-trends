@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Any, Optional
 
+import logging
 import requests
 
 from fastapi import APIRouter, Response, status
@@ -27,9 +28,7 @@ class OAuthError(Exception):
     pass
 
 
-@router.post("/login/{code}", status_code=status.HTTP_200_OK)
-@async_fail_gracefully
-async def authenticate(response: Response, code: str) -> Any:
+async def authenticate(code: str) -> str:
     start = datetime.now()
     if not PUBSUB_PUB:
         raise HTTPException(400, "Incorrect Server, must use Publisher")
@@ -55,6 +54,12 @@ async def authenticate(response: Response, code: str) -> Any:
     return user_id
 
 
+@router.post("/login/{code}", status_code=status.HTTP_200_OK)
+@async_fail_gracefully
+async def authenticate_endpoint(response: Response, code: str) -> Any:
+    return await authenticate(code)
+
+
 @router.get("/signup/public")
 def redirect_public(user_id: Optional[str] = None) -> Any:
     return RedirectResponse(get_redirect_url(private=False, user_id=user_id))
@@ -65,6 +70,15 @@ def redirect_private(user_id: Optional[str] = None) -> Any:
     return RedirectResponse(get_redirect_url(private=True, user_id=user_id))
 
 
-@router.get("/success")
-def redirect_success() -> Any:
-    return "Authentication Success! Wait a couple seconds to allow data to load, then follow steps in ReadME"
+@router.get("/redirect")
+async def redirect_return(code: str = "") -> str:
+    try:
+        user_id = await authenticate(code=code)  # type: ignore
+        return (
+            "Authenticated "
+            + user_id
+            + "! Please continue following instructions in the README."
+        )
+    except Exception as e:
+        logging.exception(e)
+        return "Unknown Error. Please try again later."

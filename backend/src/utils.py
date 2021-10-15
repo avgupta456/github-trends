@@ -10,7 +10,7 @@ def get_redirect_url(private: bool = False, user_id: Optional[str] = None) -> st
         + OAUTH_CLIENT_ID
         + "&redirect_uri="
         + OAUTH_REDIRECT_URI
-        + "/redirect_backend"
+        + "/redirect"
     )
     if private:
         url += "&scope=user,repo"
