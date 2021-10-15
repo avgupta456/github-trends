@@ -9,6 +9,7 @@ import LandingScreen from '../Landing';
 import { LoginScreen, SignUpScreen } from '../Auth';
 import HomeScreen from '../Home';
 import CustomizeScreen from '../Customize';
+import NoMatchScreen from '../NoMatch';
 
 import { logout as _logout } from '../../redux/actions/userActions';
 
@@ -76,7 +77,8 @@ function App() {
             <Route path="/signup" component={SignUpScreen} />
             <Route path="/user" component={HomeScreen} />
             <Route path="/customize/:suffix" component={CustomizeScreen} />
-            <Route path="/" component={LandingScreen} />
+            <Route exact path="/" component={LandingScreen} />
+            <Route path="*" component={NoMatchScreen} />
           </Switch>
         </section>
         <footer className="body-font">
