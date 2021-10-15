@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { Button } from '../../components';
+import previewImage from '../../assets/preview.png';
 
 const LandingScreen = () => {
   const userId = useSelector((state) => state.user.userId);
@@ -13,7 +14,7 @@ const LandingScreen = () => {
 
   return (
     <section className="text-gray-600 body-font">
-      <div className="container mx-auto flex px-5 py-16 md:flex-row flex-col items-center">
+      <div className="container mx-auto flex px-8 py-16 md:flex-row flex-col items-center">
         <div className="lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
           <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
             GitHub Trends
@@ -37,16 +38,16 @@ const LandingScreen = () => {
               rel="noopener noreferrer"
             >
               <Button className="ml-4 text-gray-700 bg-gray-100 hover:bg-gray-200">
-                Fork on GitHub
+                Star on GitHub
               </Button>
             </a>
           </div>
         </div>
         <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
           <img
-            className="object-cover object-center rounded"
+            className="pr-16 object-cover object-center rounded"
+            src={previewImage}
             alt="hero"
-            src="https://dummyimage.com/720x600"
           />
         </div>
       </div>
