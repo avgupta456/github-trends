@@ -8,9 +8,14 @@ import { classnames } from '../../utils';
 const DateRangeSection = ({ selectedTimeRange, setSelectedTimeRange }) => {
   const timeRangeOptions = [
     { id: 1, name: 'Past 1 Month', disabled: false, timeRange: 'one_month' },
+    {
+      id: 2,
+      name: 'Past 3 Months',
+      disabled: false,
+      timeRange: 'three_months',
+    },
     { id: 2, name: 'Past 6 Months', disabled: false, timeRange: 'six_months' },
     { id: 3, name: 'Past 1 Year', disabled: false, timeRange: 'one_year' },
-    { id: 4, name: 'Past 5 Years', disabled: false, timeRange: 'five_years' },
   ];
 
   const selectedOption = selectedTimeRange || timeRangeOptions[2];

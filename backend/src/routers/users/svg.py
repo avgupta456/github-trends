@@ -26,7 +26,7 @@ router = APIRouter()
 async def get_user_lang_svg(
     response: Response,
     user_id: str,
-    start_date: date = date.today() - timedelta(365),
+    start_date: date = date.today() - timedelta(30),
     end_date: date = date.today(),
     time_range: str = "one_year",
     timezone_str: str = "US/Eastern",
@@ -53,7 +53,7 @@ async def get_user_lang_svg(
 async def get_user_repo_svg(
     response: Response,
     user_id: str,
-    start_date: date = date.today() - timedelta(365),
+    start_date: date = date.today() - timedelta(30),
     end_date: date = date.today(),
     time_range: str = "one_year",
     timezone_str: str = "US/Eastern",

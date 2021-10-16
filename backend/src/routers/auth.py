@@ -11,6 +11,7 @@ from fastapi.exceptions import HTTPException
 from src.db.functions.users import login_user
 from src.external.github_auth.auth import get_unknown_user
 from src.constants import (
+    BACKEND_URL,
     OAUTH_CLIENT_ID,
     OAUTH_CLIENT_SECRET,
     OAUTH_REDIRECT_URI,
@@ -71,14 +72,20 @@ def redirect_private(user_id: Optional[str] = None) -> Any:
 
 
 @router.get("/redirect")
-async def redirect_return(code: str = "") -> str:
+async def redirect_return(code: str = "") -> RedirectResponse:
     try:
         user_id = await authenticate(code=code)  # type: ignore
-        return (
-            "Authenticated "
-            + user_id
-            + "! Please continue following instructions in the README."
-        )
+        return RedirectResponse(BACKEND_URL + "/auth/redirect_success/" + user_id)
     except Exception as e:
         logging.exception(e)
-        return "Unknown Error. Please try again later."
+        return RedirectResponse(BACKEND_URL + "/auth/redirect_failure")
+
+
+@router.get("/redirect_success/{user_id}")
+def redirect_success(user_id: str) -> str:
+    return "You (" + user_id + ") are now authenticated!"
+
+
+@router.get("/redirect_failure")
+def redirect_failure() -> str:
+    return "Unknown Error. Please try again later."

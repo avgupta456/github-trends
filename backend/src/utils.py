@@ -32,9 +32,9 @@ def use_time_range(
 ) -> Tuple[date, date, str]:
     duration_options = {
         "one_month": (30, "Past 1 Month"),
+        "three_months": (90, "Past 3 Months"),
         "six_months": (180, "Past 6 Months"),
         "one_year": (365, "Past 1 Year"),
-        "five_years": (365 * 5, "Past 5 Years"),
     }
 
     start_str = start_date.strftime("X%m/X%d/%Y").replace("X0", "X").replace("X", "")

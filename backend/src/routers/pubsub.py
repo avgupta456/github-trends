@@ -31,14 +31,17 @@ async def sub_user(response: Response, token: str, request: Request) -> Any:
 
     await lock_user(data["user_id"])
 
-    # standard policy is to check past five years of data
-    start_date = date.today() - timedelta(365 * 5)
+    # standard policy is to check past year of data
+    start_date = date.today() - timedelta(365)
     end_date = date.today()
     timezone_str = "US/Eastern"
 
     # TODO: historical data is never updated,
-    # don't query full five years each time, instead
+    # don't query full history each time, instead
     # define function to build on previous results
+
+    # TODO: improve performance to store > 1 year
+    # ideally five years, leads to issues currently
 
     output = await get_data(
         data["user_id"],
