@@ -4,7 +4,7 @@ from typing import Optional
 from fastapi import APIRouter, Response, status
 
 from src.models.user.package import UserPackage
-from src.utils import async_fail_gracefully
+from src.decorators import async_fail_gracefully
 from src.constants import PROD
 
 from src.routers.users.get_data import get_user

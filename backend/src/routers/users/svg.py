@@ -11,7 +11,8 @@ from src.svg.top_langs import get_top_langs_svg
 from src.svg.top_repos import get_top_repos_svg
 from src.svg.error import get_loading_svg
 
-from src.utils import svg_fail_gracefully, use_time_range
+from src.decorators import svg_fail_gracefully
+from src.utils import use_time_range
 
 from src.routers.users.get_data import get_user
 
@@ -25,7 +26,7 @@ router = APIRouter()
 async def get_user_lang_svg(
     response: Response,
     user_id: str,
-    start_date: date = date.today() - timedelta(365),
+    start_date: date = date.today() - timedelta(30),
     end_date: date = date.today(),
     time_range: str = "one_year",
     timezone_str: str = "US/Eastern",
@@ -52,7 +53,7 @@ async def get_user_lang_svg(
 async def get_user_repo_svg(
     response: Response,
     user_id: str,
-    start_date: date = date.today() - timedelta(365),
+    start_date: date = date.today() - timedelta(30),
     end_date: date = date.today(),
     time_range: str = "one_year",
     timezone_str: str = "US/Eastern",

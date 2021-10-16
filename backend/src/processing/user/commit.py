@@ -1,3 +1,4 @@
+from time import sleep
 from datetime import datetime
 from typing import Any, Dict, List
 
@@ -58,22 +59,27 @@ def _get_commits_languages(
     access_token: str, node_ids: List[str], per_page: int = NODE_CHUNK_SIZE
 ) -> List[Dict[str, Any]]:
     all_data: List[Dict[str, Any]] = []
-    for i in range(0, len(node_ids), per_page):
+    i, retries = 0, 0
+    while i < len(node_ids):
         cutoff = min(len(node_ids), i + per_page)
         try:
-            all_data.extend(get_commits(access_token, node_ids[i:cutoff]))  # type: ignore
-        except GraphQLErrorMissingNode as e:
-            curr = node_ids[i:cutoff]
-            curr.pop(e.node)
-            all_data.extend(_get_commits_languages(access_token, curr))
+            if retries < 2:
+                all_data.extend(get_commits(access_token, node_ids[i:cutoff]))  # type: ignore
+            else:
+                all_data.extend([{} for _ in range(cutoff - i)])
+            i, retries = i + per_page, 0
+        except GraphQLErrorMissingNode:
+            print("GraphQLErrorMissingNode, retrying...")
+            sleep(1)
+            retries += 1
         except GraphQLErrorTimeout:
-            length = cutoff - i
-            print("Commit Timeout Exception:", length, " nodes lost")
-            all_data.extend([{} for _ in range(length)])
+            print("GraphQLErrorTimeout, retrying...")
+            sleep(1)
+            retries += 1
         except GraphQLErrorAuth:
-            length = cutoff - i
-            print("Commit Auth Exception:", length, " nodes lost")
-            all_data.extend([{} for _ in range(length)])
+            print("GraphQLErrorAuth, retrying...")
+            sleep(1)
+            retries += 1
 
     return all_data
 

@@ -11,8 +11,8 @@ BACKEND_URL = "https://api.githubtrends.io" if PROD else "http://localhost:8000"
 # https://docs.github.com/en/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits
 # https://docs.github.com/en/graphql/overview/resource-limitations
 TIMEOUT = 10  # max seconds to wait for api response
-NODE_CHUNK_SIZE = 80  # number of nodes (commits) to query (max 100)
-NODE_THREADS = 5  # number of node queries simultaneously (avoid blacklisting)
+NODE_CHUNK_SIZE = 100  # number of nodes (commits) to query (max 100)
+NODE_THREADS = 10  # number of node queries simultaneously (avoid blacklisting)
 CUTOFF = 500  # if > cutoff lines, assume imported, don't count
 
 # CUSTOMIZATION
