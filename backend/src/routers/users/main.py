@@ -11,10 +11,12 @@ from src.routers.users.get_data import get_user
 from src.routers.users.db import router as db_router
 from src.routers.users.svg import router as svg_router
 from src.routers.users.dev import router as dev_router
+from src.routers.users.demo import router as demo_router
 
 router = APIRouter()
 router.include_router(db_router, prefix="/db")
 router.include_router(svg_router, prefix="/svg")
+router.include_router(demo_router, prefix="/demo")
 if not PROD:
     router.include_router(dev_router, prefix="/dev")
 
