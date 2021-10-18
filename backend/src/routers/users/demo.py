@@ -1,7 +1,7 @@
 from datetime import date
 from fastapi import APIRouter, Response, status
 
-from src.db.functions.secrets import get_next_key
+from src.db.secret.functions import get_next_key
 from src.helper.alru_cache import alru_cache
 from src.packaging.user import main as get_data
 from src.models.user.package import UserPackage

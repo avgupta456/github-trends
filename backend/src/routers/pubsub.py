@@ -4,7 +4,7 @@ from datetime import date, timedelta
 from fastapi import APIRouter, Response, Request, status
 
 from src.packaging.user import main as get_data
-from src.db.functions.users import lock_user, unlock_user, update_user
+from src.db.user.functions import lock_user, unlock_user, update_user
 
 from src.external.pubsub.templates import publish_to_topic, parse_request
 from src.decorators import fail_gracefully, pubsub_fail_gracefully

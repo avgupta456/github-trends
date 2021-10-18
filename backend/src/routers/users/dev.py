@@ -3,7 +3,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Response, status
 
-from src.db.functions.get import get_user_by_user_id
+from src.db.user.get import get_user_by_user_id
 from src.external.github_api.graphql.template import get_query_limit
 from src.packaging.user import main as get_data
 from src.models.user.package import UserPackage

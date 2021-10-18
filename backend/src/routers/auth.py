@@ -8,7 +8,7 @@ from fastapi import APIRouter, Response, status
 from fastapi.responses import RedirectResponse
 from fastapi.exceptions import HTTPException
 
-from src.db.functions.users import login_user
+from src.db.user.functions import login_user
 from src.external.github_auth.auth import get_unknown_user
 from src.constants import (
     BACKEND_URL,

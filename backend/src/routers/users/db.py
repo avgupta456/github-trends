@@ -2,9 +2,9 @@ from typing import Optional
 
 from fastapi import APIRouter, Response, status
 
-from src.db.models.users import UserModel as DBUserModel
-from src.db.functions.users import login_user
-from src.db.functions.get import get_user_by_user_id
+from src.db.user.models import UserModel as DBUserModel
+from src.db.user.functions import login_user
+from src.db.user.get import get_user_by_user_id
 
 from src.decorators import async_fail_gracefully
 

@@ -3,7 +3,7 @@ from typing import Optional
 
 from fastapi.exceptions import HTTPException
 
-from src.db.functions.get import get_user_by_user_id
+from src.db.user.get import get_user_by_user_id
 
 from src.external.pubsub.templates import publish_to_topic
 from src.models.user.package import UserPackage

@@ -2,7 +2,7 @@ from typing import Any, Dict, List, Optional
 from random import randint
 
 from src.db.mongodb import SECRETS
-from src.db.models.secrets import SecretModel
+from src.db.secret.models import SecretModel
 from src.helper.alru_cache import alru_cache
 
 
