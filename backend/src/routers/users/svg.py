@@ -12,8 +12,8 @@ from src.svg.top_langs import get_top_langs_svg
 from src.svg.top_repos import get_top_repos_svg
 from src.svg.error import get_loading_svg
 
-from src.decorators import svg_fail_gracefully
-from src.utils import use_time_range
+from src.helper.decorators import svg_fail_gracefully
+from src.helper.utils import use_time_range
 
 from src.routers.users.get_data import get_user, get_user_demo
 

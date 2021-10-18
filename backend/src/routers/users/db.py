@@ -6,7 +6,7 @@ from src.db.user.models import UserModel as DBUserModel
 from src.db.user.functions import login_user
 from src.db.user.get import get_user_by_user_id
 
-from src.decorators import async_fail_gracefully
+from src.helper.decorators import async_fail_gracefully
 
 router = APIRouter()
 

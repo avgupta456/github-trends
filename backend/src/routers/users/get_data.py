@@ -13,7 +13,7 @@ from src.packaging.user import main as get_data
 from src.analytics.user.utils import trim_package
 
 from src.helper.alru_cache import alru_cache
-from src.utils import use_time_range
+from src.helper.utils import use_time_range
 from src.constants import PUBSUB_PUB
 
 

@@ -8,8 +8,8 @@ from src.external.github_api.graphql.template import get_query_limit
 from src.packaging.user import main as get_data
 from src.models.user.package import UserPackage
 
-from src.decorators import async_fail_gracefully
-from src.utils import use_time_range
+from src.helper.decorators import async_fail_gracefully
+from src.helper.utils import use_time_range
 
 router = APIRouter()
 
