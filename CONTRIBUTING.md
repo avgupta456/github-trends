@@ -12,7 +12,7 @@ docker-compose up --build -d
 
 ### Manual
 
-With Python3.7, install the dependencies from `backend/requirements.txt` and run on two separate terminal windows
+With Python3.8, install the dependencies from `backend/requirements.txt` and run on two separate terminal windows
 
 ```
 poetry run uvicorn src.main_pub:app --reload --port=8000
