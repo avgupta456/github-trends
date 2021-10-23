@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
-import Skeleton from 'react-loading-skeleton';
-
 import CopyIcon from 'mdi-react/ContentCopyIcon';
 
 import { classnames } from '../../utils';
@@ -17,7 +15,6 @@ import SVG from './SVG';
 export const Image = ({ imageSrc, compact }) => {
   const userId = useSelector((state) => state.user.userId);
 
-  const [loaded, setLoaded] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const fullImageSrc = `${BACKEND_URL}/user/svg/${userId}/${imageSrc}`;
@@ -30,7 +27,7 @@ export const Image = ({ imageSrc, compact }) => {
     return () => clearTimeout(timeout);
   }, [copied]);
 
-  const image = (
+  return (
     <div className={classnames('card_container', 'relative')}>
       <div className="h-full w-full relative">
         <SVG
@@ -61,18 +58,6 @@ export const Image = ({ imageSrc, compact }) => {
           </>
         )}
       </button>
-    </div>
-  );
-
-  return (
-    <div>
-      <img
-        alt="content"
-        className="h-0 w-0"
-        src={fullImageSrc}
-        onLoad={() => setLoaded(true)}
-      />
-      {loaded ? image : <Skeleton style={{ paddingBottom: '95%' }} />}
     </div>
   );
 };

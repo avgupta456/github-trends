@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional
 
 from src.models.user.package import UserPackage
 from src.db.mongodb import USERS
-from src.db.functions.compression import compress
+from src.db.user.compression import compress
 
 
 async def login_user(user_id: str, access_token: str) -> str:

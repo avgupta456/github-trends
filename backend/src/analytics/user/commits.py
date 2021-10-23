@@ -32,8 +32,8 @@ def get_top_languages(
 
     languages_list = list(filter(lambda x: x["loc"] > 0, languages_list))  # type: ignore
 
-    total_loc: int = sum(x["loc"] for x in languages_list)  # type: ignore
-    total: dict_type = {"lang": "Total", "loc": total_loc + 1}
+    total_loc: int = sum(x["loc"] for x in languages_list) + 1  # type: ignore
+    total: dict_type = {"lang": "Total", "loc": total_loc}
 
     languages_list = sorted(languages_list, key=lambda x: x["loc"], reverse=True)
     other: dict_type = {"lang": "Other", "loc": 0, "color": "#ededed"}

@@ -21,7 +21,7 @@ from src.external.github_api.graphql.repo import get_repo
 
 from src.helper.gather import gather
 
-from src.utils import date_to_datetime
+from src.helper.utils import date_to_datetime
 from src.constants import NODE_CHUNK_SIZE, NODE_THREADS
 
 from src.processing.user.commit import get_all_commit_info, get_commits_languages

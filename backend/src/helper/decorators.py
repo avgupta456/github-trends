@@ -11,7 +11,7 @@ from starlette.responses import RedirectResponse
 from svgwrite.drawing import Drawing  # type: ignore
 
 from src.svg.error import get_error_svg
-from src.utils import get_redirect_url
+from src.helper.utils import get_redirect_url
 
 
 def fail_gracefully(func: Callable[..., Any]):

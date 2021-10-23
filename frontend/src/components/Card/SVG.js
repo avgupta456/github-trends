@@ -4,14 +4,29 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
+import Skeleton from 'react-loading-skeleton';
+
 const SvgInline = (props) => {
   const [svg, setSvg] = useState(null);
 
+  // eslint-disable-next-line no-unused-vars
+  const [loaded, setLoaded] = useState(false);
+
   useEffect(() => {
+    setLoaded(false);
     fetch(props.url)
       .then((res) => res.text())
-      .then(setSvg);
+      .then(setSvg)
+      .then(() => setLoaded(true))
+      .catch((e) => console.error(e));
   }, [props.url]);
+
+  if (props.forceLoading || !loaded) {
+    if (props.compact) {
+      return <Skeleton style={{ paddingBottom: '58%' }} />;
+    }
+    return <Skeleton style={{ paddingBottom: '95%' }} />;
+  }
 
   if (props.compact) {
     return (
@@ -37,11 +52,13 @@ const SvgInline = (props) => {
 SvgInline.propTypes = {
   className: PropTypes.any,
   url: PropTypes.string.isRequired,
+  forceLoading: PropTypes.bool,
   compact: PropTypes.bool,
 };
 
 SvgInline.defaultProps = {
   className: '',
+  forceLoading: false,
   compact: false,
 };
 

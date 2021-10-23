@@ -8,7 +8,7 @@ from fastapi import APIRouter, Response, status
 from fastapi.responses import RedirectResponse
 from fastapi.exceptions import HTTPException
 
-from src.db.functions.users import login_user
+from src.db.user.functions import login_user
 from src.external.github_auth.auth import get_unknown_user
 from src.constants import (
     BACKEND_URL,
@@ -17,8 +17,8 @@ from src.constants import (
     OAUTH_REDIRECT_URI,
     PUBSUB_PUB,
 )
-from src.decorators import async_fail_gracefully
-from src.utils import get_redirect_url
+from src.helper.decorators import async_fail_gracefully
+from src.helper.utils import get_redirect_url
 
 router = APIRouter()
 

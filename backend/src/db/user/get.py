@@ -3,8 +3,8 @@ from typing import Any, Dict, Optional
 from pydantic.error_wrappers import ValidationError
 
 from src.db.mongodb import USERS
-from src.db.functions.compression import decompress
-from src.db.models.users import UserModel
+from src.db.user.compression import decompress
+from src.db.user.models import UserModel
 
 from src.helper.alru_cache import alru_cache
 

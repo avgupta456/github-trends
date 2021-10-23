@@ -3,14 +3,17 @@ from typing import Optional
 
 from fastapi.exceptions import HTTPException
 
-from src.db.functions.get import get_user_by_user_id
+from src.db.user.get import get_user_by_user_id
+from src.db.secret.functions import get_next_key
 
 from src.external.pubsub.templates import publish_to_topic
 from src.models.user.package import UserPackage
 
+from src.packaging.user import main as get_data
 from src.analytics.user.utils import trim_package
 
 from src.helper.alru_cache import alru_cache
+from src.helper.utils import use_time_range
 from src.constants import PUBSUB_PUB
 
 
@@ -54,3 +57,11 @@ async def get_user(
     # TODO: handle timezone_str here
 
     return (True, output)  # type: ignore
+
+
+@alru_cache()
+async def get_user_demo(user_id: str) -> UserPackage:
+    access_token = await get_next_key("demo")
+    start_date, end_date, _ = use_time_range("one_month", date.today(), date.today())
+    data = await get_data(user_id, access_token, start_date, end_date)
+    return (True, data)  # type: ignore
