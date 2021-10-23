@@ -39,7 +39,7 @@ const DemoScreen = () => {
                   userNameInput = input;
                 }}
                 placeholder="Enter Username"
-                className="w-full input input-bordered"
+                className="bg-white text-gray-700 w-full input input-bordered"
                 onChange={(e) => setUserName(e.target.value)}
                 onKeyPress={(e) => {
                   if (e.key === 'Enter') {
