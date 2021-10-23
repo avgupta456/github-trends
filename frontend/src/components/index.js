@@ -1,5 +1,13 @@
 import Button from './Button';
-import { Card, Image } from './Card';
+import { Card, Image, SvgInline } from './Card';
 import { Section, DateRangeSection, CheckboxSection } from './Customize';
 
-export { Button, Card, Image, Section, DateRangeSection, CheckboxSection };
+export {
+  Button,
+  Card,
+  SvgInline,
+  Image,
+  Section,
+  DateRangeSection,
+  CheckboxSection,
+};
