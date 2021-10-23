@@ -5,18 +5,35 @@ import { Link } from 'react-router-dom';
 import { Button, SvgInline } from '../../components';
 
 import { BACKEND_URL } from '../../constants';
+import { sleep } from '../../utils';
 
 const DemoScreen = () => {
   const [userName, setUserName] = useState('');
   const [selectedUserName, setSelectedUserName] = useState('');
+  const [loading, setLoading] = useState(false);
 
   let userNameInput;
-
-  console.log(`${BACKEND_URL}/user/svg/${selectedUserName}/repos?demo=true`);
 
   useEffect(() => {
     userNameInput.focus();
   }, [userNameInput]);
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    await sleep(100);
+    setSelectedUserName(userName);
+    setLoading(false);
+  };
+
+  const firstCardUrl =
+    selectedUserName.length > 0
+      ? `${BACKEND_URL}/user/svg/${selectedUserName}/langs?demo=true`
+      : `${BACKEND_URL}/user/svg/demo?card=langs`;
+
+  const secondCardUrl =
+    selectedUserName.length > 0
+      ? `${BACKEND_URL}/user/svg/${selectedUserName}/repos?demo=true`
+      : `${BACKEND_URL}/user/svg/demo?card=repos`;
 
   return (
     <div className="h-full py-8 flex justify-center items-center">
@@ -41,16 +58,16 @@ const DemoScreen = () => {
                 placeholder="Enter Username"
                 className="bg-white text-gray-700 w-full input input-bordered"
                 onChange={(e) => setUserName(e.target.value)}
-                onKeyPress={(e) => {
+                onKeyPress={async (e) => {
                   if (e.key === 'Enter') {
-                    setSelectedUserName(userName);
+                    handleSubmit();
                   }
                 }}
               />
               <Button
                 type="submit"
                 className="bg-blue-500 hover:bg-blue-700 text-white"
-                onClick={() => setSelectedUserName(userName)}
+                onClick={handleSubmit}
               >
                 Go
               </Button>
@@ -79,15 +96,15 @@ const DemoScreen = () => {
             <div className="w-1/2 p-2">
               <SvgInline
                 className="w-full h-full"
-                forceLoading={selectedUserName === ''}
-                url={`${BACKEND_URL}/user/svg/${selectedUserName}/langs?demo=true`}
+                url={firstCardUrl}
+                forceLoading={loading}
               />
             </div>
             <div className="w-1/2 p-2">
               <SvgInline
                 className="w-full h-full"
-                forceLoading={selectedUserName === ''}
-                url={`${BACKEND_URL}/user/svg/${selectedUserName}/repos?demo=true`}
+                url={secondCardUrl}
+                forceLoading={loading}
               />
             </div>
           </div>

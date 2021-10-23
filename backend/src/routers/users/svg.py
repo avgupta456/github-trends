@@ -10,7 +10,7 @@ from src.models.user.package import UserPackage
 
 from src.svg.top_langs import get_top_langs_svg
 from src.svg.top_repos import get_top_repos_svg
-from src.svg.error import get_loading_svg
+from src.svg.error import get_empty_demo_svg, get_loading_svg
 
 from src.helper.decorators import svg_fail_gracefully
 from src.helper.utils import use_time_range
@@ -90,3 +90,14 @@ async def get_user_repo_svg(
     # get top repos
     processed, commits_excluded = get_top_repos(output, loc_metric, include_private)
     return get_top_repos_svg(processed, time_str, loc_metric, commits_excluded)
+
+
+@router.get("/demo", status_code=status.HTTP_200_OK, response_class=HTMLResponse)
+@svg_fail_gracefully
+async def get_demo_svg(response: Response, card: str) -> Any:
+    if card == "langs":
+        return get_empty_demo_svg("Most Used Languages")
+    elif card == "repos":
+        return get_empty_demo_svg("Most Contributed Repositories")
+    else:
+        return get_empty_demo_svg(card)

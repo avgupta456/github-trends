@@ -14,7 +14,7 @@ style = """
         fill: #333;
     }
     .no-data {
-        font: 400 24px 'Segoe UI', Ubuntu, Sans-Serif;
+        font: 400 20px 'Segoe UI', Ubuntu, Sans-Serif;
         fill: #777;
     }
 
