@@ -4,6 +4,7 @@ from svgwrite import Drawing
 from src.constants import BACKEND_URL
 
 from src.svg.style import style
+from src.svg.template import get_template
 
 
 def get_error_svg() -> Drawing:
@@ -67,4 +68,21 @@ def get_loading_svg() -> Drawing:
         )
     )
 
+    return d
+
+
+def get_no_data_svg(header: str, subheader: str) -> Drawing:
+    d, dp = get_template(
+        width=300,
+        height=285,
+        padding=20,
+        header_text=header,
+        subheader_text=subheader,
+        debug=False,
+    )
+
+    d.add(d.image(BACKEND_URL + "/assets/error", insert=(85, 80), style="opacity: 50%"))
+    dp.add(d.text("No data to show", insert=(42, 220), class_="no-data"))
+
+    d.add(dp)
     return d
