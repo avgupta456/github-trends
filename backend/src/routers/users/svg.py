@@ -21,11 +21,7 @@ router = APIRouter()
 
 
 async def svg_base(
-    user_id: str,
-    start_date: date = date.today() - timedelta(30),
-    end_date: date = date.today(),
-    time_range: str = "one_year",
-    demo: bool = False,
+    user_id: str, start_date: date, end_date: date, time_range: str, demo: bool
 ) -> Tuple[Optional[UserPackage], str]:
     # process time_range, start_date, end_date
     time_range = "one_month" if demo else time_range
