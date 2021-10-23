@@ -72,7 +72,7 @@ const DemoScreen = () => {
         <div className="h-full w-full bg-gray-50 rounded-xl p-4">
           <h1 className="text-2xl font-bold text-gray-800 text-center mb-4">
             {selectedUserName === ''
-              ? 'Example Cards'
+              ? 'Enter a Username'
               : `Example Cards for ${selectedUserName}`}
           </h1>
           <div className="w-full flex flex-wrap">

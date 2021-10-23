@@ -13,6 +13,7 @@ const SvgInline = (props) => {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
+    setLoaded(false);
     fetch(props.url)
       .then((res) => res.text())
       .then(setSvg)
