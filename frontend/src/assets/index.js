@@ -1,3 +1,3 @@
-import { LightningSVG, GitHubSVG, HamburgerMenu } from './svgs';
+import { LightningSVG, GitHubSVG, HamburgerMenuSVG } from './svgs';
 
-export { LightningSVG, GitHubSVG, HamburgerMenu };
+export { LightningSVG, GitHubSVG, HamburgerMenuSVG };
