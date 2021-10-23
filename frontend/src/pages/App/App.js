@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
+import Header from './Header';
 import LandingScreen from '../Landing';
 import DemoScreen from '../Demo';
 import { LoginScreen, SignUpScreen } from '../Auth';
@@ -12,78 +12,11 @@ import HomeScreen from '../Home';
 import CustomizeScreen from '../Customize';
 import { NoMatchScreen, RedirectScreen } from '../Misc';
 
-import { logout as _logout } from '../../redux/actions/userActions';
-
-import { LightningSVG } from '../../assets';
-
 function App() {
-  const userId = useSelector((state) => state.user.userId);
-
-  const isAuthenticated = userId && userId.length > 0;
-
-  const dispatch = useDispatch();
-
-  const logout = () => dispatch(_logout());
-
   return (
     <div className="h-screen flex flex-col">
       <Router>
-        <div className="text-gray-100 bg-white shadow-md body-font sticky top-0 z-50">
-          <div className="container mx-auto flex flex-wrap p-5 flex-row items-center">
-            <nav className="flex flex-wrap items-center text-base justify-center">
-              <Link
-                to="/"
-                className="flex items-center title-font font-medium text-gray-700 mb-0 mr-8"
-              >
-                <LightningSVG />
-                <span className="ml-3 text-xl">GitHub Trends</span>
-              </Link>
-              {isAuthenticated ? (
-                <Link
-                  to="/user"
-                  className="px-4 py-1 mr-3 rounded bg-gray-100 hover:bg-gray-300 text-gray-700"
-                >
-                  Dashboard
-                </Link>
-              ) : (
-                <Link
-                  to="/demo"
-                  className="px-4 py-1 mr-3 rounded bg-gray-100 hover:bg-gray-300 text-gray-700"
-                >
-                  Demo
-                </Link>
-              )}
-            </nav>
-            <nav className="ml-auto flex flex-wrap items-center text-base justify-center">
-              {isAuthenticated ? (
-                <>
-                  <Link
-                    to="/"
-                    className="px-4 py-1 mr-3 rounded text-gray-700 bg-gray-100 hover:bg-gray-300"
-                    onClick={logout}
-                  >
-                    Sign Out
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <Link
-                    to="/login"
-                    className="px-4 py-1 mr-3 rounded text-gray-700 bg-gray-100 hover:bg-gray-300"
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    to="/signup"
-                    className="px-4 py-1 mr-3 rounded bg-blue-500 hover:bg-blue-700 hover:text-gray-300"
-                  >
-                    Sign Up
-                  </Link>
-                </>
-              )}
-            </nav>
-          </div>
-        </div>
+        <Header />
         <section className="flex-grow">
           <Switch>
             <Route path="/login" component={LoginScreen} />
