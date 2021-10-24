@@ -17,7 +17,7 @@ function App() {
     <div className="h-screen flex flex-col">
       <Router>
         <Header />
-        <section className="flex-grow">
+        <section className="bg-white text-gray-700 flex-grow">
           <Switch>
             <Route path="/login" component={LoginScreen} />
             <Route path="/signup" component={SignUpScreen} />

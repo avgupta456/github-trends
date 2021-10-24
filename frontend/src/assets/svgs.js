@@ -28,7 +28,7 @@ export const GitHubSVG = () => (
   </svg>
 );
 
-export const HamburgerMenu = () => (
+export const HamburgerMenuSVG = () => (
   <svg
     className="w-6 h-6 text-gray-500"
     x-show="!showMenu"

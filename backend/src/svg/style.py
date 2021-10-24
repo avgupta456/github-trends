@@ -13,6 +13,10 @@ style = """
         font: 400 11px 'Segoe UI', Ubuntu, Sans-Serif;
         fill: #333;
     }
+    .no-data {
+        font: 400 20px 'Segoe UI', Ubuntu, Sans-Serif;
+        fill: #777;
+    }
 
     @keyframes fadeInAnimation {
         from {

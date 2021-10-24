@@ -5,6 +5,7 @@ from typing import List, Tuple
 from svgwrite import Drawing
 
 from src.models.user.analytics import LanguageStats
+from src.svg.error import get_no_data_svg
 
 from src.svg.template import (
     get_lang_name_section,
@@ -22,17 +23,21 @@ def get_top_langs_svg(
     commits_excluded: int,
     compact: bool,
 ) -> Drawing:
+    header = "Most Used Languages"
     subheader = time_str
     if not use_percent:
         subheader += " | " + ("LOC Changed" if loc_metric == "changed" else "LOC Added")
     if commits_excluded > 50:
         subheader += " | " + str(commits_excluded) + " commits excluded"
 
+    if len(data) <= 1:
+        return get_no_data_svg(header, subheader)
+
     d, dp = get_template(
         width=300,
         height=175 if compact else 285,
         padding=20,
-        header_text="Most Used Languages",
+        header_text=header,
         subheader_text=subheader,
         debug=False,
     )
