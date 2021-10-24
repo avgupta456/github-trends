@@ -18,6 +18,12 @@ GitHub Trends dives deep into the GitHub API to bring you exciting and impactful
 
 Visit [githubtrends.io](https://www.githubtrends.io) to create an account and get started!
 
+Skeptical? Check out [the demo](https://www.githubtrends.io/demo)!
+
+![image](https://user-images.githubusercontent.com/16708871/138575034-28ed52c6-7c15-4766-a694-cb2be317d8c5.png)
+
+---
+
 ## API Workflow (Alpha)
 
 Alternatively, you can communicate directly with the API to create and customize your cards.
@@ -47,11 +53,15 @@ You will be prompted to allow access, and (hopefully) redirected to a success sc
 
 If you have previously authenticated with the public workflow, you can upgrade to the private workflow by using the private link. If you would like to delete your account, go to your GitHub settings and revoke the access token.
 
+---
+
 ## Available Cards
 
 - **Languages Card**: See your top languages over a given time interval, based on all commits to personal and open-source repositories. Visit [the documentation](https://github.com/avgupta456/github-trends#languages-card).
 
 - **Repositories Card**: See your top repositories based on LOC contributed over a given time period. This includes both personal and open-source repositories. Visit [the documentation](https://github.com/avgupta456/github-trends#repositories-card).
+
+---
 
 ## Languages Card
 
@@ -99,6 +109,8 @@ Embeddable Link:
 ```
 
 [![GitHub Trends SVG](https://api.githubtrends.io/user/svg/avgupta456/langs?time_range=one_year&include_private=true&loc_metric=changed)](https://githubtrends.io)
+
+---
 
 ## Repositories Card
 
