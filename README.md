@@ -23,7 +23,7 @@ Visit [githubtrends.io](https://www.githubtrends.io) to create an account and ge
 
 Skeptical? Check out [the demo](https://www.githubtrends.io/demo)!
 
-![image](https://user-images.githubusercontent.com/16708871/138575034-28ed52c6-7c15-4766-a694-cb2be317d8c5.png)
+![image](https://user-images.githubusercontent.com/16708871/138611082-105e4dbc-8a27-4f68-8045-f9d86c912429.png)
 
 ---
 
