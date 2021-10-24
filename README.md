@@ -47,7 +47,15 @@ You will be prompted to allow access, and (hopefully) redirected to a success sc
 
 If you have previously authenticated with the public workflow, you can upgrade to the private workflow by using the private link. If you would like to delete your account, go to your GitHub settings and revoke the access token.
 
-## Language Card
+## Available Cards
+
+- **Languages Card**: See your top languages over a given time interval, based on all commits to personal and open-source repositories. Visit [the documentation](https://github.com/avgupta456/github-trends#languages-card).
+
+- **Repositories Card**: See your top repositories based on LOC contributed over a given time period. This includes both personal and open-source repositories. Visit [the documentation](https://github.com/avgupta456/github-trends#repositories-card).
+
+## Languages Card
+
+See your top languages over a given time interval, based on all commits to personal and open-source repositories. Your top five languages will be displayed. Due to the approximations used internally, LOC metrics will be rounded to the nearest 100 lines.
 
 After authentication, visit
 
@@ -92,7 +100,7 @@ Embeddable Link:
 
 [![GitHub Trends SVG](https://api.githubtrends.io/user/svg/avgupta456/langs?time_range=one_year&include_private=true&loc_metric=changed)](https://githubtrends.io)
 
-## Repository Card
+## Repositories Card
 
 After authentication, visit
 
@@ -109,6 +117,8 @@ The following customization options are available:
 - `include_private`: determines if private contributions are included (requires private workflow). Default is `false`
 - `use_percent`: Valid if `compact=false`, determines if lines of code (default) or percentages are displayed. Default is `false`
 - `loc_metric`: Options are LOC added (`added`) and LOC changed (`changed`), default is `added`.
+
+### Examples
 
 Endpoint: `https://api.githubtrends.io/user/svg/avgupta456/repos?time_range=three_months&include_private=true`
 
