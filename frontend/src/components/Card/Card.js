@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
-import CopyIcon from 'mdi-react/ContentCopyIcon';
+import { MdContentCopy as CopyIcon } from 'react-icons/md';
 
 import { classnames } from '../../utils';
 import { BACKEND_URL } from '../../constants';
@@ -54,7 +54,7 @@ export const Image = ({ imageSrc, compact }) => {
         ) : (
           <>
             Copy Link
-            <CopyIcon className="ml-1" />
+            <CopyIcon className="w-4 h-4 ml-1" />
           </>
         )}
       </button>

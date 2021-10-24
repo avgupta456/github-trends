@@ -3,8 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
 
+import { HiOutlineLightningBolt as LightningIcon } from 'react-icons/hi';
+import { GiHamburgerMenu as HamburgerIcon } from 'react-icons/gi';
+
 import { logout as _logout } from '../../redux/actions/userActions';
-import { HamburgerMenuSVG, LightningSVG } from '../../assets';
 import { classnames } from '../../utils';
 
 const Header = () => {
@@ -24,7 +26,7 @@ const Header = () => {
           to="/"
           className="flex items-center title-font font-medium text-gray-700 mb-0 md:mr-8"
         >
-          <LightningSVG />
+          <LightningIcon className="w-5 h-5" />
           <span className="ml-3 text-xl">GitHub Trends</span>
         </Link>
         {/* Pages: Dashboard, Demo */}
@@ -81,7 +83,7 @@ const Header = () => {
             className="outline-none"
             onClick={() => setToggle(!toggle)}
           >
-            <HamburgerMenuSVG />
+            <HamburgerIcon className="w-6 h-6 text-gray-700" />
           </button>
         </div>
       </div>
