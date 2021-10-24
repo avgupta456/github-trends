@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import BounceLoader from 'react-spinners/BounceLoader';
-import GithubIcon from 'mdi-react/GithubIcon';
+import { FaGithub as GithubIcon } from 'react-icons/fa';
 
 import { Card } from '../../components';
 

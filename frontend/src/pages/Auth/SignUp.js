@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
 
-import GithubIcon from 'mdi-react/GithubIcon';
+import { FaGithub as GithubIcon } from 'react-icons/fa';
 
 import { Button } from '../../components';
 import previewImage from '../../assets/preview.png';

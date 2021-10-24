@@ -3,7 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
-import GithubIcon from 'mdi-react/GithubIcon';
+import { FaGithub as GithubIcon } from 'react-icons/fa';
 
 import { Button } from '../../components';
 import previewImage from '../../assets/preview.png';
@@ -40,7 +40,7 @@ const LandingScreen = () => {
             >
               <Button className="ml-4 text-gray-700 bg-gray-100 hover:bg-gray-200 flex items-center">
                 Star on
-                <GithubIcon className="ml-2 w-6 h-6" />
+                <GithubIcon className="ml-2 w-5 h-5" />
               </Button>
             </a>
           </div>
