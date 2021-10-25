@@ -21,7 +21,7 @@ GitHub Trends dives deep into the GitHub API to bring you exciting and impactful
 
 Visit [githubtrends.io](https://www.githubtrends.io) to create an account and get started!
 
-Skeptical? Check out [the demo](https://www.githubtrends.io/demo)!
+Have questions? Check out [the demo](https://www.githubtrends.io/demo)!
 
 ![image](https://user-images.githubusercontent.com/16708871/138611082-105e4dbc-8a27-4f68-8045-f9d86c912429.png)
 
