@@ -98,7 +98,7 @@ class CommitContribution(BaseModel):
 
 
 class Language(BaseModel):
-    color: str
+    color: Optional[str]
     additions: int
     deletions: int
 

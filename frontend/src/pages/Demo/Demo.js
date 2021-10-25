@@ -38,7 +38,7 @@ const DemoScreen = () => {
   return (
     <div className="h-full py-8 flex justify-center items-center">
       <div className="h-full w-1/3 pl-8">
-        <div className="h-full w-full bg-gray-50 rounded-xl p-4">
+        <div className="h-full w-full bg-gray-50 rounded-xl p-4 shadow">
           <h1 className="text-2xl font-bold text-gray-800 text-center mb-4">
             GitHub Trends Demo
           </h1>
@@ -86,7 +86,7 @@ const DemoScreen = () => {
         </div>
       </div>
       <div className="h-full w-2/3 px-8">
-        <div className="h-full w-full bg-gray-50 rounded-xl p-4">
+        <div className="h-full w-full bg-gray-50 rounded-xl p-4 shadow">
           <h1 className="text-2xl font-bold text-gray-800 text-center mb-4">
             {selectedUserName === ''
               ? 'Enter a Username'

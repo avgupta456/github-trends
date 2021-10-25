@@ -34,6 +34,9 @@ LOCAL_SUBSCRIBER = (  # based on name of Docker container
 # MONGODB
 MONGODB_PASSWORD = os.getenv("MONGODB_PASSWORD", "")
 
+# SVG
+DEFAULT_COLOR = "#858585"
+
 # SENTRY
 SENTRY_DSN = os.getenv("SENTRY_DSN", "")
 

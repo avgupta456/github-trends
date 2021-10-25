@@ -12,7 +12,7 @@ class LanguageStats(BaseModel):
 
 class RepoLanguage(BaseModel):
     lang: str
-    color: str
+    color: Optional[str]
     loc: int
 
 
