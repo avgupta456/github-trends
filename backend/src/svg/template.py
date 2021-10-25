@@ -7,9 +7,7 @@ from svgwrite.container import Group
 from svgwrite.shapes import Circle
 
 from src.svg.style import style
-
-
-DEFAULT_COLOR = "#858585"
+from src.constants import DEFAULT_COLOR
 
 
 def format_number(num: int) -> str:

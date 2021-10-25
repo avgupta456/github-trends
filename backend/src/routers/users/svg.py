@@ -29,7 +29,7 @@ async def svg_base(
 
     # fetch data, either using demo or user method
     if demo:
-        output = await get_user_demo(user_id)
+        output = await get_user_demo(user_id, start_date, end_date)
     else:
         output = await get_user(user_id, start_date, end_date)
 

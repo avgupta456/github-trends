@@ -2,6 +2,7 @@ from typing import Any, Dict, List, Tuple, Union
 
 from src.models.user.analytics import LanguageStats, RepoStats
 from src.models.user.package import UserPackage
+from src.constants import DEFAULT_COLOR
 
 dict_type = Dict[str, Union[str, int, float]]
 
@@ -24,7 +25,7 @@ def get_top_languages(
     languages_list: List[dict_type] = [
         {
             "lang": lang,
-            "color": stats.color,
+            "color": stats.color or DEFAULT_COLOR,
             "loc": loc_metric_func(loc_metric, stats.additions, stats.deletions),
         }
         for lang, stats in raw_languages.items()

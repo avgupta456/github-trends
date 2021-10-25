@@ -13,7 +13,6 @@ from src.packaging.user import main as get_data
 from src.analytics.user.utils import trim_package
 
 from src.helper.alru_cache import alru_cache
-from src.helper.utils import use_time_range
 from src.constants import PUBSUB_PUB
 
 
@@ -60,8 +59,7 @@ async def get_user(
 
 
 @alru_cache()
-async def get_user_demo(user_id: str) -> UserPackage:
+async def get_user_demo(user_id: str, start_date: date, end_date: date) -> UserPackage:
     access_token = await get_next_key("demo")
-    start_date, end_date, _ = use_time_range("one_month", date.today(), date.today())
     data = await get_data(user_id, access_token, start_date, end_date)
     return (True, data)  # type: ignore
