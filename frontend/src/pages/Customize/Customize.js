@@ -72,7 +72,7 @@ const Customize = () => {
             specific languages or repositories, control the theme, and more!
           </p>
         </div>
-        <div className="min-h-screen w-2/5 pr-10 p-10 rounded bg-gray-200">
+        <div className="min-h-screen md:w-2/5 pr-10 p-10 rounded bg-gray-200">
           <DateRangeSection
             selectedTimeRange={selectedTimeRange}
             setSelectedTimeRange={setSelectedTimeRange}
@@ -96,9 +96,8 @@ const Customize = () => {
           {suffix === 'langs' && !useCompact && (
             <CheckboxSection
               title="Percent vs LOC"
-              text={`Use absolute LOC (default) or percent to rank your top ${
-                suffix === 'langs' ? 'languages' : 'repositories'
-              }.`}
+              text={`Use absolute LOC (default) or percent to rank your top ${suffix === 'langs' ? 'languages' : 'repositories'
+                }.`}
               question="Use percent?"
               variable={usePercent}
               setVariable={setUsePercent}
@@ -106,17 +105,17 @@ const Customize = () => {
           )}
           {(suffix === 'repos' ||
             (suffix === 'langs' && usePercent === false)) && (
-            <CheckboxSection
-              title="LOC Metric"
-              text="By default, LOC are measured as Added: (+) - (-). Alternatively, you can use Changed: (+) + (-)"
-              question="Use LOC changed?"
-              variable={useLocChanged}
-              setVariable={setUseLocChanged}
-            />
-          )}
+              <CheckboxSection
+                title="LOC Metric"
+                text="By default, LOC are measured as Added: (+) - (-). Alternatively, you can use Changed: (+) + (-)"
+                question="Use LOC changed?"
+                variable={useLocChanged}
+                setVariable={setUseLocChanged}
+              />
+            )}
         </div>
         <div className="lg:w-3/5 md:w-1/2 object-center">
-          <div className="w-3/5 mx-auto h-full flex flex-col justify-center">
+          <div className="sm:w-full md:w-3/5 mx-auto h-full flex flex-col justify-center">
             <Image imageSrc={fullSuffix} compact={useCompact} />
           </div>
         </div>
