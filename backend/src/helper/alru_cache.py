@@ -4,7 +4,7 @@ from typing import Any, Callable, Dict, List, Tuple
 
 
 # NOTE: return None to avoid caching
-def alru_cache(max_size: int = 128, ttl: timedelta = timedelta(hours=1)):
+def alru_cache(max_size: int = 128, ttl: timedelta = timedelta(minutes=5)):
     def decorator(func: Callable[..., Any]) -> Any:
         cache: Dict[Any, Tuple[datetime, Any]] = {}
         keys: List[Any] = []
