@@ -21,7 +21,12 @@ router = APIRouter()
 
 
 async def svg_base(
-    user_id: str, start_date: date, end_date: date, time_range: str, demo: bool
+    user_id: str,
+    start_date: date,
+    end_date: date,
+    time_range: str,
+    demo: bool,
+    no_cache: bool = False,
 ) -> Tuple[Optional[UserPackage], str]:
     # process time_range, start_date, end_date
     time_range = "one_month" if demo else time_range
@@ -29,9 +34,9 @@ async def svg_base(
 
     # fetch data, either using demo or user method
     if demo:
-        output = await get_user_demo(user_id, start_date, end_date)
+        output = await get_user_demo(user_id, start_date, end_date, no_cache=no_cache)
     else:
-        output = await get_user(user_id, start_date, end_date)
+        output = await get_user(user_id, start_date, end_date, no_cache=no_cache)
 
     return output, time_str
 
@@ -52,8 +57,11 @@ async def get_user_lang_svg(
     loc_metric: str = "added",
     compact: bool = False,
     demo: bool = False,
+    no_cache: bool = False,
 ) -> Any:
-    output, time_str = await svg_base(user_id, start_date, end_date, time_range, demo)
+    output, time_str = await svg_base(
+        user_id, start_date, end_date, time_range, demo, no_cache
+    )
 
     # if no data, return loading svg
     if output is None:
@@ -80,8 +88,11 @@ async def get_user_repo_svg(
     include_private: bool = False,
     loc_metric: str = "added",
     demo: bool = False,
+    no_cache: bool = False,
 ) -> Any:
-    output, time_str = await svg_base(user_id, start_date, end_date, time_range, demo)
+    output, time_str = await svg_base(
+        user_id, start_date, end_date, time_range, demo, no_cache
+    )
 
     # if no data, return loading svg
     if output is None:

@@ -27,17 +27,16 @@ async def get_user_raw(
 ) -> UserPackage:
     new_access_token: str = access_token if access_token else ""
     if not access_token:
-        db_user = await get_user_by_user_id(user_id, use_cache=False)
+        db_user = await get_user_by_user_id(user_id, no_cache=True)
         if db_user is None or db_user.access_token == "":
             raise LookupError("Invalid UserId")
         new_access_token = db_user.access_token
 
     start_query_limit = get_query_limit(access_token=new_access_token)
     start_date, end_date, _ = use_time_range(time_range, start_date, end_date)
-    print(start_date, end_date, user_id, new_access_token, timezone_str)
     data = await get_data(user_id, new_access_token, start_date, end_date, timezone_str)
     end_query_limit = get_query_limit(access_token=new_access_token)
-    print("query limit used", start_query_limit - end_query_limit)
-    print("query limit remaining", end_query_limit)
+    print("Query Limit Used", start_query_limit - end_query_limit)
+    print("Query Limit Remaining", end_query_limit)
 
     return data

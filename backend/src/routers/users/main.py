@@ -32,5 +32,6 @@ async def get_user_endpoint(
     start_date: date = date.today() - timedelta(365),
     end_date: date = date.today(),
     timezone_str: str = "US/Eastern",
+    no_cache: bool = False,
 ) -> Optional[UserPackage]:
-    return await get_user(user_id, start_date, end_date)
+    return await get_user(user_id, start_date, end_date, no_cache=no_cache)
