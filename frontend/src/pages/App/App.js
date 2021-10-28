@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
@@ -11,8 +12,27 @@ import { LoginScreen, SignUpScreen } from '../Auth';
 import HomeScreen from '../Home';
 import CustomizeScreen from '../Customize';
 import { NoMatchScreen, RedirectScreen } from '../Misc';
+import { setPrivateAccess as _setPrivateAccess } from '../../redux/actions/userActions';
+import { getUserMetadata } from '../../api';
 
 function App() {
+  const userId = useSelector((state) => state.user.userId);
+  // const privateAccess = useSelector((state) => state.user.privateAccess);
+
+  const dispatch = useDispatch();
+  const setPrivateAccess = (access) => dispatch(_setPrivateAccess(access));
+
+  useEffect(async () => {
+    if (userId && userId.length > 0) {
+      const result = await getUserMetadata(userId);
+      if (result !== null && result.private_access !== undefined) {
+        setPrivateAccess(result.private_access);
+      }
+    }
+  }, [userId]);
+
+  // console.log(userId, privateAccess);
+
   return (
     <div className="h-screen flex flex-col">
       <Router>

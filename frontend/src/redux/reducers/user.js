@@ -2,6 +2,7 @@ import * as types from '../actions/userActions';
 
 const initialState = {
   userId: JSON.parse(localStorage.getItem('userId')) || null,
+  privateAccess: null,
 };
 
 export default (state = initialState, action) => {
@@ -17,6 +18,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         userId: null,
+      };
+    case types.SET_PRIVATE_ACCESS:
+      return {
+        ...state,
+        privateAccess: action.payload.privateAccess,
       };
     default:
       return state;

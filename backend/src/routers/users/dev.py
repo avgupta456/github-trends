@@ -32,7 +32,6 @@ async def get_user_raw(
         if db_user is None or db_user.access_token == "":
             raise LookupError("Invalid UserId")
         new_access_token = db_user.access_token
-        print("Private Access", db_user.private_access)
 
     start_query_limit = get_query_limit(access_token=new_access_token)
     start_date, end_date, _ = use_time_range(time_range, start_date, end_date)

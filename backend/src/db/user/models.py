@@ -20,13 +20,10 @@ Database Models
 """
 
 
-class UserModel(BaseModel):
+class UserMetadata(BaseModel):
     user_id: str
     access_token: str
     private_access: Optional[bool]
-    last_updated: Optional[datetime]
-    raw_data: Optional[UserPackage]
-    lock: Optional[bool]
 
     class Config:
         validate_assignment = True
@@ -34,3 +31,9 @@ class UserModel(BaseModel):
     @validator("private_access", pre=True, always=True)
     def set_name(cls, private_access: bool):
         return False if private_access is None else private_access
+
+
+class UserModel(UserMetadata):
+    last_updated: Optional[datetime]
+    raw_data: Optional[UserPackage]
+    lock: Optional[bool]

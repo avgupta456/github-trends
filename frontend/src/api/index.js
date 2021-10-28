@@ -1,3 +1,3 @@
-import { authenticate } from './user';
+import { authenticate, getUserMetadata } from './user';
 
-export { authenticate };
+export { authenticate, getUserMetadata };
