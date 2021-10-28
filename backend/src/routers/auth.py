@@ -66,7 +66,7 @@ def redirect_public(user_id: Optional[str] = None) -> Any:
     return RedirectResponse(get_redirect_url(private=False, user_id=user_id))
 
 
-@router.get("/singup/private")
+@router.get("/signup/private")
 def redirect_private(user_id: Optional[str] = None) -> Any:
     return RedirectResponse(get_redirect_url(private=True, user_id=user_id))
 

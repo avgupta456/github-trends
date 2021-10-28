@@ -23,6 +23,6 @@ Database Models
 class UserModel(BaseModel):
     user_id: str
     access_token: str
-    last_updated: datetime
+    last_updated: Optional[datetime]
     raw_data: Optional[UserPackage]
-    lock: bool
+    lock: Optional[bool]
