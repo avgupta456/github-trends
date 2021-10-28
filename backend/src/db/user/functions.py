@@ -64,3 +64,9 @@ async def update_user(user_id: str, raw_data: Optional[UserPackage] = None) -> N
             {"user_id": user_id},
             {"$set": {"last_updated": datetime.now(), "raw_data": compressed_data}},
         )
+
+
+async def delete_user(user_id: str) -> bool:
+    result: Any = await USERS.delete_one({"user_id": user_id})  # type: ignore
+    print(user_id, result)
+    return True

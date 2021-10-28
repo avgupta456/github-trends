@@ -4,7 +4,9 @@ from typing import Tuple, Optional
 from src.constants import OAUTH_CLIENT_ID, OAUTH_REDIRECT_URI
 
 
-def get_redirect_url(private: bool = False, user_id: Optional[str] = None) -> str:
+def get_redirect_url(
+    prefix: str = "", private: bool = False, user_id: Optional[str] = None
+) -> str:
     url = (
         "https://github.com/login/oauth/authorize?client_id="
         + OAUTH_CLIENT_ID
@@ -12,11 +14,18 @@ def get_redirect_url(private: bool = False, user_id: Optional[str] = None) -> st
         + OAUTH_REDIRECT_URI
         + "/redirect"
     )
+
+    # add prefix to redirect to different backend routes
+    if len(prefix) > 0:
+        url += "/" + prefix
+
+    # add private flag to request correct permissions
     if private:
         url += "?private_access=True&scope=user,repo"
     else:
-        url += "/?private_access=False"
+        url += "?private_access=False"
 
+    # add user_id to hint if provided
     if user_id is not None:
         url += "&login=" + user_id
 

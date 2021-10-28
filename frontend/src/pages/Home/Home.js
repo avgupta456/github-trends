@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { useHistory } from 'react-router-dom';
+
 import BounceLoader from 'react-spinners/BounceLoader';
 import { FaGithub as GithubIcon } from 'react-icons/fa';
 
@@ -12,6 +14,8 @@ import { login as _login } from '../../redux/actions/userActions';
 import { REDIRECT_URI } from '../../constants';
 
 const HomeScreen = () => {
+  const history = useHistory();
+
   const [isLoading, setIsLoading] = useState(false);
 
   const userId = useSelector((state) => state.user.userId);
@@ -25,10 +29,13 @@ const HomeScreen = () => {
   useEffect(async () => {
     // After requesting Github access, Github redirects back to your app with a code parameter
     const url = window.location.href;
-    const hasCode = url.includes('?code=');
+
+    if (url.includes('error=')) {
+      history.push('/');
+    }
 
     // If Github API returns the code parameter
-    if (hasCode) {
+    if (url.includes('code=')) {
       const privateAccess = url.includes('private');
       const newUrl = url.split('?code=');
       window.history.pushState({}, null, REDIRECT_URI);

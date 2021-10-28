@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Optional
+from typing import Optional
 
 import logging
 import requests
@@ -8,7 +8,7 @@ from fastapi import APIRouter, Response, status
 from fastapi.responses import RedirectResponse
 from fastapi.exceptions import HTTPException
 
-from src.db.user.functions import login_user
+from src.db.user.functions import delete_user, login_user
 from src.external.github_auth.auth import get_unknown_user
 from src.constants import (
     BACKEND_URL,
@@ -59,17 +59,17 @@ async def authenticate(code: str, private_access: bool = False) -> str:
 @async_fail_gracefully
 async def authenticate_endpoint(
     response: Response, code: str, private_access: bool = False
-) -> Any:
+) -> str:
     return await authenticate(code, private_access)
 
 
 @router.get("/signup/public")
-def redirect_public(user_id: Optional[str] = None) -> Any:
+def redirect_public(user_id: Optional[str] = None) -> RedirectResponse:
     return RedirectResponse(get_redirect_url(private=False, user_id=user_id))
 
 
 @router.get("/signup/private")
-def redirect_private(user_id: Optional[str] = None) -> Any:
+def redirect_private(user_id: Optional[str] = None) -> RedirectResponse:
     return RedirectResponse(get_redirect_url(private=True, user_id=user_id))
 
 
@@ -93,3 +93,18 @@ def redirect_success(user_id: str) -> str:
 @router.get("/redirect_failure")
 def redirect_failure() -> str:
     return "Unknown Error. Please try again later."
+
+
+@router.get("/delete/{user_id}")
+async def delete_account_auth(user_id: str) -> RedirectResponse:
+    return RedirectResponse(
+        get_redirect_url(prefix="delete/" + user_id, private=False, user_id=user_id)
+    )
+
+
+@router.get("/redirect/delete/{user_id}")
+async def delete_account(user_id: str) -> RedirectResponse:
+    await delete_user(user_id)
+    return RedirectResponse(
+        "https://github.com/settings/connections/applications/" + OAUTH_CLIENT_ID
+    )
