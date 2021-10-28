@@ -12,14 +12,14 @@ poetry run pre-commit install
 Navigate to localhost:8000
 
 ```
-poetry run uvicorn main:app --reload
+yarn start-pub
+yarn start-sub
 ```
 
 ## Test with Code Coverage
 
 ```
-poetry run coverage -m unittest
-poetry run coverage report
+yarn test
 ```
 
 View coverage with GitHub badge or on coveralls.io
@@ -29,7 +29,7 @@ View coverage with GitHub badge or on coveralls.io
 If a new requirement has been added, make sure to update the requirements.txt
 
 ```
-poetry export -f requirements.txt --output requirements.txt --without-hashes # generate requirements.txt
+yarn set-reqs
 ```
 
 Then, just commit on the main branch (Google Cloud Run takes care of the rest)
