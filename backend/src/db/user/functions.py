@@ -6,9 +6,18 @@ from src.db.mongodb import USERS
 from src.db.user.compression import compress
 
 
-async def login_user(user_id: str, access_token: str) -> str:
+async def login_user(
+    user_id: str, access_token: str, private_access: bool = False
+) -> str:
     curr_user: Optional[Dict[str, Any]] = await USERS.find_one({"user_id": user_id})  # type: ignore
-    raw_user: Dict[str, Any] = {"user_id": user_id, "access_token": access_token}
+    raw_user: Dict[str, Any] = {
+        "user_id": user_id,
+        "access_token": access_token,
+    }
+
+    # update private access without downgrading
+    curr_private_access = curr_user.get("private_access", False) if curr_user else False
+    raw_user["private_access"] = curr_private_access or private_access
 
     if curr_user is None:
         raw_user["last_updated"] = datetime.now()

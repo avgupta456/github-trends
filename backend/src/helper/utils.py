@@ -13,9 +13,13 @@ def get_redirect_url(private: bool = False, user_id: Optional[str] = None) -> st
         + "/redirect"
     )
     if private:
-        url += "&scope=user,repo"
+        url += "?private_access=True&scope=user,repo"
+    else:
+        url += "/?private_access=False"
+
     if user_id is not None:
         url += "&login=" + user_id
+
     return url
 
 

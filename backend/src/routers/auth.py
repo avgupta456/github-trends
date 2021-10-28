@@ -29,7 +29,7 @@ class OAuthError(Exception):
     pass
 
 
-async def authenticate(code: str) -> str:
+async def authenticate(code: str, private_access: bool = False) -> str:
     start = datetime.now()
     if not PUBSUB_PUB:
         raise HTTPException(400, "Incorrect Server, must use Publisher")
@@ -49,7 +49,7 @@ async def authenticate(code: str) -> str:
     access_token = r.text.split("&")[0].split("=")[1]
     user_id = get_unknown_user(access_token)
 
-    await login_user(user_id, access_token)
+    await login_user(user_id, access_token, private_access)
 
     print("OAuth SignUp", datetime.now() - start)
     return user_id
@@ -57,8 +57,10 @@ async def authenticate(code: str) -> str:
 
 @router.post("/login/{code}", status_code=status.HTTP_200_OK)
 @async_fail_gracefully
-async def authenticate_endpoint(response: Response, code: str) -> Any:
-    return await authenticate(code)
+async def authenticate_endpoint(
+    response: Response, code: str, private_access: bool = False
+) -> Any:
+    return await authenticate(code, private_access)
 
 
 @router.get("/signup/public")
@@ -72,9 +74,11 @@ def redirect_private(user_id: Optional[str] = None) -> Any:
 
 
 @router.get("/redirect")
-async def redirect_return(code: str = "") -> RedirectResponse:
+async def redirect_return(
+    code: str = "", private_access: bool = False
+) -> RedirectResponse:
     try:
-        user_id = await authenticate(code=code)  # type: ignore
+        user_id = await authenticate(code=code, private_access=private_access)  # type: ignore
         return RedirectResponse(BACKEND_URL + "/auth/redirect_success/" + user_id)
     except Exception as e:
         logging.exception(e)

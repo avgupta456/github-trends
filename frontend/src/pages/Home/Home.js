@@ -9,6 +9,7 @@ import { Card } from '../../components';
 
 import { authenticate } from '../../api';
 import { login as _login } from '../../redux/actions/userActions';
+import { REDIRECT_URI } from '../../constants';
 
 const HomeScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -28,10 +29,11 @@ const HomeScreen = () => {
 
     // If Github API returns the code parameter
     if (hasCode) {
+      const privateAccess = url.includes('private');
       const newUrl = url.split('?code=');
-      window.history.pushState({}, null, newUrl[0]);
+      window.history.pushState({}, null, REDIRECT_URI);
       setIsLoading(true);
-      const newUserId = await authenticate(newUrl[1]);
+      const newUserId = await authenticate(newUrl[1], privateAccess);
       login(newUserId);
       setIsLoading(false);
     }

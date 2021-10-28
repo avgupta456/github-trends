@@ -4,6 +4,7 @@ from typing import Optional
 from fastapi import APIRouter, Response, status
 
 from src.db.user.get import get_user_by_user_id
+from src.db.user.models import UserModel
 from src.external.github_api.graphql.template import get_query_limit
 from src.packaging.user import main as get_data
 from src.models.user.package import UserPackage
@@ -27,10 +28,11 @@ async def get_user_raw(
 ) -> UserPackage:
     new_access_token: str = access_token if access_token else ""
     if not access_token:
-        db_user = await get_user_by_user_id(user_id, no_cache=True)
+        db_user: UserModel = await get_user_by_user_id(user_id, no_cache=True)
         if db_user is None or db_user.access_token == "":
             raise LookupError("Invalid UserId")
         new_access_token = db_user.access_token
+        print("Private Access", db_user.private_access)
 
     start_query_limit = get_query_limit(access_token=new_access_token)
     start_date, end_date, _ = use_time_range(time_range, start_date, end_date)
