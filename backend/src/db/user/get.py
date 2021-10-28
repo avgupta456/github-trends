@@ -16,7 +16,7 @@ Raw Get Methods
 
 @alru_cache(max_size=128)
 async def get_user_by_user_id(
-    user_id: str, use_cache: bool = True
+    user_id: str, ignore_cache: bool = False, update_cache: bool = False
 ) -> Optional[UserModel]:
     user: Optional[Dict[str, Any]] = await USERS.find_one({"user_id": user_id})  # type: ignore
 
@@ -40,7 +40,7 @@ async def get_user_by_user_id(
 
 @alru_cache(max_size=128)
 async def get_user_by_access_token(
-    access_token: str, use_cache: bool = True
+    access_token: str, ignore_cache: bool = False, update_cache: bool = False
 ) -> Optional[UserModel]:
     user: Optional[Dict[str, Any]] = await USERS.find_one(  # type: ignore
         {"access_token": access_token}

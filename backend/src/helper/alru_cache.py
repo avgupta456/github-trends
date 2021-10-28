@@ -66,6 +66,3 @@ def alru_cache(max_size: int = 128, ttl: timedelta = timedelta(minutes=5)):
         return wrapper
 
     return decorator
-
-
-# TODO: alru_cache() testing

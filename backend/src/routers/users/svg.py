@@ -38,7 +38,9 @@ async def svg_base(
             user_id, start_date, end_date, ignore_cache=no_cache, update_cache=no_cache
         )
     else:
-        output = await get_user(user_id, start_date, end_date)
+        output = await get_user(
+            user_id, start_date, end_date, ignore_cache=no_cache, update_cache=no_cache
+        )
 
     return output, time_str
 

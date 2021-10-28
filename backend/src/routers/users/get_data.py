@@ -22,11 +22,13 @@ def validate_raw_data(data: Optional[UserPackage]) -> bool:
     return data is not None and data.contribs is not None
 
 
-async def _get_user(user_id: str) -> Optional[UserPackage]:
+async def _get_user(user_id: str, no_cache: bool = False) -> Optional[UserPackage]:
     if not PUBSUB_PUB:
         raise HTTPException(400, "")
 
-    db_user: Optional[UserModel] = await get_user_by_user_id(user_id)
+    db_user: Optional[UserModel] = await get_user_by_user_id(
+        user_id, ignore_cache=no_cache, update_cache=no_cache
+    )
     if db_user is None or db_user.access_token == "":
         raise LookupError("Invalid UserId")
 
@@ -49,9 +51,13 @@ async def _get_user(user_id: str) -> Optional[UserPackage]:
 
 @alru_cache(max_size=128)
 async def get_user(
-    user_id: str, start_date: date, end_date: date, use_cache: bool = True
+    user_id: str,
+    start_date: date,
+    end_date: date,
+    ignore_cache: bool = False,
+    update_cache: bool = False,
 ) -> Optional[UserPackage]:
-    output = await _get_user(user_id)
+    output = await _get_user(user_id, no_cache=(ignore_cache and update_cache))
 
     if output is None:
         return (False, None)  # type: ignore
