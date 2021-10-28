@@ -34,13 +34,9 @@ async def svg_base(
 
     # fetch data, either using demo or user method
     if demo:
-        output = await get_user_demo(
-            user_id, start_date, end_date, ignore_cache=no_cache, update_cache=no_cache
-        )
+        output = await get_user_demo(user_id, start_date, end_date, no_cache=no_cache)
     else:
-        output = await get_user(
-            user_id, start_date, end_date, ignore_cache=no_cache, update_cache=no_cache
-        )
+        output = await get_user(user_id, start_date, end_date, no_cache=no_cache)
 
     return output, time_str
 

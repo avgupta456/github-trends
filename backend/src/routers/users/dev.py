@@ -27,9 +27,7 @@ async def get_user_raw(
 ) -> UserPackage:
     new_access_token: str = access_token if access_token else ""
     if not access_token:
-        db_user = await get_user_by_user_id(
-            user_id, ignore_cache=True, update_cache=True
-        )
+        db_user = await get_user_by_user_id(user_id, no_cache=True)
         if db_user is None or db_user.access_token == "":
             raise LookupError("Invalid UserId")
         new_access_token = db_user.access_token

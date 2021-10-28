@@ -22,6 +22,4 @@ async def create_db_user(response: Response, user_id: str, access_token: str) ->
 async def get_db_user(
     response: Response, user_id: str, no_cache: bool = False
 ) -> Optional[DBUserModel]:
-    return await get_user_by_user_id(
-        user_id, ignore_cache=no_cache, update_cache=no_cache
-    )
+    return await get_user_by_user_id(user_id, no_cache=no_cache)

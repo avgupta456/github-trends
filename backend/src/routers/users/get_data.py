@@ -26,9 +26,7 @@ async def _get_user(user_id: str, no_cache: bool = False) -> Optional[UserPackag
     if not PUBSUB_PUB:
         raise HTTPException(400, "")
 
-    db_user: Optional[UserModel] = await get_user_by_user_id(
-        user_id, ignore_cache=no_cache, update_cache=no_cache
-    )
+    db_user: Optional[UserModel] = await get_user_by_user_id(user_id, no_cache=no_cache)
     if db_user is None or db_user.access_token == "":
         raise LookupError("Invalid UserId")
 
@@ -54,10 +52,9 @@ async def get_user(
     user_id: str,
     start_date: date,
     end_date: date,
-    ignore_cache: bool = False,
-    update_cache: bool = False,
+    no_cache: bool = False,
 ) -> Optional[UserPackage]:
-    output = await _get_user(user_id, no_cache=(ignore_cache and update_cache))
+    output = await _get_user(user_id, no_cache=no_cache)
 
     if output is None:
         return (False, None)  # type: ignore
@@ -71,14 +68,8 @@ async def get_user(
 
 @alru_cache()
 async def get_user_demo(
-    user_id: str,
-    start_date: date,
-    end_date: date,
-    ignore_cache: bool = False,
-    update_cache: bool = False,
+    user_id: str, start_date: date, end_date: date, no_cache: bool = False
 ) -> UserPackage:
-    access_token = await get_next_key(
-        "demo", override_cache=(ignore_cache and update_cache)
-    )
+    access_token = await get_next_key("demo", no_cache=no_cache)
     data = await get_data(user_id, access_token, start_date, end_date)
     return (True, data)  # type: ignore

@@ -4,10 +4,8 @@ from typing import Any, Callable, Dict, List, Tuple
 
 
 # NOTE: return flag = False to avoid caching
-# considers two optional parameters
-# if ignore_cache=True provided, bypass cache system and do not save to cache
-# if ignore_cache=True and update_cache=True, bypass cache and save result to cache
-# otherwise, use cache normally
+# considers one optional parameter, no_cache
+# if true, bypass cache system, otherwise use normally
 def alru_cache(max_size: int = 128, ttl: timedelta = timedelta(minutes=5)):
     def decorator(func: Callable[..., Any]) -> Any:
         cache: Dict[Any, Tuple[datetime, Any]] = {}
@@ -45,17 +43,11 @@ def alru_cache(max_size: int = 128, ttl: timedelta = timedelta(minutes=5)):
         @wraps(func)
         async def wrapper(*args: List[Any], **kwargs: Dict[str, Any]) -> Any:
             key = tuple(args), frozenset(
-                {
-                    k: v
-                    for k, v in kwargs.items()
-                    if k not in ["ignore_cache", "update_cache"]
-                }
+                {k: v for k, v in kwargs.items() if k not in ["no_cache"]}
             )
-            if "ignore_cache" in kwargs and kwargs["ignore_cache"]:
+            if "no_cache" in kwargs and kwargs["no_cache"]:
                 (flag, value) = await func(*args, **kwargs)
-                if "update_cache" in kwargs and kwargs["update_cache"]:
-                    return update_cache_and_return(key, flag, value)
-                return value
+                return update_cache_and_return(key, flag, value)
 
             if in_cache(key):
                 return cache[key][1]
