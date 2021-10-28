@@ -64,7 +64,15 @@ async def get_user(
 
 
 @alru_cache()
-async def get_user_demo(user_id: str, start_date: date, end_date: date) -> UserPackage:
-    access_token = await get_next_key("demo")
+async def get_user_demo(
+    user_id: str,
+    start_date: date,
+    end_date: date,
+    ignore_cache: bool = False,
+    update_cache: bool = False,
+) -> UserPackage:
+    access_token = await get_next_key(
+        "demo", override_cache=(ignore_cache and update_cache)
+    )
     data = await get_data(user_id, access_token, start_date, end_date)
     return (True, data)  # type: ignore

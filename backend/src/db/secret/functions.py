@@ -7,7 +7,9 @@ from src.helper.alru_cache import alru_cache
 
 
 @alru_cache()
-async def get_keys(project: str) -> List[str]:
+async def get_keys(
+    project: str, ignore_cache: bool = False, update_cache: bool = False
+) -> List[str]:
     secrets: Optional[Dict[str, Any]] = await SECRETS.find_one({"project": project})  # type: ignore
     if secrets is None:
         return (False, [])  # type: ignore
@@ -16,8 +18,10 @@ async def get_keys(project: str) -> List[str]:
     return (True, tokens)  # type: ignore
 
 
-async def get_next_key(project: str) -> str:
-    keys: List[str] = await get_keys(project)
+async def get_next_key(project: str, override_cache: bool = False) -> str:
+    keys: List[str] = await get_keys(
+        project, ignore_cache=override_cache, update_cache=override_cache
+    )
     if len(keys) == 0:
         return ""
 
