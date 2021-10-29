@@ -27,14 +27,7 @@ async def login_user(user_id: str, access_token: str) -> str:
 async def lock_user(user_id: str) -> None:
     await USERS.update_one(  # type: ignore
         {"user_id": user_id},
-        {"$set": {"lock": True}},
-    )
-
-
-async def unlock_user(user_id: str) -> None:
-    await USERS.update_one(  # type: ignore
-        {"user_id": user_id},
-        {"$set": {"lock": False}},
+        {"$set": {"lock": datetime.now()}},
     )
 
 

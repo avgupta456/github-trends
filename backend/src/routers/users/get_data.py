@@ -36,7 +36,11 @@ async def _get_user(user_id: str, no_cache: bool = False) -> Optional[UserPackag
 
     time_diff = datetime.now() - last_updated
     if time_diff > timedelta(hours=6) or not validate_raw_data(db_user.raw_data):
-        if db_user.lock is None or not db_user.lock:
+        last_updated: datetime = datetime(1970, 1, 1)
+        if db_user.lock is not None:
+            last_updated = db_user.lock
+        time_diff = datetime.now() - last_updated
+        if time_diff > timedelta(minutes=1):
             publish_to_topic(
                 "user", {"user_id": user_id, "access_token": db_user.access_token}
             )
