@@ -11,12 +11,16 @@ import DemoScreen from '../Demo';
 import { LoginScreen, SignUpScreen } from '../Auth';
 import HomeScreen from '../Home';
 import CustomizeScreen from '../Customize';
+import SettingsScreen from '../Settings';
 import { NoMatchScreen, RedirectScreen } from '../Misc';
+
 import { setPrivateAccess as _setPrivateAccess } from '../../redux/actions/userActions';
 import { getUserMetadata } from '../../api';
 
 function App() {
   const userId = useSelector((state) => state.user.userId);
+  const isAuthenticated = userId && userId.length > 0;
+
   // const privateAccess = useSelector((state) => state.user.privateAccess);
 
   const dispatch = useDispatch();
@@ -39,12 +43,21 @@ function App() {
         <Header />
         <section className="bg-white text-gray-700 flex-grow">
           <Switch>
-            <Route path="/login" component={LoginScreen} />
-            <Route path="/signup" component={SignUpScreen} />
+            {!isAuthenticated && (
+              <Route path="/login" component={LoginScreen} />
+            )}
+            {!isAuthenticated && (
+              <Route path="/signup" component={SignUpScreen} />
+            )}
             <Route path="/demo" component={DemoScreen} />
             <Route path="/user/redirect" component={RedirectScreen} />
             <Route path="/user" component={HomeScreen} />
-            <Route path="/customize/:suffix" component={CustomizeScreen} />
+            {isAuthenticated && (
+              <Route path="/customize/:suffix" component={CustomizeScreen} />
+            )}
+            {isAuthenticated && (
+              <Route path="/settings" component={SettingsScreen} />
+            )}
             <Route exact path="/" component={LandingScreen} />
             <Route path="*" component={NoMatchScreen} />
           </Switch>
