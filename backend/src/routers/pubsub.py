@@ -4,7 +4,7 @@ from datetime import date, timedelta
 from fastapi import APIRouter, Response, Request, status
 
 from src.packaging.user import main as get_data
-from src.db.user.functions import lock_user, unlock_user, update_user
+from src.db.user.functions import lock_user, update_user
 
 from src.external.pubsub.templates import publish_to_topic, parse_request
 from src.helper.decorators import fail_gracefully, pubsub_fail_gracefully
@@ -52,7 +52,5 @@ async def sub_user(response: Response, token: str, request: Request) -> Any:
     )
 
     await update_user(data["user_id"], output)
-
-    await unlock_user(data["user_id"])
 
     return data
