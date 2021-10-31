@@ -38,9 +38,6 @@ class UserModel(UserMetadata):
     raw_data: Optional[UserPackage]
     lock: Optional[datetime]
 
-    class Config:
-        validate_assignment = True
-
     @validator("lock", pre=True, always=True)
     def set_name(cls, lock: Union[None, bool, datetime]) -> datetime:
         if not isinstance(lock, datetime):
