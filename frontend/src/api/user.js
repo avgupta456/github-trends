@@ -26,4 +26,15 @@ const getUserMetadata = async (userId) => {
   }
 };
 
-export { authenticate, getUserMetadata };
+const deleteAccount = async (userId) => {
+  try {
+    const fullUrl = `${URL_PREFIX}/auth/delete/${userId}?redirect=False`;
+    const result = await axios.get(fullUrl);
+    return result.data; // no decorator
+  } catch (error) {
+    console.error(error);
+    return '';
+  }
+};
+
+export { authenticate, getUserMetadata, deleteAccount };

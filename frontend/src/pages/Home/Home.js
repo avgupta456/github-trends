@@ -107,7 +107,7 @@ const HomeScreen = () => {
         >
           <button
             type="button"
-            className="rounded-full bg-gray-700 hover:bg-gray-800 text-gray-50 text-md px-3 py-2 flex items-center"
+            className="rounded-full bg-gray-700 hover:bg-gray-800 text-gray-50 px-3 py-2 flex items-center"
           >
             Star on
             <GithubIcon className="ml-1.5 w-5 h-5" />

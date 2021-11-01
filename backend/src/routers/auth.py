@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Any, Optional
 
 import logging
 import requests
@@ -63,6 +63,9 @@ async def authenticate_endpoint(
     return await authenticate(code, private_access)
 
 
+# TODO: reset cache upon upgrade, downgrade, or delete
+
+
 @router.get("/signup/public")
 def redirect_public(user_id: Optional[str] = None) -> RedirectResponse:
     return RedirectResponse(get_redirect_url(private=False, user_id=user_id))
@@ -96,10 +99,16 @@ def redirect_failure() -> str:
 
 
 @router.get("/delete/{user_id}")
-async def delete_account_auth(user_id: str) -> RedirectResponse:
-    return RedirectResponse(
-        get_redirect_url(prefix="delete/" + user_id, private=False, user_id=user_id)
-    )
+async def delete_account_auth(user_id: str, redirect: bool = True) -> Any:
+    if redirect:
+        return RedirectResponse(
+            get_redirect_url(prefix="delete/" + user_id, private=False, user_id=user_id)
+        )
+
+    # TODO: setup CORS by route to allow adding "await delete_user(user_id)" without security concerns
+
+    await delete_user(user_id)
+    return "https://github.com/settings/connections/applications/" + OAUTH_CLIENT_ID
 
 
 @router.get("/redirect/delete/{user_id}")
