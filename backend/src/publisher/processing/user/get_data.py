@@ -6,11 +6,14 @@ from fastapi.exceptions import HTTPException
 from src.data.mongo.user.get import get_user_by_user_id
 from src.data.mongo.user.models import UserModel
 
-# from src.data.mongo.secret.functions import get_next_key
+from src.data.mongo.secret.functions import get_next_key
 
 from src.models.user.package.main import UserPackage
 
 from src.publisher.aggregation.user.utils import trim_package
+
+# TODO: replace with call to subscriber so compute not on publisher
+from src.subscriber.aggregation.user.package import main as get_data
 
 from src.utils.alru_cache import alru_cache
 from src.utils.pubsub import publish_to_topic
@@ -74,12 +77,6 @@ async def get_user(
 async def get_user_demo(
     user_id: str, start_date: date, end_date: date, no_cache: bool = False
 ) -> UserPackage:
-
-    # TODO: implement publisher demo using subscriber compute
-    raise NotImplementedError("Not implemented yet (rewrite in progress)")
-
-    """
     access_token = await get_next_key("demo", no_cache=no_cache)
     data = await get_data(user_id, access_token, start_date, end_date)
     return (True, data)  # type: ignore
-    """
