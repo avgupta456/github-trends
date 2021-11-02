@@ -14,10 +14,10 @@ os.environ["PUBSUB_PUB"] = "True"
 # flake8: noqa E402
 
 # add endpoints here (after load dotenv)
-from src.routers.users.main import router as user_router
-from src.routers.pubsub import router as pubsub_router
-from src.routers.auth import router as auth_router
-from src.routers.assets import router as asset_router
+from src.publisher.routers.users.main import router as user_router
+from src.publisher.routers.pubsub import router as pubsub_router
+from src.publisher.routers.auth import router as auth_router
+from src.publisher.routers.assets.assets import router as asset_router
 
 from src.constants import PROD, PUBSUB_PUB, SENTRY_DSN
 
