@@ -36,3 +36,4 @@ jobs:
       env:
         AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
         COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
