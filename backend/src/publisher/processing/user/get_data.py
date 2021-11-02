@@ -1,8 +1,6 @@
 from datetime import date, datetime, timedelta
 from typing import Optional
 
-from fastapi.exceptions import HTTPException
-
 from src.data.mongo.user import get_user_by_user_id, UserModel
 from src.data.mongo.secret import get_next_key
 
@@ -13,8 +11,8 @@ from src.publisher.aggregation import trim_package
 # TODO: replace with call to subscriber so compute not on publisher
 from src.subscriber.aggregation import get_data
 
-from src.utils import alru_cache, publish_to_topic
-from src.constants import PUBSUB_PUB
+from src.utils import alru_cache
+from src.utils.pubsub import publish_to_topic
 
 
 def validate_raw_data(data: Optional[UserPackage]) -> bool:
@@ -23,9 +21,6 @@ def validate_raw_data(data: Optional[UserPackage]) -> bool:
 
 
 async def _get_user(user_id: str, no_cache: bool = False) -> Optional[UserPackage]:
-    if not PUBSUB_PUB:
-        raise HTTPException(400, "")
-
     db_user: Optional[UserModel] = await get_user_by_user_id(user_id, no_cache=no_cache)
     if db_user is None or db_user.access_token == "":
         raise LookupError("Invalid UserId")

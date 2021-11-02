@@ -9,7 +9,7 @@ from src.data.mongo.user import (
     get_user_by_user_id,
 )
 
-from src.utils import publish_to_topic
+from src.utils.pubsub import publish_to_topic
 
 
 async def authenticate(code: str, private_access: bool) -> Any:
