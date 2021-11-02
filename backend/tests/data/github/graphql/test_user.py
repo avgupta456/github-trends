@@ -1,12 +1,14 @@
 from datetime import datetime, timedelta
 import unittest
 
-from src.models.user.contribs import RawCalendar, RawEvents
-from src.models.user.follows import RawFollows
-from src.external.github_api.graphql.user import (
+from src.data.github.graphql.user.contribs.models import RawCalendar, RawEvents
+from src.data.github.graphql.user.follows.models import RawFollows
+from src.data.github.graphql.user.contribs.contribs import (
     get_user_contribution_years,
     get_user_contribution_calendar,
     get_user_contribution_events,
+)
+from src.data.github.graphql.user.follows.follows import (
     get_user_followers,
     get_user_following,
 )
