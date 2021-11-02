@@ -1,11 +1,9 @@
 # import json
-from typing import Dict, List, Union
+from typing import List
 from datetime import datetime
 
-from src.external.github_api.graphql.template import get_template
-
-from src.models.user.contribs import RawCalendar, RawEvents
-from src.models.user.follows import RawFollows
+from src.data.github.graphql.template import get_template
+from src.data.github.graphql.user.contribs.models import RawCalendar, RawEvents
 
 
 def get_user_contribution_years(user_id: str, access_token: str) -> List[int]:
@@ -180,119 +178,3 @@ def get_user_contribution_events(
     raw_data = get_template(query, access_token)
     output = raw_data["data"]["user"]["contributionsCollection"]
     return RawEvents.parse_obj(output)
-
-
-def get_user_followers(
-    user_id: str, access_token: str, first: int = 100, after: str = ""
-) -> RawFollows:
-    """gets user's followers and users following'"""
-
-    variables: Dict[str, Union[str, int]] = (
-        {"login": user_id, "first": first, "after": after}
-        if after != ""
-        else {"login": user_id, "first": first}
-    )
-
-    query_str: str = (
-        """
-        query getUser($login: String!, $first: Int!, $after: String!) {
-            user(login: $login){
-                followers(first: $first, after: $after){
-                    nodes{
-                        name,
-                        login,
-                        url
-                    }
-                    pageInfo{
-                        hasNextPage,
-                        endCursor
-                    }
-                }
-            }
-        }
-    """
-        if after != ""
-        else """
-        query getUser($login: String!, $first: Int!) {
-            user(login: $login){
-                followers(first: $first){
-                    nodes{
-                        name,
-                        login,
-                        url
-                    }
-                    pageInfo{
-                        hasNextPage,
-                        endCursor
-                    }
-                }
-            }
-        }
-    """
-    )
-
-    query = {
-        "variables": variables,
-        "query": query_str,
-    }
-
-    output_dict = get_template(query, access_token)["data"]["user"]["followers"]
-    return RawFollows.parse_obj(output_dict)
-
-
-def get_user_following(
-    user_id: str, access_token: str, first: int = 10, after: str = ""
-) -> RawFollows:
-    """gets user's followers and users following'"""
-
-    variables: Dict[str, Union[str, int]] = (
-        {"login": user_id, "first": first, "after": after}
-        if after != ""
-        else {"login": user_id, "first": first}
-    )
-
-    query_str: str = (
-        """
-        query getUser($login: String!, $first: Int!, $after: String!) {
-            user(login: $login){
-                following(first: $first, after: $after){
-                    nodes{
-                        name,
-                        login,
-                        url
-                    }
-                    pageInfo{
-                        hasNextPage,
-                        endCursor
-                    }
-                }
-            }
-        }
-    """
-        if after != ""
-        else """
-        query getUser($login: String!, $first: Int!) {
-            user(login: $login){
-                following(first: $first){
-                    nodes{
-                        name,
-                        login,
-                        url
-                    }
-                    pageInfo{
-                        hasNextPage,
-                        endCursor
-                    }
-                }
-            }
-        }
-    """
-    )
-
-    query = {
-        "variables": variables,
-        "query": query_str,
-    }
-
-    output_dict = get_template(query, access_token)["data"]["user"]["following"]
-    return RawFollows.parse_obj(output_dict)

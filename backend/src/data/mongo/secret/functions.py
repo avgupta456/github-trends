@@ -1,9 +1,10 @@
 from typing import Any, Dict, List, Optional
 from random import randint
 
-from src.db.mongodb import SECRETS
-from src.db.secret.models import SecretModel
-from src.helper.alru_cache import alru_cache
+from src.data.mongo.main import SECRETS
+from src.data.mongo.secret.models import SecretModel
+
+from src.utils.alru_cache import alru_cache
 
 
 @alru_cache()

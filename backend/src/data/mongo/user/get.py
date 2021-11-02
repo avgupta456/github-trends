@@ -2,11 +2,11 @@ from typing import Any, Dict, Optional
 
 from pydantic.error_wrappers import ValidationError
 
-from src.db.mongodb import USERS
-from src.db.user.compression import decompress
-from src.db.user.models import UserMetadata, UserModel
+from src.data.mongo.main import USERS
+from src.data.mongo.user.compression import decompress
+from src.data.mongo.user.models import UserMetadata, UserModel
 
-from src.helper.alru_cache import alru_cache
+from src.utils.alru_cache import alru_cache
 
 
 """

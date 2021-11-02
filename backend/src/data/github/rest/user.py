@@ -1,6 +1,6 @@
 from typing import Any, Dict, List
 
-from src.external.github_api.rest.template import get_template, get_template_plural
+from src.data.github.rest.template import get_template, get_template_plural
 
 BASE_URL = "https://api.github.com/users/"
 

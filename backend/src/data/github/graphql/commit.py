@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Union
 
-from src.external.github_api.graphql.template import get_template
+from src.data.github.graphql.template import get_template
 
 
 # TODO: create return class

@@ -1,0 +1,37 @@
+from datetime import datetime
+from typing import Any, Dict, Optional
+
+from src.models.user.package.main import UserPackage
+
+from src.data.mongo.main import USERS
+from src.data.mongo.user.compression import compress
+
+
+async def lock_user(user_id: str) -> None:
+    await USERS.update_one(  # type: ignore
+        {"user_id": user_id},
+        {"$set": {"lock": datetime.now()}},
+    )
+
+
+async def update_user(user_id: str, raw_user: Dict[str, Any]) -> None:
+    await USERS.update_one(  # type: ignore
+        {"user_id": user_id},
+        {"$set": raw_user},
+        upsert=True,
+    )
+
+
+async def update_user_raw_data(
+    user_id: str, raw_data: Optional[UserPackage] = None
+) -> None:
+    if raw_data is not None:
+        compressed_data = compress(raw_data.dict())
+        await USERS.update_one(  # type: ignore
+            {"user_id": user_id},
+            {"$set": {"last_updated": datetime.now(), "raw_data": compressed_data}},
+        )
+
+
+async def delete_user(user_id: str) -> None:
+    await USERS.delete_one({"user_id": user_id})  # type: ignore

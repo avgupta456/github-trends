@@ -2,18 +2,7 @@ from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
-"""
-APIResponse
-"""
-
-
-class User(BaseModel):
-    name: Optional[str]
-    login: str
-    url: str
-
-    class Config:
-        allow_none = True
+from src.models.user.package.follows import User
 
 
 class PageInfo(BaseModel):
@@ -27,8 +16,3 @@ class PageInfo(BaseModel):
 class RawFollows(BaseModel):
     nodes: List[User]
     page_info: PageInfo = Field(alias="pageInfo")
-
-
-class UserFollows(BaseModel):
-    followers: List[User]
-    following: List[User]
