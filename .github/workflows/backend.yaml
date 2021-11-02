@@ -31,7 +31,7 @@ jobs:
     - name: Upload coverage to Coveralls
       run: |
           cd backend
-          coverage run -m unittest
+          coverage run --source=src -m unittest
           coveralls
       env:
         AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
