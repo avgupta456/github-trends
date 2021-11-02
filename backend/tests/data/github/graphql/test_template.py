@@ -1,6 +1,6 @@
 import unittest
 
-from src.external.github_api.graphql.template import get_template
+from src.data.github.graphql.template import get_template
 from src.constants import TEST_USER_ID as USER_ID, TEST_TOKEN as TOKEN
 
 
