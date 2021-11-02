@@ -6,7 +6,7 @@ from svgwrite import Drawing
 from svgwrite.container import Group
 from svgwrite.shapes import Circle
 
-from src.svg.style import style
+from src.publisher.render.style import style
 from src.constants import DEFAULT_COLOR
 
 

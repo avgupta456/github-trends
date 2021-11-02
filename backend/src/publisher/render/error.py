@@ -3,8 +3,8 @@
 from svgwrite import Drawing
 from src.constants import BACKEND_URL
 
-from src.svg.style import style
-from src.svg.template import get_template
+from src.publisher.render.style import style
+from src.publisher.render.template import get_template
 
 
 def get_error_svg() -> Drawing:

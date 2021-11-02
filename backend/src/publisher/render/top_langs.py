@@ -4,10 +4,10 @@ from typing import List, Tuple
 
 from svgwrite import Drawing
 
-from src.models.user.analytics import LanguageStats
-from src.svg.error import get_no_data_svg
+from src.publisher.aggregation.user.models import LanguageStats
 
-from src.svg.template import (
+from src.publisher.render.error import get_no_data_svg
+from src.publisher.render.template import (
     get_lang_name_section,
     get_template,
     get_bar_section,
