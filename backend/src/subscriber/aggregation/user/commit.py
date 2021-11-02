@@ -2,14 +2,15 @@ from time import sleep
 from datetime import datetime
 from typing import Any, Dict, List, Tuple
 
-from src.data.github.graphql.template import (
+from src.data.github.graphql import (
+    get_commits,
     GraphQLErrorAuth,
     GraphQLErrorTimeout,
     GraphQLErrorMissingNode,
 )
 
-from src.data.github.rest.repo import get_repo_commits
-from src.data.github.graphql.commit import get_commits
+from src.data.github.rest import get_repo_commits
+
 from src.constants import NODE_CHUNK_SIZE, CUTOFF, BLACKLIST
 
 

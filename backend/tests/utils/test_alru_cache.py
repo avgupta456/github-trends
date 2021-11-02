@@ -3,7 +3,7 @@ from datetime import timedelta
 
 from aiounittest.case import AsyncTestCase
 
-from src.utils.alru_cache import alru_cache
+from src.utils import alru_cache
 
 
 class TestTemplate(AsyncTestCase):

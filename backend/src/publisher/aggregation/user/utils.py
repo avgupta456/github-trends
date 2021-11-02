@@ -1,8 +1,7 @@
 from typing import Any, Dict, List, Tuple
 from datetime import date, datetime
 
-from src.models.user.package.contribs import ContributionDay
-from src.models.user.package.main import UserPackage
+from src.models import ContributionDay, UserPackage
 
 
 def trim_contribs(

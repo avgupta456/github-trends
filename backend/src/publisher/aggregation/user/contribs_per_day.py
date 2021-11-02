@@ -1,6 +1,6 @@
 from typing import Dict
 
-from src.models.user.package.main import UserPackage
+from src.models import UserPackage
 
 
 def get_contribs_per_day(data: UserPackage) -> Dict[str, int]:

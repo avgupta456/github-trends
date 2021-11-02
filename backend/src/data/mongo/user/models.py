@@ -3,7 +3,7 @@ from typing import Optional, Union
 
 from pydantic import BaseModel, validator
 
-from src.models.user.package.main import UserPackage
+from src.models import UserPackage
 
 """
 Input Models

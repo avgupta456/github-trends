@@ -2,10 +2,14 @@ from typing import Optional
 
 from fastapi import APIRouter, Response, status
 
-from src.data.mongo.user.models import UserMetadata, UserModel
-from src.data.mongo.user.get import get_user_by_user_id, get_user_metadata
+from src.data.mongo.user import (
+    get_user_by_user_id,
+    get_user_metadata,
+    UserMetadata,
+    UserModel,
+)
 
-from src.utils.decorators import async_fail_gracefully
+from src.utils import async_fail_gracefully
 
 router = APIRouter()
 

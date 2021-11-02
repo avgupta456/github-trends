@@ -1,8 +1,8 @@
 import unittest
 
-from src.models.user.package.follows import UserFollows
+from src.models import UserFollows
 
-from src.subscriber.aggregation.user.follows import get_user_follows
+from src.subscriber.aggregation import get_user_follows
 
 from src.constants import TEST_USER_ID as USER_ID, TEST_TOKEN as TOKEN
 

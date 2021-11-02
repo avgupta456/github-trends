@@ -1,8 +1,8 @@
 from aiounittest.case import AsyncTestCase
 
-from src.models.user.package.contribs import UserContributions
+from src.models import UserContributions
 
-from src.subscriber.aggregation.user.contributions import get_contributions
+from src.subscriber.aggregation import get_contributions
 
 from src.constants import TEST_USER_ID as USER_ID, TEST_TOKEN as TOKEN
 

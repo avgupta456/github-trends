@@ -4,7 +4,7 @@ from random import randint
 from src.data.mongo.main import SECRETS
 from src.data.mongo.secret.models import SecretModel
 
-from src.utils.alru_cache import alru_cache
+from src.utils import alru_cache
 
 
 @alru_cache()

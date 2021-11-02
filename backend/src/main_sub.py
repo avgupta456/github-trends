@@ -14,8 +14,7 @@ os.environ["PUBSUB_PUB"] = "False"
 # flake8: noqa E402
 
 # add endpoints here (after load dotenv)
-from src.subscriber.routers.dev import router as dev_router
-from src.subscriber.routers.pubsub import router as pubsub_router
+from src.subscriber.routers import dev_router, pubsub_router
 
 from src.constants import PROD, PUBSUB_PUB, SENTRY_DSN
 

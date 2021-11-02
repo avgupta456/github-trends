@@ -11,7 +11,7 @@ from starlette.responses import RedirectResponse
 from svgwrite.drawing import Drawing  # type: ignore
 from src.constants import OAUTH_CLIENT_ID, OAUTH_REDIRECT_URI
 
-from src.publisher.render.error import get_error_svg
+from src.publisher.render import get_error_svg
 
 
 # TODO: remove get_redirect_url in favor of a cleaner method

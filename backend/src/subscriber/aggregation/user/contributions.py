@@ -4,24 +4,19 @@ from typing import Any, DefaultDict, Dict, List, Optional, Set, Union
 
 import pytz
 
-from src.data.github.graphql.user.contribs.models import (
+from src.data.github.graphql import (
+    get_user_contribution_years,
+    get_user_contribution_calendar,
+    get_user_contribution_events,
+    get_repo,
     RawCalendar,
     RawEventsCommit,
     RawEventsEvent,
 )
 
-from src.models.user.package.contribs import UserContributions
+from src.models import UserContributions
 
-from src.data.github.graphql.user.contribs.contribs import (
-    get_user_contribution_years,
-    get_user_contribution_calendar,
-    get_user_contribution_events,
-)
-
-from src.data.github.graphql.repo import get_repo
-
-from src.utils.gather import gather
-from src.utils.utils import date_to_datetime
+from src.utils import gather, date_to_datetime
 
 from src.constants import NODE_CHUNK_SIZE, NODE_THREADS
 

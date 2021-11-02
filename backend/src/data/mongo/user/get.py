@@ -6,7 +6,7 @@ from src.data.mongo.main import USERS
 from src.data.mongo.user.compression import decompress
 from src.data.mongo.user.models import UserMetadata, UserModel
 
-from src.utils.alru_cache import alru_cache
+from src.utils import alru_cache
 
 
 """

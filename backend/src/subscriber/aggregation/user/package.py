@@ -4,7 +4,7 @@ from src.subscriber.aggregation.user.contributions import get_contributions
 
 # from src.processing.user.follows import get_user_follows
 
-from src.models.user.package.main import UserPackage
+from src.models import UserPackage
 
 
 async def main(

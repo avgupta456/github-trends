@@ -1,16 +1,15 @@
 from datetime import datetime, timedelta
 import unittest
 
-from src.data.github.graphql.user.contribs.models import RawCalendar, RawEvents
-from src.data.github.graphql.user.follows.models import RawFollows
-from src.data.github.graphql.user.contribs.contribs import (
+from src.data.github.graphql import (
     get_user_contribution_years,
     get_user_contribution_calendar,
     get_user_contribution_events,
-)
-from src.data.github.graphql.user.follows.follows import (
     get_user_followers,
     get_user_following,
+    RawCalendar,
+    RawEvents,
+    RawFollows,
 )
 
 from src.constants import TEST_USER_ID as USER_ID, TEST_TOKEN as TOKEN

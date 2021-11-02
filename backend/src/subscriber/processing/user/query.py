@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 
-from src.subscriber.aggregation.user.package import main as get_data
-from src.data.mongo.user.functions import lock_user, update_user_raw_data
+from src.subscriber.aggregation import get_data
+from src.data.mongo.user import lock_user, update_user_raw_data
 
 
 async def query_user(user_id: str, access_token: str) -> bool:

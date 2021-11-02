@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Response, status
 
-from src.utils.pubsub import publish_to_topic
-from src.utils.decorators import fail_gracefully
+from src.utils import publish_to_topic, fail_gracefully
 
 router = APIRouter()
 

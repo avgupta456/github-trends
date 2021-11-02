@@ -3,20 +3,17 @@ from typing import Optional
 
 from fastapi.exceptions import HTTPException
 
-from src.data.mongo.user.get import get_user_by_user_id
-from src.data.mongo.user.models import UserModel
+from src.data.mongo.user import get_user_by_user_id, UserModel
+from src.data.mongo.secret import get_next_key
 
-from src.data.mongo.secret.functions import get_next_key
+from src.models import UserPackage
 
-from src.models.user.package.main import UserPackage
-
-from src.publisher.aggregation.user.utils import trim_package
+from src.publisher.aggregation import trim_package
 
 # TODO: replace with call to subscriber so compute not on publisher
-from src.subscriber.aggregation.user.package import main as get_data
+from src.subscriber.aggregation import get_data
 
-from src.utils.alru_cache import alru_cache
-from src.utils.pubsub import publish_to_topic
+from src.utils import alru_cache, publish_to_topic
 from src.constants import PUBSUB_PUB
 
 

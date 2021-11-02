@@ -2,11 +2,14 @@ from datetime import datetime
 from typing import Any, Dict
 from src.constants import OAUTH_CLIENT_ID
 
-from src.data.github.auth.main import authenticate as github_authenticate
-from src.data.mongo.user.functions import update_user, delete_user as db_delete_user
-from src.data.mongo.user.get import get_user_by_user_id
+from src.data.github.auth import authenticate as github_authenticate
+from src.data.mongo.user import (
+    update_user,
+    delete_user as db_delete_user,
+    get_user_by_user_id,
+)
 
-from src.utils.pubsub import publish_to_topic
+from src.utils import publish_to_topic
 
 
 async def authenticate(code: str, private_access: bool) -> Any:

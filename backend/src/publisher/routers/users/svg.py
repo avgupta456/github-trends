@@ -5,18 +5,21 @@ from fastapi import Response, status
 from fastapi.responses import HTMLResponse
 from fastapi.routing import APIRouter
 
-from src.models.user.package.main import UserPackage
+from src.models import UserPackage
 
-from src.publisher.aggregation.user.commits import get_top_languages, get_top_repos
+from src.publisher.aggregation import get_top_languages, get_top_repos
 
-from src.publisher.render.top_langs import get_top_langs_svg
-from src.publisher.render.top_repos import get_top_repos_svg
-from src.publisher.render.error import get_empty_demo_svg, get_loading_svg
+from src.publisher.render import (
+    get_top_langs_svg,
+    get_top_repos_svg,
+    get_empty_demo_svg,
+    get_loading_svg,
+)
 
+from src.publisher.processing import get_user, get_user_demo
 from src.publisher.routers.decorators import svg_fail_gracefully
-from src.publisher.processing.user.get_data import get_user, get_user_demo
 
-from src.utils.utils import use_time_range
+from src.utils import use_time_range
 
 router = APIRouter()
 

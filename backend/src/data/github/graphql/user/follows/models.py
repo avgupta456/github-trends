@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
-from src.models.user.package.follows import User
+from src.models import User
 
 
 class PageInfo(BaseModel):

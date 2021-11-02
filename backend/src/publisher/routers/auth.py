@@ -5,11 +5,11 @@ import logging
 from fastapi import APIRouter, Response, status
 from fastapi.responses import RedirectResponse
 
-from src.publisher.processing.user.auth import authenticate, delete_user
+from src.publisher.processing import authenticate, delete_user
 from src.publisher.routers.decorators import get_redirect_url
 
 from src.constants import BACKEND_URL
-from src.utils.decorators import async_fail_gracefully
+from src.utils import async_fail_gracefully
 
 router = APIRouter()
 

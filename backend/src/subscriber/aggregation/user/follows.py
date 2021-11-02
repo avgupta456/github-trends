@@ -1,10 +1,10 @@
 from typing import List, Optional
 
-from src.data.github.graphql.user.follows.follows import (
+from src.data.github.graphql import (
     get_user_followers as _get_user_followers,
     get_user_following as _get_user_following,
 )
-from src.models.user.package.follows import User, UserFollows
+from src.models import User, UserFollows
 
 
 def get_user_follows(user_id: str, access_token: str) -> UserFollows:
