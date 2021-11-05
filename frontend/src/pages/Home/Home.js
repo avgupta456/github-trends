@@ -75,14 +75,14 @@ const HomeScreen = () => {
         </div>
       </div>
       <div className="flex flex-wrap -mt-8">
-        <div className="p-0 md:p-2 md:w-1/3 sm:mb-0 mb-6">
+        <div className="p-0 sm:w-full md:p-2 md:w-1/3 sm:mb-0 mb-6">
           <Card
             title="Language Contributions"
             description="See your language breakdown across all repositories you contribute to."
             imageSrc="langs"
           />
         </div>
-        <div className="p-0 md:p-2 md:w-1/3 sm:mb-0 mb-6">
+        <div className="p-0 sm:w-full md:p-2 md:w-1/3 sm:mb-0 mb-6">
           <Card
             title="Repository Contributions"
             description="See your repository breakdown sorted by LOC and separated by language."

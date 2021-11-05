@@ -15,7 +15,7 @@ const LandingScreen = () => {
 
   return (
     <section className="bg-gray-50 text-gray-600 body-font lg:h-screen 2xl:py-16">
-      <div className="container mx-auto my-auto flex flex-col items-center px-4 md:px-16 xl:px-8 xl:flex-row">
+      <div className="container mx-auto flex flex-col items-center px-4 md:px-16 xl:px-8 xl:flex-row">
         <div
           className={classnames(
             'bg-gray-50 w-full py-16 flex flex-col items-center text-center',
@@ -62,7 +62,7 @@ const LandingScreen = () => {
             </a>
           </div>
         </div>
-        <div className="hidden md:block md:w-full xl:w-1/2 xl:px-12">
+        <div className="-mt-7 md:mt-0 md:block md:w-full xl:w-1/2 xl:px-12">
           <Preview />
         </div>
       </div>
