@@ -36,8 +36,8 @@ const DemoScreen = () => {
       : `${BACKEND_URL}/user/svg/demo?card=repos`;
 
   return (
-    <div className="h-full py-8 flex justify-center items-center">
-      <div className="h-full w-1/3 pl-8">
+    <div className="h-full py-8 flex flex-col lg:flex-row justify-center items-center">
+      <div className="h-full w-full px-5 pb-5 lg:w-1/3 lg:pl-8 lg:pr-0 lg:pb-0">
         <div className="h-full w-full bg-gray-50 rounded-xl p-4 shadow">
           <h1 className="text-2xl font-bold text-gray-800 text-center mb-4">
             GitHub Trends Demo
@@ -85,7 +85,7 @@ const DemoScreen = () => {
           </div>
         </div>
       </div>
-      <div className="h-full w-2/3 px-8">
+      <div className="h-full w-full lg:w-2/3 px-5 lg:px-8">
         <div className="h-full w-full bg-gray-50 rounded-xl p-4 shadow">
           <h1 className="text-2xl font-bold text-gray-800 text-center mb-4">
             {selectedUserName === ''
@@ -93,14 +93,14 @@ const DemoScreen = () => {
               : `Example Cards for ${selectedUserName}`}
           </h1>
           <div className="w-full flex flex-wrap">
-            <div className="w-1/2 p-2">
+            <div className="w-full lg:w-1/2 p-2">
               <SvgInline
                 className="w-full h-full"
                 url={firstCardUrl}
                 forceLoading={loading}
               />
             </div>
-            <div className="w-1/2 p-2">
+            <div className="w-full lg:w-1/2 p-2">
               <SvgInline
                 className="w-full h-full"
                 url={secondCardUrl}
