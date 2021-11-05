@@ -62,7 +62,7 @@ const LandingScreen = () => {
             </a>
           </div>
         </div>
-        <div className="md:block md:w-full xl:w-1/2 xl:px-12">
+        <div className="hidden md:block md:w-full xl:w-1/2 xl:px-12">
           <Preview />
         </div>
       </div>
