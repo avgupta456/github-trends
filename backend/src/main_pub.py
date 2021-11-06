@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from google.api_core.exceptions import AlreadyExists
+
 import sentry_sdk
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 
@@ -14,12 +16,40 @@ os.environ["PUBSUB_PUB"] = "True"
 # flake8: noqa E402
 
 # add endpoints here (after load dotenv)
-from src.routers.users.main import router as user_router
-from src.routers.pubsub import router as pubsub_router
-from src.routers.auth import router as auth_router
-from src.routers.assets import router as asset_router
+from src.publisher.routers import user_router, pubsub_router, auth_router, asset_router
+from src.utils.pubsub import create_topic, create_push_subscription
 
-from src.constants import PROD, PUBSUB_PUB, SENTRY_DSN
+from src.constants import (
+    DOCKER,
+    LOCAL_SUBSCRIBER,
+    PROD,
+    PROJECT_ID,
+    PUBSUB_PUB,
+    PUBSUB_TOKEN,
+    SENTRY_DSN,
+)
+
+"""
+EMULATOR SETUP
+"""
+
+
+if not PROD and DOCKER:
+    topic = "user"
+    subscription = "user_sub"
+    endpoint = LOCAL_SUBSCRIBER + "/pubsub/sub/user/" + PUBSUB_TOKEN
+
+    print("Creating Topic", PROJECT_ID, topic)
+    try:
+        create_topic(PROJECT_ID, topic)
+    except AlreadyExists:
+        print("Topic Already Exists")
+
+    print("Creating Subscription", PROJECT_ID, topic, subscription, endpoint)
+    try:
+        create_push_subscription(PROJECT_ID, topic, subscription, endpoint)
+    except AlreadyExists:
+        print("Subscription already exists")
 
 """
 SETUP

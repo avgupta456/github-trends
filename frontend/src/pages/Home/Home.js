@@ -2,15 +2,20 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { useHistory } from 'react-router-dom';
+
 import BounceLoader from 'react-spinners/BounceLoader';
 import { FaGithub as GithubIcon } from 'react-icons/fa';
 
 import { Card } from '../../components';
 
-import { authenticate } from '../../api';
+import { setUserKey, authenticate } from '../../api';
 import { login as _login } from '../../redux/actions/userActions';
+import { REDIRECT_URI } from '../../constants';
 
 const HomeScreen = () => {
+  const history = useHistory();
+
   const [isLoading, setIsLoading] = useState(false);
 
   const userId = useSelector((state) => state.user.userId);
@@ -19,20 +24,25 @@ const HomeScreen = () => {
 
   const dispatch = useDispatch();
 
-  const login = (newUserId) => dispatch(_login(newUserId));
+  const login = (newUserId, userKey) => dispatch(_login(newUserId, userKey));
 
   useEffect(async () => {
     // After requesting Github access, Github redirects back to your app with a code parameter
     const url = window.location.href;
-    const hasCode = url.includes('?code=');
+
+    if (url.includes('error=')) {
+      history.push('/');
+    }
 
     // If Github API returns the code parameter
-    if (hasCode) {
+    if (url.includes('code=')) {
+      const privateAccess = url.includes('private');
       const newUrl = url.split('?code=');
-      window.history.pushState({}, null, newUrl[0]);
+      window.history.pushState({}, null, REDIRECT_URI);
       setIsLoading(true);
-      const newUserId = await authenticate(newUrl[1]);
-      login(newUserId);
+      const userKey = await setUserKey(newUrl[1]);
+      const newUserId = await authenticate(newUrl[1], privateAccess);
+      login(newUserId, userKey);
       setIsLoading(false);
     }
   }, []);
@@ -98,7 +108,7 @@ const HomeScreen = () => {
         >
           <button
             type="button"
-            className="rounded-full bg-gray-700 hover:bg-gray-800 text-gray-50 text-md px-3 py-2 flex items-center"
+            className="rounded-full bg-gray-700 hover:bg-gray-800 text-gray-50 px-3 py-2 flex items-center"
           >
             Star on
             <GithubIcon className="ml-1.5 w-5 h-5" />

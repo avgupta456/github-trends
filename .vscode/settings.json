@@ -9,7 +9,12 @@
 
     "files.exclude": {
         "**/.git": true,
-        "**/__pycache__": true
+        "**/__pycache__": true,
+        "**/.venv": true,
+        "**/.pytest_cache": true,
+        "**/.coverage": true,
+        "**/build": true,
+        "**/node_modules": true,
     },
 
     "editor.formatOnSave": true,

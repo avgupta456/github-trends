@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { GiHamburgerMenu as HamburgerIcon } from 'react-icons/gi';
+import { MdSettings as SettingsIcon } from 'react-icons/md';
 
 import { logout as _logout } from '../../redux/actions/userActions';
 import rocketIcon from '../../assets/rocket.png';
@@ -51,6 +52,9 @@ const Header = () => {
         <div className="hidden md:flex ml-auto items-center text-base justify-center">
           {isAuthenticated ? (
             <>
+              <Link to="/settings" className="mr-3 px-1 py-1">
+                <SettingsIcon className="h-6 w-6 text-gray-700" />
+              </Link>
               <Link
                 to="/"
                 className="px-4 py-1 mr-3 rounded text-gray-700 bg-gray-100 hover:bg-gray-300"
@@ -97,6 +101,16 @@ const Header = () => {
               className="block text-sm px-2 my-2 py-2 rounded bg-gray-100 text-gray-700"
             >
               Dashboard
+            </Link>
+            <Link
+              to="/settings"
+              onClick={() => {
+                setToggle(false);
+                logout();
+              }}
+              className="block text-sm px-2 my-2 py-2 rounded bg-gray-100 text-gray-700"
+            >
+              Settings
             </Link>
             <Link
               to="/"
