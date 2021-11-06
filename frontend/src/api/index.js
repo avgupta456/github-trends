@@ -1,3 +1,8 @@
-import { authenticate, getUserMetadata, deleteAccount } from './user';
+import {
+  setUserKey,
+  authenticate,
+  getUserMetadata,
+  deleteAccount,
+} from './user';
 
-export { authenticate, getUserMetadata, deleteAccount };
+export { setUserKey, authenticate, getUserMetadata, deleteAccount };

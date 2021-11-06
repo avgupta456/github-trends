@@ -9,7 +9,7 @@ import { Button } from '../../components';
 import { logout as _logout } from '../../redux/actions/userActions';
 import { deleteAccount } from '../../api';
 import { classnames } from '../../utils';
-import { GITHUB_PRIVATE_AUTH_URL } from '../../constants';
+import { GITHUB_PRIVATE_AUTH_URL, CLIENT_ID } from '../../constants';
 
 const SectionButton = ({ name, implemented, isSelected, setSelected }) => {
   return (
@@ -74,6 +74,7 @@ const SettingsScreen = () => {
   useOutsideAlerter(wrapperRef, closeDeleteModal);
 
   const userId = useSelector((state) => state.user.userId);
+  const userKey = useSelector((state) => state.user.userKey);
   const privateAccess = useSelector((state) => state.user.privateAccess);
   const accountTier = privateAccess ? 'Private Workflow' : 'Public Workflow';
 
@@ -218,9 +219,11 @@ const SettingsScreen = () => {
                   <Button
                     className="bg-gray-200 ml-auto rounded-lg text-red-600 border-2"
                     onClick={async () => {
-                      const url = await deleteAccount(userId);
-                      logout();
-                      window.location = url;
+                      const success = await deleteAccount(userId, userKey);
+                      if (success) {
+                        logout();
+                        window.location = `https://github.com/settings/connections/applications/${CLIENT_ID}`;
+                      }
                     }}
                   >
                     Delete Account

@@ -9,7 +9,7 @@ import { FaGithub as GithubIcon } from 'react-icons/fa';
 
 import { Card } from '../../components';
 
-import { authenticate } from '../../api';
+import { setUserKey, authenticate } from '../../api';
 import { login as _login } from '../../redux/actions/userActions';
 import { REDIRECT_URI } from '../../constants';
 
@@ -24,7 +24,7 @@ const HomeScreen = () => {
 
   const dispatch = useDispatch();
 
-  const login = (newUserId) => dispatch(_login(newUserId));
+  const login = (newUserId, userKey) => dispatch(_login(newUserId, userKey));
 
   useEffect(async () => {
     // After requesting Github access, Github redirects back to your app with a code parameter
@@ -40,8 +40,9 @@ const HomeScreen = () => {
       const newUrl = url.split('?code=');
       window.history.pushState({}, null, REDIRECT_URI);
       setIsLoading(true);
+      const userKey = await setUserKey(newUrl[1]);
       const newUserId = await authenticate(newUrl[1], privateAccess);
-      login(newUserId);
+      login(newUserId, userKey);
       setIsLoading(false);
     }
   }, []);

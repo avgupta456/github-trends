@@ -2,7 +2,7 @@ from fastapi import status
 from fastapi.routing import APIRouter
 from fastapi.responses import Response
 
-from src.publisher.processing import set_user_key, authenticate
+from src.publisher.processing import set_user_key, authenticate, delete_user
 from src.utils import async_fail_gracefully
 
 
@@ -25,3 +25,11 @@ async def authenticate_endpoint(
     response: Response, code: str, private_access: bool = False
 ) -> str:
     return await authenticate(code, private_access)
+
+
+@router.get(
+    "/delete/{user_id}", status_code=status.HTTP_200_OK, include_in_schema=False
+)
+@async_fail_gracefully
+async def delete_user_endpoint(response: Response, user_id: str, user_key: str) -> bool:
+    return await delete_user(user_id, user_key=user_key)

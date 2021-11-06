@@ -21,7 +21,8 @@ function App() {
   const userId = useSelector((state) => state.user.userId);
   const isAuthenticated = userId && userId.length > 0;
 
-  // const privateAccess = useSelector((state) => state.user.privateAccess);
+  const userKey = useSelector((state) => state.user.userKey);
+  const privateAccess = useSelector((state) => state.user.privateAccess);
 
   const dispatch = useDispatch();
   const setPrivateAccess = (access) => dispatch(_setPrivateAccess(access));
@@ -35,7 +36,7 @@ function App() {
     }
   }, [userId]);
 
-  // console.log(userId, privateAccess);
+  console.log(userId, userKey, privateAccess);
 
   return (
     <div className="h-screen flex flex-col">
