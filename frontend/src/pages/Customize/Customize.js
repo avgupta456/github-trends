@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import { useParams } from 'react-router-dom';
 
@@ -7,8 +6,6 @@ import { Image, DateRangeSection, CheckboxSection } from '../../components';
 
 const Customize = () => {
   const { suffix } = useParams();
-
-  const userId = useSelector((state) => state.user.userId);
 
   const [selectedTimeRange, setSelectedTimeRange] = useState({
     id: 3,
@@ -42,20 +39,6 @@ const Customize = () => {
   }
 
   console.log(fullSuffix);
-
-  const isAuthenticated = userId && userId.length > 0;
-
-  if (!isAuthenticated) {
-    return (
-      <div className="h-full py-8 flex justify-center items-center">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold">
-            Please sign in to access this page
-          </h1>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="h-full py-8 flex justify-center items-center text-gray-600 body-font">
