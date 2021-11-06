@@ -1,6 +1,8 @@
 *.pyc
 __pycache__
 
+.vscode
+
 backend/.env
 backend/.venv
 backend/.coverage
