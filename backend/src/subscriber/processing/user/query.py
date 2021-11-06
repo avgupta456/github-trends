@@ -10,9 +10,8 @@ from src.utils.alru_cache import alru_cache
 s = requests.Session()
 
 
-@alru_cache(ttl=timedelta(minutes=1))
+@alru_cache()
 async def query_user(user_id: str, access_token: str) -> bool:
-    print("QUERY USER", user_id, access_token)
     await lock_user(user_id)
 
     # standard policy is to check past year of data

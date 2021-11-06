@@ -1,3 +1,4 @@
+from datetime import timedelta
 from typing import Any, Dict, List, Optional
 from random import randint
 
@@ -7,7 +8,7 @@ from src.data.mongo.secret.models import SecretModel
 from src.utils import alru_cache
 
 
-@alru_cache()
+@alru_cache(ttl=timedelta(minutes=15))
 async def get_keys(project: str, no_cache: bool = False) -> List[str]:
     secrets: Optional[Dict[str, Any]] = await SECRETS.find_one({"project": project})  # type: ignore
     if secrets is None:
