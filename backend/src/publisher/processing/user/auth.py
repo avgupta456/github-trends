@@ -1,54 +1,51 @@
-from datetime import datetime
-from typing import Any, Dict
-from src.constants import OAUTH_CLIENT_ID
+from typing import Any, Dict, Optional
 
 from src.data.github.auth import authenticate as github_authenticate
 from src.data.mongo.user import (
-    update_user,
+    update_user_metadata,
     delete_user as db_delete_user,
-    get_user_by_user_id,
 )
+from src.data.mongo.user.get import get_user_metadata
+from src.data.mongo.user.models import UserMetadata
+from src.publisher.processing.user.get_data import update_user
 
-from src.utils.pubsub import publish_to_topic
+# frontend first calls set_user_key with code and user_key
+# next they call authenticate which determines the user_id to associate with the code/user_key
+# these actions should happen sequentially, so in-memory storage is fine
+code_key_map: Dict[str, str] = {}
 
 
-async def authenticate(code: str, private_access: bool) -> Any:
+async def set_user_key(code: str, user_key: str) -> str:
+    code_key_map[code] = user_key
+    return user_key
+
+
+async def authenticate(code: str, private_access: bool) -> str:
     user_id, access_token = await github_authenticate(code)
-    await login_user(user_id, access_token, private_access)
-    return user_id
 
+    curr_user: Optional[UserMetadata] = await get_user_metadata(user_id)
 
-async def login_user(
-    user_id: str, access_token: str, private_access: bool = False
-) -> str:
-    curr_user = await get_user_by_user_id(user_id)
     raw_user: Dict[str, Any] = {
         "user_id": user_id,
         "access_token": access_token,
+        "user_key": code_key_map.get(code, None),
     }
 
-    # update private access without downgrading
-    curr_private_access = curr_user.get("private_access", False) if curr_user else False
-    new_private_access = curr_private_access or private_access
+    raw_user["private_access"] = private_access
+    if curr_user is not None:
+        curr_private_access = curr_user.private_access
+        new_private_access = curr_private_access or private_access
+        raw_user["private_access"] = new_private_access
 
-    raw_user["private_access"] = new_private_access
-    if new_private_access != curr_private_access:
-        # queues data query after cache expires
-        raw_user["last_updated"] = datetime(1970, 1, 1)
+        if new_private_access != curr_private_access:
+            await update_user(user_id, access_token)
+    else:
+        # first time sign up
+        await update_user(user_id, access_token)
 
-        # triggers data query to fetch private commits
-        publish_to_topic("user", {"user_id": user_id, "access_token": access_token})
-
-    if curr_user is None:
-        raw_user["last_updated"] = datetime.now()
-        raw_user["raw_data"] = None
-        raw_user["lock"] = False
-
-    await update_user(user_id, raw_user)
-
+    await update_user_metadata(user_id, raw_user)
     return user_id
 
 
-async def delete_user(user_id: str) -> str:
-    await db_delete_user(user_id)
-    return "https://github.com/settings/connections/applications/" + OAUTH_CLIENT_ID
+async def delete_user(user_id: str, user_key: str, use_user_key: bool = True) -> bool:
+    return await db_delete_user(user_id, user_key, use_user_key)

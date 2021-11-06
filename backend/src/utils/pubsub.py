@@ -68,7 +68,8 @@ def publish_to_topic(topic: str, message: Dict[str, Any]) -> None:
         publisher.publish(topic_path, data=data)  # type: ignore
     else:
         # Send message directly (not async)
-        requests.post(LOCAL_SUBSCRIBER + topic + "/" + PUBSUB_TOKEN, data=data)
+        url = LOCAL_SUBSCRIBER + "/pubsub/sub/" + topic + "/" + PUBSUB_TOKEN
+        requests.post(url, data=data)
 
 
 async def parse_request(token: str, request: Request) -> Dict[str, Any]:

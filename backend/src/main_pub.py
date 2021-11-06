@@ -37,7 +37,7 @@ EMULATOR SETUP
 if not PROD and DOCKER:
     topic = "user"
     subscription = "user_sub"
-    endpoint = LOCAL_SUBSCRIBER + "user/" + PUBSUB_TOKEN
+    endpoint = LOCAL_SUBSCRIBER + "/pubsub/sub/user/" + PUBSUB_TOKEN
 
     print("Creating Topic", PROJECT_ID, topic)
     try:

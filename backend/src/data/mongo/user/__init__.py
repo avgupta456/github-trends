@@ -1,6 +1,5 @@
 from src.data.mongo.user.functions import (
     lock_user,
-    is_user_locked,
     update_user_metadata,
     update_user_raw_data,
     delete_user,
@@ -13,7 +12,6 @@ from src.data.mongo.user.models import UserMetadata, UserModel, ExternalUserMode
 
 __all__ = [
     "lock_user",
-    "is_user_locked",
     "update_user_metadata",
     "update_user_raw_data",
     "delete_user",

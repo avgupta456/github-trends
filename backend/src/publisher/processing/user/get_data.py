@@ -1,7 +1,12 @@
 from datetime import date, datetime, timedelta
 from typing import Optional
 
-from src.data.mongo.user import get_user_by_user_id, UserModel
+from src.data.mongo.user import (
+    get_user_metadata,
+    get_user_by_user_id,
+    UserMetadata,
+    UserModel,
+)
 from src.data.mongo.secret import get_next_key
 
 from src.models import UserPackage
@@ -23,7 +28,18 @@ def validate_raw_data(data: Optional[UserPackage]) -> bool:
 def validate_dt(dt: Optional[datetime], td: timedelta):
     last_updated = dt if dt is not None else datetime(1970, 1, 1)
     time_diff = datetime.now() - last_updated
-    return time_diff > timedelta(hours=6)
+    return time_diff > td
+
+
+async def update_user(user_id: str, access_token: Optional[str] = None) -> bool:
+    """Sends a message to pubsub to request a user update (auto cache updates)"""
+    if access_token is None:
+        user: Optional[UserMetadata] = await get_user_metadata(user_id)
+        if user is None:
+            return False
+        access_token = user.access_token
+    publish_to_topic("user", {"user_id": user_id, "access_token": access_token})
+    return True
 
 
 async def _get_user(user_id: str, no_cache: bool = False) -> Optional[UserPackage]:
@@ -34,9 +50,7 @@ async def _get_user(user_id: str, no_cache: bool = False) -> Optional[UserPackag
     valid_dt = validate_dt(db_user.last_updated, timedelta(hours=6))
     if valid_dt or not validate_raw_data(db_user.raw_data):
         if validate_dt(db_user.lock, timedelta(minutes=1)):
-            publish_to_topic(
-                "user", {"user_id": user_id, "access_token": db_user.access_token}
-            )
+            await update_user(user_id, db_user.access_token)
 
     if validate_raw_data(db_user.raw_data):
         return db_user.raw_data  # type: ignore

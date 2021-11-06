@@ -14,7 +14,7 @@ from src.constants import OAUTH_CLIENT_ID, OAUTH_REDIRECT_URI
 from src.publisher.render import get_error_svg
 
 
-# TODO: remove get_redirect_url in favor of a cleaner method
+# for standalone auth routes
 def get_redirect_url(
     prefix: str = "", private: bool = False, user_id: Optional[str] = None
 ) -> str:

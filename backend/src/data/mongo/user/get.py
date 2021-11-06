@@ -1,3 +1,4 @@
+from datetime import timedelta
 from typing import Any, Dict, Optional
 
 from pydantic.error_wrappers import ValidationError
@@ -9,7 +10,7 @@ from src.data.mongo.user.models import UserMetadata, UserModel
 from src.utils import alru_cache
 
 
-@alru_cache()
+@alru_cache(ttl=timedelta(minutes=1))
 async def get_user_metadata(
     user_id: str, no_cache: bool = False
 ) -> Optional[UserMetadata]:
@@ -28,7 +29,7 @@ async def get_user_metadata(
         return (False, None)  # type: ignore
 
 
-@alru_cache()
+@alru_cache(ttl=timedelta(minutes=1))
 async def get_user_by_user_id(
     user_id: str, no_cache: bool = False
 ) -> Optional[UserModel]:

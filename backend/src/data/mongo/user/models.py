@@ -34,6 +34,7 @@ class UserMetadata(BaseModel):
 
 
 class UserModel(UserMetadata):
+    user_key: Optional[str]
     last_updated: Optional[datetime]
     raw_data: Optional[UserPackage]
     lock: Optional[datetime]
@@ -43,3 +44,7 @@ class UserModel(UserMetadata):
         if not isinstance(lock, datetime):
             return datetime(1970, 1, 1)
         return lock
+
+
+class ExternalUserModel(UserMetadata):
+    raw_data: Optional[UserPackage]

@@ -4,11 +4,7 @@ import os
 PROD = os.getenv("PROD", "False") == "True"
 DOCKER = os.getenv("DOCKER", "False") == "True"
 PROJECT_ID = "github-298920"
-BACKEND_URL = (
-    "https://api.githubtrends.io"
-    if PROD
-    else "http://" + ("publisher" if DOCKER else "localhost") + ":8000"
-)
+BACKEND_URL = "https://api.githubtrends.io" if PROD else "http://localhost:8000"
 
 # API
 # https://docs.github.com/en/rest/reference/rate-limit
@@ -30,9 +26,8 @@ OAUTH_REDIRECT_URI = os.getenv("OAUTH_REDIRECT_URI", "")  # redirect uri for App
 # PUBSUB
 PUBSUB_PUB = os.getenv("PUBSUB_PUB", "False") == "True"
 PUBSUB_TOKEN = os.getenv("PUBSUB_TOKEN", "")
-LOCAL_SUBSCRIBER = (  # based on name of Docker container
-    "http://" + ("subscriber" if DOCKER else "localhost") + ":8001/pubsub/sub/"
-)
+LOCAL_SUBSCRIBER = "http://" + ("subscriber" if DOCKER else "localhost") + ":8001"
+LOCAL_PUBLISHER = BACKEND_URL if not DOCKER else "http://publisher:8000"
 
 
 # MONGODB
