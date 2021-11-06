@@ -2,11 +2,11 @@ steps:
 - name: node:10.15.1
   entrypoint: npm
   args: ["install"]
-  dir: '../'
+  dir: 'backend'
 - name: node:10.15.1
   entrypoint: npm
   args: ["run", "create-env"]
-  dir: '../'
+  dir: 'backend'
   env:
     - 'PUBSUB_TOKEN=${_PUBSUB_TOKEN}'
     - 'OAUTH_CLIENT_ID=${_OAUTH_CLIENT_ID}'
@@ -15,5 +15,5 @@ steps:
     - 'MONGODB_PASSWORD=${_MONGODB_PASSWORD}'
     - 'SENTRY_DSN=${_SENTRY_DSN}'
 - name: "gcr.io/cloud-builders/gcloud"
-  args: ["app", "deploy",  "--appyaml", "./app_pub.yaml"]
-  dir: '../'
+  args: ["app", "deploy",  "--appyaml", "./deploy/app_pub.yaml"]
+  dir: 'backend'
