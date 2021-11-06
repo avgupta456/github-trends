@@ -6,7 +6,7 @@ from typing import Any, Callable, Dict, List, Tuple
 # NOTE: return flag = False to avoid caching
 # considers one optional parameter, no_cache
 # if true, bypass cache system, otherwise use normally
-def alru_cache(max_size: int = 128, ttl: timedelta = timedelta(minutes=5)):
+def alru_cache(max_size: int = 128, ttl: timedelta = timedelta(minutes=1)):
     def decorator(func: Callable[..., Any]) -> Any:
         cache: Dict[Any, Tuple[datetime, Any]] = {}
         keys: List[Any] = []

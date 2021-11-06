@@ -67,7 +67,7 @@ def svg_fail_gracefully(func: Callable[..., Any]):
         sio = io.StringIO()
         d.write(sio)  # type: ignore
 
-        print(datetime.now() - start)
+        print("SVG", datetime.now() - start)
 
         return Response(
             sio.getvalue(), media_type="image/svg+xml", status_code=status.HTTP_200_OK

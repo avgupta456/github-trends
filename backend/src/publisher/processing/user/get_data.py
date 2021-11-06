@@ -77,7 +77,7 @@ async def get_user(
     return (True, output)  # type: ignore
 
 
-@alru_cache()
+@alru_cache(ttl=timedelta(minutes=15))
 async def get_user_demo(
     user_id: str, start_date: date, end_date: date, no_cache: bool = False
 ) -> UserPackage:
