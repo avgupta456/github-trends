@@ -1,6 +1,6 @@
 [run]
-source = 
-    .
+source = src
+
 omit =
     ./.venv/*
     ./tests/*

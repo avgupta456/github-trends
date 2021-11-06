@@ -1,6 +1,6 @@
-service: default
+service: sub
 runtime: python37
-entrypoint: gunicorn -w 4 -k uvicorn.workers.UvicornWorker src.main_pub:app
+entrypoint: gunicorn -w 4 -k uvicorn.workers.UvicornWorker ../src.main_sub:app
 
 #smallest instance class
 instance_class: F2
@@ -17,4 +17,4 @@ resources:
 
 env_variables:
   PROD: true
-  PUBSUB_PUB: true
+  PUBSUB_PUB: false
