@@ -25,6 +25,7 @@ SETUP
 app = FastAPI()
 
 origins = [
+    "http://localhost:8085",
     "http://localhost:3000",
     "http://localhost:8000",
     "https://githubtrends.io",

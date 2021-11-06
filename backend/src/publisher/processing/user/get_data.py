@@ -20,22 +20,20 @@ def validate_raw_data(data: Optional[UserPackage]) -> bool:
     return data is not None and data.contribs is not None
 
 
+def validate_dt(dt: Optional[datetime], td: timedelta):
+    last_updated = dt if dt is not None else datetime(1970, 1, 1)
+    time_diff = datetime.now() - last_updated
+    return time_diff > timedelta(hours=6)
+
+
 async def _get_user(user_id: str, no_cache: bool = False) -> Optional[UserPackage]:
     db_user: Optional[UserModel] = await get_user_by_user_id(user_id, no_cache=no_cache)
     if db_user is None or db_user.access_token == "":
         raise LookupError("Invalid UserId")
 
-    last_updated: datetime = datetime(1970, 1, 1)
-    if db_user.last_updated is not None:
-        last_updated = db_user.last_updated
-
-    time_diff = datetime.now() - last_updated
-    if time_diff > timedelta(hours=6) or not validate_raw_data(db_user.raw_data):
-        last_updated: datetime = datetime(1970, 1, 1)
-        if db_user.lock is not None:
-            last_updated = db_user.lock
-        time_diff = datetime.now() - last_updated
-        if time_diff > timedelta(minutes=1):
+    valid_dt = validate_dt(db_user.last_updated, timedelta(hours=6))
+    if valid_dt or not validate_raw_data(db_user.raw_data):
+        if validate_dt(db_user.lock, timedelta(minutes=1)):
             publish_to_topic(
                 "user", {"user_id": user_id, "access_token": db_user.access_token}
             )
@@ -46,7 +44,7 @@ async def _get_user(user_id: str, no_cache: bool = False) -> Optional[UserPackag
     return None
 
 
-@alru_cache(max_size=128)
+@alru_cache()
 async def get_user(
     user_id: str,
     start_date: date,

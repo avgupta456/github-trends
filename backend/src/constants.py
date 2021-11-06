@@ -4,7 +4,11 @@ import os
 PROD = os.getenv("PROD", "False") == "True"
 DOCKER = os.getenv("DOCKER", "False") == "True"
 PROJECT_ID = "github-298920"
-BACKEND_URL = "https://api.githubtrends.io" if PROD else "http://localhost:8000"
+BACKEND_URL = (
+    "https://api.githubtrends.io"
+    if PROD
+    else "http://" + ("publisher" if DOCKER else "localhost") + ":8000"
+)
 
 # API
 # https://docs.github.com/en/rest/reference/rate-limit

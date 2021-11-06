@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any, Dict, Optional
 
 from src.models import UserPackage
@@ -14,7 +14,17 @@ async def lock_user(user_id: str) -> None:
     )
 
 
-async def update_user(user_id: str, raw_user: Dict[str, Any]) -> None:
+async def is_user_locked(user_id: str) -> bool:
+    """Returns true if user is locked, false otherwise"""
+    user = await USERS.find_one({"user_id": user_id}, {"lock": 1})  # type: ignore
+    last_updated: datetime = datetime(1970, 1, 1)
+    if user is not None and user["lock"] is not None:
+        last_updated: datetime = user["lock"]
+    time_diff = datetime.now() - last_updated
+    return time_diff < timedelta(minutes=1)
+
+
+async def update_user_metadata(user_id: str, raw_user: Dict[str, Any]) -> None:
     await USERS.update_one(  # type: ignore
         {"user_id": user_id},
         {"$set": raw_user},

@@ -1,31 +1,52 @@
 version: "3"
 
 services:
+  pubsub:
+    container_name: pubsub
+    build:
+      context: "./backend"
+      dockerfile: deploy/pubsub.Dockerfile
+    ports:
+      - 8085:8085
+    volumes:
+      - ./backend:/backend
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/backend/gcloud_key.json
+      - PUBSUB_EMULATOR_HOST=pubsub:8085
+
   publisher:
     container_name: publisher
     build:
       context: "./backend"
-      dockerfile: pub.Dockerfile
+      dockerfile: deploy/pub.Dockerfile
     ports:
       - 8000:8000
     volumes:
       - ./backend:/backend
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/backend/gcloud_key.json
+      - PUBSUB_EMULATOR_HOST=pubsub:8085
+      - PROJECT_ID=github-298920
       - DOCKER=True
+    depends_on:
+      - pubsub
 
   subscriber:
     container_name: subscriber
     build:
       context: "./backend"
-      dockerfile: sub.Dockerfile
+      dockerfile: deploy/sub.Dockerfile
     ports:
       - 8001:8001
     volumes:
       - ./backend:/backend
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/backend/gcloud_key.json
+      - PUBSUB_EMULATOR_HOST=pubsub:8085
+      - PROJECT_ID=github-298920
       - DOCKER=True
+    depends_on:
+      - pubsub
 
   frontend:
     container_name: frontend
@@ -37,3 +58,6 @@ services:
       - ./frontend:/frontend
     environment:
       - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - publisher
+      - subscriber
