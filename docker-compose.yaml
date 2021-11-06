@@ -52,6 +52,7 @@ services:
     container_name: frontend
     build:
       context: "./frontend"
+      dockerfile: deploy/Dockerfile
     ports:
       - "3000:3000"
     volumes:
