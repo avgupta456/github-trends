@@ -43,7 +43,7 @@ const Customize = () => {
   return (
     <div className="h-full py-8 flex justify-center items-center text-gray-600 body-font">
       <div className="container px-8 mx-auto flex flex-wrap">
-        <div className="w-full h-1 bg-gray-200 rounded overflow-hidden">
+        <div className="w-full h-1 bg-gray-200 rounded">
           <div className="w-48 h-full bg-blue-500" />
         </div>
         <div className="w-full flex flex-wrap sm:flex-row flex-col pt-6 pb-8">
@@ -55,7 +55,7 @@ const Customize = () => {
             specific languages or repositories, control the theme, and more!
           </p>
         </div>
-        <div className="min-h-screen w-2/5 pr-10 p-10 rounded bg-gray-200">
+        <div className="h-auto lg:w-2/5 md:w-1/2 pr-10 p-10 rounded bg-gray-200">
           <DateRangeSection
             selectedTimeRange={selectedTimeRange}
             setSelectedTimeRange={setSelectedTimeRange}
@@ -98,8 +98,8 @@ const Customize = () => {
             />
           )}
         </div>
-        <div className="lg:w-3/5 md:w-1/2 object-center">
-          <div className="w-3/5 mx-auto h-full flex flex-col justify-center">
+        <div className="w-full lg:w-3/5 md:w-1/2 object-center pt-5 md:pt-0 pl-0 md:pl-5 lg:pl-0">
+          <div className="w-full lg:w-3/5 mx-auto h-full flex flex-col justify-center">
             <Image imageSrc={fullSuffix} compact={useCompact} />
           </div>
         </div>
