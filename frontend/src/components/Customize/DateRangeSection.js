@@ -24,7 +24,7 @@ const DateRangeSection = ({ selectedTimeRange, setSelectedTimeRange }) => {
     <Section title="Date Range">
       <p>Select the date range for statistics.</p>
       <select
-        className="text-white select select-sm w-40 rounded mt-4"
+        className="text-gray-700 bg-white select select-sm w-40 rounded mt-4"
         value={selectedOption.name}
         onChange={(e) =>
           setSelectedTimeRange(
