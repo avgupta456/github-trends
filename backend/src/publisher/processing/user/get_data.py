@@ -21,14 +21,25 @@ from src.utils.pubsub import publish_to_topic
 
 
 def validate_raw_data(data: Optional[UserPackage]) -> bool:
+    """Returns False if invalid data"""
     # NOTE: add more validation as more fields are required
-    return data is not None and data.contribs is not None
+    if data is None or data.contribs is None:
+        return False
+
+    if (
+        data.contribs.total_stats.commits_count > 0
+        and len(data.contribs.total_stats.languages) == 0
+    ):
+        return False
+
+    return True
 
 
 def validate_dt(dt: Optional[datetime], td: timedelta):
+    """Returns false if invalid date"""
     last_updated = dt if dt is not None else datetime(1970, 1, 1)
     time_diff = datetime.now() - last_updated
-    return time_diff > td
+    return time_diff <= td
 
 
 async def update_user(user_id: str, access_token: Optional[str] = None) -> bool:
@@ -48,8 +59,8 @@ async def _get_user(user_id: str, no_cache: bool = False) -> Optional[UserPackag
         raise LookupError("Invalid UserId")
 
     valid_dt = validate_dt(db_user.last_updated, timedelta(hours=6))
-    if valid_dt or not validate_raw_data(db_user.raw_data):
-        if validate_dt(db_user.lock, timedelta(minutes=1)):
+    if not valid_dt or not validate_raw_data(db_user.raw_data):
+        if not validate_dt(db_user.lock, timedelta(minutes=1)):
             await update_user(user_id, db_user.access_token)
 
     if validate_raw_data(db_user.raw_data):
