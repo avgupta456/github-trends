@@ -149,8 +149,6 @@ const HomeScreen = () => {
   const [theme, setTheme] = useState('light');
   const themeSuffix = `${fullSuffix}&theme=${theme}`;
 
-  console.log(selectedCard, fullSuffix, themeSuffix);
-
   return (
     <div className="h-full py-8 px-8 text-gray-600 body-font">
       <div className="flex flex-col">
