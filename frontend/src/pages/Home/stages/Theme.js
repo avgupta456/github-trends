@@ -1,17 +1,11 @@
 /* eslint-disable react/no-array-index-key */
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Card } from '../../../components';
 
-const ThemeStage = ({ fullSuffix, setThemeSuffix }) => {
-  const [selectedTheme, setSelectedTheme] = useState('light');
-
-  useEffect(() => {
-    setThemeSuffix(`${fullSuffix}&theme=${selectedTheme}`);
-  }, [fullSuffix, selectedTheme]);
-
+const ThemeStage = ({ theme, setTheme, themeSuffix }) => {
   return (
     <div className="flex flex-wrap">
       {[
@@ -30,13 +24,13 @@ const ThemeStage = ({ fullSuffix, setThemeSuffix }) => {
           className="w-1/3 p-4"
           key={index}
           type="button"
-          onClick={() => setSelectedTheme(card.imageSrc)}
+          onClick={() => setTheme(card.imageSrc)}
         >
           <Card
             title={card.title}
             description={card.description}
-            imageSrc={`${fullSuffix}&theme=${card.imageSrc}`}
-            selected={selectedTheme === card.imageSrc}
+            imageSrc={themeSuffix}
+            selected={theme === card.imageSrc}
           />
         </button>
       ))}
@@ -45,8 +39,9 @@ const ThemeStage = ({ fullSuffix, setThemeSuffix }) => {
 };
 
 ThemeStage.propTypes = {
-  fullSuffix: PropTypes.string.isRequired,
-  setThemeSuffix: PropTypes.func.isRequired,
+  theme: PropTypes.string.isRequired,
+  setTheme: PropTypes.func.isRequired,
+  themeSuffix: PropTypes.string.isRequired,
 };
 
 export default ThemeStage;

@@ -101,18 +101,53 @@ const HomeScreen = () => {
   const [selectedCard, setSelectedCard] = useState('langs');
 
   // for stage two
-  const [fullSuffix, setFullSuffix] = useState('');
+  const defaultTimeRange = {
+    id: 3,
+    name: 'Past 1 Year',
+    disabled: false,
+    timeRange: 'one_year',
+  };
+  const [selectedTimeRange, setSelectedTimeRange] = useState(defaultTimeRange);
 
-  // for stage three
-  const [themeSuffix, setThemeSuffix] = useState('');
+  const [usePercent, setUsePercent] = useState(false);
+  const [usePrivate, setUsePrivate] = useState(false);
+  const [useLocChanged, setUseLocChanged] = useState(false);
+  const [useCompact, setUseCompact] = useState(false);
+
+  const resetCustomization = () => {
+    setSelectedTimeRange(defaultTimeRange);
+    setUsePercent(false);
+    setUsePrivate(false);
+    setUseLocChanged(false);
+    setUseCompact(false);
+  };
 
   useEffect(() => {
-    setFullSuffix(`${selectedCard}?time_range=one_year`);
+    resetCustomization();
   }, [selectedCard]);
 
-  useEffect(() => {
-    setThemeSuffix(`${fullSuffix}&theme=light`);
-  }, [fullSuffix]);
+  const time = selectedTimeRange.timeRange;
+  let fullSuffix = `${selectedCard}?time_range=${time}`;
+
+  if (usePercent) {
+    fullSuffix += '&use_percent=True';
+  }
+
+  if (usePrivate) {
+    fullSuffix += '&include_private=True';
+  }
+
+  if (useLocChanged) {
+    fullSuffix += '&loc_metric=changed';
+  }
+
+  if (useCompact) {
+    fullSuffix += '&compact=True';
+  }
+
+  // for stage three
+  const [theme, setTheme] = useState('light');
+  const themeSuffix = `${fullSuffix}&theme=${theme}`;
 
   console.log(selectedCard, fullSuffix, themeSuffix);
 
@@ -161,13 +196,24 @@ const HomeScreen = () => {
           {stage === 1 && (
             <CustomizeStage
               selectedCard={selectedCard}
-              setFullSuffix={setFullSuffix}
+              selectedTimeRange={selectedTimeRange}
+              setSelectedTimeRange={setSelectedTimeRange}
+              usePrivate={usePrivate}
+              setUsePrivate={setUsePrivate}
+              useCompact={useCompact}
+              setUseCompact={setUseCompact}
+              usePercent={usePercent}
+              setUsePercent={setUsePercent}
+              useLocChanged={useLocChanged}
+              setUseLocChanged={setUseLocChanged}
+              fullSuffix={fullSuffix}
             />
           )}
           {stage === 2 && (
             <ThemeStage
-              fullSuffix={fullSuffix}
-              setThemeSuffix={setThemeSuffix}
+              theme={theme}
+              setTheme={setTheme}
+              themeSuffix={themeSuffix}
             />
           )}
           {stage === 3 && <DisplayStage themeSuffix={themeSuffix} />}

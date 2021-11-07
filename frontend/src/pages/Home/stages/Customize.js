@@ -1,45 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Image, DateRangeSection, CheckboxSection } from '../../../components';
 
-const CustomizeStage = ({ selectedCard, setFullSuffix }) => {
-  const defaultTimeRange = {
-    id: 3,
-    name: 'Past 1 Year',
-    disabled: false,
-    timeRange: 'one_year',
-  };
-  const [selectedTimeRange, setSelectedTimeRange] = useState(defaultTimeRange);
-
-  const [usePercent, setUsePercent] = useState(false);
-  const [usePrivate, setUsePrivate] = useState(false);
-  const [useLocChanged, setUseLocChanged] = useState(false);
-  const [useCompact, setUseCompact] = useState(false);
-
-  const time = selectedTimeRange.timeRange;
-  let fullSuffix = `${selectedCard}?time_range=${time}`;
-
-  if (usePercent) {
-    fullSuffix += '&use_percent=True';
-  }
-
-  if (usePrivate) {
-    fullSuffix += '&include_private=True';
-  }
-
-  if (useLocChanged) {
-    fullSuffix += '&loc_metric=changed';
-  }
-
-  if (useCompact) {
-    fullSuffix += '&compact=True';
-  }
-
-  useEffect(() => {
-    setFullSuffix(fullSuffix);
-  }, [fullSuffix]);
-
+const CustomizeStage = ({
+  selectedCard,
+  selectedTimeRange,
+  setSelectedTimeRange,
+  usePrivate,
+  setUsePrivate,
+  useCompact,
+  setUseCompact,
+  usePercent,
+  setUsePercent,
+  useLocChanged,
+  setUseLocChanged,
+  fullSuffix,
+}) => {
   return (
     <div className="w-full flex flex-wrap">
       <div className="h-auto lg:w-2/5 md:w-1/2 pr-10 p-10 rounded bg-gray-200">
@@ -93,7 +70,17 @@ const CustomizeStage = ({ selectedCard, setFullSuffix }) => {
 
 CustomizeStage.propTypes = {
   selectedCard: PropTypes.string.isRequired,
-  setFullSuffix: PropTypes.func.isRequired,
+  selectedTimeRange: PropTypes.object.isRequired,
+  setSelectedTimeRange: PropTypes.func.isRequired,
+  usePrivate: PropTypes.bool.isRequired,
+  setUsePrivate: PropTypes.func.isRequired,
+  useCompact: PropTypes.bool.isRequired,
+  setUseCompact: PropTypes.func.isRequired,
+  usePercent: PropTypes.bool.isRequired,
+  setUsePercent: PropTypes.func.isRequired,
+  useLocChanged: PropTypes.bool.isRequired,
+  setUseLocChanged: PropTypes.func.isRequired,
+  fullSuffix: PropTypes.string.isRequired,
 };
 
 export default CustomizeStage;
