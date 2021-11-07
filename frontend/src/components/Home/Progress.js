@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -8,13 +9,12 @@ import {
 
 import { classnames } from '../../utils';
 
-const ProgressSection = ({ num, item, passed, onClick, clickDisabled }) => {
+const ProgressSection = ({ num, item, passed, onClick }) => {
   return (
     <button
       className={classnames(
-        'w-1/4 flex flex-col mx-2 p-2 border-t-4',
+        'w-1/4 flex flex-col mx-2 p-2 border-t-4 cursor-pointer',
         passed ? 'border-blue-500' : 'border-gray-400',
-        clickDisabled ? 'cursor-not-allowed' : 'cursor-pointer',
       )}
       type="button"
       onClick={onClick}
@@ -39,25 +39,18 @@ ProgressSection.propTypes = {
   item: PropTypes.string.isRequired,
   passed: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
-  clickDisabled: PropTypes.bool.isRequired,
 };
 
-const ProgressBar = ({
-  items,
-  currItem,
-  setCurrItem,
-  leftDisabled,
-  rightDisabled,
-}) => {
-  const fullLeftDisabled = leftDisabled || currItem === 0;
-  const fullRightDisabled = rightDisabled || currItem === items.length - 1;
+const ProgressBar = ({ items, currItem, setCurrItem }) => {
+  const leftDisabled = currItem === 0;
+  const rightDisabled = currItem === items.length - 1;
 
   return (
     <div className="w-full flex items-center">
       <LeftArrowIcon
         className={classnames(
           'w-8 h-8',
-          fullLeftDisabled
+          leftDisabled
             ? 'text-gray-300 cursor-not-allowed'
             : 'text-gray-700 cursor-pointer',
         )}
@@ -68,13 +61,10 @@ const ProgressBar = ({
           return (
             <ProgressSection
               num={index}
+              key={index}
               item={item}
               passed={currItem >= index}
               onClick={() => setCurrItem(index)}
-              clickDisabled={
-                (currItem > index && fullLeftDisabled) ||
-                (currItem < index && fullRightDisabled)
-              }
             />
           );
         })}
@@ -82,7 +72,7 @@ const ProgressBar = ({
       <RightArrowIcon
         className={classnames(
           'w-8 h-8',
-          fullRightDisabled
+          rightDisabled
             ? 'text-gray-300 cursor-not-allowed'
             : 'text-gray-700 cursor-pointer',
         )}
@@ -96,13 +86,6 @@ ProgressBar.propTypes = {
   items: PropTypes.array.isRequired,
   currItem: PropTypes.number.isRequired,
   setCurrItem: PropTypes.func.isRequired,
-  leftDisabled: PropTypes.bool,
-  rightDisabled: PropTypes.bool,
-};
-
-ProgressBar.defaultProps = {
-  leftDisabled: false,
-  rightDisabled: false,
 };
 
 export default ProgressBar;

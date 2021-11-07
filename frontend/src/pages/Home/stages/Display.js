@@ -32,7 +32,6 @@ const DisplayStage = ({ themeSuffix }) => {
       `[![GitHub Trends SVG](https://api.githubtrends.io/user/svg/${userId}/${themeSuffix})](https://githubtrends.io)`,
     );
     sleep(3000).then(() => {
-      console.log('Redirecting...');
       openInNewTab(
         `https://github.com/${userId}/${userId}/edit/master/README.md`,
       );

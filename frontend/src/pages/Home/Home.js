@@ -98,7 +98,7 @@ const HomeScreen = () => {
   const [stage, setStage] = useState(0);
 
   // for stage one
-  const [selectedCard, setSelectedCard] = useState(null);
+  const [selectedCard, setSelectedCard] = useState('langs');
 
   // for stage two
   const [fullSuffix, setFullSuffix] = useState('');
@@ -106,7 +106,15 @@ const HomeScreen = () => {
   // for stage three
   const [themeSuffix, setThemeSuffix] = useState('');
 
-  console.log(themeSuffix);
+  useEffect(() => {
+    setFullSuffix(`${selectedCard}?time_range=one_year`);
+  }, [selectedCard]);
+
+  useEffect(() => {
+    setThemeSuffix(`${fullSuffix}&theme=light`);
+  }, [fullSuffix]);
+
+  console.log(selectedCard, fullSuffix, themeSuffix);
 
   return (
     <div className="h-full py-8 px-8 text-gray-600 body-font">
@@ -120,7 +128,6 @@ const HomeScreen = () => {
           ]}
           currItem={stage}
           setCurrItem={setStage}
-          rightDisabled={stage === 0 && selectedCard === null}
         />
         <div className="m-4 rounded-lg">
           <div className="p-4">
@@ -149,7 +156,6 @@ const HomeScreen = () => {
             <SelectCardStage
               selectedCard={selectedCard}
               setSelectedCard={setSelectedCard}
-              setStage={setStage}
             />
           )}
           {stage === 1 && (

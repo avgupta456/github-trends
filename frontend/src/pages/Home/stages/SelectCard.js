@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import { Card } from '../../../components';
 
-const SelectCardStage = ({ selectedCard, setSelectedCard, setStage }) => {
+const SelectCardStage = ({ selectedCard, setSelectedCard }) => {
   return (
     <div className="flex flex-wrap">
       {[
@@ -24,14 +24,7 @@ const SelectCardStage = ({ selectedCard, setSelectedCard, setStage }) => {
           className="w-1/3 p-4"
           key={index}
           type="button"
-          onClick={() => {
-            if (selectedCard !== card.imageSrc) {
-              setSelectedCard(card.imageSrc);
-              setStage(1);
-            } else {
-              setSelectedCard(null);
-            }
-          }}
+          onClick={() => setSelectedCard(card.imageSrc)}
         >
           <Card
             title={card.title}
@@ -48,7 +41,6 @@ const SelectCardStage = ({ selectedCard, setSelectedCard, setStage }) => {
 SelectCardStage.propTypes = {
   selectedCard: PropTypes.string.isRequired,
   setSelectedCard: PropTypes.func.isRequired,
-  setStage: PropTypes.func.isRequired,
 };
 
 export default SelectCardStage;

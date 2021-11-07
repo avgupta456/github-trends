@@ -17,18 +17,6 @@ const CustomizeStage = ({ selectedCard, setFullSuffix }) => {
   const [useLocChanged, setUseLocChanged] = useState(false);
   const [useCompact, setUseCompact] = useState(false);
 
-  const resetCustomizations = () => {
-    setSelectedTimeRange(defaultTimeRange);
-    setUsePercent(false);
-    setUsePrivate(false);
-    setUseLocChanged(false);
-    setUseCompact(false);
-  };
-
-  useEffect(() => {
-    resetCustomizations();
-  }, [selectedCard]);
-
   const time = selectedTimeRange.timeRange;
   let fullSuffix = `${selectedCard}?time_range=${time}`;
 
