@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -7,11 +6,37 @@ import { useHistory } from 'react-router-dom';
 import BounceLoader from 'react-spinners/BounceLoader';
 import { FaGithub as GithubIcon } from 'react-icons/fa';
 
-import { Card } from '../../components';
+import { ProgressBar } from '../../components';
+import {
+  SelectCardStage,
+  CustomizeStage,
+  ThemeStage,
+  DisplayStage,
+} from './stages';
 
 import { setUserKey, authenticate } from '../../api';
 import { login as _login } from '../../redux/actions/userActions';
 import { PROD } from '../../constants';
+
+const FloatingIcon = () => {
+  return (
+    <div className="fixed bottom-8 right-8">
+      <a
+        href="https://www.github.com/avgupta456/github-trends"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <button
+          type="button"
+          className="rounded-full bg-gray-700 hover:bg-gray-800 text-gray-50 px-3 py-2 flex items-center"
+        >
+          Star on
+          <GithubIcon className="ml-1.5 w-5 h-5" />
+        </button>
+      </a>
+    </div>
+  );
+};
 
 const HomeScreen = () => {
   const history = useHistory();
@@ -69,54 +94,130 @@ const HomeScreen = () => {
     );
   }
 
+  // for all stages
+  const [stage, setStage] = useState(0);
+
+  // for stage one
+  const [selectedCard, setSelectedCard] = useState('langs');
+
+  // for stage two
+  const defaultTimeRange = {
+    id: 3,
+    name: 'Past 1 Year',
+    disabled: false,
+    timeRange: 'one_year',
+  };
+  const [selectedTimeRange, setSelectedTimeRange] = useState(defaultTimeRange);
+
+  const [usePercent, setUsePercent] = useState(false);
+  const [usePrivate, setUsePrivate] = useState(false);
+  const [useLocChanged, setUseLocChanged] = useState(false);
+  const [useCompact, setUseCompact] = useState(false);
+
+  const resetCustomization = () => {
+    setSelectedTimeRange(defaultTimeRange);
+    setUsePercent(false);
+    setUsePrivate(false);
+    setUseLocChanged(false);
+    setUseCompact(false);
+  };
+
+  useEffect(() => {
+    resetCustomization();
+  }, [selectedCard]);
+
+  const time = selectedTimeRange.timeRange;
+  let fullSuffix = `${selectedCard}?time_range=${time}`;
+
+  if (usePercent) {
+    fullSuffix += '&use_percent=True';
+  }
+
+  if (usePrivate) {
+    fullSuffix += '&include_private=True';
+  }
+
+  if (useLocChanged) {
+    fullSuffix += '&loc_metric=changed';
+  }
+
+  if (useCompact) {
+    fullSuffix += '&compact=True';
+  }
+
+  // for stage three
+  const [theme, setTheme] = useState('light');
+  const themeSuffix = `${fullSuffix}&theme=${theme}`;
+
   return (
     <div className="h-full py-8 px-8 text-gray-600 body-font">
       <div className="flex flex-col">
-        <div className="h-1 bg-gray-200 rounded overflow-hidden">
-          <div className="w-24 h-full bg-blue-500" />
-        </div>
-        <div className="flex flex-wrap sm:flex-row flex-col py-6 mb-12">
-          <h1 className="sm:w-2/5 text-gray-900 font-medium title-font text-2xl mb-2 sm:mb-0">
-            GitHub README SVG Gallery
-          </h1>
-          <p className="sm:w-3/5 leading-relaxed text-base sm:pl-10 pl-0">
-            Scroll through the list of images and see which ones you like.
-            Simply click on the image to copy the embeddable link. Each image
-            can be customized via the edit button. Enjoy!
-          </p>
+        <ProgressBar
+          items={[
+            'Select Card',
+            'Modify Parameters',
+            'Customize Theme',
+            'Display Card',
+          ]}
+          currItem={stage}
+          setCurrItem={setStage}
+        />
+        <div className="m-4 rounded-lg">
+          <div className="p-4">
+            <div className="text-2xl text-gray-600 font-semibold">
+              {
+                [
+                  'Select a Card',
+                  'Modify Card Parameters',
+                  'Choose a Theme',
+                  'Display your Card',
+                ][stage]
+              }
+            </div>
+            <div>
+              {
+                [
+                  'You will be able to customize your card in future steps.',
+                  'Change the date range, include private commits, and more!',
+                  'Choose from one of our predefined themes (more coming soon!)',
+                  'Display your card on GitHub, Twitter, or Linkedin',
+                ][stage]
+              }
+            </div>
+          </div>
+          {stage === 0 && (
+            <SelectCardStage
+              selectedCard={selectedCard}
+              setSelectedCard={setSelectedCard}
+            />
+          )}
+          {stage === 1 && (
+            <CustomizeStage
+              selectedCard={selectedCard}
+              selectedTimeRange={selectedTimeRange}
+              setSelectedTimeRange={setSelectedTimeRange}
+              usePrivate={usePrivate}
+              setUsePrivate={setUsePrivate}
+              useCompact={useCompact}
+              setUseCompact={setUseCompact}
+              usePercent={usePercent}
+              setUsePercent={setUsePercent}
+              useLocChanged={useLocChanged}
+              setUseLocChanged={setUseLocChanged}
+              fullSuffix={fullSuffix}
+            />
+          )}
+          {stage === 2 && (
+            <ThemeStage
+              theme={theme}
+              setTheme={setTheme}
+              themeSuffix={themeSuffix}
+            />
+          )}
+          {stage === 3 && <DisplayStage themeSuffix={themeSuffix} />}
         </div>
       </div>
-      <div className="flex flex-wrap -mt-8">
-        <div className="p-0 sm:w-full md:p-2 md:w-1/3 sm:mb-0 mb-6">
-          <Card
-            title="Language Contributions"
-            description="See your language breakdown across all repositories you contribute to."
-            imageSrc="langs"
-          />
-        </div>
-        <div className="p-0 sm:w-full md:p-2 md:w-1/3 sm:mb-0 mb-6">
-          <Card
-            title="Repository Contributions"
-            description="See your repository breakdown sorted by LOC and separated by language."
-            imageSrc="repos"
-          />
-        </div>
-      </div>
-      <div className="fixed bottom-8 right-8">
-        <a
-          href="https://www.github.com/avgupta456/github-trends"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <button
-            type="button"
-            className="rounded-full bg-gray-700 hover:bg-gray-800 text-gray-50 px-3 py-2 flex items-center"
-          >
-            Star on
-            <GithubIcon className="ml-1.5 w-5 h-5" />
-          </button>
-        </a>
-      </div>
+      <FloatingIcon />
     </div>
   );
 };

@@ -6,7 +6,14 @@ import PropTypes from 'prop-types';
 
 import Section from './Section';
 
-const CheckboxSection = ({ title, text, question, variable, setVariable }) => {
+const CheckboxSection = ({
+  title,
+  text,
+  question,
+  variable,
+  setVariable,
+  disabled,
+}) => {
   return (
     <Section title={title}>
       <p>{text}</p>
@@ -17,7 +24,8 @@ const CheckboxSection = ({ title, text, question, variable, setVariable }) => {
       >
         <input
           type="checkbox"
-          checked={variable ? 'checked' : ''}
+          disabled={disabled}
+          checked={variable && !disabled ? 'checked' : ''}
           className="checkbox mr-2"
           onChange={() => setVariable(!variable)}
         />
@@ -33,6 +41,11 @@ CheckboxSection.propTypes = {
   question: PropTypes.string.isRequired,
   variable: PropTypes.bool.isRequired,
   setVariable: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+};
+
+CheckboxSection.defaultProps = {
+  disabled: false,
 };
 
 export default CheckboxSection;
