@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -10,7 +7,12 @@ import BounceLoader from 'react-spinners/BounceLoader';
 import { FaGithub as GithubIcon } from 'react-icons/fa';
 
 import { ProgressBar } from '../../components';
-import { SelectCardStage, CustomizeStage, ThemeStage } from './stages';
+import {
+  SelectCardStage,
+  CustomizeStage,
+  ThemeStage,
+  DisplayStage,
+} from './stages';
 
 import { setUserKey, authenticate } from '../../api';
 import { login as _login } from '../../redux/actions/userActions';
@@ -162,6 +164,7 @@ const HomeScreen = () => {
               setThemeSuffix={setThemeSuffix}
             />
           )}
+          {stage === 3 && <DisplayStage themeSuffix={themeSuffix} />}
         </div>
       </div>
       <FloatingIcon />
