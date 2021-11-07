@@ -77,21 +77,22 @@ def get_bar_section(
         total_percent, total_items = 0, len(data_row)
         for j, (percent, color) in enumerate(data_row):
             color = color or DEFAULT_COLOR
+            percent = max(300 / bar_width, percent)
             bar_percent = bar_width * percent / 100
             bar_total = bar_width * total_percent / 100
             box_size, insert = (bar_percent, 8), (bar_total, 0)
             progress.add(d.rect(size=box_size, insert=insert, rx=5, ry=5, fill=color))
 
+            width = min(bar_percent / 2, 5)
             if total_items > 1:
                 box_left, box_right = j > 0, j < total_items - 1
-                box_size, insert = bar_percent - 10, bar_total + 5
+                box_size, insert = bar_percent - 2 * width, bar_total + width
                 if box_left:
-                    box_size += 5
-                    insert -= 5
+                    box_size += width
+                    insert -= width
                 if box_right:
-                    box_size += 5
-                box_size, insert = (max(box_size, 3), 8), (insert, 0)
-                progress.add(d.rect(size=box_size, insert=insert, fill=color))
+                    box_size += width
+                progress.add(d.rect(size=(box_size, 8), insert=(insert, 0), fill=color))
 
             total_percent += percent
         row.add(progress)
