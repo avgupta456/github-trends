@@ -10,11 +10,31 @@ import BounceLoader from 'react-spinners/BounceLoader';
 import { FaGithub as GithubIcon } from 'react-icons/fa';
 
 import { ProgressBar } from '../../components';
-import { SelectCardStage, CustomizeStage } from './stages';
+import { SelectCardStage, CustomizeStage, ThemeStage } from './stages';
 
 import { setUserKey, authenticate } from '../../api';
 import { login as _login } from '../../redux/actions/userActions';
 import { PROD } from '../../constants';
+
+const FloatingIcon = () => {
+  return (
+    <div className="fixed bottom-8 right-8">
+      <a
+        href="https://www.github.com/avgupta456/github-trends"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <button
+          type="button"
+          className="rounded-full bg-gray-700 hover:bg-gray-800 text-gray-50 px-3 py-2 flex items-center"
+        >
+          Star on
+          <GithubIcon className="ml-1.5 w-5 h-5" />
+        </button>
+      </a>
+    </div>
+  );
+};
 
 const HomeScreen = () => {
   const history = useHistory();
@@ -81,7 +101,10 @@ const HomeScreen = () => {
   // for stage two
   const [fullSuffix, setFullSuffix] = useState('');
 
-  console.log(fullSuffix);
+  // for stage three
+  const [themeSuffix, setThemeSuffix] = useState('');
+
+  console.log(themeSuffix);
 
   return (
     <div className="h-full py-8 px-8 text-gray-600 body-font">
@@ -133,23 +156,15 @@ const HomeScreen = () => {
               setFullSuffix={setFullSuffix}
             />
           )}
+          {stage === 2 && (
+            <ThemeStage
+              fullSuffix={fullSuffix}
+              setThemeSuffix={setThemeSuffix}
+            />
+          )}
         </div>
       </div>
-      <div className="fixed bottom-8 right-8">
-        <a
-          href="https://www.github.com/avgupta456/github-trends"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <button
-            type="button"
-            className="rounded-full bg-gray-700 hover:bg-gray-800 text-gray-50 px-3 py-2 flex items-center"
-          >
-            Star on
-            <GithubIcon className="ml-1.5 w-5 h-5" />
-          </button>
-        </a>
-      </div>
+      <FloatingIcon />
     </div>
   );
 };
