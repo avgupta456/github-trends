@@ -1,6 +1,6 @@
 repos:
 -   repo: https://github.com/ambv/black
-    rev: stable
+    rev: 21.10b0
     hooks:
     - id: black
       language_version: python3.8
@@ -8,3 +8,5 @@ repos:
     rev: v2.3.0
     hooks:
     - id: flake8
+      args: [--config=./backend/.flake8]
+    
