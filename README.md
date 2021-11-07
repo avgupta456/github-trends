@@ -13,6 +13,21 @@ GitHub Trends dives deep into the GitHub API to bring you exciting and impactful
   <img align="center" src="https://api.githubtrends.io/user/svg/avgupta456/repos?time_range=one_year&include_private=True" />
 </a>
 
+## Quickstart
+
+First, visit `https://api.githubtrends.io/auth/signup/public` and create an account with GitHub Trends. Then, paste this string into your Markdown content and insert your username.
+
+```md
+[![GitHub Trends SVG](https://api.githubtrends.io/user/svg/avgupta456/langs)](https://githubtrends.io)
+```
+
+And voila, you get a card like above. Keep reading to learn more!
+
+
+## Why GitHub Trends?
+
+Unlike other projects which look at just your public repositories, GitHub Trends computes metrics based on your individual commits. If you commit to open-source projects, or have collaborators contribute to your own repositories, GitHub Trends will better measure your own code contributions. Through this method, GitHub Trends is the first project that allows users to surface lines of code written (LOC) by language and repository. Our web interface also allows for easier customization.
+
 ---
 
 # Usage
@@ -42,13 +57,13 @@ You will only need to authenticate once with GitHub Trends. Subsequent requests 
 
 For the public workflow, visit
 
-```
+```md
 https://api.githubtrends.io/auth/signup/public
 ```
 
 For the private workflow, visit
 
-```
+```md
 https://api.githubtrends.io/auth/signup/private
 ```
 
@@ -72,7 +87,7 @@ See your top languages over a given time interval, based on all commits to perso
 
 After authentication, visit
 
-```
+```md
 https://api.githubtrends.io/user/svg/{user_id}/langs
 ```
 
@@ -95,7 +110,7 @@ Endpoint: `https://api.githubtrends.io/user/svg/avgupta456/langs?time_range=thre
 
 Embeddable Link:
 
-```
+```md
 [![GitHub Trends SVG](https://api.githubtrends.io/user/svg/avgupta456/langs?time_range=three_months&include_private=true&compact=true)](https://githubtrends.io)
 ```
 
@@ -107,7 +122,7 @@ Endpoint: `https://api.githubtrends.io/user/svg/avgupta456/langs?time_range=one_
 
 Embeddable Link:
 
-```
+```md
 [![GitHub Trends SVG](https://api.githubtrends.io/user/svg/avgupta456/langs?time_range=one_year&include_private=true&loc_metric=changed)](https://githubtrends.io)
 ```
 
@@ -119,7 +134,7 @@ Embeddable Link:
 
 After authentication, visit
 
-```
+```md
 https://api.githubtrends.io/user/svg/{user_id}/repos
 ```
 
@@ -139,7 +154,7 @@ Endpoint: `https://api.githubtrends.io/user/svg/avgupta456/repos?time_range=thre
 
 Embeddable Link:
 
-```
+```md
 [![GitHub Trends SVG](https://api.githubtrends.io/user/svg/avgupta456/repos?time_range=three_months&include_private=true)](https://githubtrends.io)
 ```
 
@@ -151,7 +166,7 @@ Endpoint: `https://api.githubtrends.io/user/svg/avgupta456/repos?time_range=one_
 
 Embeddable Link:
 
-```
+```md
 [![GitHub Trends SVG](https://api.githubtrends.io/user/svg/avgupta456/repos?time_range=one_year&include_private=true&loc_metric=changed)](https://githubtrends.io)
 ```
 
