@@ -5,7 +5,11 @@ import Section from './Section';
 
 import { classnames } from '../../utils';
 
-const DateRangeSection = ({ selectedTimeRange, setSelectedTimeRange }) => {
+const DateRangeSection = ({
+  selectedTimeRange,
+  setSelectedTimeRange,
+  disabled,
+}) => {
   const timeRangeOptions = [
     { id: 1, name: 'Past 1 Month', disabled: false, timeRange: 'one_month' },
     {
@@ -31,6 +35,7 @@ const DateRangeSection = ({ selectedTimeRange, setSelectedTimeRange }) => {
             timeRangeOptions.find((item) => item.name === e.target.value),
             // eslint-disable-next-line prettier/prettier
           )}
+        disabled={disabled}
       >
         {timeRangeOptions.map((option) => (
           <option
@@ -51,6 +56,11 @@ const DateRangeSection = ({ selectedTimeRange, setSelectedTimeRange }) => {
 DateRangeSection.propTypes = {
   selectedTimeRange: PropTypes.object.isRequired,
   setSelectedTimeRange: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+};
+
+DateRangeSection.defaultProps = {
+  disabled: false,
 };
 
 export default DateRangeSection;

@@ -1,15 +1,16 @@
 import Button from './Button';
 import { Card, Image, SvgInline } from './Card';
-import { Section, DateRangeSection, CheckboxSection } from './Customize';
 import Preview from './Preview';
+
+import { ProgressBar, DateRangeSection, CheckboxSection } from './Home';
 
 export {
   Button,
   Card,
   SvgInline,
   Image,
-  Section,
+  Preview,
+  ProgressBar,
   DateRangeSection,
   CheckboxSection,
-  Preview,
 };
