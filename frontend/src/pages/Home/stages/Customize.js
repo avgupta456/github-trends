@@ -9,6 +9,7 @@ const CustomizeStage = ({
   setSelectedTimeRange,
   usePrivate,
   setUsePrivate,
+  privateAccess,
   useCompact,
   setUseCompact,
   usePercent,
@@ -39,6 +40,7 @@ const CustomizeStage = ({
           question="Use private commits?"
           variable={usePrivate}
           setVariable={setUsePrivate}
+          disabled={!privateAccess}
         />
         {selectedCard === 'langs' && (
           <CheckboxSection
@@ -74,6 +76,7 @@ CustomizeStage.propTypes = {
   setSelectedTimeRange: PropTypes.func.isRequired,
   usePrivate: PropTypes.bool.isRequired,
   setUsePrivate: PropTypes.func.isRequired,
+  privateAccess: PropTypes.bool.isRequired,
   useCompact: PropTypes.bool.isRequired,
   setUseCompact: PropTypes.func.isRequired,
   usePercent: PropTypes.bool.isRequired,

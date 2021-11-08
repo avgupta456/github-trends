@@ -2,7 +2,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -10,9 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Card, Button } from '../../../components';
 import { classnames, sleep } from '../../../utils';
 
-const DisplayStage = ({ themeSuffix }) => {
-  const userId = useSelector((state) => state.user.userId);
-
+const DisplayStage = ({ userId, themeSuffix }) => {
   const openInNewTab = (url) => {
     const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
     if (newWindow) newWindow.opener = null;
@@ -99,6 +96,7 @@ const DisplayStage = ({ themeSuffix }) => {
 };
 
 DisplayStage.propTypes = {
+  userId: PropTypes.string.isRequired,
   themeSuffix: PropTypes.string.isRequired,
 };
 
