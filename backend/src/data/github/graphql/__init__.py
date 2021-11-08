@@ -18,6 +18,7 @@ from src.data.github.graphql.user.follows.models import RawFollows
 
 from src.data.github.graphql.commit import get_commits
 from src.data.github.graphql.repo import get_repo
+from src.data.github.graphql.models import RawCommit
 
 from src.data.github.graphql.template import (
     get_query_limit,
@@ -34,6 +35,7 @@ __all__ = [
     "get_user_following",
     "get_commits",
     "get_repo",
+    "RawCommit",
     "RawCalendar",
     "RawEvents",
     "RawEventsCommit",

@@ -48,10 +48,9 @@ def get_template(query: Dict[str, Any], access_token: str) -> Dict[str, Any]:
         if "errors" in data:
             if (
                 "type" in data["errors"][0]
-                and data["errors"][0]["type"] == "SERVICE_UNAVAILABLE"
+                and data["errors"][0]["type"] in ["SERVICE_UNAVAILABLE", "NOT_FOUND"]
                 and "path" in data["errors"][0]
                 and isinstance(data["errors"][0]["path"], list)
-                and len(data["errors"][0]["path"]) == 3  # type: ignore
                 and data["errors"][0]["path"][0] == "nodes"
             ):
                 raise GraphQLErrorMissingNode(node=int(data["errors"][0]["path"][1]))  # type: ignore

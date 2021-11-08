@@ -1,15 +1,22 @@
-from typing import Any, Dict, List, Union
+from typing import List, Optional
 
-from src.data.github.graphql.template import get_template
+from src.data.github.graphql.template import (
+    GraphQLError,
+    GraphQLErrorMissingNode,
+    GraphQLErrorTimeout,
+    get_template,
+    GraphQLErrorAuth,
+)
+from src.data.github.graphql.models import RawCommit
 
 
-# TODO: create return class
-
-
-def get_commits(
-    access_token: str, node_ids: List[str]
-) -> Union[Dict[str, Any], List[Any]]:
-    """gets all repository data from graphql"""
+def get_commits(access_token: str, node_ids: List[str]) -> List[Optional[RawCommit]]:
+    """
+    Gets all repository data from graphql
+    :param access_token: GitHub access token
+    :param node_ids: List of node ids
+    :return: List of commits
+    """
     query = {
         "variables": {"ids": node_ids},
         "query": """
@@ -25,4 +32,21 @@ def get_commits(
         """,
     }
 
-    return get_template(query, access_token)["data"]["nodes"]
+    try:
+        raw_commits = get_template(query, access_token)["data"]["nodes"]
+    except GraphQLErrorMissingNode as e:
+        return (
+            get_commits(access_token, node_ids[: e.node])
+            + [None]
+            + get_commits(access_token, node_ids[e.node + 1 :])
+        )
+    except (GraphQLErrorAuth, GraphQLErrorTimeout, GraphQLError):
+        return [None for _ in node_ids]
+
+    out: List[Optional[RawCommit]] = []
+    for raw_commit in raw_commits:
+        try:
+            out.append(RawCommit.parse_obj(raw_commit))
+        except Exception:
+            out.append(None)
+    return out
