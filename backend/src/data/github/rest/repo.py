@@ -1,36 +1,58 @@
 from datetime import datetime
+import logging
 from typing import Any, Dict, List, Optional
 
+from src.data.github.rest.models import RawCommit
 from src.data.github.rest.template import (
-    RESTErrorEmptyRepo,
     get_template,
     get_template_plural,
+    RESTErrorEmptyRepo,
+    RESTError,
 )
 
 BASE_URL = "https://api.github.com/repos/"
 
 
-# TODO: create return classes
-
-
+# NOTE: unused, untested
 def get_repo(access_token: str, owner: str, repo: str) -> Dict[str, Any]:
-    """Returns raw repository data"""
+    """
+    Returns raw repository data
+    :param access_token: GitHub access token
+    :param owner: repository owner
+    :param repo: repository name
+    :return: repository data
+    """
     return get_template(BASE_URL + owner + "/" + repo, access_token)
 
 
+# NOTE: unused, untested
 def get_repo_languages(
     access_token: str, owner: str, repo: str
 ) -> List[Dict[str, Any]]:
-    """Returns repository language breakdown"""
+    """
+    Returns repository language breakdown
+    :param access_token: GitHub access token
+    :param owner: repository owner
+    :param repo: repository name
+    :return: repository language breakdown
+    """
     return get_template_plural(
         BASE_URL + owner + "/" + repo + "/languages", access_token
     )
 
 
+# NOTE: unused, untested
 def get_repo_stargazers(
     access_token: str, owner: str, repo: str, per_page: int = 100
 ) -> List[Dict[str, Any]]:
-    """Returns stargazers with timestamp for repository"""
+    """
+    Returns stargazers with timestamp for repository
+    :param access_token: GitHub access token
+    :param owner: repository owner
+    :param repo: repository name
+    :param per_page: number of items per page
+    :return: stargazers with timestamp for repository
+    """
     return get_template_plural(
         BASE_URL + owner + "/" + repo + "/stargazers",
         access_token,
@@ -39,39 +61,73 @@ def get_repo_stargazers(
     )
 
 
+# NOTE: unused, untested
 # does not accept per page, exceeds if necessary
 def get_repo_code_frequency(access_token: str, owner: str, repo: str) -> Dict[str, Any]:
-    """Returns code frequency for repository"""
+    """
+    Returns code frequency for repository
+    :param access_token: GitHub access token
+    :param owner: repository owner
+    :param repo: repository name
+    :return: code frequency for repository
+    """
     return get_template(
         BASE_URL + owner + "/" + repo + "/stats/code_frequency", access_token
     )
 
 
+# NOTE: unused, untested
 def get_repo_commit_activity(
     access_token: str, owner: str, repo: str
 ) -> Dict[str, Any]:
-    """Returns commit activity for past year, broken by week"""
+    """
+    Returns commit activity for past year, broken by week
+    :param access_token: GitHub access token
+    :param owner: repository owner
+    :param repo: repository name
+    :return: commit activity for past year, broken by week
+    """
     return get_template(
         BASE_URL + owner + "/" + repo + "/stats/commit_activity", access_token
     )
 
 
+# NOTE: unused, untested
 def get_repo_contributors(access_token: str, owner: str, repo: str) -> Dict[str, Any]:
-    """Returns contributors for a repository"""
+    """
+    Returns contributors for a repository
+    :param access_token: GitHub access token
+    :param owner: repository owner
+    :param repo: repository name
+    :return: contributors for a repository
+    """
     return get_template(
         BASE_URL + owner + "/" + repo + "/stats/contributors", access_token
     )
 
 
+# NOTE: unused, untested
 def get_repo_weekly_commits(access_token: str, owner: str, repo: str) -> Dict[str, Any]:
-    """Returns contributions by week, owner/non-owner"""
+    """
+    Returns contributions by week, owner/non-owner
+    :param access_token: GitHub access token
+    :param owner: repository owner
+    :param repo: repository name
+    :return: contributions by week, owner/non-owner
+    """
     return get_template(
         BASE_URL + owner + "/" + repo + "/stats/participation", access_token
     )
 
 
+# NOTE: unused, untested
 def get_repo_hourly_commits(access_token: str, owner: str, repo: str) -> Dict[str, Any]:
-    """Returns contributions by day, hour for repository"""
+    """
+    Returns contributions by day, hour for repository
+    :param access_token: GitHub access token
+    :param owner: repository owner
+    :param repo: repository name
+    """
     return get_template(
         BASE_URL + owner + "/" + repo + "/stats/punch_card", access_token
     )
@@ -85,8 +141,18 @@ def get_repo_commits(
     since: Optional[datetime] = None,
     until: Optional[datetime] = None,
     page: int = 1,
-) -> List[Dict[str, Any]]:
-    """Returns most recent commits including commit message"""
+) -> List[RawCommit]:
+    """
+    Returns most recent commits
+    :param access_token: GitHub access token
+    :param owner: repository owner
+    :param repo: repository name
+    :param user: optional GitHub user if not owner
+    :param since: optional datetime to start from
+    :param until: optional datetime to end at
+    :param page: optional page number
+    :return: Up to 100 commits from page
+    """
     user = user if user is not None else owner
     query = BASE_URL + owner + "/" + repo + "/commits?author=" + user
     if since is not None:
@@ -94,6 +160,19 @@ def get_repo_commits(
     if until is not None:
         query += "&until=" + str(until)
     try:
-        return get_template_plural(query, access_token, page=page)
-    except RESTErrorEmptyRepo:
+        data = get_template_plural(query, access_token, page=page)
+
+        def extract_info(x: Any) -> RawCommit:
+            dt = x["commit"]["committer"]["date"]
+            temp = {
+                "timestamp": datetime.strptime(dt, "%Y-%m-%dT%H:%M:%SZ"),
+                "node_id": x["node_id"],
+            }
+            return RawCommit.parse_obj(temp)
+
+        return list(map(extract_info, data))
+    except (RESTErrorEmptyRepo, RESTError):
+        return []
+    except Exception as e:
+        logging.exception(e)
         return []

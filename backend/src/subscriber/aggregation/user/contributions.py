@@ -14,6 +14,7 @@ from src.data.github.graphql import (
     RawEventsCommit,
     RawEventsEvent,
 )
+from src.data.github.rest import RawCommit
 
 from src.models import UserContributions
 
@@ -137,7 +138,7 @@ async def get_contributions(
             repos_set.add(repo)
     repos = list(repos_set)
 
-    commit_infos = await gather(
+    commit_infos: List[List[RawCommit]] = await gather(
         funcs=[get_all_commit_info for _ in repos],
         args_dicts=[
             {
@@ -171,8 +172,8 @@ async def get_contributions(
         if repo_info is not None
     }
 
-    commit_times = [[x[0] for x in repo] for repo in commit_infos]
-    commit_node_ids = [[x[1] for x in repo] for repo in commit_infos]
+    commit_times = [[x.timestamp for x in repo] for repo in commit_infos]
+    commit_node_ids = [[x.node_id for x in repo] for repo in commit_infos]
 
     id_mapping: Dict[str, List[int]] = {}
     repo_mapping: Dict[str, str] = {}

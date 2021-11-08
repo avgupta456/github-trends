@@ -1,8 +1,8 @@
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Union
 
-from src.data.github.graphql import get_commits, RawCommit, RawRepo
-from src.data.github.rest import get_repo_commits
+from src.data.github.graphql import get_commits, RawRepo, RawCommit as GraphQLRawCommit
+from src.data.github.rest import get_repo_commits, RawCommit as RESTRawCommit
 from src.constants import NODE_CHUNK_SIZE, CUTOFF, BLACKLIST
 
 
@@ -10,44 +10,31 @@ def get_all_commit_info(
     user_id: str,
     access_token: str,
     name_with_owner: str,
-    start_date: datetime = datetime.now(),
-    end_date: datetime = datetime.now(),
-) -> List[Tuple[datetime, Any]]:
+    start_date: datetime,
+    end_date: datetime,
+) -> List[RESTRawCommit]:
     """Gets all user's commit times for a given repository"""
     owner, repo = name_with_owner.split("/")
-    data: List[Any] = []
-    index = 0
-    while index < 10 and len(data) == 100 * index:
-        data.extend(
-            get_repo_commits(
-                access_token=access_token,
-                owner=owner,
-                repo=repo,
-                user=user_id,
-                since=start_date,
-                until=end_date,
-                page=index + 1,
-            )
-        )
-        index += 1
+    data: List[RESTRawCommit] = []
 
-    def extract_info(x: Any) -> Tuple[datetime, Any]:
-        return (
-            datetime.strptime(x["commit"]["committer"]["date"], "%Y-%m-%dT%H:%M:%SZ"),
-            x["node_id"],
+    def _get_repo_commits(page: int):
+        return get_repo_commits(
+            access_token, owner, repo, user_id, start_date, end_date, page
         )
 
-    extracted_data = list(map(extract_info, data))
+    for i in range(10):
+        if len(data) == 100 * i:
+            data.extend(_get_repo_commits(i + 1))
 
     # sort ascending
-    sorted_data = sorted(extracted_data, key=lambda x: x[0])
+    sorted_data = sorted(data, key=lambda x: x.timestamp)
     return sorted_data
 
 
 def _get_commits_languages(
     access_token: str, node_ids: List[str], per_page: int = NODE_CHUNK_SIZE
-) -> List[Optional[RawCommit]]:
-    all_data: List[Optional[RawCommit]] = []
+) -> List[Optional[GraphQLRawCommit]]:
+    all_data: List[Optional[GraphQLRawCommit]] = []
     for i in range(0, len(node_ids), per_page):
         cutoff = min(len(node_ids), i + per_page)
         all_data.extend(get_commits(access_token, node_ids[i:cutoff]))

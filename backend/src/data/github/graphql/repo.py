@@ -5,7 +5,13 @@ from src.data.github.graphql.template import get_template
 
 
 def get_repo(access_token: str, owner: str, repo: str) -> Optional[RawRepo]:
-    """gets all repository data from graphql"""
+    """
+    Gets all repository data from graphql
+    :param access_token: GitHub access token
+    :param owner: GitHub owner
+    :param repo: GitHub repository
+    :return: RawRepo object or None if repo not present
+    """
     query = {
         "variables": {"owner": owner, "repo": repo},
         "query": """

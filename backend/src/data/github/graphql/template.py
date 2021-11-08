@@ -29,7 +29,12 @@ class GraphQLErrorTimeout(Exception):
 
 
 def get_template(query: Dict[str, Any], access_token: str) -> Dict[str, Any]:
-    """Template for interacting with the GitHub GraphQL API"""
+    """
+    Template for interacting with the GitHub GraphQL API
+    :param query: The query to be sent to the GitHub GraphQL API
+    :param access_token: The access token to be used for the query
+    :return: The response from the GitHub GraphQL API
+    """
     start = datetime.now()
     headers: Dict[str, str] = {"Authorization": "bearer " + access_token}
 
@@ -69,8 +74,11 @@ def get_template(query: Dict[str, Any], access_token: str) -> Dict[str, Any]:
 
 
 def get_query_limit(access_token: str) -> int:
-    """Get the current rate limit for the GitHub GraphQL API"""
-
+    """
+    Get the current rate limit for the GitHub GraphQL API
+    :param access_token: The access token to be used for the query
+    :return: The current rate limit for the GitHub GraphQL API
+    """
     try:
         data = get_template(
             {"query": "query { rateLimit { remaining } }"}, access_token
