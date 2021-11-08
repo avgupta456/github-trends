@@ -26,7 +26,7 @@ class TestTemplate(unittest.TestCase):
         response = get_user_contribution_calendar(
             user_id=USER_ID,
             access_token=TOKEN,
-            start_date=datetime.today() - timedelta(days=365),
+            start_date=datetime.today() - timedelta(days=30),
             end_date=datetime.today(),
         )
         self.assertIsInstance(response, RawCalendar)
@@ -35,7 +35,7 @@ class TestTemplate(unittest.TestCase):
         response = get_user_contribution_events(
             user_id=USER_ID,
             access_token=TOKEN,
-            start_date=datetime.today() - timedelta(days=365),
+            start_date=datetime.today() - timedelta(days=30),
             end_date=datetime.today(),
         )
         self.assertIsInstance(response, RawEvents)

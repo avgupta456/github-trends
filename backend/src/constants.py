@@ -40,5 +40,5 @@ DEFAULT_COLOR = "#858585"
 SENTRY_DSN = os.getenv("SENTRY_DSN", "")
 
 # TESTING
-TEST_USER_ID = "AshishGupta938"  # for testing, previously "avgupta456"
+TEST_USER_ID = "avgupta456"
 TEST_TOKEN = os.getenv("AUTH_TOKEN", "")  # for authentication

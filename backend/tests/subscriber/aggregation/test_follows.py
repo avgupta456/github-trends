@@ -8,7 +8,7 @@ from src.constants import TEST_USER_ID as USER_ID, TEST_TOKEN as TOKEN
 
 
 class TestTemplate(unittest.TestCase):
-    def test_get_contributions(self):
+    def test_get_follows(self):
         response = get_user_follows(USER_ID, TOKEN)
         self.assertIsInstance(response, UserFollows)
 
