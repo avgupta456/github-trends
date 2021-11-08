@@ -1,4 +1,5 @@
 from datetime import datetime
+import logging
 from typing import Any, Dict, Tuple
 
 import requests
@@ -75,5 +76,6 @@ def get_query_limit(access_token: str) -> int:
             {"query": "query { rateLimit { remaining } }"}, access_token
         )
         return data["data"]["rateLimit"]["remaining"]
-    except Exception:
+    except Exception as e:
+        logging.exception(e)
         return -1

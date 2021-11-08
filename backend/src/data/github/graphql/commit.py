@@ -1,3 +1,4 @@
+import logging
 from typing import List, Optional
 
 from src.data.github.graphql.template import (
@@ -40,13 +41,17 @@ def get_commits(access_token: str, node_ids: List[str]) -> List[Optional[RawComm
             + [None]
             + get_commits(access_token, node_ids[e.node + 1 :])
         )
-    except (GraphQLErrorAuth, GraphQLErrorTimeout, GraphQLError):
+    except (GraphQLErrorAuth, GraphQLErrorTimeout):
+        return [None for _ in node_ids]
+    except GraphQLError as e:
+        logging.exception(e)
         return [None for _ in node_ids]
 
     out: List[Optional[RawCommit]] = []
     for raw_commit in raw_commits:
         try:
             out.append(RawCommit.parse_obj(raw_commit))
-        except Exception:
+        except Exception as e:
+            logging.exception(e)
             out.append(None)
     return out

@@ -41,6 +41,7 @@ SENTRY_DSN = os.getenv("SENTRY_DSN", "")
 
 # TESTING
 TEST_USER_ID = "avgupta456"
+TEST_REPO = "github-trends"
 TEST_TOKEN = os.getenv("AUTH_TOKEN", "")  # for authentication
 TEST_NODE_IDS = [
     "C_kwDOENp939oAKGM1MzdlM2QzMTZjMmEyZGIyYWU4ZWI0MmNmNjQ4YWEwNWQ5OTBiMjM",
