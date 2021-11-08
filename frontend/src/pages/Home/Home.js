@@ -44,55 +44,13 @@ const HomeScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const userId = useSelector((state) => state.user.userId);
+  const privateAccess = useSelector((state) => state.user.privateAccess);
 
   const isAuthenticated = userId && userId.length > 0;
 
   const dispatch = useDispatch();
 
   const login = (newUserId, userKey) => dispatch(_login(newUserId, userKey));
-
-  useEffect(async () => {
-    // After requesting Github access, Github redirects back to your app with a code parameter
-    const url = window.location.href;
-
-    if (url.includes('error=')) {
-      history.push('/');
-    }
-
-    // If Github API returns the code parameter
-    if (url.includes('code=')) {
-      const privateAccess = url.includes('private');
-      const newUrl = url.split('?code=');
-      const subStr = PROD ? 'githubtrends.io' : 'localhost:3000';
-      const redirect = `${url.split(subStr)[0]}${subStr}/user`;
-      window.history.pushState({}, null, redirect);
-      setIsLoading(true);
-      const userKey = await setUserKey(newUrl[1]);
-      const newUserId = await authenticate(newUrl[1], privateAccess);
-      login(newUserId, userKey);
-      setIsLoading(false);
-    }
-  }, []);
-
-  if (isLoading) {
-    return (
-      <div className="h-full py-8 flex justify-center items-center">
-        <BounceLoader color="#3B82F6" />
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return (
-      <div className="h-full py-8 flex justify-center items-center">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold">
-            Please sign in to access this page
-          </h1>
-        </div>
-      </div>
-    );
-  }
 
   // for all stages
   const [stage, setStage] = useState(0);
@@ -149,6 +107,49 @@ const HomeScreen = () => {
   const [theme, setTheme] = useState('light');
   const themeSuffix = `${fullSuffix}&theme=${theme}`;
 
+  useEffect(async () => {
+    // After requesting Github access, Github redirects back to your app with a code parameter
+    const url = window.location.href;
+
+    if (url.includes('error=')) {
+      history.push('/');
+    }
+
+    // If Github API returns the code parameter
+    if (url.includes('code=')) {
+      const tempPrivateAccess = url.includes('private');
+      const newUrl = url.split('?code=');
+      const subStr = PROD ? 'githubtrends.io' : 'localhost:3000';
+      const redirect = `${url.split(subStr)[0]}${subStr}/user`;
+      window.history.pushState({}, null, redirect);
+      setIsLoading(true);
+      const userKey = await setUserKey(newUrl[1]);
+      const newUserId = await authenticate(newUrl[1], tempPrivateAccess);
+      login(newUserId, userKey);
+      setIsLoading(false);
+    }
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="h-full py-8 flex justify-center items-center">
+        <BounceLoader color="#3B82F6" />
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="h-full py-8 flex justify-center items-center">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold">
+            Please sign in to access this page
+          </h1>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="h-full py-8 px-8 text-gray-600 body-font">
       <div className="flex flex-col">
@@ -198,6 +199,7 @@ const HomeScreen = () => {
               setSelectedTimeRange={setSelectedTimeRange}
               usePrivate={usePrivate}
               setUsePrivate={setUsePrivate}
+              privateAccess={privateAccess}
               useCompact={useCompact}
               setUseCompact={setUseCompact}
               usePercent={usePercent}
@@ -214,7 +216,9 @@ const HomeScreen = () => {
               themeSuffix={themeSuffix}
             />
           )}
-          {stage === 3 && <DisplayStage themeSuffix={themeSuffix} />}
+          {stage === 3 && (
+            <DisplayStage userId={userId} themeSuffix={themeSuffix} />
+          )}
         </div>
       </div>
       <FloatingIcon />
