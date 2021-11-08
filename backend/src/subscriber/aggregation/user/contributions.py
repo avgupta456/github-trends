@@ -5,14 +5,16 @@ from typing import Any, DefaultDict, Dict, List, Optional, Set, Union
 import pytz
 
 from src.data.github.graphql import (
+    get_repo,
     get_user_contribution_years,
     get_user_contribution_calendar,
     get_user_contribution_events,
-    get_repo,
+    RawRepo,
     RawCalendar,
     RawEventsCommit,
     RawEventsEvent,
 )
+from src.data.github.rest import RawCommit
 
 from src.models import UserContributions
 
@@ -136,7 +138,7 @@ async def get_contributions(
             repos_set.add(repo)
     repos = list(repos_set)
 
-    commit_infos = await gather(
+    commit_infos: List[List[RawCommit]] = await gather(
         funcs=[get_all_commit_info for _ in repos],
         args_dicts=[
             {
@@ -151,7 +153,7 @@ async def get_contributions(
         max_threads=100,
     )
 
-    _repo_infos = await gather(
+    _repo_infos: List[Optional[RawRepo]] = await gather(
         funcs=[get_repo for _ in repos],
         args_dicts=[
             {
@@ -164,10 +166,14 @@ async def get_contributions(
         max_threads=100,
     )
 
-    repo_infos = {repo: repo_info for repo, repo_info in zip(repos, _repo_infos)}
+    repo_infos = {
+        repo: repo_info
+        for repo, repo_info in zip(repos, _repo_infos)
+        if repo_info is not None
+    }
 
-    commit_times = [[x[0] for x in repo] for repo in commit_infos]
-    commit_node_ids = [[x[1] for x in repo] for repo in commit_infos]
+    commit_times = [[x.timestamp for x in repo] for repo in commit_infos]
+    commit_node_ids = [[x.node_id for x in repo] for repo in commit_infos]
 
     id_mapping: Dict[str, List[int]] = {}
     repo_mapping: Dict[str, str] = {}
@@ -283,7 +289,7 @@ async def get_contributions(
         total[date_str]["stats"]["other_count"] -= count
         total_stats[event + "_count"] += count  # type: ignore
         total_stats["other_count"] -= count  # type: ignore
-        is_private = repo_infos[repo]["isPrivate"]
+        is_private = repo_infos[repo].is_private
         if not is_private:
             public[date_str]["stats"][event + "_count"] += count
             public[date_str]["stats"]["other_count"] -= count
@@ -298,7 +304,7 @@ async def get_contributions(
     def update_langs(
         date_str: str, repo: str, langs_list: List[Dict[str, Dict[str, int]]]
     ):
-        is_private = repo_infos[repo]["isPrivate"]
+        is_private = repo_infos[repo].is_private
         for langs in langs_list:
             for lang, lang_data in langs.items():
                 stores = [
@@ -344,7 +350,7 @@ async def get_contributions(
                         repositories[repo][date_str]["lists"]["commits"].extend(
                             commit_info
                         )
-                        if not repo_infos[repo]["isPrivate"]:
+                        if not repo_infos[repo].is_private:
                             public[date_str]["lists"]["commits"].extend(commit_info)
 
                         # update stats
@@ -356,7 +362,7 @@ async def get_contributions(
                         repositories[repo][date_str]["lists"][event_type].append(
                             datetime_str
                         )
-                        if not repo_infos[repo]["isPrivate"]:
+                        if not repo_infos[repo].is_private:
                             public[date_str]["lists"]["commits"].append(datetime_str)
 
                         # update stats
@@ -373,7 +379,7 @@ async def get_contributions(
     }
 
     for repo in repo_stats:
-        repo_stats[repo]["private"] = repo_infos[repo]["isPrivate"]
+        repo_stats[repo]["private"] = repo_infos[repo].is_private
 
     output = UserContributions.parse_obj(
         {

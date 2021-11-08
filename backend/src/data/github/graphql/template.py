@@ -1,4 +1,5 @@
 from datetime import datetime
+import logging
 from typing import Any, Dict, Tuple
 
 import requests
@@ -28,7 +29,12 @@ class GraphQLErrorTimeout(Exception):
 
 
 def get_template(query: Dict[str, Any], access_token: str) -> Dict[str, Any]:
-    """Template for interacting with the GitHub GraphQL API"""
+    """
+    Template for interacting with the GitHub GraphQL API
+    :param query: The query to be sent to the GitHub GraphQL API
+    :param access_token: The access token to be used for the query
+    :return: The response from the GitHub GraphQL API
+    """
     start = datetime.now()
     headers: Dict[str, str] = {"Authorization": "bearer " + access_token}
 
@@ -48,10 +54,9 @@ def get_template(query: Dict[str, Any], access_token: str) -> Dict[str, Any]:
         if "errors" in data:
             if (
                 "type" in data["errors"][0]
-                and data["errors"][0]["type"] == "SERVICE_UNAVAILABLE"
+                and data["errors"][0]["type"] in ["SERVICE_UNAVAILABLE", "NOT_FOUND"]
                 and "path" in data["errors"][0]
                 and isinstance(data["errors"][0]["path"], list)
-                and len(data["errors"][0]["path"]) == 3  # type: ignore
                 and data["errors"][0]["path"][0] == "nodes"
             ):
                 raise GraphQLErrorMissingNode(node=int(data["errors"][0]["path"][1]))  # type: ignore
@@ -69,12 +74,16 @@ def get_template(query: Dict[str, Any], access_token: str) -> Dict[str, Any]:
 
 
 def get_query_limit(access_token: str) -> int:
-    """Get the current rate limit for the GitHub GraphQL API"""
-
+    """
+    Get the current rate limit for the GitHub GraphQL API
+    :param access_token: The access token to be used for the query
+    :return: The current rate limit for the GitHub GraphQL API
+    """
     try:
         data = get_template(
             {"query": "query { rateLimit { remaining } }"}, access_token
         )
         return data["data"]["rateLimit"]["remaining"]
-    except Exception:
+    except Exception as e:
+        logging.exception(e)
         return -1

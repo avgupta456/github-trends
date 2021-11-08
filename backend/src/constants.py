@@ -40,5 +40,11 @@ DEFAULT_COLOR = "#858585"
 SENTRY_DSN = os.getenv("SENTRY_DSN", "")
 
 # TESTING
-TEST_USER_ID = "AshishGupta938"  # for testing, previously "avgupta456"
+TEST_USER_ID = "avgupta456"
+TEST_REPO = "github-trends"
 TEST_TOKEN = os.getenv("AUTH_TOKEN", "")  # for authentication
+TEST_NODE_IDS = [
+    "C_kwDOENp939oAKGM1MzdlM2QzMTZjMmEyZGIyYWU4ZWI0MmNmNjQ4YWEwNWQ5OTBiMjM",
+    "C_kwDOD_-BVNoAKDFhNTIxNWE1MGM4ZDllOGEwYTFhNjhmYWZkYzE5MzA5YTRkMDMwZmM",
+    "C_kwDOD_-BVNoAKDRiZTQ4MTQ0MzgwYjBlNGEwNjQ4YjY4YWI4ZjFjYmQ3MWU4M2VhMzU",
+]
