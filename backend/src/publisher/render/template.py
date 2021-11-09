@@ -6,7 +6,7 @@ from svgwrite import Drawing
 from svgwrite.container import Group
 from svgwrite.shapes import Circle
 
-from src.publisher.render.style import style
+from src.publisher.render.style import style, style_no_animation
 from src.constants import DEFAULT_COLOR
 
 
@@ -27,10 +27,11 @@ def get_template(
     padding: int,
     header_text: str,
     subheader_text: str,
+    use_animation: bool = True,
     debug: bool = False,
 ) -> Tuple[Drawing, Group]:
     d = Drawing(size=(width, height))
-    d.defs.add(d.style(style))
+    d.defs.add(d.style(style if use_animation else style_no_animation))
 
     d.add(
         d.rect(

@@ -1,4 +1,5 @@
-from typing import List
+from typing import List, Optional
+
 from pydantic import BaseModel, Field
 
 
@@ -10,7 +11,7 @@ class RawCommit(BaseModel):
 
 class RawRepoLanguageNode(BaseModel):
     name: str
-    color: str
+    color: Optional[str]
 
 
 class RawRepoLanguageEdge(BaseModel):
