@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { saveSvgAsPng } from 'save-svg-as-png';
+
 import { Card, Button } from '../../../components';
 import { classnames, sleep } from '../../../utils';
 
@@ -33,6 +35,13 @@ const DisplayStage = ({ userId, themeSuffix }) => {
         `https://github.com/${userId}/${userId}/edit/master/README.md`,
       );
     });
+  };
+
+  const downloadPNG = () => {
+    saveSvgAsPng(
+      document.getElementById('svg-card'),
+      `${userId}_${themeSuffix.split('?')[0]}.png`,
+    );
   };
 
   return (
@@ -64,7 +73,7 @@ const DisplayStage = ({ userId, themeSuffix }) => {
             },
             { title: 'Share on Twitter', active: false, onClick: null },
             { title: 'Share on LinkedIn', active: false, onClick: null },
-            { title: 'Download PNG', active: false, onClick: null },
+            { title: 'Download PNG', active: true, onClick: downloadPNG },
           ].map((item, index) => (
             <Button
               key={index}
@@ -86,7 +95,7 @@ const DisplayStage = ({ userId, themeSuffix }) => {
           <Card
             title="Your Card"
             description="The finished product!"
-            imageSrc={themeSuffix}
+            imageSrc={`${themeSuffix}&use_animation=False`}
             selected
           />
         </div>
