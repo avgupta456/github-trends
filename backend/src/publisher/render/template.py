@@ -7,7 +7,7 @@ from svgwrite.container import Group
 from svgwrite.shapes import Circle
 
 from src.constants import DEFAULT_COLOR
-from src.publisher.render.style import style, style_no_animation, background_styles
+from src.publisher.render.style import get_theme_style, background_styles
 
 
 def format_number(num: int) -> str:
@@ -32,6 +32,8 @@ def get_template(
     theme: str,
 ) -> Tuple[Drawing, Group]:
     d = Drawing(size=(width, height))
+
+    style, style_no_animation = get_theme_style(theme=theme)
     d.defs.add(d.style(style if use_animation else style_no_animation))
 
     d.add(
@@ -39,8 +41,8 @@ def get_template(
             size=(width - 1, height - 1),
             insert=(0.5, 0.5),
             rx=4.5,
-            stroke=background_styles[theme][1],
-            fill=background_styles[theme][0],
+            stroke=background_styles[theme]["border_color"],
+            fill=background_styles[theme]["main_fill_color"],
         )
     )
 
@@ -75,7 +77,7 @@ def get_bar_section(
         row.add(d.text(right_text, insert=(bar_width + 10, 33), class_="lang-name"))
         progress = Drawing(width=str(bar_width), x="0", y="25")
         progress.add(
-            d.rect(size=(bar_width, 8), insert=(0, 0), rx=5, ry=5, fill=background_styles[theme][2])
+            d.rect(size=(bar_width, 8), insert=(0, 0), rx=5, ry=5, fill=background_styles[theme]["bar_default_color"])
         )
         total_percent, total_items = 0, len(data_row)
         for j, (percent, color) in enumerate(data_row):
