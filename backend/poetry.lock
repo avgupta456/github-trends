@@ -7,7 +7,7 @@ python-versions = ">=3.6,<4.0"
 version = "0.7.0"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Test asyncio code more easily."
 name = "aiounittest"
 optional = false
@@ -113,7 +113,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 version = "0.4.4"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Code coverage measurement for Python"
 name = "coverage"
 optional = false
@@ -124,7 +124,7 @@ version = "5.5"
 toml = ["toml"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Show coverage stats online via coveralls.io"
 name = "coveralls"
 optional = false
@@ -160,7 +160,7 @@ DNSSEC = ["pycryptodome", "ecdsa (>=0.13)"]
 IDNA = ["idna (>=2.1)"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Pythonic argument parser, that will make you smile"
 name = "docopt"
 optional = false
@@ -290,6 +290,10 @@ version = "1.53.0"
 
 [package.dependencies]
 protobuf = ">=3.12.0"
+
+[package.dependencies.grpcio]
+optional = true
+version = ">=1.0.0"
 
 [package.extras]
 grpc = ["grpcio (>=1.0.0)"]
@@ -899,7 +903,7 @@ python-versions = ">=3.6.1"
 version = "8.1"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Module for decorators, wrappers and monkey patching."
 name = "wrapt"
 optional = false
@@ -907,7 +911,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 version = "1.13.3"
 
 [metadata]
-content-hash = "66ff09fa1ec36b9f2e6de50265332690f9091cfce705b1d6172e2a5fc907a07c"
+content-hash = "d0bc4b0393afab90925bed27f8f24bcad01af80253665e134473bdb1aee327dd"
 lock-version = "1.0"
 python-versions = "^3.8"
 
