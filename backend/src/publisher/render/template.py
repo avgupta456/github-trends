@@ -6,8 +6,8 @@ from svgwrite import Drawing
 from svgwrite.container import Group
 from svgwrite.shapes import Circle
 
-from src.publisher.render.style import style, style_no_animation
 from src.constants import DEFAULT_COLOR
+from src.publisher.render.style import style, style_no_animation
 
 
 def format_number(num: int) -> str:

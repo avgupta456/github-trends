@@ -1,9 +1,9 @@
 from datetime import datetime
 from typing import Dict, List, Optional, Union
 
-from src.data.github.graphql import get_commits, RawRepo, RawCommit as GraphQLRawCommit
-from src.data.github.rest import get_repo_commits, RawCommit as RESTRawCommit
-from src.constants import DEFAULT_COLOR, NODE_CHUNK_SIZE, CUTOFF, BLACKLIST
+from src.constants import BLACKLIST, CUTOFF, DEFAULT_COLOR, NODE_CHUNK_SIZE
+from src.data.github.graphql import RawCommit as GraphQLRawCommit, RawRepo, get_commits
+from src.data.github.rest import RawCommit as RESTRawCommit, get_repo_commits
 
 
 def get_all_commit_info(
