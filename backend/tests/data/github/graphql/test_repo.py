@@ -1,12 +1,11 @@
 import unittest
 
-from src.data.github.graphql import get_repo, RawRepo
-
 from src.constants import (
+    TEST_REPO as REPO,
     TEST_TOKEN as TOKEN,
     TEST_USER_ID as USER_ID,
-    TEST_REPO as REPO,
 )
+from src.data.github.graphql import RawRepo, get_repo
 
 
 class TestTemplate(unittest.TestCase):

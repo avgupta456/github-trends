@@ -6,17 +6,14 @@ from fastapi.responses import HTMLResponse
 from fastapi.routing import APIRouter
 
 from src.publisher.aggregation import get_top_languages, get_top_repos
-
+from src.publisher.processing import svg_base
 from src.publisher.render import (
-    get_top_langs_svg,
-    get_top_repos_svg,
     get_empty_demo_svg,
     get_loading_svg,
+    get_top_langs_svg,
+    get_top_repos_svg,
 )
-
-from src.publisher.processing import svg_base
 from src.publisher.routers.decorators import svg_fail_gracefully
-
 
 router = APIRouter()
 

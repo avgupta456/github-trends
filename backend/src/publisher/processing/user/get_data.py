@@ -1,21 +1,18 @@
 from datetime import date, datetime, timedelta
 from typing import Optional
 
+from src.data.mongo.secret import get_next_key
 from src.data.mongo.user import (
-    get_user_metadata,
-    get_user_by_user_id,
     UserMetadata,
     UserModel,
+    get_user_by_user_id,
+    get_user_metadata,
 )
-from src.data.mongo.secret import get_next_key
-
 from src.models import UserPackage
-
 from src.publisher.aggregation import trim_package
 
 # TODO: replace with call to subscriber so compute not on publisher
 from src.subscriber.aggregation import get_data
-
 from src.utils import alru_cache
 from src.utils.pubsub import publish_to_topic
 

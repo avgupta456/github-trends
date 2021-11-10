@@ -4,28 +4,24 @@ from typing import Any, DefaultDict, Dict, List, Optional, Set, Union
 
 import pytz
 
+from src.constants import NODE_CHUNK_SIZE, NODE_THREADS
 from src.data.github.graphql import (
-    get_repo,
-    get_user_contribution_years,
-    get_user_contribution_calendar,
-    get_user_contribution_events,
-    RawRepo,
     RawCalendar,
     RawEventsCommit,
     RawEventsEvent,
+    RawRepo,
+    get_repo,
+    get_user_contribution_calendar,
+    get_user_contribution_events,
+    get_user_contribution_years,
 )
 from src.data.github.rest import RawCommit
-
 from src.models import UserContributions
-
-from src.utils import gather, date_to_datetime
-
-from src.constants import NODE_CHUNK_SIZE, NODE_THREADS
-
 from src.subscriber.aggregation.user.commit import (
     get_all_commit_info,
     get_commits_languages,
 )
+from src.utils import date_to_datetime, gather
 
 t_stats = DefaultDict[str, Dict[str, List[Union[RawEventsEvent, RawEventsCommit]]]]
 t_commits = List[Dict[str, Union[Dict[str, Dict[str, int]], str]]]

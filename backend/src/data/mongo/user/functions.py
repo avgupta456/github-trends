@@ -1,10 +1,9 @@
 from datetime import datetime
 from typing import Any, Dict, Optional
 
-from src.models import UserPackage
-
 from src.data.mongo.main import USERS
 from src.data.mongo.user.compression import compress
+from src.models import UserPackage
 
 
 async def is_user_key(user_id: str, user_key: str) -> bool:

@@ -6,7 +6,6 @@ from requests.exceptions import ReadTimeout
 
 from src.constants import TIMEOUT
 
-
 s = requests.session()
 
 

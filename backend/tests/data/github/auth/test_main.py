@@ -1,7 +1,7 @@
 import unittest
 
+from src.constants import TEST_TOKEN as TOKEN, TEST_USER_ID as USER_ID
 from src.data.github.auth.main import get_unknown_user
-from src.constants import TEST_USER_ID as USER_ID, TEST_TOKEN as TOKEN
 
 
 class TestTemplate(unittest.TestCase):

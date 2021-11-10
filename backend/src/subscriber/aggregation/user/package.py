@@ -1,10 +1,9 @@
 from datetime import date
 
+from src.models import UserPackage
 from src.subscriber.aggregation.user.contributions import get_contributions
 
 # from src.processing.user.follows import get_user_follows
-
-from src.models import UserPackage
 
 
 async def main(

@@ -1,3 +1,12 @@
+from src.data.github.graphql.commit import get_commits
+from src.data.github.graphql.models import RawCommit, RawRepo
+from src.data.github.graphql.repo import get_repo
+from src.data.github.graphql.template import (
+    GraphQLErrorAuth,
+    GraphQLErrorMissingNode,
+    GraphQLErrorTimeout,
+    get_query_limit,
+)
 from src.data.github.graphql.user.contribs.contribs import (
     get_user_contribution_calendar,
     get_user_contribution_events,
@@ -9,23 +18,11 @@ from src.data.github.graphql.user.contribs.models import (
     RawEventsCommit,
     RawEventsEvent,
 )
-
 from src.data.github.graphql.user.follows.follows import (
     get_user_followers,
     get_user_following,
 )
 from src.data.github.graphql.user.follows.models import RawFollows
-
-from src.data.github.graphql.commit import get_commits
-from src.data.github.graphql.repo import get_repo
-from src.data.github.graphql.models import RawCommit, RawRepo
-
-from src.data.github.graphql.template import (
-    get_query_limit,
-    GraphQLErrorAuth,
-    GraphQLErrorTimeout,
-    GraphQLErrorMissingNode,
-)
 
 __all__ = [
     "get_user_contribution_calendar",

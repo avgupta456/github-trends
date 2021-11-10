@@ -1,6 +1,6 @@
 # import json
-from typing import List
 from datetime import datetime
+from typing import List
 
 from src.data.github.graphql.template import get_template
 from src.data.github.graphql.user.contribs.models import RawCalendar, RawEvents

@@ -1,10 +1,9 @@
 from fastapi import status
-from fastapi.routing import APIRouter
 from fastapi.responses import Response
+from fastapi.routing import APIRouter
 
-from src.publisher.processing import set_user_key, authenticate, delete_user
+from src.publisher.processing import authenticate, delete_user, set_user_key
 from src.utils import async_fail_gracefully
-
 
 router = APIRouter()
 

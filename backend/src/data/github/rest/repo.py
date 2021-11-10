@@ -1,13 +1,13 @@
-from datetime import datetime
 import logging
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from src.data.github.rest.models import RawCommit
 from src.data.github.rest.template import (
+    RESTError,
+    RESTErrorEmptyRepo,
     get_template,
     get_template_plural,
-    RESTErrorEmptyRepo,
-    RESTError,
 )
 
 BASE_URL = "https://api.github.com/repos/"

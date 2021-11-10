@@ -1,10 +1,9 @@
 from datetime import timedelta
-from typing import Any, Dict, List, Optional
 from random import randint
+from typing import Any, Dict, List, Optional
 
 from src.data.mongo.main import SECRETS
 from src.data.mongo.secret.models import SecretModel
-
 from src.utils import alru_cache
 
 

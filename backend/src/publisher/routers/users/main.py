@@ -4,12 +4,9 @@ from typing import Optional
 from fastapi import APIRouter, Response, status
 
 from src.models import UserPackage
-
 from src.publisher.processing import get_user
-
 from src.publisher.routers.users.db import router as db_router
 from src.publisher.routers.users.svg import router as svg_router
-
 from src.utils import async_fail_gracefully
 
 router = APIRouter()

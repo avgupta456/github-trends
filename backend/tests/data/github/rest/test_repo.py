@@ -1,12 +1,11 @@
 import unittest
 
-from src.data.github.rest import get_repo_commits, RawCommit
-
 from src.constants import (
+    TEST_REPO as REPO,
     TEST_TOKEN as TOKEN,
     TEST_USER_ID as USER_ID,
-    TEST_REPO as REPO,
 )
+from src.data.github.rest import RawCommit, get_repo_commits
 
 
 class TestTemplate(unittest.TestCase):

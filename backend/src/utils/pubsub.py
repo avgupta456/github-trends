@@ -1,20 +1,18 @@
-import json
 import base64
+import json
+from typing import Any, Dict
+
 import requests
-
-from typing import Dict, Any
-
-from fastapi import Request, HTTPException
-
+from fastapi import HTTPException, Request
 from google.cloud import pubsub_v1  # type: ignore
 
 from src.constants import (
     DOCKER,
+    LOCAL_SUBSCRIBER,
     PROD,
     PROJECT_ID,
     PUBSUB_PUB,
     PUBSUB_TOKEN,
-    LOCAL_SUBSCRIBER,
 )
 
 publisher = pubsub_v1.PublisherClient()

@@ -1,15 +1,14 @@
-from datetime import datetime, timedelta
 import unittest
+from datetime import datetime, timedelta
 
+from src.constants import TEST_TOKEN as TOKEN, TEST_USER_ID as USER_ID
 from src.data.github.graphql import (
-    get_user_contribution_years,
-    get_user_contribution_calendar,
-    get_user_contribution_events,
     RawCalendar,
     RawEvents,
+    get_user_contribution_calendar,
+    get_user_contribution_events,
+    get_user_contribution_years,
 )
-
-from src.constants import TEST_USER_ID as USER_ID, TEST_TOKEN as TOKEN
 
 
 class TestTemplate(unittest.TestCase):

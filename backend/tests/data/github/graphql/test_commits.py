@@ -1,8 +1,7 @@
 import unittest
 
-from src.data.github.graphql import get_commits, RawCommit
-
-from src.constants import TEST_TOKEN as TOKEN, TEST_NODE_IDS as NODE_IDS
+from src.constants import TEST_NODE_IDS as NODE_IDS, TEST_TOKEN as TOKEN
+from src.data.github.graphql import RawCommit, get_commits
 
 
 class TestTemplate(unittest.TestCase):

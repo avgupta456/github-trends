@@ -5,7 +5,6 @@ from pydantic.error_wrappers import ValidationError
 from src.data.mongo.main import USERS
 from src.data.mongo.user.compression import decompress
 from src.data.mongo.user.models import UserMetadata, UserModel
-
 from src.utils import alru_cache
 
 
