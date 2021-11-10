@@ -27,9 +27,9 @@ def get_template(
     padding: int,
     header_text: str,
     subheader_text: str,
+    theme: str,
     use_animation: bool = True,
     debug: bool = False,
-    theme: str,
 ) -> Tuple[Drawing, Group]:
     d = Drawing(size=(width, height))
 
@@ -65,9 +65,9 @@ def get_template(
 def get_bar_section(
     d: Drawing,
     dataset: List[Tuple[str, str, List[Tuple[float, str]]]],
+    theme: str,
     padding: int = 45,
     bar_width: int = 210,
-    theme: str,
 ) -> Group:
     section = Group(transform="translate(0, " + str(padding) + ")")
     for i, (top_text, right_text, data_row) in enumerate(dataset):

@@ -12,6 +12,10 @@ background_styles: Dict[str, Dict[str, str]] = {
         "main_fill_color": "#1F1F1F",
         "border_color": "#7B8794",
         "bar_default_color": "#333333",
+    }, 
+    "error": {
+        "main_fill_color": "#fffefe",
+        "border_color": "#e4e2e2",
     }
 }
 
@@ -27,6 +31,12 @@ general_styles: Dict[str, Dict[str, str]] = {
         "subheader_text_color": "",
         "langname_color": "",
         "no_data_color": "",
+    },
+    "error": {
+        "header_text_color": "#2f80ed",
+        "subheader_text_color": "#666",
+        "langname_color": "#333",
+        "no_data_color": "#777",
     }
 }
 

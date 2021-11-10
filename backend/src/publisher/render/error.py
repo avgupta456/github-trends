@@ -3,12 +3,14 @@
 from svgwrite import Drawing
 
 from src.constants import BACKEND_URL
-from src.publisher.render.style import style
+from src.publisher.render.style import get_theme_style, background_styles
 from src.publisher.render.template import get_template
 
 
 def get_error_svg() -> Drawing:
     d = Drawing(size=(300, 285))
+
+    style, style_no_animation = get_theme_style(theme="error")
     d.defs.add(d.style(style))
 
     d.add(
@@ -16,8 +18,8 @@ def get_error_svg() -> Drawing:
             size=(299, 284),
             insert=(0.5, 0.5),
             rx=4.5,
-            stroke="#e4e2e2",
-            fill="#fffefe",
+            stroke=background_styles["error"]["border_color"],
+            fill=background_styles["error"]["main_fill_color"],
         )
     )
 
@@ -40,6 +42,8 @@ def get_error_svg() -> Drawing:
 
 def get_loading_svg() -> Drawing:
     d = Drawing(size=(300, 285))
+
+    style, style_no_animation = get_theme_style(theme="error")
     d.defs.add(d.style(style))
 
     d.add(
@@ -47,8 +51,8 @@ def get_loading_svg() -> Drawing:
             size=(299, 284),
             insert=(0.5, 0.5),
             rx=4.5,
-            stroke="#e4e2e2",
-            fill="#fffefe",
+            stroke=background_styles["error"]["border_color"],
+            fill=background_styles["error"]["main_fill_color"],
         )
     )
 
@@ -79,6 +83,7 @@ def get_no_data_svg(header: str, subheader: str) -> Drawing:
         header_text=header,
         subheader_text=subheader,
         debug=False,
+        theme="error",
     )
 
     d.add(d.image(BACKEND_URL + "/assets/error", insert=(85, 80), style="opacity: 50%"))
@@ -90,6 +95,8 @@ def get_no_data_svg(header: str, subheader: str) -> Drawing:
 
 def get_empty_demo_svg(header: str) -> Drawing:
     d = Drawing(size=(300, 285))
+
+    style, style_no_animation = get_theme_style(theme="error")
     d.defs.add(d.style(style))
 
     d.add(
@@ -97,8 +104,8 @@ def get_empty_demo_svg(header: str) -> Drawing:
             size=(299, 284),
             insert=(0.5, 0.5),
             rx=4.5,
-            stroke="#e4e2e2",
-            fill="#fffefe",
+            stroke=background_styles["error"]["border_color"],
+            fill=background_styles["error"]["main_fill_color"],
         )
     )
 
