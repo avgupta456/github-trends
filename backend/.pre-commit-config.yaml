@@ -10,8 +10,8 @@ repos:
     - id: flake8
       args: [--config=./backend/.flake8]
 - repo: https://github.com/pycqa/isort
-  rev: 5.6.4
+  rev: 5.8.0
   hooks:
     - id: isort
-      args: ["--profile", "black", "--filter-files"]
+      args: [--src-path=./src]
     
