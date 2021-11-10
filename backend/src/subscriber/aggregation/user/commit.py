@@ -1,9 +1,9 @@
 from datetime import datetime
 from typing import Dict, List, Optional, Union
 
-from src.constants import BLACKLIST, CUTOFF, NODE_CHUNK_SIZE
-from src.data.github.graphql import RawCommit as GraphQLRawCommit, RawRepo, get_commits
-from src.data.github.rest import RawCommit as RESTRawCommit, get_repo_commits
+from src.data.github.graphql import get_commits, RawRepo, RawCommit as GraphQLRawCommit
+from src.data.github.rest import get_repo_commits, RawCommit as RESTRawCommit
+from src.constants import DEFAULT_COLOR, NODE_CHUNK_SIZE, CUTOFF, BLACKLIST
 
 
 def get_all_commit_info(
@@ -67,7 +67,7 @@ def get_commits_languages(
                     out[-1][lang_name] = {
                         "additions": additions,
                         "deletions": deletions,
-                        "color": lang_color,
+                        "color": lang_color or DEFAULT_COLOR,
                     }
 
     return out

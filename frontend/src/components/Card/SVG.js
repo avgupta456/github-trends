@@ -33,7 +33,7 @@ const SvgInline = (props) => {
       <div
         className={props.className}
         dangerouslySetInnerHTML={{
-          __html: `<svg viewBox="0 0 300 175">${svg}</svg>`,
+          __html: `<svg id="svg-card" viewBox="0 0 300 175">${svg}</svg>`,
         }}
       />
     );
@@ -43,7 +43,7 @@ const SvgInline = (props) => {
     <div
       className={props.className}
       dangerouslySetInnerHTML={{
-        __html: `<svg viewBox="0 0 300 285">${svg}</svg>`,
+        __html: `<svg id="svg-card" viewBox="0 0 300 285">${svg}</svg>`,
       }}
     />
   );

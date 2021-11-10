@@ -15,7 +15,11 @@ from src.publisher.render.template import (
 
 
 def get_top_repos_svg(
-    data: List[RepoStats], time_str: str, loc_metric: str, commits_excluded: int
+    data: List[RepoStats],
+    time_str: str,
+    loc_metric: str,
+    commits_excluded: int,
+    use_animation: bool,
 ) -> Drawing:
     header = "Most Contributed Repositories"
     subheader = time_str
@@ -32,6 +36,7 @@ def get_top_repos_svg(
         padding=20,
         header_text=header,
         subheader_text=subheader,
+        use_animation=use_animation,
         debug=False,
     )
 

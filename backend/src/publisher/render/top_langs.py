@@ -21,6 +21,7 @@ def get_top_langs_svg(
     loc_metric: str,
     commits_excluded: int,
     compact: bool,
+    use_animation: bool,
 ) -> Drawing:
     header = "Most Used Languages"
     subheader = time_str
@@ -38,6 +39,7 @@ def get_top_langs_svg(
         padding=20,
         header_text=header,
         subheader_text=subheader,
+        use_animation=use_animation,
         debug=False,
     )
 

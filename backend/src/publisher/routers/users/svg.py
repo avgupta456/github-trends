@@ -35,6 +35,7 @@ async def get_user_lang_svg(
     compact: bool = False,
     demo: bool = False,
     no_cache: bool = False,
+    use_animation: bool = True,
 ) -> Any:
     output, time_str = await svg_base(
         user_id, start_date, end_date, time_range, demo, no_cache
@@ -45,9 +46,15 @@ async def get_user_lang_svg(
         return get_loading_svg()
 
     # get top languages
-    processed, num_excluded = get_top_languages(output, loc_metric, include_private)
+    processed, commits_excluded = get_top_languages(output, loc_metric, include_private)
     return get_top_langs_svg(
-        processed, time_str, use_percent, loc_metric, num_excluded, compact
+        data=processed,
+        time_str=time_str,
+        use_percent=use_percent,
+        loc_metric=loc_metric,
+        commits_excluded=commits_excluded,
+        compact=compact,
+        use_animation=use_animation,
     )
 
 
@@ -66,6 +73,7 @@ async def get_user_repo_svg(
     loc_metric: str = "added",
     demo: bool = False,
     no_cache: bool = False,
+    use_animation: bool = True,
 ) -> Any:
     output, time_str = await svg_base(
         user_id, start_date, end_date, time_range, demo, no_cache
@@ -77,7 +85,13 @@ async def get_user_repo_svg(
 
     # get top repos
     processed, commits_excluded = get_top_repos(output, loc_metric, include_private)
-    return get_top_repos_svg(processed, time_str, loc_metric, commits_excluded)
+    return get_top_repos_svg(
+        data=processed,
+        time_str=time_str,
+        loc_metric=loc_metric,
+        commits_excluded=commits_excluded,
+        use_animation=use_animation,
+    )
 
 
 @router.get(
