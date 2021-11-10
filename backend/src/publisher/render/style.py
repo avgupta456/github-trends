@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 # List[Tuple["selector", List[Tuple["property", "is_animation"]], "is_animation"]]
 
@@ -55,3 +55,16 @@ style_no_animation = "\n".join(
         if not rule[2]
     ]
 )
+
+background_styles: Dict[str, Dict[str, str]] = {
+    "classic": {
+        "main_fill_color": "#e4e2e2",
+        "border_color": "#fffefe",
+        "bar_default_color": "#ddd",
+    },
+    "dark": {
+        "main_fill_color": "#1F1F1F",
+        "border_color": "#7B8794",
+        "bar_default_color": "#333333",
+    }
+}

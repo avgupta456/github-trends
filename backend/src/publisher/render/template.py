@@ -7,7 +7,7 @@ from svgwrite.container import Group
 from svgwrite.shapes import Circle
 
 from src.constants import DEFAULT_COLOR
-from src.publisher.render.style import style, style_no_animation
+from src.publisher.render.style import style, style_no_animation, background_styles
 
 
 def format_number(num: int) -> str:
@@ -29,6 +29,7 @@ def get_template(
     subheader_text: str,
     use_animation: bool = True,
     debug: bool = False,
+    theme: str,
 ) -> Tuple[Drawing, Group]:
     d = Drawing(size=(width, height))
     d.defs.add(d.style(style if use_animation else style_no_animation))
@@ -38,8 +39,8 @@ def get_template(
             size=(width - 1, height - 1),
             insert=(0.5, 0.5),
             rx=4.5,
-            stroke="#e4e2e2",
-            fill="#fffefe",
+            stroke=background_styles[theme][1],
+            fill=background_styles[theme][0],
         )
     )
 
@@ -64,6 +65,7 @@ def get_bar_section(
     dataset: List[Tuple[str, str, List[Tuple[float, str]]]],
     padding: int = 45,
     bar_width: int = 210,
+    theme: str,
 ) -> Group:
     section = Group(transform="translate(0, " + str(padding) + ")")
     for i, (top_text, right_text, data_row) in enumerate(dataset):
@@ -73,7 +75,7 @@ def get_bar_section(
         row.add(d.text(right_text, insert=(bar_width + 10, 33), class_="lang-name"))
         progress = Drawing(width=str(bar_width), x="0", y="25")
         progress.add(
-            d.rect(size=(bar_width, 8), insert=(0, 0), rx=5, ry=5, fill="#ddd")
+            d.rect(size=(bar_width, 8), insert=(0, 0), rx=5, ry=5, fill=background_styles[theme][2])
         )
         total_percent, total_items = 0, len(data_row)
         for j, (percent, color) in enumerate(data_row):
