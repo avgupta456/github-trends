@@ -25,3 +25,10 @@ README.md
 
 # Ignored by the build system
 /setup.cfg
+
+# remove irrelevant files/folders
+deploy
+tests
+.env-template
+.pre-commit-config.yaml
+gcloud_key.json

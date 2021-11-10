@@ -6,31 +6,31 @@ authors = ["Abhijit Gupta <avgupta456@gmail.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.8"
-fastapi = "^0.65.3"
-requests = "^2.25.1"
-uvicorn = {extras = ["standard"], version = "^0.13.3"}
-python-dotenv = "^0.15.0"
-typing-extensions = "^3.7.4"
-grpcio = "^1.38.0"
-gunicorn = "^20.1.0"
-google-cloud-pubsub = "^2.8.0"
-pytz = "^2021.1"
-motor = "^2.5.1"
-pymongo = {extras = ["srv"], version = "^3.12.0"}
 aiofiles = "^0.7.0"
-svgwrite = "^1.4.1"
-sentry-sdk = "^1.4.1"
-
-[tool.poetry.dev-dependencies]
 aiounittest = "^1.4.0"
 coverage = "^5.3.1"
 coveralls = "^3.0.0"
-flake8 = "^3.8.4"
+fastapi = "^0.65.3"
+google-cloud-pubsub = "^2.8.0"
+grpcio = "^1.38.0"
+gunicorn = "^20.1.0"
+motor = "^2.5.1"
+pymongo = {extras = ["srv"], version = "^3.12.0"}
+python = "^3.8"
+python-dotenv = "^0.15.0"
+pytz = "^2021.1"
+requests = "^2.25.1"
+sentry-sdk = "^1.4.1"
+svgwrite = "^1.4.1"
+typing-extensions = "^3.7.4"
+uvicorn = {extras = ["standard"], version = "^0.13.3"}
+
+[tool.poetry.dev-dependencies]
 black = "^20.8b1"
+flake8 = "^3.8.4"
+isort = "^5.10.1"
 pre-commit = "^2.9.3"
 pyinstrument = "^3.3.0"
-isort = "^5.10.1"
 
 [build-system]
 requires = ["poetry>=0.12"]
