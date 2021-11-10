@@ -1,11 +1,10 @@
-from aiounittest.case import AsyncTestCase
 from datetime import date, timedelta
 
+from aiounittest.case import AsyncTestCase
+
+from src.constants import TEST_TOKEN as TOKEN, TEST_USER_ID as USER_ID
 from src.models import UserContributions
-
 from src.subscriber.aggregation import get_contributions
-
-from src.constants import TEST_USER_ID as USER_ID, TEST_TOKEN as TOKEN
 
 
 class TestTemplate(AsyncTestCase):

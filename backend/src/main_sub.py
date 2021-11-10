@@ -1,10 +1,9 @@
 import os
 
+import sentry_sdk
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-import sentry_sdk
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 
 load_dotenv()
@@ -14,9 +13,8 @@ os.environ["PUBSUB_PUB"] = "False"
 # flake8: noqa E402
 
 # add endpoints here (after load dotenv)
-from src.subscriber.routers import dev_router, pubsub_router
-
 from src.constants import PROD, PUBSUB_PUB, SENTRY_DSN
+from src.subscriber.routers import dev_router, pubsub_router
 
 """
 SETUP

@@ -2,7 +2,7 @@
 
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from src.constants import PROD, MONGODB_PASSWORD
+from src.constants import MONGODB_PASSWORD, PROD
 
 if PROD:
     conn_str = f"mongodb+srv://root:{MONGODB_PASSWORD}@backend.aqlpb.mongodb.net/prod_backend?retryWrites=true&w=majority"

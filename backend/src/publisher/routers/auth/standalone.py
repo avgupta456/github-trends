@@ -4,10 +4,9 @@ from typing import Optional
 from fastapi import APIRouter
 from fastapi.responses import RedirectResponse
 
+from src.constants import OAUTH_CLIENT_ID
 from src.publisher.processing import authenticate, delete_user
 from src.publisher.routers.decorators import get_redirect_url
-from src.constants import OAUTH_CLIENT_ID
-
 
 router = APIRouter()
 

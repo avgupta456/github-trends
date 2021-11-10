@@ -1,11 +1,11 @@
 from datetime import date, timedelta
+
 import requests
 
-from src.subscriber.aggregation import get_data
-from src.data.mongo.user import lock_user, update_user_raw_data
 from src.constants import BACKEND_URL, DOCKER, LOCAL_PUBLISHER, PROD
+from src.data.mongo.user import lock_user, update_user_raw_data
+from src.subscriber.aggregation import get_data
 from src.utils.alru_cache import alru_cache
-
 
 s = requests.Session()
 

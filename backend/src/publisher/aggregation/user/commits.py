@@ -1,8 +1,8 @@
 from typing import Any, Dict, List, Tuple, Union
 
+from src.constants import DEFAULT_COLOR
 from src.models import UserPackage
 from src.publisher.aggregation.user.models import LanguageStats, RepoStats
-from src.constants import DEFAULT_COLOR
 
 dict_type = Dict[str, Union[str, int, float]]
 

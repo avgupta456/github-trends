@@ -1,16 +1,14 @@
-import logging
 import io
-
+import logging
 from datetime import datetime
 from functools import wraps
 from typing import Any, Callable, Dict, List, Optional
 
 from fastapi import Response, status
 from starlette.responses import RedirectResponse
-
 from svgwrite.drawing import Drawing  # type: ignore
-from src.constants import OAUTH_CLIENT_ID, OAUTH_REDIRECT_URI
 
+from src.constants import OAUTH_CLIENT_ID, OAUTH_REDIRECT_URI
 from src.publisher.render import get_error_svg
 
 

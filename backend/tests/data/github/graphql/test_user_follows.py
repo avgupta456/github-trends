@@ -1,8 +1,7 @@
 import unittest
 
-from src.data.github.graphql import get_user_followers, get_user_following, RawFollows
-
-from src.constants import TEST_USER_ID as USER_ID, TEST_TOKEN as TOKEN
+from src.constants import TEST_TOKEN as TOKEN, TEST_USER_ID as USER_ID
+from src.data.github.graphql import RawFollows, get_user_followers, get_user_following
 
 
 class TestTemplate(unittest.TestCase):

@@ -1,14 +1,14 @@
 import logging
 from typing import List, Optional
 
+from src.data.github.graphql.models import RawCommit
 from src.data.github.graphql.template import (
     GraphQLError,
+    GraphQLErrorAuth,
     GraphQLErrorMissingNode,
     GraphQLErrorTimeout,
     get_template,
-    GraphQLErrorAuth,
 )
-from src.data.github.graphql.models import RawCommit
 
 
 def get_commits(access_token: str, node_ids: List[str]) -> List[Optional[RawCommit]]:

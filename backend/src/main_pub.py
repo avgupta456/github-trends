@@ -1,12 +1,10 @@
 import os
 
+import sentry_sdk
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
 from google.api_core.exceptions import AlreadyExists
-
-import sentry_sdk
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 
 load_dotenv()
@@ -16,9 +14,6 @@ os.environ["PUBSUB_PUB"] = "True"
 # flake8: noqa E402
 
 # add endpoints here (after load dotenv)
-from src.publisher.routers import user_router, pubsub_router, auth_router, asset_router
-from src.utils.pubsub import create_topic, create_push_subscription
-
 from src.constants import (
     DOCKER,
     LOCAL_SUBSCRIBER,
@@ -28,6 +23,8 @@ from src.constants import (
     PUBSUB_TOKEN,
     SENTRY_DSN,
 )
+from src.publisher.routers import asset_router, auth_router, pubsub_router, user_router
+from src.utils.pubsub import create_push_subscription, create_topic
 
 """
 EMULATOR SETUP

@@ -1,11 +1,9 @@
 from typing import Any, Dict
 
-from fastapi import APIRouter, Response, Request, status
+from fastapi import APIRouter, Request, Response, status
 
 from src.subscriber.processing import query_user
-
 from src.subscriber.routers.decorators import pubsub_fail_gracefully
-
 from src.utils.pubsub import parse_request
 
 router = APIRouter()

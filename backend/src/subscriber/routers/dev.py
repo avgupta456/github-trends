@@ -3,14 +3,11 @@ from typing import Optional
 
 from fastapi import APIRouter, Response, status
 
-from src.models import UserPackage
-
-from src.data.mongo.user import get_user_by_user_id, UserModel
 from src.data.github.graphql import get_query_limit
-
+from src.data.mongo.user import UserModel, get_user_by_user_id
+from src.models import UserPackage
 from src.subscriber.aggregation import get_data
-
-from src.utils import use_time_range, async_fail_gracefully
+from src.utils import async_fail_gracefully, use_time_range
 
 router = APIRouter()
 

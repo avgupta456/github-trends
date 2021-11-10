@@ -1,5 +1,5 @@
-from typing import Any, Dict, List, Tuple
 from datetime import date, datetime
+from typing import Any, Dict, List, Tuple
 
 from src.models import ContributionDay, UserPackage
 

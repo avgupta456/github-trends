@@ -5,13 +5,12 @@ from typing import List, Tuple
 from svgwrite import Drawing
 
 from src.publisher.aggregation import LanguageStats
-
 from src.publisher.render.error import get_no_data_svg
 from src.publisher.render.template import (
+    format_number,
+    get_bar_section,
     get_lang_name_section,
     get_template,
-    get_bar_section,
-    format_number,
 )
 
 

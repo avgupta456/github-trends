@@ -1,8 +1,8 @@
 # type: ignore
 
 from svgwrite import Drawing
-from src.constants import BACKEND_URL
 
+from src.constants import BACKEND_URL
 from src.publisher.render.style import style
 from src.publisher.render.template import get_template
 

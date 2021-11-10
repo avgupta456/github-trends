@@ -2,11 +2,11 @@ from typing import Any, Dict, Optional
 
 from src.data.github.auth import authenticate as github_authenticate
 from src.data.mongo.user import (
-    update_user_metadata,
+    UserMetadata,
     delete_user as db_delete_user,
+    get_user_metadata,
+    update_user_metadata,
 )
-from src.data.mongo.user.get import get_user_metadata
-from src.data.mongo.user.models import UserMetadata
 from src.publisher.processing.user.get_data import update_user
 
 # frontend first calls set_user_key with code and user_key
