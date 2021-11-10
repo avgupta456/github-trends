@@ -8,6 +8,6 @@
     "set-reqs": "poetry lock && poetry export -f requirements.txt --output requirements.txt --without-hashes",
     "create-env": "printenv > .env",
     "test": "poetry run coverage run --source=src -m unittest -v && poetry run coverage report",
-    "isort": "poetry run isort . --src-path=./src --multi-line=3 --trailing-comma --line-length=88 --combine-as"
+    "isort": "poetry run isort . --src-path=./src --multi-line=3 --trailing-comma --line-length=88 --combine-as --ensure-newline-before-comments"
   }
 }
