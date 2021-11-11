@@ -12,9 +12,18 @@ import { Card, Button } from '../../../components';
 import { classnames, sleep } from '../../../utils';
 
 const DisplayStage = ({ userId, themeSuffix }) => {
+  const card = themeSuffix.split('?')[0];
+
   const openInNewTab = (url) => {
     const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
     if (newWindow) newWindow.opener = null;
+  };
+
+  const downloadPNG = (scale = 1) => {
+    saveSvgAsPng(document.getElementById('svg-card'), `${userId}_${card}.png`, {
+      scale,
+      encoderOptions: 1,
+    });
   };
 
   const redirectGitHub = () => {
@@ -37,11 +46,28 @@ const DisplayStage = ({ userId, themeSuffix }) => {
     });
   };
 
-  const downloadPNG = () => {
-    saveSvgAsPng(
-      document.getElementById('svg-card'),
-      `${userId}_${themeSuffix.split('?')[0]}.png`,
-    );
+  const redirectTwitter = () => {
+    toast.info('Saved to Downloads, redirecting...', {
+      position: 'bottom-right',
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: false,
+      progress: undefined,
+    });
+    downloadPNG(5);
+    sleep(3000).then(() => {
+      let twitterText =
+        card === 'repos'
+          ? 'Take a look at my most contributed GitHub repositories.'
+          : 'Take a look at my most used programming languages on GitHub.';
+      twitterText = `${twitterText} Create your own visualizations at `;
+      const urlText = twitterText.split(' ').join('%20');
+      openInNewTab(
+        `https://twitter.com/intent/tweet?text=${urlText}&url=githubtrends.io`,
+      );
+    });
   };
 
   return (
@@ -71,7 +97,11 @@ const DisplayStage = ({ userId, themeSuffix }) => {
               active: true,
               onClick: redirectGitHub,
             },
-            { title: 'Share on Twitter', active: false, onClick: null },
+            {
+              title: 'Share on Twitter',
+              active: true,
+              onClick: redirectTwitter,
+            },
             { title: 'Share on LinkedIn', active: false, onClick: null },
             { title: 'Download PNG', active: true, onClick: downloadPNG },
           ].map((item, index) => (
