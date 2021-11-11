@@ -47,7 +47,7 @@ const DisplayStage = ({ userId, themeSuffix }) => {
   };
 
   const redirectTwitter = () => {
-    toast.info('Saved to Downloads, redirecting...', {
+    toast.info('Saved card, redirecting...', {
       position: 'bottom-right',
       autoClose: 3000,
       hideProgressBar: false,
@@ -65,8 +65,24 @@ const DisplayStage = ({ userId, themeSuffix }) => {
       twitterText = `${twitterText} Create your own visualizations at `;
       const urlText = twitterText.split(' ').join('%20');
       openInNewTab(
-        `https://twitter.com/intent/tweet?text=${urlText}&url=githubtrends.io`,
+        `https://twitter.com/intent/tweet?text=${urlText}&url=githubtrends.io%2F`,
       );
+    });
+  };
+
+  const redirectLinkedin = () => {
+    toast.info('Saved card, redirecting...', {
+      position: 'bottom-right',
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: false,
+      progress: undefined,
+    });
+    downloadPNG(5);
+    sleep(3000).then(() => {
+      openInNewTab(`https://linkedin.com/feed`);
     });
   };
 
@@ -102,7 +118,11 @@ const DisplayStage = ({ userId, themeSuffix }) => {
               active: true,
               onClick: redirectTwitter,
             },
-            { title: 'Share on LinkedIn', active: false, onClick: null },
+            {
+              title: 'Share on LinkedIn',
+              active: true,
+              onClick: redirectLinkedin,
+            },
             { title: 'Download PNG', active: true, onClick: downloadPNG },
           ].map((item, index) => (
             <Button
