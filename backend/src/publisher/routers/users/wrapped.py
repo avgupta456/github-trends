@@ -2,10 +2,9 @@ from typing import Optional
 
 from fastapi import APIRouter, Response, status
 
-from src.publisher.processing import get_wrapped_user
 from src.models import WrappedPackage
+from src.publisher.processing import get_wrapped_user
 from src.utils import async_fail_gracefully
-
 
 router = APIRouter()
 

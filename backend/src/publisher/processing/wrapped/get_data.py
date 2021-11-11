@@ -1,12 +1,14 @@
 from datetime import datetime, timedelta
 from typing import Optional
 
-from src.data.mongo.user import UserMetadata, get_user_metadata
-from src.data.mongo.wrapped import WrappedModel, lock_wrapped_user
 from src.data.mongo.secret import get_next_key
-
+from src.data.mongo.user import UserMetadata, get_user_metadata
+from src.data.mongo.wrapped import (
+    WrappedModel,
+    get_wrapped_user as db_get_wrapped_user,
+    lock_wrapped_user,
+)
 from src.models.wrapped.main import WrappedPackage
-from src.data.mongo.wrapped import get_wrapped_user as db_get_wrapped_user
 from src.publisher.processing.pubsub import publish_wrapped_user
 from src.utils import alru_cache
 

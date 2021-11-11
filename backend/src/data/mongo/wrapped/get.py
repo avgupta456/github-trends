@@ -2,9 +2,9 @@ from typing import Any, Dict, Optional
 
 from pydantic import ValidationError
 
-from src.utils import alru_cache
 from src.data.mongo.main import WRAPPED
 from src.data.mongo.wrapped.models import WrappedModel
+from src.utils import alru_cache
 
 
 @alru_cache()

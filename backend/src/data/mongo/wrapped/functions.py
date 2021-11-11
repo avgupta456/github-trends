@@ -1,8 +1,7 @@
 from datetime import datetime
 
-from src.models import WrappedPackage
-
 from src.data.mongo.main import WRAPPED
+from src.models import WrappedPackage
 
 
 async def lock_wrapped_user(user_id: str, year: int) -> None:
