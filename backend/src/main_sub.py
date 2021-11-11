@@ -58,5 +58,5 @@ def get_info():
     return {"PUBSUB_PUB": PUBSUB_PUB, "PROD": PROD}
 
 
-app.include_router(dev_router, prefix="/user/dev", tags=["Dev"])
+app.include_router(dev_router, prefix="/dev", tags=["Dev"])
 app.include_router(pubsub_router, prefix="/pubsub", tags=["PubSub"])

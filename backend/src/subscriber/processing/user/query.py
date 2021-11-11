@@ -4,7 +4,7 @@ import requests
 
 from src.constants import BACKEND_URL, DOCKER, LOCAL_PUBLISHER, PROD
 from src.data.mongo.user import lock_user, update_user_raw_data
-from src.subscriber.aggregation import get_data
+from src.subscriber.aggregation import get_user_data
 from src.utils.alru_cache import alru_cache
 
 s = requests.Session()
@@ -31,7 +31,9 @@ async def query_user(user_id: str, access_token: str) -> bool:
     # TODO: improve performance to store > 1 year
     # ideally five years, leads to issues currently
 
-    output = await get_data(user_id, access_token, start_date, end_date, timezone_str)
+    output = await get_user_data(
+        user_id, access_token, start_date, end_date, timezone_str
+    )
 
     await update_user_raw_data(user_id, output)
 

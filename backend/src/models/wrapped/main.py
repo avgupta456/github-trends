@@ -1,7 +1,7 @@
-from typing import Any, Dict
-
 from pydantic import BaseModel
+
+from src.models.user.contribs import UserContributions
 
 
 class WrappedPackage(BaseModel):
-    data: Dict[str, Any]
+    user_data: UserContributions
