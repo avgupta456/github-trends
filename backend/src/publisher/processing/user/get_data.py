@@ -10,11 +10,11 @@ from src.data.mongo.user import (
 )
 from src.models import UserPackage
 from src.publisher.aggregation import trim_package
+from src.publisher.processing.pubsub import publish_user
 
 # TODO: replace with call to subscriber so compute not on publisher
 from src.subscriber.aggregation import get_data
 from src.utils import alru_cache
-from src.utils.pubsub import publish_to_topic
 
 
 def validate_raw_data(data: Optional[UserPackage]) -> bool:
@@ -46,7 +46,7 @@ async def update_user(user_id: str, access_token: Optional[str] = None) -> bool:
         if user is None:
             return False
         access_token = user.access_token
-    publish_to_topic("user", {"user_id": user_id, "access_token": access_token})
+    publish_user(user_id, access_token)
     return True
 
 
