@@ -79,5 +79,3 @@ def get_style(theme: str = "classic", use_animation: bool = True) -> str:
 
 styles = {k: get_style(k) for k in themes.keys()}
 styles_no_animation = {k: get_style(k, False) for k in themes.keys()}
-
-print(styles)
