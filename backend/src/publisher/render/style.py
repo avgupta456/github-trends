@@ -5,11 +5,13 @@ from typing import List, Tuple, Dict, Any
 background_styles: Dict[str, Dict[str, str]] = {
     "classic": {
         "main_fill_color": "#e4e2e2",
+        "sub_fill_color": "#fff",
         "border_color": "#fffefe",
         "bar_default_color": "#ddd",
     },
     "dark": {
-        "main_fill_color": "#1F1F1F",
+        "main_fill_color": "#1a1a1a",
+        "sub_fill_color": "#1f1f1f",
         "border_color": "#7B8794",
         "bar_default_color": "#333333",
     }, 
@@ -27,10 +29,10 @@ general_styles: Dict[str, Dict[str, str]] = {
         "no_data_color": "#777",
     },
     "dark": {
-        "header_text_color": "",
-        "subheader_text_color": "",
-        "langname_color": "",
-        "no_data_color": "",
+        "header_text_color": "#2f80ed",
+        "subheader_text_color": "#ebebeb",
+        "langname_color": "#f5f5f5",
+        "no_data_color": "#c9c9c9",
     },
     "error": {
         "header_text_color": "#2f80ed",

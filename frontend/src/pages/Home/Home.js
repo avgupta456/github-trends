@@ -104,7 +104,7 @@ const HomeScreen = () => {
   }
 
   // for stage three
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState('classic');
   const themeSuffix = `${fullSuffix}&theme=${theme}`;
 
   useEffect(async () => {
@@ -213,7 +213,7 @@ const HomeScreen = () => {
             <ThemeStage
               theme={theme}
               setTheme={setTheme}
-              themeSuffix={themeSuffix}
+              fullSuffix={fullSuffix}
             />
           )}
           {stage === 3 && (

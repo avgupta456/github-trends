@@ -5,14 +5,14 @@ import PropTypes from 'prop-types';
 
 import { Card } from '../../../components';
 
-const ThemeStage = ({ theme, setTheme, themeSuffix }) => {
+const ThemeStage = ({ theme, setTheme, fullSuffix }) => {
   return (
     <div className="flex flex-wrap">
       {[
         {
           title: 'Light Theme',
           description: 'The classic look',
-          imageSrc: 'light',
+          imageSrc: 'classic',
         },
         {
           title: 'Dark Theme',
@@ -29,7 +29,7 @@ const ThemeStage = ({ theme, setTheme, themeSuffix }) => {
           <Card
             title={card.title}
             description={card.description}
-            imageSrc={themeSuffix}
+            imageSrc={`${fullSuffix}&theme=${card.imageSrc}`}
             selected={theme === card.imageSrc}
           />
         </button>
@@ -41,7 +41,7 @@ const ThemeStage = ({ theme, setTheme, themeSuffix }) => {
 ThemeStage.propTypes = {
   theme: PropTypes.string.isRequired,
   setTheme: PropTypes.func.isRequired,
-  themeSuffix: PropTypes.string.isRequired,
+  fullSuffix: PropTypes.string.isRequired,
 };
 
 export default ThemeStage;

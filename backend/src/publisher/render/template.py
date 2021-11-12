@@ -50,7 +50,7 @@ def get_template(
         d.rect(
             size=(width - 2 * padding, height - 2 * padding),
             insert=(padding, padding),
-            fill="#eee" if debug else "#fff",
+            fill="#eee" if debug else background_styles[theme]["sub_fill_color"],
         )
     )
 
