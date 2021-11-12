@@ -30,8 +30,14 @@ const Header = () => {
           <img src={rocketIcon} alt="logo" className="w-6 h-6" />
           <span className="ml-2 text-xl">GitHub Trends</span>
         </Link>
-        {/* Pages: Dashboard, Demo */}
+        {/* Pages: Wrapped, Dashboard, Demo */}
         <div className="hidden md:flex">
+          <Link
+            to="/wrapped"
+            className="px-4 py-1 mr-3 rounded bg-blue-500 hover:bg-blue-600 text-white"
+          >
+            Wrapped
+          </Link>
           {isAuthenticated ? (
             <Link
               to="/user"
@@ -96,6 +102,13 @@ const Header = () => {
         {isAuthenticated ? (
           <>
             <Link
+              to="/wrapped"
+              onClick={() => setToggle(false)}
+              className="block text-sm px-2 my-2 py-2 rounded bg-gray-100 text-gray-700"
+            >
+              Wrapped
+            </Link>
+            <Link
               to="/user"
               onClick={() => setToggle(false)}
               className="block text-sm px-2 my-2 py-2 rounded bg-gray-100 text-gray-700"
@@ -125,6 +138,13 @@ const Header = () => {
           </>
         ) : (
           <>
+            <Link
+              to="/wrapped"
+              onClick={() => setToggle(false)}
+              className="block text-sm px-2 my-2 py-2 rounded bg-gray-100 text-gray-700"
+            >
+              Wrapped
+            </Link>
             <Link
               to="/demo"
               onClick={() => setToggle(false)}

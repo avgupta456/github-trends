@@ -10,6 +10,7 @@ import LandingScreen from '../Landing';
 import DemoScreen from '../Demo';
 import { LoginScreen, SignUpScreen } from '../Auth';
 import HomeScreen from '../Home';
+import WrappedScreen from '../Wrapped';
 import SettingsScreen from '../Settings';
 import { NoMatchScreen, RedirectScreen } from '../Misc';
 
@@ -52,6 +53,7 @@ function App() {
             <Route path="/demo" component={DemoScreen} />
             <Route path="/user/redirect" component={RedirectScreen} />
             <Route path="/user" component={HomeScreen} />
+            <Route path="/wrapped" component={WrappedScreen} />
             {isAuthenticated && (
               <Route path="/settings" component={SettingsScreen} />
             )}
