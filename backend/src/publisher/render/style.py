@@ -17,6 +17,38 @@ themes = {
         "border_color": "#e4e2e2",
         "bar_color": "#333333",
     },
+    "bright_lights": {
+        "header_color": "#fff",
+        "subheader_color": "#0E86D4",
+        "text_color": "#B1D4E0",
+        "bg_color": "#003060",
+        "border_color": "#0E86D4",
+        "bar_color": "#68BBE3",
+    },
+    "rosettes": {
+        "header_color": "#fff",
+        "subheader_color": "#B6E2D3",
+        "text_color": "#FAE8E0",
+        "bg_color": "#EF7C8E",
+        "border_color": "#B6E2D3",
+        "bar_color": "#D8A7B1",
+    },
+    "ferns": {
+        "header_color": "#116530",
+        "subheader_color": "#18A558",
+        "text_color": "#116530",
+        "bg_color": "#A3EBB1",
+        "border_color": "#21B6A8",
+        "bar_color": "#21B6A8",
+    },
+    "synthwaves": {
+        "header_color": "#e2e9ec",
+        "subheader_color": "#e5289e",
+        "text_color": "#ef8539",
+        "bg_color": "#2b213a",
+        "border_color": "#e5289e",
+        "bar_color": "#e5289e",
+    }
 }
 
 

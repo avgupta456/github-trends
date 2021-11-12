@@ -19,6 +19,26 @@ const ThemeStage = ({ theme, setTheme, fullSuffix }) => {
           description: 'Coming soon!',
           imageSrc: 'dark',
         },
+        {
+          title: 'Bright Lights Theme',
+          description: 'Coming soon!',
+          imageSrc: 'bright_lights',
+        },
+        {
+          title: 'Rosettes',
+          description: 'Coming soon!',
+          imageSrc: 'rosettes',
+        },
+        {
+          title: 'Ferns',
+          description: 'Coming soon!',
+          imageSrc: 'ferns',
+        },
+        {
+          title: 'Synthwaves',
+          description: 'Coming soon!',
+          imageSrc: 'synthwaves',
+        },
       ].map((card, index) => (
         <button
           className="w-1/3 p-4"
