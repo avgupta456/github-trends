@@ -3,33 +3,33 @@
 from svgwrite import Drawing
 
 from src.constants import BACKEND_URL
-from src.publisher.render.style import get_theme_style, background_styles
+from src.publisher.render.style import themes, styles_no_animation
 from src.publisher.render.template import get_template
+
+THEME = "classic"
 
 
 def get_error_svg() -> Drawing:
     d = Drawing(size=(300, 285))
-
-    style, style_no_animation = get_theme_style(theme="error")
-    d.defs.add(d.style(style))
+    d.defs.add(d.style(styles_no_animation[THEME]))
 
     d.add(
         d.rect(
             size=(299, 284),
             insert=(0.5, 0.5),
             rx=4.5,
-            stroke=background_styles["error"]["border_color"],
-            fill=background_styles["error"]["main_fill_color"],
+            stroke=themes[THEME]["border_color"],
+            fill=themes[THEME]["bg_color"],
         )
     )
 
-    d.add(d.text("Unknown Error", insert=(25, 35), class_="header"))
+    d.add(d.text("Unknown Error", insert=(25, 35), class_=THEME + "-header"))
 
     d.add(
         d.text(
             "Please try again later or raise a ticket on GitHub",
             insert=(25, 60),
-            class_="lang-name",
+            class_=THEME + "-lang-name",
         )
     )
 
@@ -40,29 +40,62 @@ def get_error_svg() -> Drawing:
     return d
 
 
-def get_loading_svg() -> Drawing:
+def get_empty_demo_svg(header: str) -> Drawing:
     d = Drawing(size=(300, 285))
-
-    style, style_no_animation = get_theme_style(theme="error")
-    d.defs.add(d.style(style))
+    d.defs.add(d.style(styles_no_animation[THEME]))
 
     d.add(
         d.rect(
             size=(299, 284),
             insert=(0.5, 0.5),
             rx=4.5,
-            stroke=background_styles["error"]["border_color"],
-            fill=background_styles["error"]["main_fill_color"],
+            stroke=themes[THEME]["border_color"],
+            fill=themes[THEME]["bg_color"],
         )
     )
 
-    d.add(d.text("Loading data, hang tight!", insert=(25, 35), class_="header"))
+    d.add(d.text(header, insert=(25, 35), class_=THEME + "-header"))
+
+    d.add(
+        d.text(
+            "Enter your username to start!",
+            insert=(25, 60),
+            class_=THEME + "-lang-name",
+        )
+    )
+
+    d.add(
+        d.image(
+            BACKEND_URL + "/assets/stopwatch", insert=(85, 100), style="opacity: 50%"
+        )
+    )
+
+    return d
+
+
+def get_loading_svg() -> Drawing:
+    d = Drawing(size=(300, 285))
+    d.defs.add(d.style(styles_no_animation[THEME]))
+
+    d.add(
+        d.rect(
+            size=(299, 284),
+            insert=(0.5, 0.5),
+            rx=4.5,
+            stroke=themes[THEME]["border_color"],
+            fill=themes[THEME]["bg_color"],
+        )
+    )
+
+    d.add(
+        d.text("Loading data, hang tight!", insert=(25, 35), class_=THEME + "-header")
+    )
 
     d.add(
         d.text(
             "Please wait a couple seconds and refresh the page.",
             insert=(25, 60),
-            class_="lang-name",
+            class_=THEME + "-lang-name",
         )
     )
 
@@ -83,46 +116,11 @@ def get_no_data_svg(header: str, subheader: str) -> Drawing:
         header_text=header,
         subheader_text=subheader,
         debug=False,
-        theme="error",
+        theme=THEME,
     )
 
     d.add(d.image(BACKEND_URL + "/assets/error", insert=(85, 80), style="opacity: 50%"))
-    dp.add(d.text("No data to show", insert=(55, 220), class_="no-data"))
+    dp.add(d.text("No data to show", insert=(55, 220), class_=THEME + "-image-text"))
 
     d.add(dp)
-    return d
-
-
-def get_empty_demo_svg(header: str) -> Drawing:
-    d = Drawing(size=(300, 285))
-
-    style, style_no_animation = get_theme_style(theme="error")
-    d.defs.add(d.style(style))
-
-    d.add(
-        d.rect(
-            size=(299, 284),
-            insert=(0.5, 0.5),
-            rx=4.5,
-            stroke=background_styles["error"]["border_color"],
-            fill=background_styles["error"]["main_fill_color"],
-        )
-    )
-
-    d.add(d.text(header, insert=(25, 35), class_="header"))
-
-    d.add(
-        d.text(
-            "Enter your username to start!",
-            insert=(25, 60),
-            class_="lang-name",
-        )
-    )
-
-    d.add(
-        d.image(
-            BACKEND_URL + "/assets/stopwatch", insert=(85, 100), style="opacity: 50%"
-        )
-    )
-
     return d

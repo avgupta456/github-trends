@@ -1,54 +1,33 @@
-from typing import List, Tuple, Dict, Any
+from typing import List, Tuple
 
-# List[Tuple["selector", List[Tuple["property", "is_animation"]], "is_animation"]]
-
-background_styles: Dict[str, Dict[str, str]] = {
+themes = {
     "classic": {
-        "main_fill_color": "#e4e2e2",
-        "sub_fill_color": "#fff",
-        "border_color": "#fffefe",
-        "bar_default_color": "#ddd",
-    },
-    "dark": {
-        "main_fill_color": "#1a1a1a",
-        "sub_fill_color": "#1f1f1f",
-        "border_color": "#7B8794",
-        "bar_default_color": "#333333",
-    }, 
-    "error": {
-        "main_fill_color": "#fffefe",
+        "header_color": "#2f80ed",
+        "subheader_color": "#666",
+        "text_color": "#333",
+        "bg_color": "#fffefe",
         "border_color": "#e4e2e2",
-    }
-}
-
-general_styles: Dict[str, Dict[str, str]] = {
-    "classic": {
-        "header_text_color": "#2f80ed",
-        "subheader_text_color": "#666",
-        "langname_color": "#333",
-        "no_data_color": "#777",
+        "bar_color": "#ddd",
     },
     "dark": {
-        "header_text_color": "#2f80ed",
-        "subheader_text_color": "#ebebeb",
-        "langname_color": "#f5f5f5",
-        "no_data_color": "#c9c9c9",
+        "header_color": "#fff",
+        "subheader_color": "#9f9f9f",
+        "text_color": "#9f9f9f",
+        "bg_color": "#151515",
+        "border_color": "#e4e2e2",
+        "bar_color": "#333333",
     },
-    "error": {
-        "header_text_color": "#2f80ed",
-        "subheader_text_color": "#666",
-        "langname_color": "#333",
-        "no_data_color": "#777",
-    }
 }
 
-def get_theme_style(theme: str) -> Tuple[Any, Any]:
+
+def get_style(theme: str = "classic", use_animation: bool = True) -> str:
+    # List[Tuple["selector", List[Tuple["property", "is_animation"]], "is_animation"]]
     _style: List[Tuple[str, List[Tuple[str, bool]], bool]] = [
         (
             ".header",
             [
                 ("font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;", False),
-                ("fill: " + general_styles[theme]["header_text_color"] + ";", False),
+                ("fill: " + themes[theme]["header_color"] + ";", False),
                 ("animation: fadeInAnimation 0.8s ease-in-out forwards;", True),
             ],
             False,
@@ -56,8 +35,8 @@ def get_theme_style(theme: str) -> Tuple[Any, Any]:
         (
             ".subheader",
             [
-                ("font: 500 10px 'Segoe UI', Ubuntu, San-Serif;", False),
-                ("fill: " + general_styles[theme]["subheader_text_color"] + ";", False),
+                ("font: 500 10px 'Segoe UI', Ubuntu, Sans-Serif;", False),
+                ("fill: " + themes[theme]["subheader_color"] + ";", False),
                 ("animation: fadeInAnimation 0.8s ease-in-out forwards;", True),
             ],
             False,
@@ -66,15 +45,16 @@ def get_theme_style(theme: str) -> Tuple[Any, Any]:
             ".lang-name",
             [
                 ("font: 400 11px 'Segoe UI', Ubuntu, Sans-Serif;", False),
-                ("fill: " + general_styles[theme]["langname_color"] + ";", False),
+                ("fill: " + themes[theme]["text_color"] + ";", False),
             ],
             False,
         ),
         (
-            ".no-data",
+            ".image-text",
             [
-                ("font: 400 20px 'Segoe UI', Ubuntu, Sans-Serif;", False),
-                ("fill: " + general_styles[theme]["no_data_color"] + ";", False),
+                ("font: 500 20px 'Segoe UI', Ubuntu, Sans-Serif;", False),
+                ("fill: " + themes[theme]["text_color"] + ";", False),
+                ("opacity: 50%;", False),
             ],
             False,
         ),
@@ -85,25 +65,19 @@ def get_theme_style(theme: str) -> Tuple[Any, Any]:
         ),
     ]
 
-    style = "\n".join(
-        [rule[0] + " {" + "\n".join(item[0] for item in rule[1]) + "}" for rule in _style]
-    )
-
-    style_no_animation = "\n".join(
+    return "\n".join(
         [
-            rule[0] + " {" + "\n".join(item[0] for item in rule[1] if not item[1]) + "}"
+            rule[0].replace(".", "." + theme + "-")
+            + " {"
+            + "\n".join(item[0] for item in rule[1] if (use_animation or not item[1]))
+            + "}"
             for rule in _style
-            if not rule[2]
+            if use_animation or not rule[2]
         ]
     )
 
-    return style, style_no_animation
 
+styles = {k: get_style(k) for k in themes.keys()}
+styles_no_animation = {k: get_style(k, False) for k in themes.keys()}
 
-
-
-
-
-
-
-
+print(styles)
