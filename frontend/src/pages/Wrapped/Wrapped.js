@@ -21,13 +21,11 @@ const WrappedScreen = () => {
 
   return (
     <div className="h-full w-full flex flex-col justify-center items-center">
-      <div className="flex bg-red-100 w-full h-48">
-        <Calendar
-          startDate="2021-01-02"
-          endDate="2021-12-31"
-          data={data.calendar_data}
-        />
-      </div>
+      <Calendar
+        startDate="2021-01-02"
+        endDate="2021-12-31"
+        data={data.calendar_data}
+      />
     </div>
   );
 };

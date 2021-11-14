@@ -1,4 +1,5 @@
-import Button from './Button';
+import { Button, Input } from './Generic';
+
 import { Card, Image, SvgInline } from './Card';
 import Preview from './Preview';
 
@@ -7,6 +8,7 @@ import { Calendar } from './Wrapped';
 
 export {
   Button,
+  Input,
   Card,
   SvgInline,
   Image,
