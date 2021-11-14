@@ -7,13 +7,11 @@ from src.models import UserPackage
 from src.publisher.processing import get_user
 from src.publisher.routers.users.db import router as db_router
 from src.publisher.routers.users.svg import router as svg_router
-from src.publisher.routers.users.wrapped import router as wrapped_router
 from src.utils import async_fail_gracefully
 
 router = APIRouter()
 router.include_router(db_router, prefix="/db")
 router.include_router(svg_router, prefix="/svg")
-router.include_router(wrapped_router, prefix="/wrapped")
 
 
 """

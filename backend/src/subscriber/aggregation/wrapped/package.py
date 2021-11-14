@@ -2,6 +2,7 @@ from datetime import date
 
 from src.models import WrappedPackage
 from src.subscriber.aggregation.user.package import main as get_data
+from src.subscriber.aggregation.wrapped.calendar import get_calendar_data
 
 # from src.processing.user.follows import get_user_follows
 
@@ -20,4 +21,6 @@ async def main(
         user_id, access_token, start_date, end_date, timezone_str
     )
 
-    return WrappedPackage(user_data=user_package.contribs)
+    calendar_data = get_calendar_data(user_package)
+
+    return WrappedPackage(calendar_data=calendar_data)

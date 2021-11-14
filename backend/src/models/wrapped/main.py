@@ -1,7 +1,8 @@
+from typing import List
 from pydantic import BaseModel
 
-from src.models.user.contribs import UserContributions
+from src.models.wrapped.calendar import CalendarDayData
 
 
 class WrappedPackage(BaseModel):
-    user_data: UserContributions
+    calendar_data: List[CalendarDayData]

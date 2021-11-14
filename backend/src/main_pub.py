@@ -23,7 +23,13 @@ from src.constants import (
     PUBSUB_TOKEN,
     SENTRY_DSN,
 )
-from src.publisher.routers import asset_router, auth_router, pubsub_router, user_router
+from src.publisher.routers import (
+    asset_router,
+    auth_router,
+    pubsub_router,
+    user_router,
+    wrapped_router,
+)
 from src.utils.pubsub import create_push_subscription, create_topic
 
 """
@@ -89,6 +95,7 @@ def get_info():
 
 
 app.include_router(user_router, prefix="/user", tags=["Users"])
+app.include_router(wrapped_router, prefix="/wrapped", tags=["Wrapped"])
 app.include_router(pubsub_router, prefix="/pubsub", tags=["PubSub"])
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 app.include_router(asset_router, prefix="/assets", tags=["Assets"])

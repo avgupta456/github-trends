@@ -1,32 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
-import { Link } from 'react-router-dom';
+import { getWrapped } from '../../api';
+import { Calendar } from '../../components';
 
-import { Button } from '../../components';
+const WrappedScreen = () => {
+  const userId = useSelector((state) => state.user.userId);
+  // eslint-disable-next-line no-unused-vars
+  const [year, setYear] = useState(2021);
 
-const NoMatchScreen = () => {
+  const [data, setData] = useState({});
+
+  useEffect(async () => {
+    if (userId.length > 0 && year > 2010 && year <= 2021) {
+      setData(await getWrapped(userId, year));
+    }
+  }, [userId, year]);
+
+  console.log(userId, year, data);
+
   return (
     <div className="h-full w-full flex flex-col justify-center items-center">
-      <div className="flex">
-        <div className="pr-8 text-5xl font-semibold text-blue-500">405</div>
-        <div className="flex flex-col">
-          <div className="pl-8 border-l-2 border-gray-200">
-            <div className="text-5xl font-bold text-gray-900">
-              Page not Found
-            </div>
-            <div className="text-lg text-gray-500 mt-2">
-              Please check the URL in the address bar and try again.
-            </div>
-          </div>
-          <Link to="/" className="ml-8 mt-8">
-            <Button className="bg-blue-500 hover:bg-blue-600 text-white">
-              Go to Home
-            </Button>
-          </Link>
-        </div>
+      <div className="flex bg-red-100 w-full h-48">
+        <Calendar
+          startDate="2021-01-02"
+          endDate="2021-12-31"
+          data={data.calendar_data}
+        />
       </div>
     </div>
   );
 };
 
-export default NoMatchScreen;
+export default WrappedScreen;
