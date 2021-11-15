@@ -1,7 +1,7 @@
 from src.utils.alru_cache import alru_cache
 from src.utils.decorators import async_fail_gracefully, fail_gracefully
 from src.utils.gather import gather
-from src.utils.utils import date_to_datetime, use_time_range
+from src.utils.utils import date_to_datetime, use_time_range, format_number
 
 # PubSub removed from __all__ to prevent tests requiring GCP
 
@@ -12,4 +12,5 @@ __all__ = [
     "gather",
     "date_to_datetime",
     "use_time_range",
+    "format_number",
 ]

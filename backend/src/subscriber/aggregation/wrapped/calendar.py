@@ -1,7 +1,6 @@
 from typing import Any, Dict, List
 
-from src.models import UserPackage
-from src.models.wrapped.calendar import CalendarDayData
+from src.models import UserPackage, CalendarDayData
 
 
 def get_calendar_data(data: UserPackage) -> List[CalendarDayData]:
@@ -28,7 +27,7 @@ def get_calendar_data(data: UserPackage) -> List[CalendarDayData]:
         out: Dict[str, Any] = {
             "day": all.date,
             "contribs": all.stats.contribs_count,
-            "public_contribs": public.stats.contribs_count,
+            "public_contribs": public.stats.contribs_count - public.stats.other_count,
             "commits": all.stats.commits_count,
             "public_commits": public.stats.commits_count,
             "issues": all.stats.issues_count,

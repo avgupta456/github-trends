@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { ResponsiveCalendar } from '@nivo/calendar';
 
 import { Checkbox, Input } from '../Generic';
+import { theme } from './theme';
 
 const Calendar = ({ startDate, endDate, data }) => {
   const valueOptions = [
@@ -24,11 +25,8 @@ const Calendar = ({ startDate, endDate, data }) => {
   const fullValue = usePrivate ? value.value : `public_${value.value}`;
   const fullDisplayValue = `${usePrivate ? 'All' : 'Public'} ${value.label}`;
 
-  console.log(value);
-
+  // eslint-disable-next-line no-unused-vars
   const [selectedDay, setSelectedDay] = React.useState(null);
-
-  console.log(selectedDay);
 
   return (
     <div className="flex flex-col w-3/4 mx-auto px-8">
@@ -49,6 +47,7 @@ const Calendar = ({ startDate, endDate, data }) => {
       </div>
       <div className="h-48">
         <ResponsiveCalendar
+          theme={theme}
           data={
             Array.isArray(data)
               ? data

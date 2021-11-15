@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { getWrapped } from '../../api';
-import { Calendar } from '../../components';
+import { Calendar, PieChart } from '../../components';
 
 const WrappedScreen = () => {
   const userId = useSelector((state) => state.user.userId);
@@ -20,12 +20,18 @@ const WrappedScreen = () => {
   console.log(userId, year, data);
 
   return (
-    <div className="h-full w-full flex flex-col justify-center items-center">
-      <Calendar
-        startDate="2021-01-02"
-        endDate="2021-12-31"
-        data={data.calendar_data}
-      />
+    <div className="w-3/4 mx-auto">
+      <div className="h-full w-full flex flex-col justify-center items-center">
+        <Calendar
+          startDate="2021-01-02"
+          endDate="2021-12-31"
+          data={data.calendar_data}
+        />
+        <div className="flex w-full">
+          <PieChart data={data.pie_data} type="repos" usePrivate />
+          <PieChart data={data.pie_data} type="langs" usePrivate />
+        </div>
+      </div>
     </div>
   );
 };
