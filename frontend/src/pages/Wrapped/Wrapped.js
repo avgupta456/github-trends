@@ -39,7 +39,8 @@ const WrappedScreen = () => {
           <PieChart data={data.pie_data} type="repos" usePrivate />
           <PieChart data={data.pie_data} type="langs" usePrivate />
         </div>
-        <SwarmPlot data={data.swarm_data} usePrivate />
+        <SwarmPlot data={data.swarm_data} type="type" usePrivate />
+        <SwarmPlot data={data.swarm_data} type="weekday" usePrivate />
       </div>
     </div>
   );

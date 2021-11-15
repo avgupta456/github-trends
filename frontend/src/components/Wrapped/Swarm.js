@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-curly-newline */
 
 import React from 'react';
@@ -7,70 +8,76 @@ import { ResponsiveSwarmPlot } from '@nivo/swarmplot';
 
 import { theme } from './theme';
 
-const SwarmPlot = ({ data, usePrivate }) => {
+const SwarmPlot = ({ data, type, usePrivate }) => {
   const prefix = `${usePrivate ? '' : 'public_'}contribs`;
-  // eslint-disable-next-line react/prop-types
   const currData = data[prefix];
 
-  console.log(currData);
+  const tickValues = [0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => 10800 * i);
 
   return (
     <div className="w-full h-96">
       <ResponsiveSwarmPlot
         theme={theme}
+        isInteractive={false}
         data={currData}
-        groups={['commit', 'issue', 'pr', 'review']}
-        groupBy="type"
+        groupBy={type}
+        groups={
+          type === 'type'
+            ? ['commit', 'issue', 'pr', 'review']
+            : [0, 1, 2, 3, 4, 5, 6]
+        }
         identity="id"
         value="timestamp"
-        valueFormat="$.2f"
-        // valueScale={{ type: 'linear', min: 0, max: 500, reverse: false }}
-        // size={{ key: 'volume', values: [4, 20], sizes: [6, 20] }}
+        size={6}
         forceStrength={4}
-        simulationIterations={100}
-        borderColor={{
-          from: 'color',
-          modifiers: [
-            ['darker', 0.6],
-            ['opacity', 0.5],
-          ],
-        }}
-        margin={{ top: 80, right: 100, bottom: 80, left: 100 }}
-        axisTop={{
-          orient: 'top',
-          tickSize: 10,
-          tickPadding: 5,
-          tickRotation: 0,
-          legend: 'group if vertical, price if horizontal',
-          legendPosition: 'middle',
-          legendOffset: -46,
-        }}
-        axisRight={{
-          orient: 'right',
-          tickSize: 10,
-          tickPadding: 5,
-          tickRotation: 0,
-          legend: 'price if vertical, group if horizontal',
-          legendPosition: 'middle',
-          legendOffset: 76,
-        }}
+        simulationIterations={60}
+        colors={{ scheme: 'category10' }}
+        gridYValues={tickValues}
+        margin={{ top: 20, right: 20, bottom: 80, left: 100 }}
+        axisTop={null}
+        axisRight={null}
         axisBottom={{
           orient: 'bottom',
           tickSize: 10,
           tickPadding: 5,
           tickRotation: 0,
-          legend: 'group if vertical, price if horizontal',
+          legend: type === 'type' ? 'Contribution Type' : 'Day of Week',
           legendPosition: 'middle',
           legendOffset: 46,
+          format: (value) => {
+            return {
+              0: 'Sunday',
+              1: 'Monday',
+              2: 'Tuesday',
+              3: 'Wednesday',
+              4: 'Thursday',
+              5: 'Friday',
+              6: 'Saturday',
+              commit: 'Commits',
+              issue: 'Issues',
+              pr: 'Pull Requests',
+              review: 'Reviews',
+            }[value];
+          },
         }}
         axisLeft={{
           orient: 'left',
           tickSize: 10,
           tickPadding: 5,
           tickRotation: 0,
-          legend: 'price if vertical, group if horizontal',
+          legend: 'Time of Day',
           legendPosition: 'middle',
-          legendOffset: -76,
+          legendOffset: -86,
+          tickValues,
+          format: (value) => {
+            let hours = Math.floor(value / 3600);
+            const suffix = hours % 24 > 12 ? 'PM' : 'AM';
+            hours = hours % 12 === 0 ? 12 : hours % 12;
+            const minutes = String(Math.floor((value % 3600) / 60 / 10) * 10);
+            const displayHour = String(hours).padStart(2, '0');
+            const displayMinute = String(minutes).padStart(2, '0');
+            return `${displayHour}:${displayMinute} ${suffix}`;
+          },
         }}
       />
     </div>
@@ -84,6 +91,7 @@ SwarmPlot.propTypes = {
       public_contribs: PropTypes.array,
     }),
   ),
+  type: PropTypes.string,
   usePrivate: PropTypes.bool,
 };
 
@@ -92,6 +100,7 @@ SwarmPlot.defaultProps = {
     contribs: [],
     public_contribs: [],
   },
+  type: 'type',
   usePrivate: false,
 };
 

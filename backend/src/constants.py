@@ -15,7 +15,7 @@ NODE_CHUNK_SIZE = 100  # number of nodes (commits) to query (max 100)
 NODE_THREADS = 10  # number of node queries simultaneously (avoid blacklisting)
 CUTOFF = 500  # if > cutoff lines, assume imported, don't count
 
-WRAPPED_VERSION = 1.01  # determines when to overwrite MongoDB data
+WRAPPED_VERSION = 1  # determines when to overwrite MongoDB data
 
 # CUSTOMIZATION
 BLACKLIST = ["Jupyter Notebook", "HTML"]  # languages to ignore
