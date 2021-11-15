@@ -2,6 +2,7 @@ from datetime import date
 
 from src.models import WrappedPackage
 from src.subscriber.aggregation.user.package import get_full_user_data
+from src.subscriber.aggregation.wrapped.bar import get_bar_data
 from src.subscriber.aggregation.wrapped.calendar import get_calendar_data
 from src.subscriber.aggregation.wrapped.pie import get_pie_data
 from src.subscriber.aggregation.wrapped.swarm import get_swarm_data
@@ -23,10 +24,14 @@ async def main(
         user_id, access_token, start_date, end_date, timezone_str
     )
 
+    bar_data = get_bar_data(user_package)
     calendar_data = get_calendar_data(user_package)
     pie_data = get_pie_data(user_package)
     swarm_data = get_swarm_data(user_package)
 
     return WrappedPackage(
-        calendar_data=calendar_data, pie_data=pie_data, swarm_data=swarm_data
+        bar_data=bar_data,
+        calendar_data=calendar_data,
+        pie_data=pie_data,
+        swarm_data=swarm_data,
     )

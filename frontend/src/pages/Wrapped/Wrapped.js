@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { useSelector } from 'react-redux';
 
 import { getWrapped } from '../../api';
-import { Calendar, PieChart, SwarmPlot } from '../../components';
+// eslint-disable-next-line no-unused-vars
+import { BarGraph, Calendar, PieChart, SwarmPlot } from '../../components';
 
 const WrappedScreen = () => {
   const userId = useSelector((state) => state.user.userId);
@@ -41,6 +43,7 @@ const WrappedScreen = () => {
         </div>
         <SwarmPlot data={data.swarm_data} type="type" usePrivate />
         <SwarmPlot data={data.swarm_data} type="weekday" usePrivate />
+        <BarGraph data={data.bar_data} type="loc_changed" usePrivate />
       </div>
     </div>
   );
