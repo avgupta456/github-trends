@@ -17,6 +17,7 @@ from src.data.github.graphql import (
 )
 from src.data.github.rest import RawCommit
 from src.models import UserContributions
+from src.models.user.contribs import FullUserContributions
 from src.subscriber.aggregation.user.commit import (
     get_all_commit_info,
     get_commits_languages,
@@ -80,7 +81,8 @@ async def get_contributions(
     start_date: date = date.today() - timedelta(365),
     end_date: date = date.today(),
     timezone_str: str = "US/Eastern",
-) -> UserContributions:
+    full: bool = False,
+) -> Union[UserContributions, FullUserContributions]:
     tz = pytz.timezone(timezone_str)
 
     # get years for contribution calendar
@@ -359,7 +361,7 @@ async def get_contributions(
                             datetime_str
                         )
                         if not repo_infos[repo].is_private:
-                            public[date_str]["lists"]["commits"].append(datetime_str)
+                            public[date_str]["lists"][event_type].append(datetime_str)
 
                         # update stats
                         update(date_str, repo, event_type, 1)
@@ -377,7 +379,8 @@ async def get_contributions(
     for repo in repo_stats:
         repo_stats[repo]["private"] = repo_infos[repo].is_private
 
-    output = UserContributions.parse_obj(
+    cls = FullUserContributions if full else UserContributions
+    output = cls.parse_obj(
         {
             "total_stats": total_stats,
             "public_stats": public_stats,

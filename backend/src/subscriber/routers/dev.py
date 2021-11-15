@@ -1,12 +1,16 @@
 from datetime import date, timedelta
-from typing import Optional
+from typing import Optional, Union
 
 from fastapi import APIRouter, Response, status
 
 from src.data.github.graphql import get_query_limit
 from src.data.mongo.user import UserModel, get_user_by_user_id
-from src.models import UserPackage, WrappedPackage
-from src.subscriber.aggregation import get_user_data, get_wrapped_data
+from src.models import UserPackage, FullUserPackage, WrappedPackage
+from src.subscriber.aggregation import (
+    get_user_data,
+    get_full_user_data,
+    get_wrapped_data,
+)
 from src.utils import async_fail_gracefully, use_time_range
 
 router = APIRouter()
@@ -22,7 +26,7 @@ async def _get_access_token(user_id: str, access_token: Optional[str]) -> str:
     return new_access_token
 
 
-@router.get("/{user_id}", status_code=status.HTTP_200_OK)
+@router.get("/user/{user_id}", status_code=status.HTTP_200_OK)
 @async_fail_gracefully
 async def get_user_raw(
     response: Response,
@@ -32,13 +36,13 @@ async def get_user_raw(
     end_date: date = date.today(),
     time_range: str = "one_month",
     timezone_str: str = "US/Eastern",
-) -> UserPackage:
+    full: bool = False,
+) -> Union[UserPackage, FullUserPackage]:
     new_access_token = await _get_access_token(user_id, access_token)
     start_query_limit = get_query_limit(access_token=new_access_token)
     start_date, end_date, _ = use_time_range(time_range, start_date, end_date)
-    data = await get_user_data(
-        user_id, new_access_token, start_date, end_date, timezone_str
-    )
+    func = get_user_data if not full else get_full_user_data
+    data = await func(user_id, new_access_token, start_date, end_date, timezone_str)
     end_query_limit = get_query_limit(access_token=new_access_token)
     print("Query Limit Used", start_query_limit - end_query_limit)
     print("Query Limit Remaining", end_query_limit)

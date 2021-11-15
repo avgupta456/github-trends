@@ -1,6 +1,12 @@
 from typing import List
 
-from src.models import UserPackage, RepoContributionStats, Language, PieData, PieDatum
+from src.models import (
+    FullUserPackage,
+    RepoContributionStats,
+    Language,
+    PieData,
+    PieDatum,
+)
 from src.utils import format_number
 
 
@@ -12,7 +18,7 @@ def _count_repo_loc_changed(x: RepoContributionStats) -> int:
     return sum(_loc_changed(lang) for lang in x.languages.values())
 
 
-def get_pie_data(data: UserPackage) -> PieData:
+def get_pie_data(data: FullUserPackage) -> PieData:
     # REPO PIE CHART
     stores = [
         data.contribs.repo_stats.items(),

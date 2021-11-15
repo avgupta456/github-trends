@@ -1,4 +1,5 @@
 import Calendar from './Calendar';
 import PieChart from './Pie';
+import SwarmPlot from './Swarm';
 
-export { Calendar, PieChart };
+export { Calendar, PieChart, SwarmPlot };

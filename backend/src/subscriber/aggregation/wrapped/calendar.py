@@ -1,9 +1,9 @@
 from typing import Any, Dict, List
 
-from src.models import UserPackage, CalendarDayData
+from src.models import FullUserPackage, CalendarDayData
 
 
-def get_calendar_data(data: UserPackage) -> List[CalendarDayData]:
+def get_calendar_data(data: FullUserPackage) -> List[CalendarDayData]:
     top_langs = [
         x[0]
         for x in sorted(

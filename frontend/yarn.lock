@@ -1538,6 +1538,15 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
+"@nivo/annotations@0.74.0":
+  version "0.74.0"
+  resolved "https://registry.yarnpkg.com/@nivo/annotations/-/annotations-0.74.0.tgz#f4a3474fdf8812c3812c30e08d3277e209bec0f6"
+  integrity sha512-nxZLKDi9YEy2zZUsOtbYL/2oAgsxK5SVZ1P3Csll+cQ96uLU6sU7jmb67AwK0nDbYk7BD3sZf/O/A9r/MCK4Ow==
+  dependencies:
+    "@nivo/colors" "0.74.0"
+    "@react-spring/web" "9.2.6"
+    lodash "^4.17.21"
+
 "@nivo/arcs@0.74.0":
   version "0.74.0"
   resolved "https://registry.yarnpkg.com/@nivo/arcs/-/arcs-0.74.0.tgz#102084e878545c02032ff87593f3595a5822668a"
@@ -1546,6 +1555,16 @@
     "@nivo/colors" "0.74.0"
     "@react-spring/web" "9.2.6"
     d3-shape "^1.3.5"
+
+"@nivo/axes@0.74.0":
+  version "0.74.0"
+  resolved "https://registry.yarnpkg.com/@nivo/axes/-/axes-0.74.0.tgz#cf7cf2277b7aca5449a040ddf3e0cf9891971199"
+  integrity sha512-27o1H+Br0AaeUTiRhy7OebqzYEWr1xznHOxd+Hn2Xz9kK1alGBiPgwXrkXV0Q9CtrsroQFnX2QR3JxRgOtC5fA==
+  dependencies:
+    "@nivo/scales" "0.74.0"
+    "@react-spring/web" "9.2.6"
+    d3-format "^1.4.4"
+    d3-time-format "^3.0.0"
 
 "@nivo/calendar@^0.74.0":
   version "0.74.0"
@@ -1611,12 +1630,47 @@
   dependencies:
     react-lifecycles-compat "^3.0.4"
 
+"@nivo/scales@0.74.0":
+  version "0.74.0"
+  resolved "https://registry.yarnpkg.com/@nivo/scales/-/scales-0.74.0.tgz#ede12b899da9e3aee7921ebce40f227e670a430d"
+  integrity sha512-5mER71NgZGdgs8X2PgilBpAWMMGtTXrUuYOBQWDKDMgtc83MU+mphhiYfLv5e6ViZyUB5ebfEkfeIgStLqrcEA==
+  dependencies:
+    d3-scale "^3.2.3"
+    d3-time "^1.0.11"
+    d3-time-format "^3.0.0"
+    lodash "^4.17.21"
+
+"@nivo/swarmplot@^0.74.0":
+  version "0.74.0"
+  resolved "https://registry.yarnpkg.com/@nivo/swarmplot/-/swarmplot-0.74.0.tgz#b9913f104d27eae596f542d4c990d9c59bde176f"
+  integrity sha512-PBWfmmTKJvE2LbphslAr16SaNexJvyOJo+F2EhUXwfNr2CXcPsRCnLTzCpX9ZRbhMHU5gcLU6ODL1BNr0jfX1Q==
+  dependencies:
+    "@nivo/annotations" "0.74.0"
+    "@nivo/axes" "0.74.0"
+    "@nivo/colors" "0.74.0"
+    "@nivo/legends" "0.74.0"
+    "@nivo/scales" "0.74.0"
+    "@nivo/tooltip" "0.74.0"
+    "@nivo/voronoi" "0.74.0"
+    "@react-spring/web" "9.2.6"
+    d3-force "^2.0.1"
+    d3-scale "^3.2.3"
+    lodash "^4.17.21"
+
 "@nivo/tooltip@0.74.0":
   version "0.74.0"
   resolved "https://registry.yarnpkg.com/@nivo/tooltip/-/tooltip-0.74.0.tgz#60d94b0fecc2fc179ada3efa380e7e456982b4a5"
   integrity sha512-h3PUgNFF5HUeQFfx19MWS1uGK8iUDymZNY+5PyaCWDFT+0/ldXBu8uw5WYRui2KwNdTym6F0E/aT7JKczDd85w==
   dependencies:
     "@react-spring/web" "9.2.6"
+
+"@nivo/voronoi@0.74.0":
+  version "0.74.0"
+  resolved "https://registry.yarnpkg.com/@nivo/voronoi/-/voronoi-0.74.0.tgz#4b427955ddabd86934a2bbb95a62ff53ee97c575"
+  integrity sha512-Q3267T1+Tlufn8LbmSYnO8x9gL+h/iwH2Uqc5CENHSZu2KPD0PB82vxpQnbDVhjadulI0rlrPA9fU3VY3q1zKg==
+  dependencies:
+    d3-delaunay "^5.3.0"
+    d3-scale "^3.2.3"
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -4150,6 +4204,27 @@ d3-array@2, d3-array@^2.3.0:
   resolved "https://registry.yarnpkg.com/d3-color/-/d3-color-2.0.0.tgz#8d625cab42ed9b8f601a1760a389f7ea9189d62e"
   integrity sha512-SPXi0TSKPD4g9tw0NMZFnR95XVgUZiBH+uUTqQuDu1OsE2zomHU7ho0FISciaPvosimixwHFl3WHLGabv6dDgQ==
 
+d3-delaunay@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/d3-delaunay/-/d3-delaunay-5.3.0.tgz#b47f05c38f854a4e7b3cea80e0bb12e57398772d"
+  integrity sha512-amALSrOllWVLaHTnDLHwMIiz0d1bBu9gZXd1FiLfXf8sHcX9jrcj81TVZOqD4UX7MgBZZ07c8GxzEgBpJqc74w==
+  dependencies:
+    delaunator "4"
+
+"d3-dispatch@1 - 2":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/d3-dispatch/-/d3-dispatch-2.0.0.tgz#8a18e16f76dd3fcaef42163c97b926aa9b55e7cf"
+  integrity sha512-S/m2VsXI7gAti2pBoLClFFTMOO1HTtT0j99AuXLoGFKO6deHDdnv6ZGTxSTTUTgO1zVcv82fCOtDjYK4EECmWA==
+
+d3-force@^2.0.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/d3-force/-/d3-force-2.1.1.tgz#f20ccbf1e6c9e80add1926f09b51f686a8bc0937"
+  integrity sha512-nAuHEzBqMvpFVMf9OX75d00OxvOXdxY+xECIXjW6Gv8BRrXu6gAWbv/9XKrvfJ5i5DCokDW7RYE50LRoK092ew==
+  dependencies:
+    d3-dispatch "1 - 2"
+    d3-quadtree "1 - 2"
+    d3-timer "1 - 2"
+
 "d3-format@1 - 2":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/d3-format/-/d3-format-2.0.0.tgz#a10bcc0f986c372b729ba447382413aabf5b0767"
@@ -4176,6 +4251,11 @@ d3-path@1:
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/d3-path/-/d3-path-1.0.9.tgz#48c050bb1fe8c262493a8caf5524e3e9591701cf"
   integrity sha512-VLaYcn81dtHVTjEHd8B+pbe9yHWpXKZUC87PzoFmsFrJqgFwDe/qxfp5MlfsfM1V5E/iVt0MmEbWQ7FVIXh/bg==
+
+"d3-quadtree@1 - 2":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/d3-quadtree/-/d3-quadtree-2.0.0.tgz#edbad045cef88701f6fee3aee8e93fb332d30f9d"
+  integrity sha512-b0Ed2t1UUalJpc3qXzKi+cPGxeXRr4KU9YSlocN74aTzp6R/Ud43t79yLLqxHRWZfsvWXmbDWPpoENK1K539xw==
 
 d3-scale-chromatic@^2.0.0:
   version "2.0.0"
@@ -4217,10 +4297,15 @@ d3-shape@^1.3.5:
   dependencies:
     d3-array "2"
 
-d3-time@^1.0.10:
+d3-time@^1.0.10, d3-time@^1.0.11:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/d3-time/-/d3-time-1.1.0.tgz#b1e19d307dae9c900b7e5b25ffc5dcc249a8a0f1"
   integrity sha512-Xh0isrZ5rPYYdqhAVk8VLnMEidhz5aP7htAADH6MfzgmmicPkTo8LhkLxci61/lCB7n7UmE3bN0leRt+qvkLxA==
+
+"d3-timer@1 - 2":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/d3-timer/-/d3-timer-2.0.0.tgz#055edb1d170cfe31ab2da8968deee940b56623e6"
+  integrity sha512-TO4VLh0/420Y/9dO3+f9abDEFYeCUr2WZRlxJvbp4HPTQcSylXNiL6yZa9FIUvV1yRiFufl1bszTCLDqv9PWNA==
 
 d@1, d@^1.0.1:
   version "1.0.1"
@@ -4373,6 +4458,11 @@ del@^4.1.1:
     p-map "^2.0.0"
     pify "^4.0.1"
     rimraf "^2.6.3"
+
+delaunator@4:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/delaunator/-/delaunator-4.0.1.tgz#3d779687f57919a7a418f8ab947d3bddb6846957"
+  integrity sha512-WNPWi1IRKZfCt/qIDMfERkDp93+iZEmOxN2yy4Jg+Xhv8SLk2UTqqbe1sfiipn0and9QrE914/ihdx82Y/Giag==
 
 delayed-stream@~1.0.0:
   version "1.0.0"

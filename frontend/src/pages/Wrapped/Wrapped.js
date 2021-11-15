@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { getWrapped } from '../../api';
-import { Calendar, PieChart } from '../../components';
+import { Calendar, PieChart, SwarmPlot } from '../../components';
 
 const WrappedScreen = () => {
   const userId = useSelector((state) => state.user.userId);
@@ -19,6 +19,14 @@ const WrappedScreen = () => {
 
   console.log(userId, year, data);
 
+  if (data === undefined || data === null) {
+    return (
+      <div className="w-3/4 mx-auto">
+        <h1 className="text-center">Loading...</h1>
+      </div>
+    );
+  }
+
   return (
     <div className="w-3/4 mx-auto">
       <div className="h-full w-full flex flex-col justify-center items-center">
@@ -31,6 +39,7 @@ const WrappedScreen = () => {
           <PieChart data={data.pie_data} type="repos" usePrivate />
           <PieChart data={data.pie_data} type="langs" usePrivate />
         </div>
+        <SwarmPlot data={data.swarm_data} usePrivate />
       </div>
     </div>
   );
