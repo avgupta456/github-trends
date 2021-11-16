@@ -19,3 +19,4 @@ else:
 
 USERS = DB.users
 SECRETS = DB.secrets
+WRAPPED = DB.wrapped

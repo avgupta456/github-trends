@@ -10,17 +10,6 @@ from src.constants import DEFAULT_COLOR
 from src.publisher.render.style import style, style_no_animation
 
 
-def format_number(num: int) -> str:
-    if num > 10000:
-        return "~" + str(int(num / 1000)) + "k lines"
-    elif num > 1000:
-        return "~" + str(int(num / 100) / 10) + "k lines"
-    elif num > 100:
-        return "~" + str(int(num / 100) * 100) + " lines"
-    else:
-        return "<100 lines"
-
-
 def get_template(
     width: int,
     height: int,

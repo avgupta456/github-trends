@@ -61,9 +61,9 @@ const HomeScreen = () => {
   // for stage two
   const defaultTimeRange = {
     id: 3,
-    name: 'Past 1 Year',
+    label: 'Past 1 Year',
     disabled: false,
-    timeRange: 'one_year',
+    value: 'one_year',
   };
   const [selectedTimeRange, setSelectedTimeRange] = useState(defaultTimeRange);
 
@@ -84,7 +84,7 @@ const HomeScreen = () => {
     resetCustomization();
   }, [selectedCard]);
 
-  const time = selectedTimeRange.timeRange;
+  const time = selectedTimeRange.value;
   let fullSuffix = `${selectedCard}?time_range=${time}`;
 
   if (usePercent) {
