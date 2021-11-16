@@ -41,7 +41,7 @@ const WrappedScreen = () => {
   }
 
   return (
-    <div className="container p-16 mx-auto">
+    <div className="container px-32 py-16 mx-auto">
       <div className="h-full w-full flex flex-row flex-wrap justify-center items-center">
         <div className="w-full h-32 p-2">
           <div className="shadow bg-gray-50 w-full h-full p-4 flex flex-col">
@@ -66,15 +66,15 @@ const WrappedScreen = () => {
           type="repos_added"
           usePrivate={usePrivate}
         />
-        <PieChart
-          data={data.pie_data}
-          type="langs_added"
-          usePrivate={usePrivate}
-        />
         <SwarmPlot data={data.swarm_data} type="type" usePrivate={usePrivate} />
         <SwarmPlot
           data={data.swarm_data}
           type="weekday"
+          usePrivate={usePrivate}
+        />
+        <PieChart
+          data={data.pie_data}
+          type="langs_added"
           usePrivate={usePrivate}
         />
         <BarGraph

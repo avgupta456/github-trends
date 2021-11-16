@@ -41,5 +41,5 @@ def get_swarm_data(data: FullUserPackage) -> SwarmData:
                     out.append(SwarmDatum.parse_obj(_obj))
                     counts[type] += 1
 
-            full_out[label] = out
+        full_out[label] = out
     return SwarmData.parse_obj(full_out)

@@ -31,7 +31,7 @@ const Calendar = ({ data, startDate, endDate, usePrivate }) => {
     : 0;
 
   return (
-    <div className="w-full h-80 p-2">
+    <div className="w-full h-72 p-2">
       <div className="shadow bg-gray-50 w-full h-full p-4 flex flex-col">
         <div className="h-6 flex justify-between items-center">
           <p className="text-xl font-semibold">
@@ -46,31 +46,29 @@ const Calendar = ({ data, startDate, endDate, usePrivate }) => {
         </div>
         <div className="h-60 flex flex-col">
           <p className="text-lg">{`${numEvents} ${fullDisplayValue}`}</p>
-          <ResponsiveCalendar
-            theme={theme}
-            data={
-              Array.isArray(data)
-                ? data
-                    .map((item) => ({
-                      day: item.day,
-                      value: item[fullValue],
-                    }))
-                    .filter((item) => item.value !== 0)
-                : []
-            }
-            from={startDate}
-            to={endDate}
-            emptyColor="#EBEDF0"
-            colors={['#9BE9A8', '#40C463', '#30A14E', '#216E39']}
-            margin={{ top: 0, right: 0, bottom: 0, left: 20 }}
-            monthBorderColor="#ffffff"
-            dayBorderWidth={2}
-            dayBorderColor="#ffffff"
-            // eslint-disable-next-line no-unused-vars
-            onClick={(dayData, event) => {
-              setSelectedDay(dayData.day);
-            }}
-          />
+          {Array.isArray(data) && data.length > 0 && (
+            <ResponsiveCalendar
+              theme={theme}
+              data={data
+                .map((item) => ({
+                  day: item.day,
+                  value: item[fullValue],
+                }))
+                .filter((item) => item.value !== 0)}
+              from={startDate}
+              to={endDate}
+              emptyColor="#EBEDF0"
+              colors={['#9BE9A8', '#40C463', '#30A14E', '#216E39']}
+              margin={{ top: 0, right: 0, bottom: 0, left: 20 }}
+              monthBorderColor="#ffffff"
+              dayBorderWidth={2}
+              dayBorderColor="#ffffff"
+              // eslint-disable-next-line no-unused-vars
+              onClick={(dayData, event) => {
+                setSelectedDay(dayData.day);
+              }}
+            />
+          )}
         </div>
       </div>
     </div>
