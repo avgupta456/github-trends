@@ -18,7 +18,6 @@ const SelectUserScreen = () => {
 
   const handleSubmit = async () => {
     await sleep(100);
-    console.log(userName);
     history.push(`/wrapped/${userName}`);
   };
 

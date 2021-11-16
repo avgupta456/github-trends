@@ -81,8 +81,6 @@ const SettingsScreen = () => {
   const dispatch = useDispatch();
   const logout = () => dispatch(_logout());
 
-  console.log(userId, privateAccess, accountTier);
-
   return (
     <div className="h-full w-full">
       <div className={classnames('h-full flex', deleteModal && 'opacity-25')}>

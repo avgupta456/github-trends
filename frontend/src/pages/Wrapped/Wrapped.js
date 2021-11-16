@@ -27,8 +27,6 @@ const WrappedScreen = () => {
     }
   }, [userId, year, data]);
 
-  console.log(userId, year, data);
-
   // eslint-disable-next-line no-unused-vars
   const [usePrivate, setUsePrivate] = useState(false);
 
