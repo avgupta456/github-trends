@@ -1,7 +1,13 @@
 from datetime import datetime
 from typing import Dict, List, Optional, Union
 
-from src.constants import BLACKLIST, CUTOFF, DEFAULT_COLOR, NODE_CHUNK_SIZE
+from src.constants import (
+    BLACKLIST,
+    CUTOFF,
+    CUTOFF_PER_FILE,
+    DEFAULT_COLOR,
+    NODE_CHUNK_SIZE,
+)
 from src.data.github.graphql import RawCommit as GraphQLRawCommit, RawRepo, get_commits
 from src.data.github.rest import RawCommit as RESTRawCommit, get_repo_commits
 
@@ -47,13 +53,19 @@ def get_commits_languages(
     commit_repos: List[str],
     repo_infos: Dict[str, RawRepo],
     cutoff: int = CUTOFF,
+    cutoff_per_file: int = CUTOFF_PER_FILE,
 ):
     all_data = _get_commits_languages(access_token, node_ids, per_page=NODE_CHUNK_SIZE)
 
     out: List[Dict[str, Dict[str, Union[int, str]]]] = []
     for commit, commit_repo in zip(all_data, commit_repos):
         out.append({})
-        if commit is not None and commit.additions + commit.deletions < cutoff:
+        if commit is None:
+            continue
+
+        loc_changed = commit.additions + commit.deletions
+        loc_changed_per_file = loc_changed / max(1, commit.changed_files)
+        if loc_changed < cutoff or loc_changed_per_file < cutoff_per_file:
             repo_info = repo_infos[commit_repo].languages.edges
             languages = [x for x in repo_info if x.node.name not in BLACKLIST]
             total_repo_size = sum([language.size for language in languages])
