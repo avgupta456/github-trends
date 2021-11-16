@@ -1,8 +1,8 @@
 from typing import Any, Dict, Optional
 
 from pydantic import ValidationError
-from src.constants import WRAPPED_VERSION
 
+from src.constants import WRAPPED_VERSION
 from src.data.mongo.main import WRAPPED
 from src.data.mongo.wrapped.models import WrappedModel
 from src.utils import alru_cache

@@ -1,6 +1,6 @@
 from typing import Any, Dict, List
 
-from src.models import FullUserPackage, CalendarDayData
+from src.models import CalendarDayData, FullUserPackage
 
 
 def get_calendar_data(data: FullUserPackage) -> List[CalendarDayData]:

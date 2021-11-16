@@ -1,18 +1,17 @@
 from src.models.user.contribs import (
     ContributionDay,
-    UserContributions,
     FullUserContributions,
-    RepoContributionStats,
     Language,
+    RepoContributionStats,
+    UserContributions,
 )
 from src.models.user.follows import User, UserFollows
-from src.models.user.main import UserPackage, FullUserPackage
-
+from src.models.user.main import FullUserPackage, UserPackage
 from src.models.wrapped.bar import BarData, BarDatum
 from src.models.wrapped.calendar import CalendarDayData, CalendarLanguageDayData
+from src.models.wrapped.main import WrappedPackage
 from src.models.wrapped.pie import PieData, PieDatum
 from src.models.wrapped.swarm import SwarmData, SwarmDatum
-from src.models.wrapped.main import WrappedPackage
 
 __all__ = [
     # User

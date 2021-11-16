@@ -1,6 +1,6 @@
 from datetime import date
 
-from src.models import UserPackage, FullUserPackage
+from src.models import FullUserPackage, UserPackage
 from src.subscriber.aggregation.user.contributions import get_contributions
 from src.subscriber.aggregation.user.follows import get_user_follows
 

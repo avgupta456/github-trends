@@ -2,10 +2,10 @@ from typing import List
 
 from src.models import (
     FullUserPackage,
-    RepoContributionStats,
     Language,
     PieData,
     PieDatum,
+    RepoContributionStats,
 )
 from src.utils import format_number
 

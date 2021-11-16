@@ -1,6 +1,6 @@
 from datetime import datetime
-from src.constants import WRAPPED_VERSION
 
+from src.constants import WRAPPED_VERSION
 from src.data.mongo.main import WRAPPED
 from src.models import WrappedPackage
 

@@ -2,7 +2,7 @@ from collections import defaultdict
 from datetime import datetime
 from typing import Dict, List, Union
 
-from src.models import FullUserPackage, BarData, BarDatum
+from src.models import BarData, BarDatum, FullUserPackage
 from src.utils import format_number
 
 

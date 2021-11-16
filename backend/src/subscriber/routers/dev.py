@@ -5,10 +5,10 @@ from fastapi import APIRouter, Response, status
 
 from src.data.github.graphql import get_query_limit
 from src.data.mongo.user import UserModel, get_user_by_user_id
-from src.models import UserPackage, FullUserPackage, WrappedPackage
+from src.models import FullUserPackage, UserPackage, WrappedPackage
 from src.subscriber.aggregation import (
-    get_user_data,
     get_full_user_data,
+    get_user_data,
     get_wrapped_data,
 )
 from src.utils import async_fail_gracefully, use_time_range
