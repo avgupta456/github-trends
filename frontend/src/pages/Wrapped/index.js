@@ -1,3 +1,4 @@
+import SelectUserScreen from './SelectUser';
 import WrappedScreen from './Wrapped';
 
-export default WrappedScreen;
+export { SelectUserScreen, WrappedScreen };

@@ -71,7 +71,7 @@ const SwarmPlot = ({ data, type, usePrivate }) => {
           tickValues,
           format: (value) => {
             let hours = Math.floor(value / 3600);
-            const suffix = hours % 24 > 12 ? 'PM' : 'AM';
+            const suffix = hours % 24 >= 12 ? 'PM' : 'AM';
             hours = hours % 12 === 0 ? 12 : hours % 12;
             const minutes = String(Math.floor((value % 3600) / 60 / 10) * 10);
             const displayHour = String(hours).padStart(2, '0');
@@ -85,12 +85,7 @@ const SwarmPlot = ({ data, type, usePrivate }) => {
 };
 
 SwarmPlot.propTypes = {
-  data: PropTypes.objectOf(
-    PropTypes.shape({
-      contribs: PropTypes.array,
-      public_contribs: PropTypes.array,
-    }),
-  ),
+  data: PropTypes.object,
   type: PropTypes.string,
   usePrivate: PropTypes.bool,
 };

@@ -22,7 +22,8 @@ def get_bar_data(data: FullUserPackage) -> BarData:
             months[month]["loc_changed"] += loc_changed
 
         out: List[BarDatum] = []
-        for k, v in months.items():
+        for k in range(12):
+            v = months[k]
             _obj: Dict[str, Union[str, int]] = {"month": k, **v}
             _obj["formatted_loc_changed"] = format_number(v["loc_changed"])
             out.append(BarDatum.parse_obj(_obj))

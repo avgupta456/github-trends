@@ -88,12 +88,7 @@ const BarGraph = ({ data, type, usePrivate }) => {
 };
 
 BarGraph.propTypes = {
-  data: PropTypes.objectOf(
-    PropTypes.shape({
-      months: PropTypes.array,
-      public_months: PropTypes.array,
-    }),
-  ),
+  data: PropTypes.object,
   type: PropTypes.string.isRequired,
   usePrivate: PropTypes.bool,
 };

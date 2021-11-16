@@ -11,7 +11,11 @@ class PieDatum(BaseModel):
 
 
 class PieData(BaseModel):
-    repos: List[PieDatum]
-    public_repos: List[PieDatum]
-    langs: List[PieDatum]
-    public_langs: List[PieDatum]
+    repos_changed: List[PieDatum]
+    repos_added: List[PieDatum]
+    public_repos_changed: List[PieDatum]
+    public_repos_added: List[PieDatum]
+    langs_changed: List[PieDatum]
+    langs_added: List[PieDatum]
+    public_langs_changed: List[PieDatum]
+    public_langs_added: List[PieDatum]
