@@ -33,7 +33,7 @@ const Header = () => {
         {/* Pages: Wrapped, Dashboard, Demo */}
         <div className="hidden md:flex">
           <Link
-            to="/wrapped"
+            to={isAuthenticated ? `/wrapped/${userId}` : 'wrapped'}
             className="px-4 py-1 mr-3 rounded bg-blue-500 hover:bg-blue-600 text-white"
           >
             Wrapped
@@ -102,7 +102,7 @@ const Header = () => {
         {isAuthenticated ? (
           <>
             <Link
-              to="/wrapped"
+              to={`/wrapped/${userId}`}
               onClick={() => setToggle(false)}
               className="block text-sm px-2 my-2 py-2 rounded bg-gray-100 text-gray-700"
             >
