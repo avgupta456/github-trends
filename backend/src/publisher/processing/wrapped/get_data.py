@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 from typing import Optional
 
-from src.data.mongo.secret import get_next_key
 from src.data.mongo.user import UserMetadata, get_user_metadata
 from src.data.mongo.wrapped import (
     WrappedModel,
@@ -23,11 +22,8 @@ def validate_dt(dt: Optional[datetime], td: timedelta):
 async def update_wrapped_user(user_id: str, year: int) -> bool:
     await lock_wrapped_user(user_id, year)
     user: Optional[UserMetadata] = await get_user_metadata(user_id)
-    if user is None:
-        access_token = await get_next_key("wrapped")
-    else:
-        access_token = user.access_token
-    publish_wrapped_user(user_id, access_token, year)
+    access_token = None if user is None else user.access_token
+    publish_wrapped_user(user_id, year, access_token)
     return True
 
 

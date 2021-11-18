@@ -10,7 +10,9 @@ from src.subscriber.aggregation import get_contributions
 class TestTemplate(AsyncTestCase):
     async def test_get_contributions(self):
         response = await get_contributions(
-            USER_ID, TOKEN, start_date=date.today() - timedelta(days=30)
+            user_id=USER_ID,
+            start_date=date.today() - timedelta(days=30),
+            access_token=TOKEN,
         )
         self.assertIsInstance(response, UserContributions)
 
