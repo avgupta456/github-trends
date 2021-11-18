@@ -7,7 +7,7 @@ from src.data.github.graphql import (
 from src.models import User, UserFollows
 
 
-def get_user_follows(user_id: str, access_token: str) -> UserFollows:
+def get_user_follows(user_id: str, access_token: Optional[str]) -> UserFollows:
     """get user followers and users following for given user"""
 
     followers: List[User] = []
@@ -20,7 +20,7 @@ def get_user_follows(user_id: str, access_token: str) -> UserFollows:
         index, cont = 0, True  # initialize variables
         while cont and index < 10:
             after_str: str = after if isinstance(after, str) else ""
-            data = get_func(user_id, access_token, after=after_str)
+            data = get_func(user_id, after=after_str, access_token=access_token)
 
             cont = False
 

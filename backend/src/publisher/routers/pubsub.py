@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import APIRouter, Response, status
 
 from src.publisher.processing import publish_user, publish_wrapped_user
@@ -12,7 +14,7 @@ router = APIRouter()
     include_in_schema=False,
 )
 @fail_gracefully
-def pub_user(response: Response, user_id: str, access_token: str) -> str:
+def pub_user(response: Response, user_id: str, access_token: Optional[str]) -> str:
     publish_user(user_id, access_token)
     return user_id
 
@@ -24,7 +26,7 @@ def pub_user(response: Response, user_id: str, access_token: str) -> str:
 )
 @fail_gracefully
 def pub_wrapped_user(
-    response: Response, user_id: str, access_token: str, year: int
+    response: Response, user_id: str, year: int, access_token: Optional[str] = None
 ) -> str:
-    publish_wrapped_user(user_id, access_token, year)
+    publish_wrapped_user(user_id, year, access_token)
     return user_id

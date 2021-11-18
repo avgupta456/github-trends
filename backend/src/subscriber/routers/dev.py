@@ -3,8 +3,7 @@ from typing import Optional, Union
 
 from fastapi import APIRouter, Response, status
 
-from src.data.github.graphql import get_query_limit
-from src.data.mongo.user import UserModel, get_user_by_user_id
+from src.data.mongo.secret import update_keys
 from src.models import FullUserPackage, UserPackage, WrappedPackage
 from src.subscriber.aggregation import (
     get_full_user_data,
@@ -14,16 +13,6 @@ from src.subscriber.aggregation import (
 from src.utils import async_fail_gracefully, use_time_range
 
 router = APIRouter()
-
-
-async def _get_access_token(user_id: str, access_token: Optional[str]) -> str:
-    new_access_token: str = access_token if access_token else ""
-    if not access_token:
-        db_user: UserModel = await get_user_by_user_id(user_id, no_cache=True)
-        if db_user is None or db_user.access_token == "":
-            raise LookupError("Invalid UserId")
-        new_access_token = db_user.access_token
-    return new_access_token
 
 
 @router.get("/user/{user_id}", status_code=status.HTTP_200_OK)
@@ -38,14 +27,10 @@ async def get_user_raw(
     timezone_str: str = "US/Eastern",
     full: bool = False,
 ) -> Union[UserPackage, FullUserPackage]:
-    new_access_token = await _get_access_token(user_id, access_token)
-    start_query_limit = get_query_limit(access_token=new_access_token)
+    await update_keys()
     start_date, end_date, _ = use_time_range(time_range, start_date, end_date)
     func = get_user_data if not full else get_full_user_data
-    data = await func(user_id, new_access_token, start_date, end_date, timezone_str)
-    end_query_limit = get_query_limit(access_token=new_access_token)
-    print("Query Limit Used", start_query_limit - end_query_limit)
-    print("Query Limit Remaining", end_query_limit)
+    data = await func(user_id, start_date, end_date, timezone_str, access_token)
     return data
 
 
@@ -57,10 +42,6 @@ async def get_wrapped_user_raw(
     access_token: Optional[str] = None,
     year: int = 2021,
 ) -> WrappedPackage:
-    new_access_token = await _get_access_token(user_id, access_token)
-    start_query_limit = get_query_limit(access_token=new_access_token)
-    data = await get_wrapped_data(user_id, new_access_token, year)
-    end_query_limit = get_query_limit(access_token=new_access_token)
-    print("Query Limit Used", start_query_limit - end_query_limit)
-    print("Query Limit Remaining", end_query_limit)
+    await update_keys()
+    data = await get_wrapped_data(user_id, year, access_token)
     return data

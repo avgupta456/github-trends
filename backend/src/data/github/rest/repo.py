@@ -134,13 +134,13 @@ def get_repo_hourly_commits(access_token: str, owner: str, repo: str) -> Dict[st
 
 
 def get_repo_commits(
-    access_token: str,
     owner: str,
     repo: str,
     user: Optional[str] = None,
     since: Optional[datetime] = None,
     until: Optional[datetime] = None,
     page: int = 1,
+    access_token: Optional[str] = None,
 ) -> List[RawCommit]:
     """
     Returns most recent commits
