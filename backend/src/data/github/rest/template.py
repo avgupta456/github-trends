@@ -1,10 +1,11 @@
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import requests
 from requests.exceptions import ReadTimeout
 
 from src.constants import TIMEOUT
+from src.data.github.utils import get_access_token
 
 s = requests.session()
 
@@ -22,7 +23,10 @@ class RESTErrorTimeout(Exception):
 
 
 def _get_template(
-    query: str, params: Dict[str, Any], access_token: str, accept_header: str
+    query: str,
+    params: Dict[str, Any],
+    accept_header: str,
+    access_token: Optional[str] = None,
 ) -> Any:
     """
     Internal template for interacting with the GitHub REST API
@@ -34,6 +38,7 @@ def _get_template(
     """
     start = datetime.now()
 
+    access_token = get_access_token(access_token)
     headers: Dict[str, str] = {
         "Accept": str(accept_header),
         "Authorization": "bearer " + access_token,
@@ -45,7 +50,7 @@ def _get_template(
         raise RESTErrorTimeout("REST Error: Request Timeout")
 
     if r.status_code == 200:
-        print("REST API", datetime.now() - start)
+        print("REST API", access_token, datetime.now() - start)
         return r.json()  # type: ignore
 
     if r.status_code == 409:
@@ -56,7 +61,7 @@ def _get_template(
 
 def get_template(
     query: str,
-    access_token: str,
+    access_token: Optional[str] = None,
     accept_header: str = "application/vnd.github.v3+json",
 ) -> Dict[str, Any]:
     """
@@ -68,14 +73,14 @@ def get_template(
     """
 
     try:
-        return _get_template(query, {}, access_token, accept_header)
+        return _get_template(query, {}, accept_header, access_token)
     except Exception as e:
         raise e
 
 
 def get_template_plural(
     query: str,
-    access_token: str,
+    access_token: Optional[str] = None,
     per_page: int = 100,
     page: int = 1,
     accept_header: str = "application/vnd.github.v3+json",
@@ -91,6 +96,6 @@ def get_template_plural(
     """
     params: Dict[str, str] = {"per_page": str(per_page), "page": str(page)}
     try:
-        return _get_template(query, params, access_token, accept_header)
+        return _get_template(query, params, accept_header, access_token)
     except Exception as e:
         raise e

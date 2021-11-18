@@ -1,12 +1,14 @@
 # import json
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 from src.data.github.graphql.template import get_template
 from src.data.github.graphql.user.contribs.models import RawCalendar, RawEvents
 
 
-def get_user_contribution_years(user_id: str, access_token: str) -> List[int]:
+def get_user_contribution_years(
+    user_id: str, access_token: Optional[str] = None
+) -> List[int]:
     """Gets years where the user had activity"""
     query = {
         "variables": {"login": user_id},
@@ -28,9 +30,9 @@ def get_user_contribution_years(user_id: str, access_token: str) -> List[int]:
 
 def get_user_contribution_calendar(
     user_id: str,
-    access_token: str,
     start_date: datetime,
     end_date: datetime,
+    access_token: Optional[str] = None,
 ) -> RawCalendar:
     """Gets contribution calendar for a given time period (max one year)"""
     if (end_date - start_date).days > 365:
@@ -68,12 +70,12 @@ def get_user_contribution_calendar(
 
 def get_user_contribution_events(
     user_id: str,
-    access_token: str,
     start_date: datetime,
     end_date: datetime,
     max_repos: int = 100,
     first: int = 100,
     after: str = "",
+    access_token: Optional[str] = None,
 ) -> RawEvents:
     """Fetches user contributions (commits, issues, prs, reviews)"""
     if (end_date - start_date).days > 365:

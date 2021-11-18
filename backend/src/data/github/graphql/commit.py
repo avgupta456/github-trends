@@ -11,7 +11,9 @@ from src.data.github.graphql.template import (
 )
 
 
-def get_commits(access_token: str, node_ids: List[str]) -> List[Optional[RawCommit]]:
+def get_commits(
+    node_ids: List[str], access_token: Optional[str] = None
+) -> List[Optional[RawCommit]]:
     """
     Gets all repository data from graphql
     :param access_token: GitHub access token
@@ -37,9 +39,9 @@ def get_commits(access_token: str, node_ids: List[str]) -> List[Optional[RawComm
         raw_commits = get_template(query, access_token)["data"]["nodes"]
     except GraphQLErrorMissingNode as e:
         return (
-            get_commits(access_token, node_ids[: e.node])
+            get_commits(node_ids[: e.node], access_token)
             + [None]
-            + get_commits(access_token, node_ids[e.node + 1 :])
+            + get_commits(node_ids[e.node + 1 :], access_token)
         )
     except (GraphQLErrorAuth, GraphQLErrorTimeout):
         return [None for _ in node_ids]

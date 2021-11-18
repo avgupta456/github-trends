@@ -15,9 +15,6 @@ from src.constants import (
     PUBSUB_TOKEN,
 )
 
-publisher = pubsub_v1.PublisherClient()
-subscriber = pubsub_v1.SubscriberClient()
-
 """
 EMULATOR FUNTIONS
 """
@@ -25,6 +22,7 @@ EMULATOR FUNTIONS
 
 def create_topic(project_id: str, topic_id: str) -> None:
     """Create a new Pub/Sub topic."""
+    publisher = pubsub_v1.PublisherClient()
     topic_path = publisher.topic_path(project_id, topic_id)  # type: ignore
     topic = publisher.create_topic(request={"name": topic_path})  # type: ignore
     print(f"Created topic: {topic.name}")  # type: ignore
@@ -34,6 +32,8 @@ def create_push_subscription(
     project_id: str, topic_id: str, subscription_id: str, endpoint: str
 ) -> None:
     """Create a new push subscription on the given topic."""
+    publisher = pubsub_v1.PublisherClient()
+    subscriber = pubsub_v1.SubscriberClient()
     topic_path = publisher.topic_path(project_id, topic_id)  # type: ignore
     sub_path = subscriber.subscription_path(project_id, subscription_id)  # type: ignore
     push_config = pubsub_v1.types.PushConfig(push_endpoint=endpoint)  # type: ignore
@@ -51,6 +51,8 @@ def create_push_subscription(
 """
 APPLICATION FUNTIONS
 """
+
+publisher = pubsub_v1.PublisherClient()
 
 
 def publish_to_topic(topic: str, message: Dict[str, Any]) -> None:

@@ -5,7 +5,9 @@ from src.data.github.graphql.models import RawRepo
 from src.data.github.graphql.template import get_template
 
 
-def get_repo(access_token: str, owner: str, repo: str) -> Optional[RawRepo]:
+def get_repo(
+    owner: str, repo: str, access_token: Optional[str] = None
+) -> Optional[RawRepo]:
     """
     Gets all repository data from graphql
     :param access_token: GitHub access token

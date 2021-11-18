@@ -1,4 +1,5 @@
 from datetime import date
+from typing import Optional
 
 from src.models import WrappedPackage
 from src.subscriber.aggregation.user.package import get_full_user_data
@@ -13,8 +14,8 @@ from src.subscriber.aggregation.wrapped.swarm import get_swarm_data
 
 async def main(
     user_id: str,
-    access_token: str,
     year: int,
+    access_token: Optional[str],
 ) -> WrappedPackage:
     """packages all processing steps for the user query"""
     start_date = date(year, 1, 1)
@@ -22,7 +23,11 @@ async def main(
     timezone_str = "US/Eastern"
 
     user_package = await get_full_user_data(
-        user_id, access_token, start_date, end_date, timezone_str
+        user_id=user_id,
+        start_date=start_date,
+        end_date=end_date,
+        timezone_str=timezone_str,
+        access_token=access_token,
     )
 
     bar_data = get_bar_data(user_package)
