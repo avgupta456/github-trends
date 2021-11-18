@@ -31,9 +31,9 @@ def get_pie_data(data: FullUserPackage) -> PieData:
         for m in ["changed", "added"]:
             repos = sorted(store, key=lambda x: _count_repo_loc(x[1], m), reverse=True)
             repo_objs: List[PieDatum] = []
-            for k, v in list(repos)[:5]:
+            for i, (k, v) in enumerate(list(repos)[:5]):
                 repo_data = {
-                    "id": k,
+                    "id": i,
                     "label": "private/repository" if v.private else k,
                     "value": _count_repo_loc(v, m),
                     "formatted_value": format_number(_count_repo_loc(v, m)),

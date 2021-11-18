@@ -38,7 +38,12 @@ const WrappedScreen = () => {
     // do nothing
   }
 
-  console.log(contribData);
+  let miscData = {};
+  try {
+    miscData = data.numeric_data.misc;
+  } catch (e) {
+    // do nothing
+  }
 
   if (isLoading) {
     return (
@@ -75,6 +80,7 @@ const WrappedScreen = () => {
             usePrivate={usePrivate}
             type={item.type}
             label={item.label}
+            width="1/5"
           />
         ))}
         <Calendar
@@ -83,6 +89,19 @@ const WrappedScreen = () => {
           endDate={`${year}-12-31`}
           usePrivate={usePrivate}
         />
+
+        {[
+          { type: 'total_days', label: 'With Contributions' },
+          { type: 'longest_streak', label: 'Longest Streak' },
+          { type: 'weekend_percent', label: 'Weekend Activity' },
+        ].map((item) => (
+          <Numeric
+            data={miscData}
+            usePrivate={usePrivate}
+            type={item.type}
+            label={item.label}
+          />
+        ))}
         <PieChart
           data={data.pie_data}
           type="repos_added"
