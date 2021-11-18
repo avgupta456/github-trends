@@ -8,6 +8,7 @@ import {
   Checkbox,
   BarGraph,
   Calendar,
+  Numeric,
   PieChart,
   SwarmPlot,
 } from '../../components';
@@ -29,6 +30,15 @@ const WrappedScreen = () => {
 
   // eslint-disable-next-line no-unused-vars
   const [usePrivate, setUsePrivate] = useState(false);
+
+  let contribData = {};
+  try {
+    contribData = data.numeric_data.contribs;
+  } catch (e) {
+    // do nothing
+  }
+
+  console.log(contribData);
 
   if (isLoading) {
     return (
@@ -53,6 +63,20 @@ const WrappedScreen = () => {
             />
           </div>
         </div>
+        {[
+          { type: 'contribs', label: 'Contributions' },
+          { type: 'commits', label: 'Commits' },
+          { type: 'issues', label: 'Issues' },
+          { type: 'prs', label: 'Pull Requests' },
+          { type: 'reviews', label: 'Reviews' },
+        ].map((item) => (
+          <Numeric
+            data={contribData}
+            usePrivate={usePrivate}
+            type={item.type}
+            label={item.label}
+          />
+        ))}
         <Calendar
           data={data.calendar_data}
           startDate={`${year}-01-02`}

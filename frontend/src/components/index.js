@@ -4,7 +4,7 @@ import { Card, Image, SvgInline } from './Card';
 import Preview from './Preview';
 
 import { ProgressBar, DateRangeSection, CheckboxSection } from './Home';
-import { BarGraph, Calendar, PieChart, SwarmPlot } from './Wrapped';
+import { BarGraph, Calendar, Numeric, PieChart, SwarmPlot } from './Wrapped';
 
 export {
   Button,
@@ -19,6 +19,7 @@ export {
   CheckboxSection,
   BarGraph,
   Calendar,
+  Numeric,
   PieChart,
   SwarmPlot,
 };
