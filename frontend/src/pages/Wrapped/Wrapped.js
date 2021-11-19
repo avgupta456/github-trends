@@ -8,6 +8,7 @@ import {
   Checkbox,
   BarGraph,
   Calendar,
+  Numeric,
   PieChart,
   SwarmPlot,
 } from '../../components';
@@ -29,6 +30,20 @@ const WrappedScreen = () => {
 
   // eslint-disable-next-line no-unused-vars
   const [usePrivate, setUsePrivate] = useState(false);
+
+  let contribData = {};
+  try {
+    contribData = data.numeric_data.contribs;
+  } catch (e) {
+    // do nothing
+  }
+
+  let miscData = {};
+  try {
+    miscData = data.numeric_data.misc;
+  } catch (e) {
+    // do nothing
+  }
 
   if (isLoading) {
     return (
@@ -53,12 +68,40 @@ const WrappedScreen = () => {
             />
           </div>
         </div>
+        {[
+          { type: 'contribs', label: 'Contributions' },
+          { type: 'commits', label: 'Commits' },
+          { type: 'issues', label: 'Issues' },
+          { type: 'prs', label: 'Pull Requests' },
+          { type: 'reviews', label: 'Reviews' },
+        ].map((item) => (
+          <Numeric
+            data={contribData}
+            usePrivate={usePrivate}
+            type={item.type}
+            label={item.label}
+            width="1/5"
+          />
+        ))}
         <Calendar
           data={data.calendar_data}
           startDate={`${year}-01-02`}
           endDate={`${year}-12-31`}
           usePrivate={usePrivate}
         />
+
+        {[
+          { type: 'total_days', label: 'With Contributions' },
+          { type: 'longest_streak', label: 'Longest Streak' },
+          { type: 'weekend_percent', label: 'Weekend Activity' },
+        ].map((item) => (
+          <Numeric
+            data={miscData}
+            usePrivate={usePrivate}
+            type={item.type}
+            label={item.label}
+          />
+        ))}
         <PieChart
           data={data.pie_data}
           type="repos_added"

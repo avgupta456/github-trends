@@ -196,7 +196,7 @@ async def get_contributions(
             [repo_mapping[node_id] for node_id in node_id_chunks[-1]]
         )
 
-    max_threads = NODE_THREADS * (2 if access_token is None else 1)
+    max_threads = NODE_THREADS * (5 if access_token is None else 1)
     commit_language_chunks = await gather(
         funcs=[get_commits_languages for _ in node_id_chunks],
         args_dicts=[
