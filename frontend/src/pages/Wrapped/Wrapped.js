@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { useParams } from 'react-router-dom';
 import { PulseLoader } from 'react-spinners';
@@ -9,13 +10,14 @@ import TypistLoop from 'react-typist-loop';
 
 import { getWrapped } from '../../api';
 import {
-  Checkbox,
   BarGraph,
   Calendar,
   Numeric,
   PieChart,
   SwarmPlot,
+  Button,
 } from '../../components';
+import { GITHUB_PRIVATE_AUTH_URL } from '../../constants';
 import './loading.css';
 
 const WrappedScreen = () => {
@@ -23,7 +25,10 @@ const WrappedScreen = () => {
   let { userId, year } = useParams();
   year = year || 2021;
 
-  const [refresh, setRefresh] = useState(0);
+  const currUserId = useSelector((state) => state.user.userId);
+  const currPrivateAccess = useSelector((state) => state.user.privateAccess);
+  const usePrivate = currUserId === userId && currPrivateAccess;
+
   const [data, setData] = useState({});
 
   const [isLoading, setIsLoading] = useState(true);
@@ -44,27 +49,15 @@ const WrappedScreen = () => {
   }, []);
 
   useEffect(async () => {
-    if (
-      isLoading &&
-      !showLoadingErrorMessage &&
-      userId.length > 0 &&
-      year > 2010 &&
-      year <= 2021
-    ) {
+    if (userId.length > 0 && year > 2010 && year <= 2021) {
       const output = await getWrapped(userId, year);
       console.log(output);
       if (output !== null && output !== undefined && output !== {}) {
         setData(output);
         setIsLoading(false);
-      } else {
-        setTimeout(() => {
-          setRefresh(refresh + 1);
-        }, 10000);
       }
     }
-  }, [refresh]);
-
-  const [usePrivate, setUsePrivate] = useState(false);
+  }, []);
 
   let contribData = {};
   try {
@@ -131,18 +124,52 @@ const WrappedScreen = () => {
   }
 
   return (
-    <div className="container px-32 py-16 mx-auto">
+    <div className="container px-16 py-8 mx-auto">
       <div className="h-full w-full flex flex-row flex-wrap justify-center items-center">
-        <div className="w-full h-32 p-2">
-          <div className="shadow bg-gray-50 w-full h-full p-4 flex flex-col">
-            <p className="text-2xl font-semibold">
-              {`${userId} GitHub Wrapped`}
+        <div className="w-full h-auto p-2">
+          <div className="shadow bg-gray-50 w-full h-full px-12 py-8 flex flex-col">
+            <p className="text-2xl font-semibold text-center w-full mb-2">
+              {`${userId}'s`}
             </p>
-            <Checkbox
-              question="Use Private Contributions?"
-              variable={usePrivate}
-              setVariable={setUsePrivate}
-            />
+            <p className="text-4xl text-center w-full mb-4">
+              {`${year} GitHub Wrapped`}
+            </p>
+          </div>
+        </div>
+        <div className="w-1/3 h-40 p-2">
+          <div className="shadow bg-gray-50 w-full h-full p-4 flex flex-col">
+            <p className="mb-4">
+              Create a{' '}
+              <a
+                href="https://github.com/avgupta456/github-trends#faq"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 underline"
+              >
+                private workflow
+              </a>{' '}
+              account to view private contributions.
+            </p>
+            {usePrivate ? (
+              <div className="w-full flex justify-center">
+                <Button className="text-white cursor-not-allowed bg-gray-300 border border-gray-600">
+                  Create an Account
+                </Button>
+              </div>
+            ) : (
+              <a
+                href={`${GITHUB_PRIVATE_AUTH_URL}&login=${userId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex justify-center"
+              >
+                <Button className="text-white bg-blue-500 hover:bg-blue-600">
+                  {currUserId === userId
+                    ? 'Upgrade Account'
+                    : 'Create an Account'}
+                </Button>
+              </a>
+            )}
           </div>
         </div>
         {[
