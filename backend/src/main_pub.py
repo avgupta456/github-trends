@@ -28,7 +28,6 @@ from src.publisher.routers import (
     auth_router,
     pubsub_router,
     user_router,
-    wrapped_router,
 )
 from src.utils.pubsub import create_push_subscription, create_topic
 
@@ -38,12 +37,9 @@ EMULATOR SETUP
 
 
 if not PROD and DOCKER:
-    topics = ["user", "wrapped"]
-    subscriptions = ["user_sub", "wrapped_sub"]
-    endpoints = [
-        LOCAL_SUBSCRIBER + "/pubsub/sub/user/" + PUBSUB_TOKEN,
-        LOCAL_SUBSCRIBER + "/pubsub/sub/wrapped/" + PUBSUB_TOKEN,
-    ]
+    topics = ["user"]
+    subscriptions = ["user_sub"]
+    endpoints = [LOCAL_SUBSCRIBER + "/pubsub/sub/user/" + PUBSUB_TOKEN]
 
     for topic, subscription, endpoint in zip(topics, subscriptions, endpoints):
         try:
@@ -99,7 +95,6 @@ def get_info():
 
 
 app.include_router(user_router, prefix="/user", tags=["Users"])
-app.include_router(wrapped_router, prefix="/wrapped", tags=["Wrapped"])
 app.include_router(pubsub_router, prefix="/pubsub", tags=["PubSub"])
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 app.include_router(asset_router, prefix="/assets", tags=["Assets"])

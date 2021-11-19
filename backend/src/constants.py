@@ -10,13 +10,13 @@ BACKEND_URL = "https://api.githubtrends.io" if PROD else "http://localhost:8000"
 # https://docs.github.com/en/rest/reference/rate-limit
 # https://docs.github.com/en/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits
 # https://docs.github.com/en/graphql/overview/resource-limitations
-TIMEOUT = 10  # max seconds to wait for api response
-NODE_CHUNK_SIZE = 50  # number of nodes (commits) to query (max 100)
+TIMEOUT = 15  # max seconds to wait for api response
+NODE_CHUNK_SIZE = 100  # number of nodes (commits) to query (max 100)
 NODE_THREADS = 5  # number of node queries simultaneously (avoid blacklisting)
 CUTOFF = 500  # if less than cutoff, count LOC
 CUTOFF_PER_FILE = 100  # if less than cutoff per file, count LOC
 
-WRAPPED_VERSION = 0.012  # determines when to overwrite MongoDB data
+WRAPPED_VERSION = 0.022  # determines when to overwrite MongoDB data
 
 # CUSTOMIZATION
 BLACKLIST = ["Jupyter Notebook", "HTML"]  # languages to ignore

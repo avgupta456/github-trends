@@ -22,6 +22,8 @@
     "react-scripts": "4.0.2",
     "react-spinners": "^0.11.0",
     "react-toastify": "^8.1.0",
+    "react-typist": "^2.0.5",
+    "react-typist-loop": "0.0.5",
     "redux": "^4.0.5",
     "save-svg-as-png": "^1.4.17",
     "uuid": "^8.3.2"

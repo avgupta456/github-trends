@@ -11,7 +11,11 @@ module.exports = {
       '2xl': '1536px',
       '3xl': '1792px',
     },
-    extend: {},
+    extend: {
+      fontFamily: {
+        typist: ['Playfair Display SC', 'Courier New'],
+      },
+    },
   },
   variants: {
     extend: {},

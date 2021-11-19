@@ -1,7 +1,11 @@
+/* eslint-disable react/jsx-one-expression-per-line */
+
 import React, { useEffect, useState } from 'react';
 
 import { useParams } from 'react-router-dom';
-import { BounceLoader } from 'react-spinners';
+import { PulseLoader } from 'react-spinners';
+import Typist from 'react-typist';
+import TypistLoop from 'react-typist-loop';
 
 import { getWrapped } from '../../api';
 import {
@@ -12,23 +16,54 @@ import {
   PieChart,
   SwarmPlot,
 } from '../../components';
+import './loading.css';
 
 const WrappedScreen = () => {
   // eslint-disable-next-line prefer-const
   let { userId, year } = useParams();
   year = year || 2021;
 
+  const [refresh, setRefresh] = useState(0);
   const [data, setData] = useState({});
-  const isLoading =
-    data === undefined || data === null || Object.keys(data).length === 0;
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [showLoadingMessage, setShowLoadingMessage] = useState(false);
+  const [showLoadingErrorMessage, setShowLoadingErrorMessage] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowLoadingMessage(true);
+    }, 8000);
+    const timer2 = setTimeout(() => {
+      setShowLoadingErrorMessage(true);
+    }, 32000);
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(timer2);
+    };
+  }, []);
 
   useEffect(async () => {
-    if (userId.length > 0 && year > 2010 && year <= 2021 && isLoading) {
-      setData(await getWrapped(userId, year));
+    if (
+      isLoading &&
+      !showLoadingErrorMessage &&
+      userId.length > 0 &&
+      year > 2010 &&
+      year <= 2021
+    ) {
+      const output = await getWrapped(userId, year);
+      console.log(output);
+      if (output !== null && output !== undefined && output !== {}) {
+        setData(output);
+        setIsLoading(false);
+      } else {
+        setTimeout(() => {
+          setRefresh(refresh + 1);
+        }, 10000);
+      }
     }
-  }, [userId, year, data]);
+  }, [refresh]);
 
-  // eslint-disable-next-line no-unused-vars
   const [usePrivate, setUsePrivate] = useState(false);
 
   let contribData = {};
@@ -47,8 +82,50 @@ const WrappedScreen = () => {
 
   if (isLoading) {
     return (
-      <div className="h-full py-8 flex justify-center items-center">
-        <BounceLoader color="#3B82F6" />
+      <div className="h-full py-8 flex flex-col justify-center items-center">
+        {showLoadingErrorMessage ? (
+          <div className="w-96 bg-gray-50 shadow p-4 text-gray-700 text-center text-lg">
+            Something went wrong. Please try again in a couple minutes or raise
+            an issue on{' '}
+            <a
+              href="https://github.com/avgupta456/github-trends/issues/new"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 underline"
+            >
+              GitHub
+            </a>
+            . Thank you!
+          </div>
+        ) : (
+          <>
+            <div className="mb-8">
+              <PulseLoader color="#3B82F6" speedMultiplier={0.5} />
+            </div>
+            {showLoadingMessage ? (
+              <TypistLoop interval={2000}>
+                {[
+                  'Crunching Numbers...',
+                  'Drawing Figures...',
+                  'Almost there!',
+                ].map((text, i) => (
+                  <Typist
+                    key={text}
+                    cursor={{ blink: true }}
+                    className="font-typist text-center text-2xl"
+                  >
+                    <Typist.Delay ms={500 * i} />
+                    {text}
+                    <Typist.Delay ms={3000} />
+                    <Typist.Backspace count={text.length} />
+                  </Typist>
+                ))}
+              </TypistLoop>
+            ) : (
+              <div className="h-8" />
+            )}
+          </>
+        )}
       </div>
     );
   }
@@ -76,6 +153,7 @@ const WrappedScreen = () => {
           { type: 'reviews', label: 'Reviews' },
         ].map((item) => (
           <Numeric
+            key={item.type}
             data={contribData}
             usePrivate={usePrivate}
             type={item.type}
@@ -96,6 +174,7 @@ const WrappedScreen = () => {
           { type: 'weekend_percent', label: 'Weekend Activity' },
         ].map((item) => (
           <Numeric
+            key={item.type}
             data={miscData}
             usePrivate={usePrivate}
             type={item.type}

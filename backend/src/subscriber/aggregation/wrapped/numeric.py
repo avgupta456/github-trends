@@ -32,7 +32,7 @@ def get_contrib_stats(data: FullUserPackage) -> ContribStats:
 def get_misc_stats(data: FullUserPackage) -> MiscStats:
     def get_dataset_stats(
         dataset: List[FullContributionDay], subtract_other: bool
-    ) -> Tuple[int, int, int]:
+    ) -> Tuple[int, int, float]:
         """Calculates distinct days, longest streak, weekend %"""
         weekdays: Dict[int, int] = defaultdict(int)
         yeardays, distinct_days, total_contribs = {}, 0, 0
@@ -51,7 +51,7 @@ def get_misc_stats(data: FullUserPackage) -> MiscStats:
             best = max(best, curr)
             curr = curr + 1 if i in yeardays else 0
         longest_streak = max(best, curr)
-        weekend_percent = round(100 * (weekdays[5] + weekdays[6]) / total_contribs)
+        weekend_percent = (weekdays[5] + weekdays[6]) / max(1, total_contribs)
         return distinct_days, longest_streak, weekend_percent
 
     total_days, longest_streak, weekend_percent = get_dataset_stats(
@@ -68,8 +68,8 @@ def get_misc_stats(data: FullUserPackage) -> MiscStats:
             "public_total_days": str(public_days) + " Days",
             "longest_streak": str(longest_streak) + " Days",
             "public_longest_streak": str(public_streak) + " Days",
-            "weekend_percent": str(weekend_percent) + "%",
-            "public_weekend_percent": str(public_weekend_percent) + "%",
+            "weekend_percent": str(round(100 * weekend_percent)) + "%",
+            "public_weekend_percent": str(round(100 * public_weekend_percent)) + "%",
         }
     )
 

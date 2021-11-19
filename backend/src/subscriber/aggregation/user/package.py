@@ -3,9 +3,8 @@ from typing import Optional
 
 from src.models import FullUserPackage, UserPackage
 from src.subscriber.aggregation.user.contributions import get_contributions
-from src.subscriber.aggregation.user.follows import get_user_follows
 
-# from src.processing.user.follows import get_user_follows
+# from src.subscriber.aggregation.user.follows import get_user_follows
 
 
 async def get_user_data(
@@ -44,5 +43,5 @@ async def get_full_user_data(
         full=True,
         access_token=access_token,
     )
-    follows = get_user_follows(user_id=user_id, access_token=access_token)
-    return FullUserPackage(contribs=contribs, follows=follows)
+    # follows = get_user_follows(user_id=user_id, access_token=access_token)
+    return FullUserPackage(contribs=contribs)  # , follows=follows)
