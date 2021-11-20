@@ -12,6 +12,7 @@ import {
   Numeric,
   PieChart,
   SwarmPlot,
+  WrappedSection,
 } from '../../components';
 import { Header, LoadingScreen } from './sections';
 
@@ -59,7 +60,7 @@ const WrappedScreen = () => {
   return (
     <div className="container px-16 py-8 mx-auto">
       <div className="h-full w-full flex flex-row flex-wrap justify-center items-center">
-        <div className="w-full h-auto mb-8">
+        <WrappedSection useTitle={false}>
           <Header
             userId={userId}
             year={year}
@@ -68,64 +69,85 @@ const WrappedScreen = () => {
             currUserId={currUserId}
             usePrivate={usePrivate}
           />
-        </div>
-        {[
-          { type: 'contribs', label: 'Contributions' },
-          { type: 'commits', label: 'Commits' },
-          { type: 'issues', label: 'Issues' },
-          { type: 'prs', label: 'Pull Requests' },
-          { type: 'reviews', label: 'Reviews' },
-        ].map((item) => (
-          <Numeric
-            key={item.type}
-            data={contribData}
+        </WrappedSection>
+        <WrappedSection title="Contribution Calendar">
+          <Calendar
+            data={data.calendar_data}
+            startDate={`${year}-01-02`}
+            endDate={`${year}-12-31`}
             usePrivate={usePrivate}
-            type={item.type}
-            label={item.label}
-            width="1/5"
           />
-        ))}
-        <Calendar
-          data={data.calendar_data}
-          startDate={`${year}-01-02`}
-          endDate={`${year}-12-31`}
-          usePrivate={usePrivate}
-        />
-
-        {[
-          { type: 'total_days', label: 'With Contributions' },
-          { type: 'longest_streak', label: 'Longest Streak' },
-          { type: 'weekend_percent', label: 'Weekend Activity' },
-        ].map((item) => (
+          {[
+            { data: contribData, type: 'contribs', label: 'Contributions' },
+            { data: miscData, type: 'total_days', label: 'With Contributions' },
+            { data: miscData, type: 'longest_streak', label: 'Longest Streak' },
+          ].map((item) => (
+            <Numeric
+              key={item.type}
+              data={item.data}
+              usePrivate={usePrivate}
+              type={item.type}
+              label={item.label}
+              width="1/3"
+            />
+          ))}
+          <BarGraph
+            data={data.bar_data}
+            type="contribs"
+            usePrivate={usePrivate}
+          />
+        </WrappedSection>
+        <WrappedSection title="Contribution Breakdown">
+          <SwarmPlot
+            data={data.swarm_data}
+            type="type"
+            usePrivate={usePrivate}
+          />
+          <div className="w-1/3 flex flex-wrap">
+            {[
+              { data: contribData, type: 'commits', label: 'Commits' },
+              { data: contribData, type: 'issues', label: 'Issues' },
+              { data: contribData, type: 'prs', label: 'Pull Requests' },
+              { data: contribData, type: 'reviews', label: 'Reviews' },
+            ].map((item) => (
+              <Numeric
+                key={item.type}
+                data={item.data}
+                usePrivate={usePrivate}
+                type={item.type}
+                label={item.label}
+                width="1/2"
+              />
+            ))}
+          </div>
+        </WrappedSection>
+        <WrappedSection title="Lines of Code (LOC) Analysis">
+          <PieChart
+            data={data.pie_data}
+            type="repos_added"
+            usePrivate={usePrivate}
+          />
+          <PieChart
+            data={data.pie_data}
+            type="langs_added"
+            usePrivate={usePrivate}
+          />
+        </WrappedSection>
+        <WrappedSection title="Fun Plots and Stats">
+          <SwarmPlot
+            data={data.swarm_data}
+            type="weekday"
+            usePrivate={usePrivate}
+          />
           <Numeric
-            key={item.type}
+            key="weekend_percent"
             data={miscData}
             usePrivate={usePrivate}
-            type={item.type}
-            label={item.label}
+            type="weekend_percent"
+            label="Weekend Activity"
+            width="1/3"
           />
-        ))}
-        <PieChart
-          data={data.pie_data}
-          type="repos_added"
-          usePrivate={usePrivate}
-        />
-        <SwarmPlot data={data.swarm_data} type="type" usePrivate={usePrivate} />
-        <SwarmPlot
-          data={data.swarm_data}
-          type="weekday"
-          usePrivate={usePrivate}
-        />
-        <PieChart
-          data={data.pie_data}
-          type="langs_added"
-          usePrivate={usePrivate}
-        />
-        <BarGraph
-          data={data.bar_data}
-          type="loc_changed"
-          usePrivate={usePrivate}
-        />
+        </WrappedSection>
       </div>
     </div>
   );

@@ -84,7 +84,11 @@ const BarGraph = ({ data, type, usePrivate }) => {
               legendPosition: 'middle',
               legendOffset: -60,
             }}
-            label={(d) => d.data[formattedType].split(' ')[0]}
+            label={(d) =>
+              type === 'contribs'
+                ? d.data[formattedType]
+                : d.data[formattedType].split(' ')[0]
+            }
             labelSkipWidth={12}
             labelSkipHeight={12}
             labelTextColor="#fff"

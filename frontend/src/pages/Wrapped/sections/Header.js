@@ -66,7 +66,7 @@ const Header = ({
         pauseOnHover={false}
       />
       <div className="w-full h-auto p-2">
-        <div className="shadow bg-gray-50 w-full h-full p-4 flex flex-col">
+        <div className="shadow bg-gray-50 w-full h-full p-8 flex flex-col">
           <Link to="/wrapped">
             <LeftArrowIcon className="absolute h-6 w-6 text-gray-400 hover:text-gray-700" />
           </Link>

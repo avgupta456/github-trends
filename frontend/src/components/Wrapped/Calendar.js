@@ -13,8 +13,6 @@ const Calendar = ({ data, startDate, endDate, usePrivate }) => {
     { value: 'issues', label: 'Issues', disabled: false },
     { value: 'prs', label: 'Pull Requests', disabled: false },
     { value: 'reviews', label: 'Reviews', disabled: false },
-    { value: 'loc_added', label: 'Lines of Code Added', disabled: false },
-    { value: 'loc_changed', label: 'Lines of Code Changed', disabled: false },
   ];
 
   // eslint-disable-next-line no-unused-vars
