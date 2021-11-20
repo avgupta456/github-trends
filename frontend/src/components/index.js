@@ -11,6 +11,7 @@ import {
   PieChart,
   SwarmPlot,
   WrappedSection,
+  WrappedCard,
 } from './Wrapped';
 
 export {
@@ -30,4 +31,5 @@ export {
   PieChart,
   SwarmPlot,
   WrappedSection,
+  WrappedCard,
 };

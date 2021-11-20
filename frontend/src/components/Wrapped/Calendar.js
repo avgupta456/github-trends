@@ -5,6 +5,7 @@ import { ResponsiveCalendar } from '@nivo/calendar';
 
 import { Input } from '../Generic';
 import { theme } from './theme';
+import { WrappedCard } from './Organization';
 
 const Calendar = ({ data, startDate, endDate, usePrivate }) => {
   const valueOptions = [
@@ -29,47 +30,45 @@ const Calendar = ({ data, startDate, endDate, usePrivate }) => {
     : 0;
 
   return (
-    <div className="w-full h-72 p-2">
-      <div className="shadow bg-gray-50 w-full h-full p-4 flex flex-col">
-        <div className="h-6 flex justify-between items-center">
-          <p className="text-xl font-semibold">
-            Interactive Contribution Calendar
-          </p>
-          <Input
-            className="w-48 border-2 border-gray-300"
-            options={valueOptions}
-            selectedOption={value}
-            setSelectedOption={setValue}
-          />
-        </div>
-        <div className="h-60 flex flex-col">
-          <p className="text-lg">{`${numEvents} ${fullDisplayValue}`}</p>
-          {Array.isArray(data) && data.length > 0 && (
-            <ResponsiveCalendar
-              theme={theme}
-              data={data
-                .map((item) => ({
-                  day: item.day,
-                  value: item[fullValue],
-                }))
-                .filter((item) => item.value !== 0)}
-              from={startDate}
-              to={endDate}
-              emptyColor="#EBEDF0"
-              colors={['#9BE9A8', '#40C463', '#30A14E', '#216E39']}
-              margin={{ top: 0, right: 0, bottom: 0, left: 20 }}
-              monthBorderColor="#ffffff"
-              dayBorderWidth={2}
-              dayBorderColor="#ffffff"
-              // eslint-disable-next-line no-unused-vars
-              onClick={(dayData, event) => {
-                setSelectedDay(dayData.day);
-              }}
-            />
-          )}
-        </div>
+    <WrappedCard height={72}>
+      <div className="h-6 flex justify-between items-center">
+        <p className="text-xl font-semibold">
+          Interactive Contribution Calendar
+        </p>
+        <Input
+          className="w-48 border-2 border-gray-300"
+          options={valueOptions}
+          selectedOption={value}
+          setSelectedOption={setValue}
+        />
       </div>
-    </div>
+      <div className="h-60 flex flex-col">
+        <p className="text-lg">{`${numEvents} ${fullDisplayValue}`}</p>
+        {Array.isArray(data) && data.length > 0 && (
+          <ResponsiveCalendar
+            theme={theme}
+            data={data
+              .map((item) => ({
+                day: item.day,
+                value: item[fullValue],
+              }))
+              .filter((item) => item.value !== 0)}
+            from={startDate}
+            to={endDate}
+            emptyColor="#EBEDF0"
+            colors={['#9BE9A8', '#40C463', '#30A14E', '#216E39']}
+            margin={{ top: 30, right: 0, bottom: 0, left: 20 }}
+            monthBorderColor="#ffffff"
+            dayBorderWidth={2}
+            dayBorderColor="#ffffff"
+            // eslint-disable-next-line no-unused-vars
+            onClick={(dayData, event) => {
+              setSelectedDay(dayData.day);
+            }}
+          />
+        )}
+      </div>
+    </WrappedCard>
   );
 };
 
