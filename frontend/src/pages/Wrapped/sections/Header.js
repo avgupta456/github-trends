@@ -2,6 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
@@ -11,14 +12,11 @@ import { Button, WrappedCard } from '../../../components';
 import { GITHUB_PRIVATE_AUTH_URL } from '../../../constants';
 import { sleep } from '../../../utils';
 
-const Header = ({
-  userId,
-  year,
-  numContribs,
-  numLines,
-  currUserId,
-  usePrivate,
-}) => {
+const Header = ({ userId, year, numContribs, numLines }) => {
+  const currUserId = useSelector((state) => state.user.userId);
+  const currPrivateAccess = useSelector((state) => state.user.privateAccess);
+  const usePrivate = currUserId === userId && currPrivateAccess;
+
   const shareText = `In ${year}, I made ${numContribs} contributions and modified ${numLines} lines of code. Check out my GitHub Wrapped and create your own at`;
   const shareUrl = `githubtrends.io/wrapped/${userId}`;
 
@@ -103,7 +101,7 @@ const Header = ({
             className="w-full flex justify-center"
           >
             <Button className="text-white bg-blue-500 hover:bg-blue-600">
-              {currUserId === userId ? 'Upgrade Account' : 'Create an Account'}
+              Create an Account
             </Button>
           </a>
         )}
@@ -139,15 +137,11 @@ Header.propTypes = {
   year: PropTypes.string.isRequired,
   numContribs: PropTypes.any,
   numLines: PropTypes.any,
-  currUserId: PropTypes.string,
-  usePrivate: PropTypes.bool,
 };
 
 Header.defaultProps = {
   numContribs: 0,
   numLines: 0,
-  currUserId: '',
-  usePrivate: false,
 };
 
 export default Header;

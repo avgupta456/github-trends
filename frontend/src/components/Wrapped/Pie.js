@@ -8,10 +8,8 @@ import { ResponsivePie } from '@nivo/pie';
 import { WrappedCard } from './Organization';
 import { theme } from './theme';
 
-const PieChart = ({ data, type, usePrivate }) => {
-  const prefix = `${usePrivate ? '' : 'public_'}${type}`;
-
-  const currData = data[prefix];
+const PieChart = ({ data, type }) => {
+  const currData = data[type];
 
   return (
     <WrappedCard width="1/3" height={96}>
@@ -24,7 +22,7 @@ const PieChart = ({ data, type, usePrivate }) => {
       {Array.isArray(currData) && currData.length > 0 && (
         <ResponsivePie
           theme={theme}
-          data={data[prefix]}
+          data={currData}
           margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
           innerRadius={0.4}
           padAngle={0.7}
@@ -77,7 +75,6 @@ const PieChart = ({ data, type, usePrivate }) => {
 PieChart.propTypes = {
   data: PropTypes.object,
   type: PropTypes.string,
-  usePrivate: PropTypes.bool,
 };
 
 PieChart.defaultProps = {
@@ -88,7 +85,6 @@ PieChart.defaultProps = {
     public_langs: [],
   },
   type: 'repos',
-  usePrivate: false,
 };
 
 export default PieChart;

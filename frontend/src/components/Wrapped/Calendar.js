@@ -7,7 +7,7 @@ import { Input } from '../Generic';
 import { theme } from './theme';
 import { WrappedCard } from './Organization';
 
-const Calendar = ({ data, startDate, endDate, usePrivate }) => {
+const Calendar = ({ data, startDate, endDate }) => {
   const valueOptions = [
     { value: 'contribs', label: 'Contributions', disabled: false },
     { value: 'commits', label: 'Commits', disabled: false },
@@ -19,14 +19,11 @@ const Calendar = ({ data, startDate, endDate, usePrivate }) => {
   // eslint-disable-next-line no-unused-vars
   const [value, setValue] = React.useState(valueOptions[0]);
 
-  const fullValue = usePrivate ? value.value : `public_${value.value}`;
-  const fullDisplayValue = `${usePrivate ? 'All' : 'Public'} ${value.label}`;
-
   // eslint-disable-next-line no-unused-vars
   const [selectedDay, setSelectedDay] = React.useState(null);
 
   const numEvents = Array.isArray(data)
-    ? data.reduce((acc, x) => acc + x[fullValue], 0)
+    ? data.reduce((acc, x) => acc + x[value.value], 0)
     : 0;
 
   return (
@@ -43,14 +40,14 @@ const Calendar = ({ data, startDate, endDate, usePrivate }) => {
         />
       </div>
       <div className="h-60 flex flex-col">
-        <p className="text-lg">{`${numEvents} ${fullDisplayValue}`}</p>
+        <p className="text-lg">{`${numEvents} ${value.label}`}</p>
         {Array.isArray(data) && data.length > 0 && (
           <ResponsiveCalendar
             theme={theme}
             data={data
               .map((item) => ({
                 day: item.day,
-                value: item[fullValue],
+                value: item[value.value],
               }))
               .filter((item) => item.value !== 0)}
             from={startDate}
@@ -76,12 +73,10 @@ Calendar.propTypes = {
   data: PropTypes.array,
   startDate: PropTypes.string.isRequired,
   endDate: PropTypes.string.isRequired,
-  usePrivate: PropTypes.bool,
 };
 
 Calendar.defaultProps = {
   data: [],
-  usePrivate: false,
 };
 
 export default Calendar;

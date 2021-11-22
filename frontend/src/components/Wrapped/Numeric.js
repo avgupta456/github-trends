@@ -5,11 +5,10 @@ import PropTypes from 'prop-types';
 
 import { WrappedCard } from './Organization';
 
-const Numeric = ({ data, usePrivate, type, label, width }) => {
+const Numeric = ({ data, type, label, width }) => {
   let num = 0;
-  const prefix = `${usePrivate ? '' : 'public_'}${type}`;
-  if (data !== undefined && data[prefix] !== undefined) {
-    num = data[prefix];
+  if (data !== undefined && data[type] !== undefined) {
+    num = data[type];
   }
 
   return (
@@ -22,7 +21,6 @@ const Numeric = ({ data, usePrivate, type, label, width }) => {
 
 Numeric.propTypes = {
   data: PropTypes.object,
-  usePrivate: PropTypes.bool,
   type: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   width: PropTypes.string,
@@ -30,7 +28,6 @@ Numeric.propTypes = {
 
 Numeric.defaultProps = {
   data: {},
-  usePrivate: false,
   width: '1/3',
 };
 

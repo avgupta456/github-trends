@@ -11,4 +11,3 @@ class SwarmDatum(BaseModel):
 
 class SwarmData(BaseModel):
     contribs: List[SwarmDatum]
-    public_contribs: List[SwarmDatum]

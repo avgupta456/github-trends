@@ -1,4 +1,4 @@
-import { Button, Checkbox, Input } from './Generic';
+import { Button, Checkbox, FloatingIcon, Input } from './Generic';
 
 import { Card, Image, SvgInline } from './Card';
 import Preview from './Preview';
@@ -17,6 +17,7 @@ import {
 export {
   Button,
   Checkbox,
+  FloatingIcon,
   Input,
   Card,
   SvgInline,

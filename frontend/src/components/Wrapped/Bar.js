@@ -8,12 +8,11 @@ import { ResponsiveBar } from '@nivo/bar';
 import { theme } from './theme';
 import { WrappedCard } from './Organization';
 
-const BarGraph = ({ data, type, usePrivate }) => {
+const BarGraph = ({ data, type }) => {
   const formattedType =
     type === 'contribs' ? 'contribs' : 'formatted_loc_changed';
 
-  const prefix = `${usePrivate ? '' : 'public_'}months`;
-  let newData = data[prefix];
+  let newData = data.months;
   if (!Array.isArray(newData)) {
     newData = [];
   }
@@ -99,7 +98,6 @@ const BarGraph = ({ data, type, usePrivate }) => {
 BarGraph.propTypes = {
   data: PropTypes.object,
   type: PropTypes.string.isRequired,
-  usePrivate: PropTypes.bool,
 };
 
 BarGraph.defaultProps = {
@@ -107,7 +105,6 @@ BarGraph.defaultProps = {
     months: [],
     public_months: [],
   },
-  usePrivate: false,
 };
 
 export default BarGraph;

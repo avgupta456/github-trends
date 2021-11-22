@@ -1,12 +1,12 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import { useParams } from 'react-router-dom';
 
 import { getWrapped } from '../../api';
 import {
+  FloatingIcon,
   BarGraph,
   Calendar,
   Numeric,
@@ -20,10 +20,6 @@ const WrappedScreen = () => {
   // eslint-disable-next-line prefer-const
   let { userId, year } = useParams();
   year = year || 2021;
-
-  const currUserId = useSelector((state) => state.user.userId);
-  const currPrivateAccess = useSelector((state) => state.user.privateAccess);
-  const usePrivate = currUserId === userId && currPrivateAccess;
 
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -53,6 +49,13 @@ const WrappedScreen = () => {
     // do nothing
   }
 
+  let locData = {};
+  try {
+    locData = data.numeric_data.loc;
+  } catch (e) {
+    // do nothing
+  }
+
   if (isLoading) {
     return <LoadingScreen />;
   }
@@ -65,9 +68,7 @@ const WrappedScreen = () => {
             userId={userId}
             year={year}
             numContribs={contribData.contribs || 'NA'}
-            numLines="NA" // TODO: add lines
-            currUserId={currUserId}
-            usePrivate={usePrivate}
+            numLines={locData.loc_changed || 'NA'}
           />
         </WrappedSection>
         <WrappedSection title="Contribution Calendar">
@@ -75,7 +76,6 @@ const WrappedScreen = () => {
             data={data.calendar_data}
             startDate={`${year}-01-02`}
             endDate={`${year}-12-31`}
-            usePrivate={usePrivate}
           />
           {[
             { data: contribData, type: 'contribs', label: 'Contributions' },
@@ -85,24 +85,15 @@ const WrappedScreen = () => {
             <Numeric
               key={item.type}
               data={item.data}
-              usePrivate={usePrivate}
               type={item.type}
               label={item.label}
               width="1/3"
             />
           ))}
-          <BarGraph
-            data={data.bar_data}
-            type="contribs"
-            usePrivate={usePrivate}
-          />
+          <BarGraph data={data.bar_data} type="contribs" />
         </WrappedSection>
         <WrappedSection title="Contribution Breakdown">
-          <SwarmPlot
-            data={data.swarm_data}
-            type="type"
-            usePrivate={usePrivate}
-          />
+          <SwarmPlot data={data.swarm_data} type="type" />
           <div className="w-1/3 flex flex-wrap">
             {[
               { data: contribData, type: 'commits', label: 'Commits' },
@@ -113,7 +104,6 @@ const WrappedScreen = () => {
               <Numeric
                 key={item.type}
                 data={item.data}
-                usePrivate={usePrivate}
                 type={item.type}
                 label={item.label}
                 width="1/2"
@@ -122,33 +112,21 @@ const WrappedScreen = () => {
           </div>
         </WrappedSection>
         <WrappedSection title="Lines of Code (LOC) Analysis">
-          <PieChart
-            data={data.pie_data}
-            type="repos_added"
-            usePrivate={usePrivate}
-          />
-          <PieChart
-            data={data.pie_data}
-            type="langs_added"
-            usePrivate={usePrivate}
-          />
+          <PieChart data={data.pie_data} type="repos_added" />
+          <PieChart data={data.pie_data} type="langs_added" />
         </WrappedSection>
         <WrappedSection title="Fun Plots and Stats">
-          <SwarmPlot
-            data={data.swarm_data}
-            type="weekday"
-            usePrivate={usePrivate}
-          />
+          <SwarmPlot data={data.swarm_data} type="weekday" />
           <Numeric
             key="weekend_percent"
             data={miscData}
-            usePrivate={usePrivate}
             type="weekend_percent"
             label="Weekend Activity"
             width="1/3"
           />
         </WrappedSection>
       </div>
+      <FloatingIcon />
     </div>
   );
 };
