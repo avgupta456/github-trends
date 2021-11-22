@@ -1,9 +1,13 @@
-import BarGraph from './Bar';
-import Calendar from './Calendar';
-import Numeric from './Numeric';
-import PieChart from './Pie';
-import SwarmPlot from './Swarm';
-import { WrappedSection, WrappedCard } from './Organization';
+import {
+  BarGraph,
+  Numeric,
+  PieChart,
+  SwarmPlot,
+  WrappedSection,
+  WrappedCard,
+} from './Templates';
+
+import { Calendar } from './Specifics';
 
 export {
   BarGraph,

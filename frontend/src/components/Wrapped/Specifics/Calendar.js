@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 import { ResponsiveCalendar } from '@nivo/calendar';
 
-import { Input } from '../Generic';
-import { theme } from './theme';
-import { WrappedCard } from './Organization';
+import { Input } from '../../Generic';
+import { theme } from '../Templates/theme';
+import { WrappedCard } from '../Templates/Organization';
 
 const Calendar = ({ data, startDate, endDate }) => {
   const valueOptions = [

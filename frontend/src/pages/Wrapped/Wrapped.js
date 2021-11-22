@@ -114,6 +114,47 @@ const WrappedScreen = () => {
         <WrappedSection title="Lines of Code (LOC) Analysis">
           <PieChart data={data.pie_data} type="repos_added" />
           <PieChart data={data.pie_data} type="langs_added" />
+          <div className="w-1/3 flex flex-wrap">
+            {[
+              { data: locData, type: 'loc_additions', label: 'LOC Additions' },
+              { data: locData, type: 'loc_deletions', label: 'LOC Deletions' },
+              { data: locData, type: 'loc_changed', label: 'LOC Changed' },
+              { data: locData, type: 'loc_added', label: 'LOC Added' },
+            ].map((item) => (
+              <Numeric
+                key={item.type}
+                data={item.data}
+                type={item.type}
+                label={item.label}
+                width="1/2"
+              />
+            ))}
+          </div>
+          {[
+            {
+              data: locData,
+              type: 'loc_additions_per_commit',
+              label: 'LOC Additions per Commit',
+            },
+            {
+              data: locData,
+              type: 'loc_deletions_per_commit',
+              label: 'LOC Deletions per Commit',
+            },
+            {
+              data: locData,
+              type: 'loc_changed_per_day',
+              label: 'LOC Changed per Day',
+            },
+          ].map((item) => (
+            <Numeric
+              key={item.type}
+              data={item.data}
+              type={item.type}
+              label={item.label}
+              width="1/3"
+            />
+          ))}
         </WrappedSection>
         <WrappedSection title="Fun Plots and Stats">
           <SwarmPlot data={data.swarm_data} type="weekday" />
