@@ -15,6 +15,9 @@ import {
   PieRepos,
   SwarmType,
   SwarmDay,
+  NumericPlusLOC,
+  NumericMinusLOC,
+  NumericBothLOC,
 } from '../../components';
 import { Header, LoadingScreen } from './sections';
 
@@ -78,10 +81,35 @@ const WrappedScreen = () => {
               width="1/3"
             />
           ))}
-          <BarContribs data={data} />
+        </WrappedSection>
+        <WrappedSection title="Lines of Code (LOC) Analysis">
+          <PieLangs data={data} metric="added" />
+          <div className="w-1/3 flex flex-wrap">
+            <NumericPlusLOC
+              num={data?.numeric_data?.loc?.loc_additions}
+              label="LOC Additions"
+              width="1/2"
+            />
+            <NumericMinusLOC
+              num={data?.numeric_data?.loc?.loc_deletions}
+              label="LOC Deletions"
+              width="1/2"
+            />
+            <NumericBothLOC
+              num1={data?.numeric_data?.loc?.loc_additions_per_commit}
+              num2={data?.numeric_data?.loc?.loc_deletions_per_commit}
+              label="Typical Commit"
+              width="1/2"
+            />
+            <Numeric
+              num={data?.numeric_data?.loc?.loc_changed_per_day}
+              label="Lines Changed Per Day"
+              width="1/2"
+            />
+          </div>
+          <PieRepos data={data} metric="added" />
         </WrappedSection>
         <WrappedSection title="Contribution Breakdown">
-          <SwarmType data={data} />
           <div className="w-1/3 flex flex-wrap">
             {[
               { num: data?.numeric_data?.contribs?.commits, label: 'Commits' },
@@ -100,56 +128,7 @@ const WrappedScreen = () => {
               />
             ))}
           </div>
-        </WrappedSection>
-        <WrappedSection title="Lines of Code (LOC) Analysis">
-          <PieLangs data={data} metric="added" />
-          <PieRepos data={data} metric="added" />
-          <div className="w-1/3 flex flex-wrap">
-            {[
-              {
-                num: data?.numeric_data?.loc?.loc_additions,
-                label: 'LOC Additions',
-              },
-              {
-                num: data?.numeric_data?.loc?.loc_deletions,
-                label: 'LOC Deletions',
-              },
-              {
-                num: data?.numeric_data?.loc?.loc_changed,
-                label: 'LOC Changed',
-              },
-              { num: data?.numeric_data?.loc?.loc_added, label: 'LOC Added' },
-            ].map((item) => (
-              <Numeric
-                key={item.type}
-                data={item.data}
-                type={item.type}
-                label={item.label}
-                width="1/2"
-              />
-            ))}
-          </div>
-          {[
-            {
-              num: data?.numeric_data?.loc?.loc_additions_per_commit,
-              label: 'LOC Additions per Commit',
-            },
-            {
-              num: data?.numeric_data?.loc?.loc_deletions_per_commit,
-              label: 'LOC Deletions per Commit',
-            },
-            {
-              num: data?.numeric_data?.loc?.loc_changed_per_day,
-              label: 'LOC Changed per Day',
-            },
-          ].map((item) => (
-            <Numeric
-              key={item.type}
-              num={item.num}
-              label={item.label}
-              width="1/3"
-            />
-          ))}
+          <SwarmType data={data} />
         </WrappedSection>
         <WrappedSection title="Fun Plots and Stats">
           <SwarmDay data={data} />
@@ -159,6 +138,7 @@ const WrappedScreen = () => {
             label="Weekend Activity"
             width="1/3"
           />
+          <BarContribs data={data} />
         </WrappedSection>
       </div>
       <FloatingIcon />

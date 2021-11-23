@@ -30,6 +30,8 @@ def get_pie_data(data: FullUserPackage) -> PieData:
             reverse=True,
         )
         repo_objs: List[PieDatum] = []
+
+        # first five repositories
         for i, (k, v) in enumerate(list(repos)[:5]):
             repo_data = {
                 "id": i,
@@ -38,6 +40,20 @@ def get_pie_data(data: FullUserPackage) -> PieData:
                 "formatted_value": format_number(_count_repo_loc(v, m)),
             }
             repo_objs.append(PieDatum.parse_obj(repo_data))
+
+        # remaining repositories
+        total_count = 0
+        for (k, v) in list(repos)[5:]:
+            total_count += _count_repo_loc(v, m)
+        repo_data = {
+            "id": -1,
+            "label": "other",
+            "value": total_count,
+            "formatted_value": format_number(total_count),
+        }
+        if total_count > 100:
+            repo_objs.append(PieDatum.parse_obj(repo_data))
+
         out["repos_" + m] = repo_objs
 
     # LANGUAGE PIE CHART

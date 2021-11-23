@@ -76,13 +76,9 @@ const Calendar = ({ data, startDate, endDate }) => {
 };
 
 Calendar.propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.object.isRequired,
   startDate: PropTypes.string.isRequired,
   endDate: PropTypes.string.isRequired,
-};
-
-Calendar.defaultProps = {
-  data: [],
 };
 
 export default Calendar;

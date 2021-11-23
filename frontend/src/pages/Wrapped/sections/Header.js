@@ -134,7 +134,7 @@ const Header = ({ userId, year, numContribs, numLines }) => {
 
 Header.propTypes = {
   userId: PropTypes.string.isRequired,
-  year: PropTypes.string.isRequired,
+  year: PropTypes.number.isRequired,
   numContribs: PropTypes.any,
   numLines: PropTypes.any,
 };

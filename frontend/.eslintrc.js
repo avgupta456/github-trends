@@ -15,7 +15,9 @@ module.exports = {
   rules: {
     'react/jsx-filename-extension': 'off',
     'react/forbid-prop-types': 'off',
+    'react/destructuring-assignment': 'off',
     'import/prefer-default-export': 'off',
+    'no-console': 'off',
     'prettier/prettier': [
       'error',
       {

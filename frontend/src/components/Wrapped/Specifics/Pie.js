@@ -32,9 +32,12 @@ const PieRepos = ({ data, metric }) => {
       header="Most Contributed Repositories"
       subheader={metric === 'changed' ? 'By LOC Modified' : 'By LOC Added'}
       data={newData}
-      getArcLinkLabel={(e) =>
-        e.data.label.split('/')[1].replace('repository', 'private')
-      }
+      getArcLinkLabel={({ data: { label } }) => {
+        if (label && label.includes('/')) {
+          return label.split('/')[1].replace('repository', 'private');
+        }
+        return label;
+      }}
       getFormattedValue={(e) => e.formatted_value}
       colors={{ scheme: 'category10' }}
     />

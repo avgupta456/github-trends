@@ -74,7 +74,7 @@ const SwarmPlot = ({
 
 SwarmPlot.propTypes = {
   header: PropTypes.string.isRequired,
-  data: PropTypes.object.isRequired,
+  data: PropTypes.array.isRequired,
   groupBy: PropTypes.string.isRequired,
   groups: PropTypes.array.isRequired,
   legend: PropTypes.string.isRequired,

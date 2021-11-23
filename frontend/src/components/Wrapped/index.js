@@ -3,9 +3,12 @@ import { WrappedSection, WrappedCard } from './Organization';
 import { Numeric } from './Templates';
 
 import {
-  Calendar,
   BarContribs,
   BarLOCChanged,
+  Calendar,
+  NumericPlusLOC,
+  NumericMinusLOC,
+  NumericBothLOC,
   PieLangs,
   PieRepos,
   SwarmType,
@@ -15,10 +18,13 @@ import {
 export {
   WrappedSection,
   WrappedCard,
-  Calendar,
   Numeric,
   BarContribs,
   BarLOCChanged,
+  Calendar,
+  NumericPlusLOC,
+  NumericMinusLOC,
+  NumericBothLOC,
   PieLangs,
   PieRepos,
   SwarmType,

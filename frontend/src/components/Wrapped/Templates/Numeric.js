@@ -15,12 +15,13 @@ const Numeric = ({ num, label, width }) => {
 };
 
 Numeric.propTypes = {
-  num: PropTypes.number.isRequired,
+  num: PropTypes.any,
   label: PropTypes.string.isRequired,
   width: PropTypes.string,
 };
 
 Numeric.defaultProps = {
+  num: 'N/A',
   width: '1/3',
 };
 
