@@ -5,9 +5,11 @@ import { ResponsiveCalendar } from '@nivo/calendar';
 
 import { Input } from '../../Generic';
 import { theme } from '../Templates/theme';
-import { WrappedCard } from '../Templates/Organization';
+import { WrappedCard } from '../Organization';
 
 const Calendar = ({ data, startDate, endDate }) => {
+  const newData = data?.calendar_data || [];
+
   const valueOptions = [
     { value: 'contribs', label: 'Contributions', disabled: false },
     { value: 'commits', label: 'Commits', disabled: false },
@@ -41,10 +43,10 @@ const Calendar = ({ data, startDate, endDate }) => {
       </div>
       <div className="h-60 flex flex-col">
         <p className="text-lg">{`${numEvents} ${value.label}`}</p>
-        {Array.isArray(data) && data.length > 0 && (
+        {Array.isArray(newData) && newData.length > 0 ? (
           <ResponsiveCalendar
             theme={theme}
-            data={data
+            data={newData
               .map((item) => ({
                 day: item.day,
                 value: item[value.value],
@@ -63,6 +65,10 @@ const Calendar = ({ data, startDate, endDate }) => {
               setSelectedDay(dayData.day);
             }}
           />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            No data to show
+          </div>
         )}
       </div>
     </WrappedCard>

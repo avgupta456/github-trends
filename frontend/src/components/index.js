@@ -5,13 +5,16 @@ import Preview from './Preview';
 
 import { ProgressBar, DateRangeSection, CheckboxSection } from './Home';
 import {
-  BarGraph,
-  Calendar,
-  Numeric,
-  PieChart,
-  SwarmPlot,
   WrappedSection,
   WrappedCard,
+  Numeric,
+  Calendar,
+  BarContribs,
+  BarLOCChanged,
+  PieLangs,
+  PieRepos,
+  SwarmType,
+  SwarmDay,
 } from './Wrapped';
 
 export {
@@ -26,11 +29,14 @@ export {
   ProgressBar,
   DateRangeSection,
   CheckboxSection,
-  BarGraph,
-  Calendar,
-  Numeric,
-  PieChart,
-  SwarmPlot,
   WrappedSection,
   WrappedCard,
+  Numeric,
+  Calendar,
+  BarContribs,
+  BarLOCChanged,
+  PieLangs,
+  PieRepos,
+  SwarmType,
+  SwarmDay,
 };

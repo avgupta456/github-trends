@@ -5,24 +5,25 @@ import PropTypes from 'prop-types';
 
 import { ResponsivePie } from '@nivo/pie';
 
-import { WrappedCard } from './Organization';
+import { WrappedCard } from '../Organization';
 import { theme } from './theme';
 
-const PieChart = ({ data, type }) => {
-  const currData = data[type];
-
+const PieChart = ({
+  header,
+  subheader,
+  data,
+  getArcLinkLabel,
+  getFormattedValue,
+  colors,
+}) => {
   return (
     <WrappedCard width="1/3" height={96}>
-      <p className="text-xl font-semibold">
-        {type.includes('repo')
-          ? 'Most Contributed Repositories'
-          : 'Most Used Languages'}
-      </p>
-      <p>{type.includes('changed') ? 'By LOC Modified' : 'By LOC Added'}</p>
-      {Array.isArray(currData) && currData.length > 0 && (
+      <p className="text-xl font-semibold">{header}</p>
+      <p>{subheader}</p>
+      {Array.isArray(data) && data.length > 0 ? (
         <ResponsivePie
           theme={theme}
-          data={currData}
+          data={data}
           margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
           innerRadius={0.4}
           padAngle={0.7}
@@ -31,11 +32,7 @@ const PieChart = ({ data, type }) => {
           borderWidth={1}
           borderColor={{ from: 'color', modifiers: [['darker', 0.2]] }}
           // Arc Link Settings
-          arcLinkLabel={(e) =>
-            type.includes('repos')
-              ? e.data.label.split('/')[1].replace('repository', 'private')
-              : e.data.label
-          }
+          arcLinkLabel={(e) => getArcLinkLabel(e)}
           arcLinkLabelsSkipAngle={45}
           arcLinkLabelsTextOffset={0}
           arcLinkLabelsTextColor={{ from: 'color' }}
@@ -43,7 +40,7 @@ const PieChart = ({ data, type }) => {
           arcLinkLabelsStraightLength={5}
           arcLinkLabelsThickness={0}
           // Arc Label Settings
-          arcLabel={(e) => e.data.formatted_value}
+          arcLabel={(e) => getFormattedValue(e)}
           arcLabelsSkipAngle={45}
           arcLabelsTextColor="#fff"
           // Tooltip
@@ -58,33 +55,27 @@ const PieChart = ({ data, type }) => {
               }}
             >
               <strong>{datum.label}</strong>
-              {`: ${datum.data.formatted_value}`}
+              {`: ${getFormattedValue(datum.data)}`}
             </div>
           )}
-          colors={
-            type.includes('repos')
-              ? { scheme: 'category10' }
-              : { datum: 'data.color' }
-          }
+          colors={colors}
         />
+      ) : (
+        <div className="w-full h-full flex items-center justify-center">
+          No data to show
+        </div>
       )}
     </WrappedCard>
   );
 };
 
 PieChart.propTypes = {
-  data: PropTypes.object,
-  type: PropTypes.string,
-};
-
-PieChart.defaultProps = {
-  data: {
-    repos: [],
-    public_repos: [],
-    langs: [],
-    public_langs: [],
-  },
-  type: 'repos',
+  header: PropTypes.string.isRequired,
+  subheader: PropTypes.string.isRequired,
+  data: PropTypes.array.isRequired,
+  getArcLinkLabel: PropTypes.func.isRequired,
+  getFormattedValue: PropTypes.func.isRequired,
+  colors: PropTypes.any.isRequired,
 };
 
 export default PieChart;

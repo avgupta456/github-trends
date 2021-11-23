@@ -1,20 +1,26 @@
-import {
-  BarGraph,
-  Numeric,
-  PieChart,
-  SwarmPlot,
-  WrappedSection,
-  WrappedCard,
-} from './Templates';
+import { WrappedSection, WrappedCard } from './Organization';
 
-import { Calendar } from './Specifics';
+import { Numeric } from './Templates';
+
+import {
+  Calendar,
+  BarContribs,
+  BarLOCChanged,
+  PieLangs,
+  PieRepos,
+  SwarmType,
+  SwarmDay,
+} from './Specifics';
 
 export {
-  BarGraph,
-  Calendar,
-  Numeric,
-  PieChart,
-  SwarmPlot,
   WrappedSection,
   WrappedCard,
+  Calendar,
+  Numeric,
+  BarContribs,
+  BarLOCChanged,
+  PieLangs,
+  PieRepos,
+  SwarmType,
+  SwarmDay,
 };

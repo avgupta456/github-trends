@@ -8,19 +8,14 @@ module.exports = {
     ecmaFeatures: {
       jsx: true,
     },
-    ecmaVersion: 2018,
+    ecmaVersion: 2020,
     sourceType: 'module',
   },
   plugins: ['react', 'prettier'],
   rules: {
-    'react/prefer-stateless-function': 'off',
     'react/jsx-filename-extension': 'off',
-    'react/destructuring-assignment': 'off',
-    'react/no-did-update-set-state': 'off',
     'react/forbid-prop-types': 'off',
     'import/prefer-default-export': 'off',
-    'no-useless-constructor': 'off',
-    'no-console': 'off',
     'prettier/prettier': [
       'error',
       {
