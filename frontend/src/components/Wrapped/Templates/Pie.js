@@ -17,55 +17,57 @@ const PieChart = ({
   colors,
 }) => {
   return (
-    <WrappedCard width="1/3" height={96}>
-      <p className="text-xl font-semibold">{header}</p>
-      <p>{subheader}</p>
-      {Array.isArray(data) && data.length > 0 ? (
-        <ResponsivePie
-          theme={theme}
-          data={data}
-          margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
-          innerRadius={0.4}
-          padAngle={0.7}
-          cornerRadius={3}
-          activeOuterRadiusOffset={8}
-          borderWidth={1}
-          borderColor={{ from: 'color', modifiers: [['darker', 0.2]] }}
-          // Arc Link Settings
-          arcLinkLabel={(e) => getArcLinkLabel(e)}
-          arcLinkLabelsSkipAngle={45}
-          arcLinkLabelsTextOffset={0}
-          arcLinkLabelsTextColor={{ from: 'color' }}
-          arcLinkLabelsDiagonalLength={5}
-          arcLinkLabelsStraightLength={5}
-          arcLinkLabelsThickness={0}
-          // Arc Label Settings
-          arcLabel={(e) => getFormattedValue(e)}
-          arcLabelsSkipAngle={45}
-          arcLabelsTextColor="#fff"
-          // Tooltip
-          tooltip={({ datum }) => (
-            <div
-              style={{
-                fontSize: '14px',
-                padding: 6,
-                color: datum.color,
-                background: '#fff',
-                boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-              }}
-            >
-              <strong>{datum.label}</strong>
-              {`: ${getFormattedValue(datum.data)}`}
-            </div>
-          )}
-          colors={colors}
-        />
-      ) : (
-        <div className="w-full h-full flex items-center justify-center">
-          No data to show
-        </div>
-      )}
-    </WrappedCard>
+    <div className="h-96 w-full">
+      <WrappedCard>
+        <p className="text-lg lg:text-xl font-semibold">{header}</p>
+        <p className="lg:text-lg">{subheader}</p>
+        {Array.isArray(data) && data.length > 0 ? (
+          <ResponsivePie
+            theme={theme}
+            data={data}
+            margin={{ top: 20, right: 40, bottom: 20, left: 40 }}
+            innerRadius={0.4}
+            padAngle={0.7}
+            cornerRadius={3}
+            activeOuterRadiusOffset={8}
+            borderWidth={1}
+            borderColor={{ from: 'color', modifiers: [['darker', 0.2]] }}
+            // Arc Link Settings
+            arcLinkLabel={(e) => getArcLinkLabel(e)}
+            arcLinkLabelsSkipAngle={45}
+            arcLinkLabelsTextOffset={0}
+            arcLinkLabelsTextColor={{ from: 'color' }}
+            arcLinkLabelsDiagonalLength={5}
+            arcLinkLabelsStraightLength={5}
+            arcLinkLabelsThickness={0}
+            // Arc Label Settings
+            arcLabel={(e) => getFormattedValue(e)}
+            arcLabelsSkipAngle={45}
+            arcLabelsTextColor="#fff"
+            // Tooltip
+            tooltip={({ datum }) => (
+              <div
+                style={{
+                  fontSize: '14px',
+                  padding: 6,
+                  color: datum.color,
+                  background: '#fff',
+                  boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+                }}
+              >
+                <strong>{datum.label}</strong>
+                {`: ${getFormattedValue(datum.data)}`}
+              </div>
+            )}
+            colors={colors}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            No data to show
+          </div>
+        )}
+      </WrappedCard>
+    </div>
   );
 };
 

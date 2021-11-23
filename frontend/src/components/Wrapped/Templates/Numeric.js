@@ -5,11 +5,13 @@ import PropTypes from 'prop-types';
 
 import { WrappedCard } from '../Organization';
 
-const Numeric = ({ num, label, width }) => {
+const Numeric = ({ num, label }) => {
   return (
-    <WrappedCard width={width}>
-      <p className="text-2xl font-bold w-full text-center">{num || 'N/A'}</p>
-      <p className="w-full text-center">{label}</p>
+    <WrappedCard>
+      <p className="text-2xl 2xl:text-3xl 3xl:text-4xl font-bold w-full text-center">
+        {num || 'N/A'}
+      </p>
+      <p className="2xl:text-lg w-full text-center">{label}</p>
     </WrappedCard>
   );
 };
@@ -17,12 +19,10 @@ const Numeric = ({ num, label, width }) => {
 Numeric.propTypes = {
   num: PropTypes.any,
   label: PropTypes.string.isRequired,
-  width: PropTypes.string,
 };
 
 Numeric.defaultProps = {
   num: 'N/A',
-  width: '1/3',
 };
 
 export default Numeric;

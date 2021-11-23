@@ -15,9 +15,9 @@ NODE_CHUNK_SIZE = 100  # number of nodes (commits) to query (max 100)
 NODE_THREADS = 5  # number of node queries simultaneously (avoid blacklisting)
 CUTOFF = 500  # if less than cutoff, count LOC (or below line)
 CUTOFF_PER_FILE = 100  # if less than cutoff per file, count LOC
-MAX_CUTOFF = 2000  # if more than max cutoff, don't count LOC
+MAX_CUTOFF = 5000  # if more than max cutoff, don't count LOC
 
-WRAPPED_VERSION = 0.027  # determines when to overwrite MongoDB data
+WRAPPED_VERSION = 0.028  # determines when to overwrite MongoDB data
 
 # CUSTOMIZATION
 BLACKLIST = ["Jupyter Notebook", "HTML"]  # languages to ignore

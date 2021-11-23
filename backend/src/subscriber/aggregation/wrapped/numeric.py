@@ -40,7 +40,7 @@ def get_misc_stats(data: FullUserPackage) -> MiscStats:
         best = max(best, curr)
         curr = curr + 1 if i in yeardays else 0
     longest_streak = max(best, curr)
-    weekend_percent = (weekdays[5] + weekdays[6]) / max(1, total_contribs)
+    weekend_percent = (weekdays[0] + weekdays[6]) / max(1, total_contribs)
 
     return MiscStats.parse_obj(
         {
