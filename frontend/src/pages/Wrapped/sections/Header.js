@@ -63,7 +63,7 @@ const Header = ({ userId, year, numContribs, numLines }) => {
         draggable={false}
         pauseOnHover={false}
       />
-      <div className="w-full h-48">
+      <div className="w-full h-auto">
         <WrappedCard>
           <Link to="/wrapped">
             <LeftArrowIcon className="absolute h-6 w-6 text-gray-400 hover:text-gray-700" />
