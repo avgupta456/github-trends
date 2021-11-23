@@ -14,7 +14,7 @@ os.environ["PUBSUB_PUB"] = "False"
 
 # add endpoints here (after load dotenv)
 from src.constants import PROD, PUBSUB_PUB, SENTRY_DSN
-from src.subscriber.routers import dev_router, pubsub_router
+from src.subscriber.routers import dev_router, pubsub_router, wrapped_router
 
 """
 SETUP
@@ -60,3 +60,4 @@ def get_info():
 
 app.include_router(dev_router, prefix="/dev", tags=["Dev"])
 app.include_router(pubsub_router, prefix="/pubsub", tags=["PubSub"])
+app.include_router(wrapped_router, prefix="/wrapped", tags=["Wrapped"])

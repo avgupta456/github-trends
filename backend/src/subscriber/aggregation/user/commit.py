@@ -6,6 +6,7 @@ from src.constants import (
     CUTOFF,
     CUTOFF_PER_FILE,
     DEFAULT_COLOR,
+    MAX_CUTOFF,
     NODE_CHUNK_SIZE,
 )
 from src.data.github.graphql import RawCommit as GraphQLRawCommit, RawRepo, get_commits
@@ -55,6 +56,7 @@ def get_commits_languages(
     repo_infos: Dict[str, RawRepo],
     cutoff: int = CUTOFF,
     cutoff_per_file: int = CUTOFF_PER_FILE,
+    max_cutoff: int = MAX_CUTOFF,
     access_token: Optional[str] = None,
 ):
     all_data = _get_commits_languages(
@@ -67,9 +69,9 @@ def get_commits_languages(
         if commit is None:
             continue
 
-        loc_changed = commit.additions + commit.deletions
-        loc_changed_per_file = loc_changed / max(1, commit.changed_files)
-        if loc_changed < cutoff or loc_changed_per_file < cutoff_per_file:
+        changed = commit.additions + commit.deletions
+        per_file = changed / max(1, commit.changed_files)
+        if (changed < cutoff or per_file < cutoff_per_file) and (changed < max_cutoff):
             repo_info = repo_infos[commit_repo].languages.edges
             languages = [x for x in repo_info if x.node.name not in BLACKLIST]
             total_repo_size = sum([language.size for language in languages])

@@ -2,24 +2,16 @@
 
 import axios from 'axios';
 
-import { BACKEND_URL } from '../constants';
+import { SUBSCRIBER_URL } from '../constants';
 
-const URL_PREFIX = `${BACKEND_URL}/wrapped`;
+const URL_PREFIX = `${SUBSCRIBER_URL}/wrapped`;
 
-const getWrapped = async (userId, year, retries = 0) => {
+const getWrapped = async (userId, year) => {
   try {
     const fullUrl = `${URL_PREFIX}/${userId}?year=${year}`;
     const result = await axios.get(fullUrl);
-    const output = result.data.data;
-    if (output === null || output === undefined) {
-      throw new Error('No data');
-    }
-    return output;
+    return result.data.data;
   } catch (error) {
-    if (retries < 3) {
-      return await getWrapped(userId, year, retries + 1);
-    }
-    console.error(error);
     return null;
   }
 };

@@ -1,17 +1,25 @@
+/* eslint-disable react/jsx-one-expression-per-line */
+
 import React, { useEffect, useState } from 'react';
 
 import { useParams } from 'react-router-dom';
-import { BounceLoader } from 'react-spinners';
 
 import { getWrapped } from '../../api';
 import {
-  Checkbox,
-  BarGraph,
-  Calendar,
+  FloatingIcon,
+  WrappedSection,
   Numeric,
-  PieChart,
-  SwarmPlot,
+  Calendar,
+  BarContribs,
+  PieLangs,
+  PieRepos,
+  SwarmType,
+  SwarmDay,
+  NumericPlusLOC,
+  NumericMinusLOC,
+  NumericBothLOC,
 } from '../../components';
+import { Header, LoadingScreen } from './sections';
 
 const WrappedScreen = () => {
   // eslint-disable-next-line prefer-const
@@ -19,111 +27,128 @@ const WrappedScreen = () => {
   year = year || 2021;
 
   const [data, setData] = useState({});
-  const isLoading =
-    data === undefined || data === null || Object.keys(data).length === 0;
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(async () => {
-    if (userId.length > 0 && year > 2010 && year <= 2021 && isLoading) {
-      setData(await getWrapped(userId, year));
+    if (userId?.length > 0 && year > 2010 && year <= 2021) {
+      const output = await getWrapped(userId, year);
+      if (output !== null && output !== undefined && output !== {}) {
+        setData(output);
+        setIsLoading(false);
+      }
     }
-  }, [userId, year, data]);
-
-  // eslint-disable-next-line no-unused-vars
-  const [usePrivate, setUsePrivate] = useState(false);
-
-  let contribData = {};
-  try {
-    contribData = data.numeric_data.contribs;
-  } catch (e) {
-    // do nothing
-  }
-
-  let miscData = {};
-  try {
-    miscData = data.numeric_data.misc;
-  } catch (e) {
-    // do nothing
-  }
+  }, []);
 
   if (isLoading) {
-    return (
-      <div className="h-full py-8 flex justify-center items-center">
-        <BounceLoader color="#3B82F6" />
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   return (
-    <div className="container px-32 py-16 mx-auto">
+    <div className="container px-2 lg:px-4 xl:px-16 py-2 lg:py-4 xl:py-8 mx-auto">
       <div className="h-full w-full flex flex-row flex-wrap justify-center items-center">
-        <div className="w-full h-32 p-2">
-          <div className="shadow bg-gray-50 w-full h-full p-4 flex flex-col">
-            <p className="text-2xl font-semibold">
-              {`${userId} GitHub Wrapped`}
-            </p>
-            <Checkbox
-              question="Use Private Contributions?"
-              variable={usePrivate}
-              setVariable={setUsePrivate}
+        <WrappedSection useTitle={false}>
+          <Header
+            userId={userId}
+            year={year}
+            numContribs={data?.numeric_data?.contribs?.contribs || 'NA'}
+            numLines={data?.numeric_data?.loc?.loc_changed || 'NA'}
+          />
+        </WrappedSection>
+        <WrappedSection title="Contribution Calendar">
+          <Calendar
+            data={data}
+            startDate={`${year}-01-02`}
+            endDate={`${year}-12-31`}
+          />
+          {[
+            {
+              num: data?.numeric_data?.contribs?.contribs,
+              label: 'Contributions',
+            },
+            {
+              num: data?.numeric_data?.misc?.total_days,
+              label: 'With Contributions',
+            },
+            {
+              num: data?.numeric_data?.misc?.longest_streak,
+              label: 'Longest Streak',
+            },
+          ].map((item) => (
+            <div className="w-full md:w-1/3">
+              <Numeric key={item.type} num={item.num} label={item.label} />
+            </div>
+          ))}
+        </WrappedSection>
+        <WrappedSection title="Lines of Code (LOC) Analysis">
+          <div className="w-full md:w-1/2 xl:w-1/3">
+            <PieLangs data={data} metric="added" />
+          </div>
+          <div className="w-full md:w-1/2 xl:w-1/3">
+            <PieRepos data={data} metric="added" />
+          </div>
+          <div className="w-full xl:w-1/3 flex flex-wrap">
+            <div className="w-full md:w-1/2 lg:w-1/4 xl:w-1/2">
+              <NumericPlusLOC
+                num={data?.numeric_data?.loc?.loc_additions}
+                label="LOC Additions"
+              />
+            </div>
+            <div className="w-full md:w-1/2 lg:w-1/4 xl:w-1/2">
+              <NumericMinusLOC
+                num={data?.numeric_data?.loc?.loc_deletions}
+                label="LOC Deletions"
+              />
+            </div>
+            <div className="w-full md:w-1/2 lg:w-1/4 xl:w-1/2">
+              <NumericBothLOC
+                num1={data?.numeric_data?.loc?.loc_additions_per_commit}
+                num2={data?.numeric_data?.loc?.loc_deletions_per_commit}
+                label="Typical Commit"
+              />
+            </div>
+            <div className="w-full md:w-1/2 lg:w-1/4 xl:w-1/2">
+              <Numeric
+                num={data?.numeric_data?.loc?.loc_changed_per_day}
+                label="Lines Changed Per Day"
+              />
+            </div>
+          </div>
+        </WrappedSection>
+        <WrappedSection title="Contribution Breakdown">
+          <div className="w-full lg:w-1/3 flex flex-wrap">
+            {[
+              { num: data?.numeric_data?.contribs?.commits, label: 'Commits' },
+              { num: data?.numeric_data?.contribs?.issues, label: 'Issues' },
+              {
+                num: data?.numeric_data?.contribs?.prs,
+                label: 'Pull Requests',
+              },
+              { num: data?.numeric_data?.contribs?.reviews, label: 'Reviews' },
+            ].map((item) => (
+              <div className="w-full md:w-1/2">
+                <Numeric key={item.label} num={item.num} label={item.label} />
+              </div>
+            ))}
+          </div>
+          <div className="w-full lg:w-2/3">
+            <SwarmType data={data} />
+          </div>
+        </WrappedSection>
+        <WrappedSection title="Fun Plots and Stats">
+          <div className="w-full lg:w-2/3">
+            <SwarmDay data={data} />
+          </div>
+          <div className="w-full lg:w-1/3">
+            <Numeric
+              key="weekend_percent"
+              num={data?.numeric_data?.misc?.weekend_percent}
+              label="Weekend Activity"
             />
           </div>
-        </div>
-        {[
-          { type: 'contribs', label: 'Contributions' },
-          { type: 'commits', label: 'Commits' },
-          { type: 'issues', label: 'Issues' },
-          { type: 'prs', label: 'Pull Requests' },
-          { type: 'reviews', label: 'Reviews' },
-        ].map((item) => (
-          <Numeric
-            data={contribData}
-            usePrivate={usePrivate}
-            type={item.type}
-            label={item.label}
-            width="1/5"
-          />
-        ))}
-        <Calendar
-          data={data.calendar_data}
-          startDate={`${year}-01-02`}
-          endDate={`${year}-12-31`}
-          usePrivate={usePrivate}
-        />
-
-        {[
-          { type: 'total_days', label: 'With Contributions' },
-          { type: 'longest_streak', label: 'Longest Streak' },
-          { type: 'weekend_percent', label: 'Weekend Activity' },
-        ].map((item) => (
-          <Numeric
-            data={miscData}
-            usePrivate={usePrivate}
-            type={item.type}
-            label={item.label}
-          />
-        ))}
-        <PieChart
-          data={data.pie_data}
-          type="repos_added"
-          usePrivate={usePrivate}
-        />
-        <SwarmPlot data={data.swarm_data} type="type" usePrivate={usePrivate} />
-        <SwarmPlot
-          data={data.swarm_data}
-          type="weekday"
-          usePrivate={usePrivate}
-        />
-        <PieChart
-          data={data.pie_data}
-          type="langs_added"
-          usePrivate={usePrivate}
-        />
-        <BarGraph
-          data={data.bar_data}
-          type="loc_changed"
-          usePrivate={usePrivate}
-        />
+          <BarContribs data={data} />
+        </WrappedSection>
       </div>
+      <FloatingIcon />
     </div>
   );
 };

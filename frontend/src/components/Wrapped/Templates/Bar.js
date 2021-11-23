@@ -6,18 +6,17 @@ import PropTypes from 'prop-types';
 import { ResponsiveBar } from '@nivo/bar';
 
 import { theme } from './theme';
+import { WrappedCard } from '../Organization';
 
-const BarGraph = ({ data, type, usePrivate }) => {
-  const formattedType =
-    type === 'contribs' ? 'contribs' : 'formatted_loc_changed';
-
-  const prefix = `${usePrivate ? '' : 'public_'}months`;
-  let newData = data[prefix];
-  if (!Array.isArray(newData)) {
-    newData = [];
-  }
-
-  const months = [
+const BarGraph = ({
+  months,
+  subheader,
+  type,
+  getTooltip,
+  getLabel,
+  legendText,
+}) => {
+  const monthNames = [
     'January',
     'February',
     'March',
@@ -33,16 +32,14 @@ const BarGraph = ({ data, type, usePrivate }) => {
   ];
 
   return (
-    <div className="w-full h-96 p-2">
-      <div className="shadow bg-gray-50 w-full h-full p-4 flex flex-col">
+    <div className="h-96 w-full">
+      <WrappedCard>
         <p className="text-xl font-semibold">Contributions by Month</p>
-        <p>
-          {type === 'contribs' ? 'By Contribution Count' : 'By LOC Changed'}
-        </p>
-        {Array.isArray(newData) && newData.length > 0 && (
+        <p>{subheader}</p>
+        {Array.isArray(months) && months.length > 0 ? (
           <ResponsiveBar
             theme={theme}
-            data={newData}
+            data={months}
             indexBy="month"
             keys={[type]}
             margin={{ top: 30, right: 0, bottom: 50, left: 80 }}
@@ -59,10 +56,8 @@ const BarGraph = ({ data, type, usePrivate }) => {
                   boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
                 }}
               >
-                <strong>{months[bar.data.month || 0]}</strong>
-                {`: ${bar.data[formattedType]} ${
-                  type === 'contribs' ? 'Contributions' : ''
-                }`}
+                <strong>{monthNames[bar.data.month || 0]}</strong>
+                {`: ${getTooltip(bar.data)}`}
               </div>
             )}
             axisTop={null}
@@ -74,39 +69,38 @@ const BarGraph = ({ data, type, usePrivate }) => {
               legend: 'Month',
               legendPosition: 'middle',
               legendOffset: 32,
-              format: (value) => months[value],
+              format: (value) => monthNames[value],
             }}
             axisLeft={{
               tickSize: 5,
               tickPadding: 5,
               tickRotation: 0,
-              legend: type === 'contribs' ? 'Contributions' : 'LOC Changed',
+              legend: legendText,
               legendPosition: 'middle',
               legendOffset: -60,
             }}
-            label={(d) => d.data[formattedType].split(' ')[0]}
+            label={(d) => getLabel(d.data)}
             labelSkipWidth={12}
             labelSkipHeight={12}
             labelTextColor="#fff"
           />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            No data to show
+          </div>
         )}
-      </div>
+      </WrappedCard>
     </div>
   );
 };
 
 BarGraph.propTypes = {
-  data: PropTypes.object,
+  months: PropTypes.array.isRequired,
+  subheader: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  usePrivate: PropTypes.bool,
-};
-
-BarGraph.defaultProps = {
-  data: {
-    months: [],
-    public_months: [],
-  },
-  usePrivate: false,
+  getTooltip: PropTypes.func.isRequired,
+  getLabel: PropTypes.func.isRequired,
+  legendText: PropTypes.string.isRequired,
 };
 
 export default BarGraph;

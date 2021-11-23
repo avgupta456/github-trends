@@ -22,9 +22,9 @@ const SelectUserScreen = () => {
   };
 
   return (
-    <div className="h-full container py-16">
-      <div className="h-full w-1/3 mx-auto">
-        <div className="h-full w-full bg-gray-200 rounded-xl p-8 shadow">
+    <div className="h-full w-full container mx-auto md:py-16">
+      <div className="h-full w-full md:w-1/2 xl:w-1/3 mx-auto flex justify-center items-center">
+        <div className="h-full md:h-auto w-full bg-gray-50 p-8 shadow">
           <h1 className="text-2xl font-bold text-gray-800 text-center mb-4">
             GitHub Wrapped
           </h1>

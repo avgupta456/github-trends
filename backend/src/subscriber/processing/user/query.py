@@ -11,6 +11,8 @@ from src.utils.alru_cache import alru_cache
 
 s = requests.Session()
 
+# NOTE: query user from PubSub, not from subscriber user router
+
 
 @alru_cache()
 async def query_user(user_id: str, access_token: Optional[str]) -> bool:

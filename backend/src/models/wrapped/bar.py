@@ -12,4 +12,3 @@ class BarDatum(BaseModel):
 
 class BarData(BaseModel):
     months: List[BarDatum]
-    public_months: List[BarDatum]
