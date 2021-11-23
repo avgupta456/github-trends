@@ -17,7 +17,7 @@ CUTOFF = 500  # if less than cutoff, count LOC (or below line)
 CUTOFF_PER_FILE = 100  # if less than cutoff per file, count LOC
 MAX_CUTOFF = 5000  # if more than max cutoff, don't count LOC
 
-WRAPPED_VERSION = 0.028  # determines when to overwrite MongoDB data
+WRAPPED_VERSION = 0.03  # determines when to overwrite MongoDB data
 
 # CUSTOMIZATION
 BLACKLIST = ["Jupyter Notebook", "HTML"]  # languages to ignore
