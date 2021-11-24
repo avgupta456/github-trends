@@ -10,33 +10,27 @@ const ThemeStage = ({ theme, setTheme, fullSuffix }) => {
     <div className="flex flex-wrap">
       {[
         {
-          title: 'Light Theme',
-          description: 'The classic look',
+          title: 'Classic',
           imageSrc: 'classic',
         },
         {
-          title: 'Dark Theme',
-          description: 'Coming soon!',
+          title: 'Dark',
           imageSrc: 'dark',
         },
         {
-          title: 'Bright Lights Theme',
-          description: 'Coming soon!',
+          title: 'Bright Lights',
           imageSrc: 'bright_lights',
         },
         {
           title: 'Rosettes',
-          description: 'Coming soon!',
           imageSrc: 'rosettes',
         },
         {
           title: 'Ferns',
-          description: 'Coming soon!',
           imageSrc: 'ferns',
         },
         {
           title: 'Synthwaves',
-          description: 'Coming soon!',
           imageSrc: 'synthwaves',
         },
       ].map((card, index) => (
@@ -48,7 +42,7 @@ const ThemeStage = ({ theme, setTheme, fullSuffix }) => {
         >
           <Card
             title={card.title}
-            description={card.description}
+            description=""
             imageSrc={`${fullSuffix}&theme=${card.imageSrc}`}
             selected={theme === card.imageSrc}
           />
