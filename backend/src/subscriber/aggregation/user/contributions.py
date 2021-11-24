@@ -17,6 +17,7 @@ from src.data.github.graphql import (
 )
 from src.data.github.rest import RawCommit
 from src.models import UserContributions
+from src.models.user.contribs import FullUserContributions
 from src.subscriber.aggregation.user.commit import (
     get_all_commit_info,
     get_commits_languages,
@@ -24,11 +25,15 @@ from src.subscriber.aggregation.user.commit import (
 from src.utils import date_to_datetime, gather
 
 t_stats = DefaultDict[str, Dict[str, List[Union[RawEventsEvent, RawEventsCommit]]]]
-t_commits = List[Dict[str, Union[Dict[str, Dict[str, int]], str]]]
+t_commits = List[Dict[str, Union[Dict[str, Dict[str, Union[str, int]]], str]]]
+t_languages = List[Dict[str, Dict[str, Union[str, int]]]]
 
 
 def get_user_all_contribution_events(
-    user_id: str, access_token: str, start_date: datetime, end_date: datetime
+    user_id: str,
+    start_date: datetime,
+    end_date: datetime,
+    access_token: Optional[str] = None,
 ) -> t_stats:
     repo_contribs: t_stats = defaultdict(
         lambda: {"commits": [], "issues": [], "prs": [], "reviews": [], "repos": []}
@@ -39,10 +44,10 @@ def get_user_all_contribution_events(
         after_str = after if isinstance(after, str) else ""
         response = get_user_contribution_events(
             user_id=user_id,
-            access_token=access_token,
             start_date=start_date,
             end_date=end_date,
             after=after_str,
+            access_token=access_token,
         )
 
         cont = False
@@ -76,11 +81,12 @@ def get_user_all_contribution_events(
 
 async def get_contributions(
     user_id: str,
-    access_token: str,
     start_date: date = date.today() - timedelta(365),
     end_date: date = date.today(),
     timezone_str: str = "US/Eastern",
-) -> UserContributions:
+    full: bool = False,
+    access_token: Optional[str] = None,
+) -> Union[UserContributions, FullUserContributions]:
     tz = pytz.timezone(timezone_str)
 
     # get years for contribution calendar
@@ -107,9 +113,9 @@ async def get_contributions(
         args_dicts=[
             {
                 "user_id": user_id,
-                "access_token": access_token,
                 "start_date": dates[i][0],
                 "end_date": dates[i][1],
+                "access_token": access_token,
             }
             for i in range(len(years))
         ],
@@ -120,9 +126,9 @@ async def get_contributions(
         args_dicts=[
             {
                 "user_id": user_id,
-                "access_token": access_token,
                 "start_date": dates[i][0],
                 "end_date": dates[i][1],
+                "access_token": access_token,
             }
             for i in range(len(years))
         ],
@@ -139,10 +145,10 @@ async def get_contributions(
         args_dicts=[
             {
                 "user_id": user_id,
-                "access_token": access_token,
                 "name_with_owner": repo,
                 "start_date": dates[0][0],  # first start
                 "end_date": dates[-1][1],  # last end
+                "access_token": access_token,
             }
             for repo in repos
         ],
@@ -153,9 +159,9 @@ async def get_contributions(
         funcs=[get_repo for _ in repos],
         args_dicts=[
             {
-                "access_token": access_token,
                 "owner": repo.split("/")[0],
                 "repo": repo.split("/")[1],
+                "access_token": access_token,
             }
             for repo in repos
         ],
@@ -190,31 +196,30 @@ async def get_contributions(
             [repo_mapping[node_id] for node_id in node_id_chunks[-1]]
         )
 
+    max_threads = NODE_THREADS * (5 if access_token is None else 1)
     commit_language_chunks = await gather(
         funcs=[get_commits_languages for _ in node_id_chunks],
         args_dicts=[
             {
-                "access_token": access_token,
                 "node_ids": node_id_chunk,
                 "commit_repos": commit_repo_chunk,
                 "repo_infos": repo_infos,
+                "access_token": access_token,
             }
             for (node_id_chunk, commit_repo_chunk) in zip(
                 node_id_chunks, commit_repo_chunks
             )
         ],
-        max_threads=NODE_THREADS,
+        max_threads=max_threads,
     )
 
-    commit_languages: List[List[Dict[str, Dict[str, int]]]] = [
-        [{} for _ in repo] for repo in commit_infos
-    ]
+    commit_languages: List[t_languages] = [[{} for _ in repo] for repo in commit_infos]
     for languages, node_ids in zip(commit_language_chunks, node_id_chunks):
         for language, node_id in zip(languages, node_ids):
             commit_languages[id_mapping[node_id][0]][id_mapping[node_id][1]] = language
 
     commit_times_dict: Dict[str, List[datetime]] = {}
-    commit_languages_dict: Dict[str, List[Dict[str, Dict[str, int]]]] = {}
+    commit_languages_dict: Dict[str, t_languages] = {}
     for repo, times, languages in zip(repos, commit_times, commit_languages):
         commit_times_dict[repo] = times
         commit_languages_dict[repo] = languages
@@ -298,7 +303,9 @@ async def get_contributions(
         repo_stats[repo]["contribs_count"] += count  # type: ignore
 
     def update_langs(
-        date_str: str, repo: str, langs_list: List[Dict[str, Dict[str, int]]]
+        date_str: str,
+        repo: str,
+        langs_list: t_languages,
     ):
         is_private = repo_infos[repo].is_private
         for langs in langs_list:
@@ -329,7 +336,7 @@ async def get_contributions(
                     repositories[repo][date_str]["date"] = date_str
                     if isinstance(event, RawEventsCommit):
                         commit_info: t_commits = []
-                        langs_list: List[Dict[str, Dict[str, int]]] = []
+                        langs_list: t_languages = []
                         count = 0
                         while len(commit_times_dict[repo]) > 0 and count < event.count:
                             raw_time = commit_times_dict[repo].pop(0)
@@ -359,7 +366,7 @@ async def get_contributions(
                             datetime_str
                         )
                         if not repo_infos[repo].is_private:
-                            public[date_str]["lists"]["commits"].append(datetime_str)
+                            public[date_str]["lists"][event_type].append(datetime_str)
 
                         # update stats
                         update(date_str, repo, event_type, 1)
@@ -377,7 +384,8 @@ async def get_contributions(
     for repo in repo_stats:
         repo_stats[repo]["private"] = repo_infos[repo].is_private
 
-    output = UserContributions.parse_obj(
+    cls = FullUserContributions if full else UserContributions
+    output = cls.parse_obj(
         {
             "total_stats": total_stats,
             "public_stats": public_stats,

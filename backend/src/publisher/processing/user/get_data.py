@@ -1,7 +1,7 @@
 from datetime import date, datetime, timedelta
 from typing import Optional
 
-from src.data.mongo.secret import get_next_key
+from src.data.mongo.secret.functions import update_keys
 from src.data.mongo.user import (
     UserMetadata,
     UserModel,
@@ -10,11 +10,11 @@ from src.data.mongo.user import (
 )
 from src.models import UserPackage
 from src.publisher.aggregation import trim_package
+from src.publisher.processing.pubsub import publish_user
 
 # TODO: replace with call to subscriber so compute not on publisher
-from src.subscriber.aggregation import get_data
+from src.subscriber.aggregation import get_user_data
 from src.utils import alru_cache
-from src.utils.pubsub import publish_to_topic
 
 
 def validate_raw_data(data: Optional[UserPackage]) -> bool:
@@ -46,7 +46,7 @@ async def update_user(user_id: str, access_token: Optional[str] = None) -> bool:
         if user is None:
             return False
         access_token = user.access_token
-    publish_to_topic("user", {"user_id": user_id, "access_token": access_token})
+    publish_user(user_id, access_token)
     return True
 
 
@@ -89,6 +89,13 @@ async def get_user(
 async def get_user_demo(
     user_id: str, start_date: date, end_date: date, no_cache: bool = False
 ) -> UserPackage:
-    access_token = await get_next_key("demo", no_cache=no_cache)
-    data = await get_data(user_id, access_token, start_date, end_date)
+    await update_keys()
+    timezone_str = "US/Eastern"
+    data = await get_user_data(
+        user_id=user_id,
+        start_date=start_date,
+        end_date=end_date,
+        timezone_str=timezone_str,
+        access_token=None,
+    )
     return (True, data)  # type: ignore

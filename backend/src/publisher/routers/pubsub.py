@@ -1,7 +1,9 @@
+from typing import Optional
+
 from fastapi import APIRouter, Response, status
 
+from src.publisher.processing import publish_user
 from src.utils import fail_gracefully
-from src.utils.pubsub import publish_to_topic
 
 router = APIRouter()
 
@@ -12,7 +14,6 @@ router = APIRouter()
     include_in_schema=False,
 )
 @fail_gracefully
-def pub_user(response: Response, user_id: str, access_token: str) -> str:
-    publish_to_topic("user", {"user_id": user_id, "access_token": access_token})
-
+def pub_user(response: Response, user_id: str, access_token: Optional[str]) -> str:
+    publish_user(user_id, access_token)
     return user_id

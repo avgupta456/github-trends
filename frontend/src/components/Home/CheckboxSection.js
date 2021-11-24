@@ -5,6 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Section from './Section';
+import { Checkbox } from '../Generic';
 
 const CheckboxSection = ({
   title,
@@ -17,20 +18,12 @@ const CheckboxSection = ({
   return (
     <Section title={title}>
       <p>{text}</p>
-      <div
-        className="flex inline-row mt-4"
-        onClick={() => setVariable(!variable)}
-        role="button"
-      >
-        <input
-          type="checkbox"
-          disabled={disabled}
-          checked={variable && !disabled ? 'checked' : ''}
-          className="checkbox mr-2"
-          onChange={() => setVariable(!variable)}
-        />
-        {question}
-      </div>
+      <Checkbox
+        question={question}
+        variable={variable}
+        setVariable={setVariable}
+        disabled={disabled}
+      />
     </Section>
   );
 };

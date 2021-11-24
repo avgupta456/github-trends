@@ -1,18 +1,21 @@
 from datetime import date, timedelta
-from typing import Optional
+from typing import Optional, Union
 
 from fastapi import APIRouter, Response, status
 
-from src.data.github.graphql import get_query_limit
-from src.data.mongo.user import UserModel, get_user_by_user_id
-from src.models import UserPackage
-from src.subscriber.aggregation import get_data
+from src.data.mongo.secret import update_keys
+from src.models import FullUserPackage, UserPackage, WrappedPackage
+from src.subscriber.aggregation import (
+    get_full_user_data,
+    get_user_data,
+    get_wrapped_data,
+)
 from src.utils import async_fail_gracefully, use_time_range
 
 router = APIRouter()
 
 
-@router.get("/{user_id}", status_code=status.HTTP_200_OK)
+@router.get("/user/{user_id}", status_code=status.HTTP_200_OK)
 @async_fail_gracefully
 async def get_user_raw(
     response: Response,
@@ -22,19 +25,23 @@ async def get_user_raw(
     end_date: date = date.today(),
     time_range: str = "one_month",
     timezone_str: str = "US/Eastern",
-) -> UserPackage:
-    new_access_token: str = access_token if access_token else ""
-    if not access_token:
-        db_user: UserModel = await get_user_by_user_id(user_id, no_cache=True)
-        if db_user is None or db_user.access_token == "":
-            raise LookupError("Invalid UserId")
-        new_access_token = db_user.access_token
-
-    start_query_limit = get_query_limit(access_token=new_access_token)
+    full: bool = False,
+) -> Union[UserPackage, FullUserPackage]:
+    await update_keys()
     start_date, end_date, _ = use_time_range(time_range, start_date, end_date)
-    data = await get_data(user_id, new_access_token, start_date, end_date, timezone_str)
-    end_query_limit = get_query_limit(access_token=new_access_token)
-    print("Query Limit Used", start_query_limit - end_query_limit)
-    print("Query Limit Remaining", end_query_limit)
+    func = get_user_data if not full else get_full_user_data
+    data = await func(user_id, start_date, end_date, timezone_str, access_token)
+    return data
 
+
+@router.get("/wrapped/{user_id}", status_code=status.HTTP_200_OK)
+@async_fail_gracefully
+async def get_wrapped_user_raw(
+    response: Response,
+    user_id: str,
+    year: int = 2021,
+    access_token: Optional[str] = None,
+) -> WrappedPackage:
+    await update_keys()
+    data = await get_wrapped_data(user_id, year, access_token)
     return data

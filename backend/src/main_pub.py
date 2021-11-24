@@ -23,7 +23,12 @@ from src.constants import (
     PUBSUB_TOKEN,
     SENTRY_DSN,
 )
-from src.publisher.routers import asset_router, auth_router, pubsub_router, user_router
+from src.publisher.routers import (
+    asset_router,
+    auth_router,
+    pubsub_router,
+    user_router,
+)
 from src.utils.pubsub import create_push_subscription, create_topic
 
 """
@@ -32,21 +37,22 @@ EMULATOR SETUP
 
 
 if not PROD and DOCKER:
-    topic = "user"
-    subscription = "user_sub"
-    endpoint = LOCAL_SUBSCRIBER + "/pubsub/sub/user/" + PUBSUB_TOKEN
+    topics = ["user"]
+    subscriptions = ["user_sub"]
+    endpoints = [LOCAL_SUBSCRIBER + "/pubsub/sub/user/" + PUBSUB_TOKEN]
 
-    print("Creating Topic", PROJECT_ID, topic)
-    try:
-        create_topic(PROJECT_ID, topic)
-    except AlreadyExists:
-        print("Topic Already Exists")
+    for topic, subscription, endpoint in zip(topics, subscriptions, endpoints):
+        try:
+            print("Creating Topic", PROJECT_ID, topic)
+            create_topic(PROJECT_ID, topic)
+        except AlreadyExists:
+            print("Topic Already Exists")
 
-    print("Creating Subscription", PROJECT_ID, topic, subscription, endpoint)
-    try:
-        create_push_subscription(PROJECT_ID, topic, subscription, endpoint)
-    except AlreadyExists:
-        print("Subscription already exists")
+        try:
+            print("Creating Subscription", PROJECT_ID, topic, subscription, endpoint)
+            create_push_subscription(PROJECT_ID, topic, subscription, endpoint)
+        except AlreadyExists:
+            print("Subscription already exists")
 
 """
 SETUP

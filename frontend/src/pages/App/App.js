@@ -10,6 +10,7 @@ import LandingScreen from '../Landing';
 import DemoScreen from '../Demo';
 import { LoginScreen, SignUpScreen } from '../Auth';
 import HomeScreen from '../Home';
+import { SelectUserScreen, WrappedScreen } from '../Wrapped';
 import SettingsScreen from '../Settings';
 import { NoMatchScreen, RedirectScreen } from '../Misc';
 
@@ -19,9 +20,6 @@ import { getUserMetadata } from '../../api';
 function App() {
   const userId = useSelector((state) => state.user.userId);
   const isAuthenticated = userId && userId.length > 0;
-
-  const userKey = useSelector((state) => state.user.userKey);
-  const privateAccess = useSelector((state) => state.user.privateAccess);
 
   const dispatch = useDispatch();
   const setPrivateAccess = (access) => dispatch(_setPrivateAccess(access));
@@ -34,8 +32,6 @@ function App() {
       }
     }
   }, [userId]);
-
-  console.log(userId, userKey, privateAccess);
 
   return (
     <div className="h-screen flex flex-col">
@@ -52,6 +48,9 @@ function App() {
             <Route path="/demo" component={DemoScreen} />
             <Route path="/user/redirect" component={RedirectScreen} />
             <Route path="/user" component={HomeScreen} />
+            <Route path="/wrapped/:userId/:year" component={WrappedScreen} />
+            <Route path="/wrapped/:userId" component={WrappedScreen} />
+            <Route path="/wrapped" component={SelectUserScreen} />
             {isAuthenticated && (
               <Route path="/settings" component={SettingsScreen} />
             )}

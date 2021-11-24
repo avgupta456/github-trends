@@ -1,12 +1,12 @@
 # import json
-from typing import Dict, Union
+from typing import Dict, Optional, Union
 
 from src.data.github.graphql.template import get_template
 from src.data.github.graphql.user.follows.models import RawFollows
 
 
 def get_user_followers(
-    user_id: str, access_token: str, first: int = 100, after: str = ""
+    user_id: str, first: int = 100, after: str = "", access_token: Optional[str] = None
 ) -> RawFollows:
     """gets user's followers and users following'"""
 
@@ -64,7 +64,7 @@ def get_user_followers(
 
 
 def get_user_following(
-    user_id: str, access_token: str, first: int = 10, after: str = ""
+    user_id: str, first: int = 10, after: str = "", access_token: Optional[str] = None
 ) -> RawFollows:
     """gets user's followers and users following'"""
 

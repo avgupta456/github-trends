@@ -32,3 +32,14 @@ def use_time_range(
         start_date = date.today() - timedelta(days)
 
     return start_date, end_date, time_str
+
+
+def format_number(num: int) -> str:
+    if num > 10000:
+        return "~" + str(int(num / 1000)) + "k lines"
+    elif num > 1000:
+        return "~" + str(int(num / 100) / 10) + "k lines"
+    elif num > 100:
+        return "~" + str(int(num / 100) * 100) + " lines"
+    else:
+        return "<100 lines"

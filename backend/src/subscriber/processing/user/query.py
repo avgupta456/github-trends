@@ -1,17 +1,22 @@
 from datetime import date, timedelta
+from typing import Optional
 
 import requests
 
 from src.constants import BACKEND_URL, DOCKER, LOCAL_PUBLISHER, PROD
+from src.data.mongo.secret import update_keys
 from src.data.mongo.user import lock_user, update_user_raw_data
-from src.subscriber.aggregation import get_data
+from src.subscriber.aggregation import get_user_data
 from src.utils.alru_cache import alru_cache
 
 s = requests.Session()
 
+# NOTE: query user from PubSub, not from subscriber user router
+
 
 @alru_cache()
-async def query_user(user_id: str, access_token: str) -> bool:
+async def query_user(user_id: str, access_token: Optional[str]) -> bool:
+    await update_keys()
     await lock_user(user_id)
 
     # standard policy is to check past year of data
@@ -31,7 +36,13 @@ async def query_user(user_id: str, access_token: str) -> bool:
     # TODO: improve performance to store > 1 year
     # ideally five years, leads to issues currently
 
-    output = await get_data(user_id, access_token, start_date, end_date, timezone_str)
+    output = await get_user_data(
+        user_id=user_id,
+        start_date=start_date,
+        end_date=end_date,
+        timezone_str=timezone_str,
+        access_token=access_token,
+    )
 
     await update_user_raw_data(user_id, output)
 

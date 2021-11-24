@@ -4,9 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import BounceLoader from 'react-spinners/BounceLoader';
-import { FaGithub as GithubIcon } from 'react-icons/fa';
 
-import { ProgressBar } from '../../components';
+import { ProgressBar, FloatingIcon } from '../../components';
 import {
   SelectCardStage,
   CustomizeStage,
@@ -17,26 +16,6 @@ import {
 import { setUserKey, authenticate } from '../../api';
 import { login as _login } from '../../redux/actions/userActions';
 import { PROD } from '../../constants';
-
-const FloatingIcon = () => {
-  return (
-    <div className="fixed bottom-8 right-8">
-      <a
-        href="https://www.github.com/avgupta456/github-trends"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <button
-          type="button"
-          className="rounded-full bg-gray-700 hover:bg-gray-800 text-gray-50 px-3 py-2 flex items-center"
-        >
-          Star on
-          <GithubIcon className="ml-1.5 w-5 h-5" />
-        </button>
-      </a>
-    </div>
-  );
-};
 
 const HomeScreen = () => {
   const history = useHistory();
@@ -61,9 +40,9 @@ const HomeScreen = () => {
   // for stage two
   const defaultTimeRange = {
     id: 3,
-    name: 'Past 1 Year',
+    label: 'Past 1 Year',
     disabled: false,
-    timeRange: 'one_year',
+    value: 'one_year',
   };
   const [selectedTimeRange, setSelectedTimeRange] = useState(defaultTimeRange);
 
@@ -84,7 +63,7 @@ const HomeScreen = () => {
     resetCustomization();
   }, [selectedCard]);
 
-  const time = selectedTimeRange.timeRange;
+  const time = selectedTimeRange.value;
   let fullSuffix = `${selectedCard}?time_range=${time}`;
 
   if (usePercent) {

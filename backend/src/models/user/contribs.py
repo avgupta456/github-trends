@@ -43,6 +43,13 @@ class ContributionDay(BaseModel):
     # lists: ContributionLists
 
 
+class FullContributionDay(BaseModel):
+    date: str
+    weekday: int
+    stats: ContributionStats
+    lists: ContributionLists
+
+
 class RepoContributionStats(BaseModel):
     private: bool
     contribs_count: int
@@ -62,3 +69,12 @@ class UserContributions(BaseModel):
     public: List[ContributionDay]
     repo_stats: Dict[str, RepoContributionStats]
     repos: Dict[str, List[ContributionDay]]
+
+
+class FullUserContributions(BaseModel):
+    total_stats: ContributionStats
+    public_stats: ContributionStats
+    total: List[FullContributionDay]
+    public: List[FullContributionDay]
+    repo_stats: Dict[str, RepoContributionStats]
+    repos: Dict[str, List[FullContributionDay]]

@@ -1,11 +1,12 @@
 import logging
 from datetime import datetime
-from typing import Any, Dict, Tuple
+from typing import Any, Dict, Optional, Tuple
 
 import requests
 from requests.exceptions import ReadTimeout
 
 from src.constants import TIMEOUT
+from src.data.github.utils import get_access_token
 
 s = requests.session()
 
@@ -28,7 +29,9 @@ class GraphQLErrorTimeout(Exception):
     pass
 
 
-def get_template(query: Dict[str, Any], access_token: str) -> Dict[str, Any]:
+def get_template(
+    query: Dict[str, Any], access_token: Optional[str] = None
+) -> Dict[str, Any]:
     """
     Template for interacting with the GitHub GraphQL API
     :param query: The query to be sent to the GitHub GraphQL API
@@ -36,6 +39,7 @@ def get_template(query: Dict[str, Any], access_token: str) -> Dict[str, Any]:
     :return: The response from the GitHub GraphQL API
     """
     start = datetime.now()
+    access_token = get_access_token(access_token)
     headers: Dict[str, str] = {"Authorization": "bearer " + access_token}
 
     try:
@@ -48,7 +52,7 @@ def get_template(query: Dict[str, Any], access_token: str) -> Dict[str, Any]:
     except ReadTimeout:
         raise GraphQLErrorTimeout("GraphQL Error: Request Timeout")
 
-    print("GraphQL", datetime.now() - start)
+    print("GraphQL", access_token, datetime.now() - start)
     if r.status_code == 200:
         data = r.json()  # type: ignore
         if "errors" in data:

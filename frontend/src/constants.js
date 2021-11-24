@@ -12,3 +12,7 @@ export const GITHUB_PUBLIC_AUTH_URL = `https://github.com/login/oauth/authorize?
 export const BACKEND_URL = PROD
   ? 'https://api.githubtrends.io'
   : 'http://localhost:8000';
+
+export const SUBSCRIBER_URL = PROD
+  ? 'https://sub-dot-github-298920.uc.r.appspot.com'
+  : 'http://localhost:8001';
