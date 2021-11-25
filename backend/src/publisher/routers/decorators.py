@@ -49,6 +49,7 @@ def svg_fail_gracefully(func: Callable[..., Any]):
     ) -> Any:
         d: Drawing
         start = datetime.now()
+        cache_max_age = 3600
         try:
             d = await func(response, *args, **kwargs)
         except LookupError as e:
@@ -58,9 +59,11 @@ def svg_fail_gracefully(func: Callable[..., Any]):
                 return RedirectResponse(url)
             logging.exception(e)
             d = get_error_svg()
+            cache_max_age = 0
         except Exception as e:
             logging.exception(e)
             d = get_error_svg()
+            cache_max_age = 0
 
         sio = io.StringIO()
         d.write(sio)  # type: ignore
@@ -68,7 +71,10 @@ def svg_fail_gracefully(func: Callable[..., Any]):
         print("SVG", datetime.now() - start)
 
         return Response(
-            sio.getvalue(), media_type="image/svg+xml", status_code=status.HTTP_200_OK
+            sio.getvalue(),
+            media_type="image/svg+xml",
+            status_code=status.HTTP_200_OK,
+            headers={"Cache-Control": "public, max-age=" + str(cache_max_age)},
         )
 
     return wrapper
