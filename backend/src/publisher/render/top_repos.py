@@ -20,6 +20,7 @@ def get_top_repos_svg(
     loc_metric: str,
     commits_excluded: int,
     use_animation: bool,
+    theme: str,
 ) -> Drawing:
     header = "Most Contributed Repositories"
     subheader = time_str
@@ -38,6 +39,7 @@ def get_top_repos_svg(
         subheader_text=subheader,
         use_animation=use_animation,
         debug=False,
+        theme=theme,
     )
 
     dataset: List[Tuple[str, str, List[Tuple[float, str]]]] = []
@@ -49,7 +51,9 @@ def get_top_repos_svg(
         name = "private/repository" if x.private else x.repo
         dataset.append((name, format_number(x.loc), data_row))
 
-    dp.add(get_bar_section(d=d, dataset=dataset, padding=45, bar_width=195))
+    dp.add(
+        get_bar_section(d=d, dataset=dataset, theme=theme, padding=45, bar_width=195)
+    )
 
     langs = {}
     for x in data[:4]:
@@ -59,7 +63,11 @@ def get_top_repos_svg(
 
     columns = {1: 1, 2: 2, 3: 3, 4: 2, 5: 3, 6: 3}[len(langs)]
     padding = 215 + (10 if columns == len(langs) else 0)
-    dp.add(get_lang_name_section(d=d, data=langs, columns=columns, padding=padding))
+    dp.add(
+        get_lang_name_section(
+            d=d, data=langs, theme=theme, columns=columns, padding=padding
+        )
+    )
 
     d.add(dp)
     return d

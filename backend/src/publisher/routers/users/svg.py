@@ -36,6 +36,7 @@ async def get_user_lang_svg(
     demo: bool = False,
     no_cache: bool = False,
     use_animation: bool = True,
+    theme: str = "classic",
 ) -> Any:
     output, time_str = await svg_base(
         user_id, start_date, end_date, time_range, demo, no_cache
@@ -55,6 +56,7 @@ async def get_user_lang_svg(
         commits_excluded=commits_excluded,
         compact=compact,
         use_animation=use_animation,
+        theme=theme,
     )
 
 
@@ -74,6 +76,7 @@ async def get_user_repo_svg(
     demo: bool = False,
     no_cache: bool = False,
     use_animation: bool = True,
+    theme: str = "classic",
 ) -> Any:
     output, time_str = await svg_base(
         user_id, start_date, end_date, time_range, demo, no_cache
@@ -91,6 +94,7 @@ async def get_user_repo_svg(
         loc_metric=loc_metric,
         commits_excluded=commits_excluded,
         use_animation=use_animation,
+        theme=theme,
     )
 
 

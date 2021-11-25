@@ -19,9 +19,9 @@ const DisplayStage = ({ userId, themeSuffix }) => {
     if (newWindow) newWindow.opener = null;
   };
 
-  const downloadPNG = (scale = 1) => {
+  const downloadPNG = () => {
     saveSvgAsPng(document.getElementById('svg-card'), `${userId}_${card}.png`, {
-      scale,
+      scale: 2,
       encoderOptions: 1,
     });
   };
@@ -56,7 +56,7 @@ const DisplayStage = ({ userId, themeSuffix }) => {
       draggable: false,
       progress: undefined,
     });
-    downloadPNG(5);
+    downloadPNG();
     sleep(3000).then(() => {
       let twitterText =
         card === 'repos'
@@ -80,7 +80,7 @@ const DisplayStage = ({ userId, themeSuffix }) => {
       draggable: false,
       progress: undefined,
     });
-    downloadPNG(5);
+    downloadPNG();
     sleep(3000).then(() => {
       openInNewTab(`https://linkedin.com/feed`);
     });

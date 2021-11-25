@@ -7,7 +7,7 @@ from svgwrite.container import Group
 from svgwrite.shapes import Circle
 
 from src.constants import DEFAULT_COLOR
-from src.publisher.render.style import style, style_no_animation
+from src.publisher.render.style import themes, styles, styles_no_animation
 
 
 def get_template(
@@ -16,10 +16,14 @@ def get_template(
     padding: int,
     header_text: str,
     subheader_text: str,
+    theme: str,
     use_animation: bool = True,
     debug: bool = False,
 ) -> Tuple[Drawing, Group]:
     d = Drawing(size=(width, height))
+
+    style = styles[theme]
+    style_no_animation = styles_no_animation[theme]
     d.defs.add(d.style(style if use_animation else style_no_animation))
 
     d.add(
@@ -27,8 +31,8 @@ def get_template(
             size=(width - 1, height - 1),
             insert=(0.5, 0.5),
             rx=4.5,
-            stroke="#e4e2e2",
-            fill="#fffefe",
+            stroke=themes[theme]["border_color"],
+            fill=themes[theme]["bg_color"],
         )
     )
 
@@ -36,14 +40,14 @@ def get_template(
         d.rect(
             size=(width - 2 * padding, height - 2 * padding),
             insert=(padding, padding),
-            fill="#eee" if debug else "#fff",
+            fill="#eee" if debug else themes[theme]["bg_color"],
         )
     )
 
     dp = Group(transform="translate(" + str(padding) + ", " + str(padding) + ")")
 
-    dp.add(d.text(header_text, insert=(0, 13), class_="header"))
-    dp.add(d.text(subheader_text, insert=(0, 31), class_="subheader"))
+    dp.add(d.text(header_text, insert=(0, 13), class_=theme + "-header"))
+    dp.add(d.text(subheader_text, insert=(0, 31), class_=theme + "-subheader"))
 
     return d, dp
 
@@ -51,6 +55,7 @@ def get_template(
 def get_bar_section(
     d: Drawing,
     dataset: List[Tuple[str, str, List[Tuple[float, str]]]],
+    theme: str,
     padding: int = 45,
     bar_width: int = 210,
 ) -> Group:
@@ -58,11 +63,19 @@ def get_bar_section(
     for i, (top_text, right_text, data_row) in enumerate(dataset):
         translate = "translate(0, " + str(40 * i) + ")"
         row = Group(transform=translate)
-        row.add(d.text(top_text, insert=(2, 15), class_="lang-name"))
-        row.add(d.text(right_text, insert=(bar_width + 10, 33), class_="lang-name"))
+        row.add(d.text(top_text, insert=(2, 15), class_=theme + "-lang-name"))
+        row.add(
+            d.text(right_text, insert=(bar_width + 10, 33), class_=theme + "-lang-name")
+        )
         progress = Drawing(width=str(bar_width), x="0", y="25")
         progress.add(
-            d.rect(size=(bar_width, 8), insert=(0, 0), rx=5, ry=5, fill="#ddd")
+            d.rect(
+                size=(bar_width, 8),
+                insert=(0, 0),
+                rx=5,
+                ry=5,
+                fill=themes[theme]["bar_color"],
+            )
         )
         total_percent, total_items = 0, len(data_row)
         for j, (percent, color) in enumerate(data_row):
@@ -91,7 +104,11 @@ def get_bar_section(
 
 
 def get_lang_name_section(
-    d: Drawing, data: List[Tuple[str, str]], columns: int = 2, padding: int = 80
+    d: Drawing,
+    data: List[Tuple[str, str]],
+    theme: str,
+    columns: int = 2,
+    padding: int = 80,
 ) -> Group:
     section = Group(transform="translate(0, " + str(padding) + ")")
     for i, x in enumerate(data):
@@ -99,6 +116,6 @@ def get_lang_name_section(
         y_translate = str(20 * (i // columns))
         lang = Group(transform="translate(" + x_translate + ", " + y_translate + ")")
         lang.add(Circle(center=(5, 5), r=5, fill=(data[i][1] or DEFAULT_COLOR)))
-        lang.add(d.text(data[i][0], insert=(14, 9), class_="lang-name"))
+        lang.add(d.text(data[i][0], insert=(14, 9), class_=theme + "-lang-name"))
         section.add(lang)
     return section

@@ -22,6 +22,7 @@ def get_top_langs_svg(
     commits_excluded: int,
     compact: bool,
     use_animation: bool,
+    theme: str,
 ) -> Drawing:
     header = "Most Used Languages"
     subheader = time_str
@@ -41,6 +42,7 @@ def get_top_langs_svg(
         subheader_text=subheader,
         use_animation=use_animation,
         debug=False,
+        theme=theme,
     )
 
     dataset: List[Tuple[str, str, List[Tuple[float, str]]]] = []
@@ -60,11 +62,15 @@ def get_top_langs_svg(
                 dataset.append((x.lang, format_number(x.loc), [(percent, x.color)]))
         padding, width = 45, 210 if use_percent else 195
 
-    dp.add(get_bar_section(d=d, dataset=dataset, padding=padding, bar_width=width))
+    dp.add(
+        get_bar_section(
+            d=d, dataset=dataset, theme=theme, padding=padding, bar_width=width
+        )
+    )
 
     langs = [(x.lang + " " + str(x.percent) + "%", x.color) for x in data[1:6]]
     if compact:
-        dp.add(get_lang_name_section(d=d, data=langs))
+        dp.add(get_lang_name_section(d=d, data=langs, theme=theme))
 
     d.add(dp)
     return d
