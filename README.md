@@ -2,6 +2,14 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/avgupta456/github-trends/badge.svg?t=jQQ3FK)](https://coveralls.io/github/avgupta456/github-trends)
 
+## SPECIAL: GitHub Wrapped
+
+Check out your GitHub Wrapped at `githubtrends.io/wrapped/{user_id}`!
+
+![image](https://user-images.githubusercontent.com/16708871/143486536-83e85294-2839-4cf1-9e14-685c05da918b.png)
+
+---
+
 ## What is GitHub Trends
 
 GitHub Trends dives deep into the GitHub API to bring you exciting and impactful metrics about your code contributions. Generate insights on lines written by language, repository, and time. Easily embed dynamic images into your GitHub profile to share your statistics with the world. Check out some of the examples below:
@@ -41,15 +49,15 @@ Have questions? Check out [the demo](https://www.githubtrends.io/demo)!
 
 ## API Workflow (Alpha)
 
-Alternatively, you can communicate directly with the API to create and customize your cards. Read [docs/API.md](https://github.com/avgupta456/github-trends/blob/main/docs/API.md) to learn more about the API and customizations.
+Alternatively, you can communicate directly with the API to create and customize your cards. Read [docs/API.md](https://github.com/avgupta456/github-trends/blob/revamp-docs/docs/API.md) to learn more about the API and customizations.
 
 ## FAQ
 
-See [docs/FAQ.md](https://github.com/avgupta456/github-trends/blob/main/docs/FAQ.md).
+See [docs/FAQ.md](https://github.com/avgupta456/github-trends/blob/revamp-docs/docs/FAQ.md).
 
 ## Contributing
 
-See [docs/CONTRIBUTING.md](https://github.com/avgupta456/github-trends/blob/main/docs/CONTRIBUTING.md).
+See [docs/CONTRIBUTING.md](https://github.com/avgupta456/github-trends/blob/revamp-docs/docs/CONTRIBUTING.md).
 
 ## Acknowledgements
 
