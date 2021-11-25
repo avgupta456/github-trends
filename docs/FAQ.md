@@ -15,11 +15,11 @@ Alternatively, users can use the private workflow which creates a token with rea
 **Answer**: Use HTML (credit: [github-readme-stats](https://github.com/anuraghazra/github-readme-stats#quick-tip-align-the-repo-cards))
 
 ```
-<a href="https://github.com/anuraghazra/github-readme-stats">
-  <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=anuraghazra&repo=github-readme-stats" />
+<a href="https://githubtrends.io">
+  <img align="center" src="https://api.githubtrends.io/user/svg/avgupta456/langs" />
 </a>
-<a href="https://github.com/anuraghazra/convoychat">
-  <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=anuraghazra&repo=convoychat" />
+<a href="https://githubtrends.io">
+  <img align="center" src="https://api.githubtrends.io/user/svg/avgupta456/repos" />
 </a>
 ```
 
