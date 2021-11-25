@@ -6,16 +6,16 @@ GitHub Trends provides two methods to access GitHub Trends data: the Website Wor
 
 After authenticating with either the public or private workflow (see below), users can create the following cards to display their GitHub Trends data:
 
-- **[Languages Card](https://github.com/avgupta456/github-trends#languages-card)**: See your top languages over a given time interval, based on all commits to personal and open-source repositories.
+- **[Languages Card](https://github.com/avgupta456/github-trends/blob/revamp-docs/docs/API.md#languages-card)**: See your top languages over a given time interval, based on all commits to personal and open-source repositories.
 
-- **[Repositories Card](https://github.com/avgupta456/github-trends#repositories-card)**: See your top repositories based on lines of code contributed over a given time period. This includes both personal and open-source repositories.
+- **[Repositories Card](https://github.com/avgupta456/github-trends/blob/revamp-docs/docs/API.md#repositories-card)**: See your top repositories based on lines of code contributed over a given time period. This includes both personal and open-source repositories.
 
 # Authentication
 
 You will need to create an account with GitHub Trends to create cards. The account is used to assosciate queries to the GitHub API made on your behalf with your GitHub account's API quota. We use less than 5% of your quota in almost all scenarios. There are two levels of authentication possible:
 
 - Public Workflow: The Public Workflow asks for read-only permission to public information. This will allow us to analyze your public contributions and repositories only.
-- Private Workflow: The Private Workflow asks for read and write permission to public and private information. This will allow us to analyze your entire contribution history. See [the FAQ](https://github.com/avgupta456/github-trends#FAQ) for further information.
+- Private Workflow: The Private Workflow asks for read and write permission to public and private information. This will allow us to analyze your entire contribution history. See [the FAQ](https://github.com/avgupta456/github-trends/blob/revamp-docs/docs/FAQ.md) for further information.
 
 You will only need to authenticate once with GitHub Trends. Subsequent requests will use your stored access token.
 

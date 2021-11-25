@@ -41,15 +41,15 @@ Have questions? Check out [the demo](https://www.githubtrends.io/demo)!
 
 ## API Workflow (Alpha)
 
-Alternatively, you can communicate directly with the API to create and customize your cards. Read [docs/API.md](https://api.githubtrends.io/docs) to learn more about the API and customizations.
+Alternatively, you can communicate directly with the API to create and customize your cards. Read [docs/API.md](https://github.com/avgupta456/github-trends/blob/revamp-docs/docs/API.md) to learn more about the API and customizations.
 
 ## FAQ
 
-See [docs/FAQ.md]().
+See [docs/FAQ.md](https://github.com/avgupta456/github-trends/blob/revamp-docs/docs/FAQ.md).
 
 ## Contributing
 
-See [docs/CONTRIBUTING.md]().
+See [docs/CONTRIBUTING.md](https://github.com/avgupta456/github-trends/blob/revamp-docs/docs/CONTRIBUTING.md).
 
 ## Acknowledgements
 
