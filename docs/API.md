@@ -49,13 +49,14 @@ https://api.githubtrends.io/user/svg/{user_id}/langs
 
 The following customization options are available:
 
-| Option            | Description                                                                                                                    | Default     |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
-| `time_range`      | Specifies the time range to query statistics for. Valid options are `one_month`, `three_months`, `six_months`, and `one_year`. | `one_month` |
-| `include_private` | Determines if private contributions are included (requires private workflow).                                                  | `false`     |
-| `compact`         | Determines if compact layout is used (forces percentages over LOC)                                                             | `false`     |
-| `use_percent`     | Valid of `compact=false`, determines if line of code (default) or percentages are displayed.                                   | `false`     |
-| `loc_metric`      | Options are LOC added (`added`) and LOC changed (`changed`).                                                                   | `added`     |
+| Option            | Description                                                                                                                             | Default     |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `time_range`      | Specifies the time range to query statistics for. Valid options are `one_month`, `three_months`, `six_months`, and `one_year`.          | `one_month` |
+| `include_private` | Determines if private contributions are included (requires private workflow).                                                           | `false`     |
+| `compact`         | Determines if compact layout is used (forces percentages over LOC)                                                                      | `false`     |
+| `use_percent`     | Valid of `compact=false`, determines if line of code (default) or percentages are displayed.                                            | `false`     |
+| `loc_metric`      | Options are LOC added (`added`) and LOC changed (`changed`).                                                                            | `added`     |
+| `theme`           | Theme to use for the card. See [docs/THEME.md](https://github.com/avgupta456/github-trends/blob/revamp-docs/docs/THEME.md) for options. | `classic`   |
 
 Customizations can be appended to the endpoint, separated first with `?` and subsequently with `&`.
 
@@ -77,17 +78,18 @@ https://api.githubtrends.io/user/svg/{user_id}/repos
 
 The following customization options are available:
 
-| Option            | Description                                                                                                                    | Default     |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
-| `time_range`      | Specifies the time range to query statistics for. Valid options are `one_month`, `three_months`, `six_months`, and `one_year`. | `one_month` |
-| `include_private` | Determines if private contributions are included (requires private workflow).                                                  | `false`     |
-| `use_percent`     | Valid of `compact=false`, determines if line of code (default) or percentages are displayed.                                   | `false`     |
-| `loc_metric`      | Options are LOC added (`added`) and LOC changed (`changed`).                                                                   | `added`     |
+| Option            | Description                                                                                                                             | Default     |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `time_range`      | Specifies the time range to query statistics for. Valid options are `one_month`, `three_months`, `six_months`, and `one_year`.          | `one_month` |
+| `include_private` | Determines if private contributions are included (requires private workflow).                                                           | `false`     |
+| `use_percent`     | Valid of `compact=false`, determines if line of code (default) or percentages are displayed.                                            | `false`     |
+| `loc_metric`      | Options are LOC added (`added`) and LOC changed (`changed`).                                                                            | `added`     |
+| `theme`           | Theme to use for the card. See [docs/THEME.md](https://github.com/avgupta456/github-trends/blob/revamp-docs/docs/THEME.md) for options. | `classic`   |
 
 Customizations can be appended to the endpoint, separated first with `?` and subsequently with `&`.
 
 ## Example
 
-Endpoint: `https://api.githubtrends.io/user/svg/avgupta456/repos?time_range=one_year&include_private=true&loc_metric=changed`
+Endpoint: `https://api.githubtrends.io/user/svg/avgupta456/repos?time_range=one_year&include_private=true&loc_metric=changed&theme=dark`
 
-[![GitHub Trends SVG](https://api.githubtrends.io/user/svg/avgupta456/repos?time_range=one_year&include_private=true&loc_metric=changed)](https://githubtrends.io)
+[![GitHub Trends SVG](https://api.githubtrends.io/user/svg/avgupta456/repos?time_range=one_year&include_private=true&loc_metric=changed&theme=dark)](https://githubtrends.io)
