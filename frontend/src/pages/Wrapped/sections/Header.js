@@ -14,8 +14,7 @@ import { sleep } from '../../../utils';
 
 const Header = ({ userId, year, numContribs, numLines }) => {
   const currUserId = useSelector((state) => state.user.userId);
-  const currPrivateAccess = useSelector((state) => state.user.privateAccess);
-  const usePrivate = currUserId === userId && currPrivateAccess;
+  const usePrivate = useSelector((state) => state.user.privateAccess);
 
   const shareText = `In ${year}, I made ${numContribs} contributions and modified ${numLines} lines of code. Check out my GitHub Wrapped and create your own at`;
   const shareUrl = `githubtrends.io/wrapped/${userId}`;
@@ -76,7 +75,7 @@ const Header = ({ userId, year, numContribs, numLines }) => {
           </p>
         </WrappedCard>
       </div>
-      <div className="w-full md:w-1/2 lg:w-1/3">
+      <div className="hidden md:block w-full md:w-1/2 lg:w-1/3">
         <WrappedCard className="justify-between">
           <p className="mb-4">
             Create an{' '}
@@ -90,10 +89,12 @@ const Header = ({ userId, year, numContribs, numLines }) => {
             </a>{' '}
             to include <strong>private commits</strong>.
           </p>
-          {usePrivate ? (
+          {(userId === currUserId && usePrivate) || currUserId ? (
             <div className="w-full flex justify-center">
               <Button className="bg-gray-300 text-gray-500 cursor-not-allowed">
-                Private Access Enabled
+                {userId === currUserId
+                  ? 'Private Access Enabled'
+                  : 'Not your Account'}
               </Button>
             </div>
           ) : (
@@ -104,13 +105,13 @@ const Header = ({ userId, year, numContribs, numLines }) => {
               className="w-full flex justify-center"
             >
               <Button className="text-white bg-blue-500 hover:bg-blue-600">
-                Create an Account
+                {currUserId ? 'Upgrade your Account' : 'Create an Account'}
               </Button>
             </a>
           )}
         </WrappedCard>
       </div>
-      <div className="w-full md:w-1/2 lg:w-1/3">
+      <div className="hidden md:block w-full md:w-1/2 lg:w-1/3">
         <WrappedCard className="justify-between">
           <p className="mb-4">Share your GitHub Wrapped on Twitter!</p>
           <div className="w-full flex justify-center">
@@ -123,7 +124,7 @@ const Header = ({ userId, year, numContribs, numLines }) => {
           </div>
         </WrappedCard>
       </div>
-      <div className="w-full md:w-1/2 lg:w-1/3">
+      <div className="hidden lg:block w-full md:w-1/2 lg:w-1/3">
         <WrappedCard className="justify-between">
           <p className="mb-4">Share your GitHub Wrapped on GitHub!</p>
           <div className="w-full flex justify-center">
