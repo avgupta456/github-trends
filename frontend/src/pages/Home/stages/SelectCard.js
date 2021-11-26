@@ -7,7 +7,7 @@ import { Card } from '../../../components';
 
 const SelectCardStage = ({ selectedCard, setSelectedCard }) => {
   return (
-    <div className="flex flex-wrap">
+    <div className="w-full flex flex-wrap">
       {[
         {
           title: 'Language Contributions',
@@ -21,7 +21,7 @@ const SelectCardStage = ({ selectedCard, setSelectedCard }) => {
         },
       ].map((card, index) => (
         <button
-          className="w-1/3 p-4"
+          className="w-full sm:w-1/2 lg:w-1/3 p-2 lg:p-4"
           key={index}
           type="button"
           onClick={() => setSelectedCard(card.imageSrc)}

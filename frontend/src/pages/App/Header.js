@@ -138,13 +138,7 @@ const Header = () => {
             <MobileLink to="/user" onClick={() => setToggle(false)}>
               Dashboard
             </MobileLink>
-            <MobileLink
-              to="/settings"
-              onClick={() => {
-                setToggle(false);
-                logout();
-              }}
-            >
+            <MobileLink to="/settings" onClick={() => setToggle(false)}>
               Settings
             </MobileLink>
             <MobileLink

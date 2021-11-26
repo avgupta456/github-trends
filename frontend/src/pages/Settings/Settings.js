@@ -84,7 +84,7 @@ const SettingsScreen = () => {
   return (
     <div className="h-full w-full">
       <div className={classnames('h-full flex', deleteModal && 'opacity-25')}>
-        <div className="h-full w-80 p-4 flex flex-col border-r">
+        <div className="h-full w-1/3 md:w-80 p-4 flex flex-col border-r">
           <p className="p-2 text-gray-700 text-lg font-bold">
             Account Settings
           </p>

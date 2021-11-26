@@ -36,8 +36,8 @@ const DemoScreen = () => {
       : `${BACKEND_URL}/user/svg/demo?card=repos`;
 
   return (
-    <div className="h-full py-8 flex flex-col lg:flex-row justify-center items-center">
-      <div className="h-full w-full px-5 pb-5 lg:w-1/3 lg:pl-8 lg:pr-0 lg:pb-0">
+    <div className="h-full py-8 flex flex-col xl:flex-row justify-center items-center">
+      <div className="h-full w-full px-5 pb-5 xl:w-1/3 xl:pl-8 xl:pr-0 xl:pb-0">
         <div className="h-full w-full bg-gray-100 rounded-sm p-4 shadow">
           <h1 className="text-2xl font-bold text-gray-800 text-center mb-4">
             GitHub Trends Demo
@@ -85,7 +85,7 @@ const DemoScreen = () => {
           </div>
         </div>
       </div>
-      <div className="h-full w-full lg:w-2/3 px-5 lg:px-8">
+      <div className="h-full w-full xl:w-2/3 px-5 xl:px-8">
         <div className="h-full w-full bg-gray-100 rounded-sm p-4 shadow">
           <h1 className="text-2xl font-bold text-gray-800 text-center mb-4">
             {selectedUserName === ''

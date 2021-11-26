@@ -30,8 +30,8 @@ const LoginScreen = () => {
           <h3 className="text-3xl 2xl:text-4xl font-semibold text-gray-900 mb-12">
             Log in to GitHub Trends
           </h3>
-          <a href={GITHUB_PUBLIC_AUTH_URL} className="w-full">
-            <Button className="w-full h-12 flex justify-center items-center text-white bg-blue-500 hover:bg-blue-600">
+          <a href={GITHUB_PUBLIC_AUTH_URL} className="flex justify-center">
+            <Button className="h-12 flex justify-center items-center text-white bg-blue-500 hover:bg-blue-600">
               <GithubIcon className="w-4 h-4 2xl:w-6 2xl:h-6" />
               <span className="ml-2 xl:text-lg 2xl:text-xl">
                 Continue with GitHub
