@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
@@ -9,6 +10,52 @@ import { MdSettings as SettingsIcon } from 'react-icons/md';
 import { logout as _logout } from '../../redux/actions/userActions';
 import rocketIcon from '../../assets/rocket.png';
 import { classnames } from '../../utils';
+
+const propTypes = {
+  to: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+  onClick: PropTypes.func,
+  className: PropTypes.string,
+};
+
+const defaultProps = {
+  onClick: null,
+  className: null,
+};
+
+const StandardLink = ({ to, children, onClick, className }) => (
+  <Link
+    to={to}
+    className={classnames(
+      'px-4 py-1 mr-3 rounded-sm bg-gray-200 hover:bg-gray-300 text-gray-700',
+      className,
+    )}
+    onClick={onClick}
+  >
+    {children}
+  </Link>
+);
+
+StandardLink.propTypes = propTypes;
+
+StandardLink.defaultProps = defaultProps;
+
+const MobileLink = ({ to, children, onClick, className }) => (
+  <Link
+    to={to}
+    className={classnames(
+      'block text-sm px-2 my-2 py-2 rounded-sm bg-gray-200 text-gray-700',
+      className,
+    )}
+    onClick={onClick}
+  >
+    {children}
+  </Link>
+);
+
+MobileLink.propTypes = propTypes;
+
+MobileLink.defaultProps = defaultProps;
 
 const Header = () => {
   const [toggle, setToggle] = useState(false);
@@ -34,24 +81,14 @@ const Header = () => {
         <div className="hidden md:flex">
           <Link
             to={isAuthenticated ? `/wrapped/${userId}` : 'wrapped'}
-            className="px-4 py-1 mr-3 rounded bg-blue-500 hover:bg-blue-600 text-white"
+            className="px-4 py-1 mr-3 rounded-sm bg-blue-500 hover:bg-blue-600 text-white"
           >
             Wrapped
           </Link>
           {isAuthenticated ? (
-            <Link
-              to="/user"
-              className="px-4 py-1 mr-3 rounded bg-gray-100 hover:bg-gray-300 text-gray-700"
-            >
-              Dashboard
-            </Link>
+            <StandardLink to="/user">Dashboard</StandardLink>
           ) : (
-            <Link
-              to="/demo"
-              className="px-4 py-1 mr-3 rounded bg-gray-100 hover:bg-gray-300 text-gray-700"
-            >
-              Demo
-            </Link>
+            <StandardLink to="/demo">Demo</StandardLink>
           )}
         </div>
         {/* Auth Pages: Sign Up, Log In, Log Out */}
@@ -61,25 +98,16 @@ const Header = () => {
               <Link to="/settings" className="mr-3 px-1 py-1">
                 <SettingsIcon className="h-6 w-6 text-gray-700" />
               </Link>
-              <Link
-                to="/"
-                className="px-4 py-1 mr-3 rounded text-gray-700 bg-gray-100 hover:bg-gray-300"
-                onClick={logout}
-              >
+              <StandardLink to="/" onClick={logout}>
                 Sign Out
-              </Link>
+              </StandardLink>
             </>
           ) : (
             <>
-              <Link
-                to="/login"
-                className="px-4 py-1 mr-3 rounded text-gray-700 bg-gray-100 hover:bg-gray-300"
-              >
-                Login
-              </Link>
+              <StandardLink to="/login">Login</StandardLink>
               <Link
                 to="/signup"
-                className="px-4 py-1 mr-3 rounded bg-blue-500 hover:bg-blue-700 hover:text-gray-300"
+                className="px-4 py-1 mr-3 rounded-sm bg-blue-500 hover:bg-blue-700 hover:text-gray-300"
               >
                 Sign Up
               </Link>
@@ -101,68 +129,43 @@ const Header = () => {
       <div className={classnames('p-5 pt-0', !toggle && 'hidden')}>
         {isAuthenticated ? (
           <>
-            <Link
+            <MobileLink
               to={`/wrapped/${userId}`}
               onClick={() => setToggle(false)}
-              className="block text-sm px-2 my-2 py-2 rounded bg-gray-100 text-gray-700"
             >
               Wrapped
-            </Link>
-            <Link
-              to="/user"
-              onClick={() => setToggle(false)}
-              className="block text-sm px-2 my-2 py-2 rounded bg-gray-100 text-gray-700"
-            >
+            </MobileLink>
+            <MobileLink to="/user" onClick={() => setToggle(false)}>
               Dashboard
-            </Link>
-            <Link
-              to="/settings"
-              onClick={() => {
-                setToggle(false);
-                logout();
-              }}
-              className="block text-sm px-2 my-2 py-2 rounded bg-gray-100 text-gray-700"
-            >
+            </MobileLink>
+            <MobileLink to="/settings" onClick={() => setToggle(false)}>
               Settings
-            </Link>
-            <Link
+            </MobileLink>
+            <MobileLink
               to="/"
               onClick={() => {
                 setToggle(false);
                 logout();
               }}
-              className="block text-sm px-2 my-2 py-2 rounded bg-gray-100 text-gray-700"
             >
               Sign Out
-            </Link>
+            </MobileLink>
           </>
         ) : (
           <>
-            <Link
-              to="/wrapped"
-              onClick={() => setToggle(false)}
-              className="block text-sm px-2 my-2 py-2 rounded bg-gray-100 text-gray-700"
-            >
+            <MobileLink to="/wrapped" onClick={() => setToggle(false)}>
               Wrapped
-            </Link>
-            <Link
-              to="/demo"
-              onClick={() => setToggle(false)}
-              className="block text-sm px-2 my-2 py-2 rounded bg-gray-100 text-gray-700"
-            >
+            </MobileLink>
+            <MobileLink to="/demo" onClick={() => setToggle(false)}>
               Demo
-            </Link>
-            <Link
-              to="/login"
-              onClick={() => setToggle(false)}
-              className="block text-sm px-2 my-2 py-2 rounded bg-gray-100 text-gray-700"
-            >
+            </MobileLink>
+            <MobileLink to="/login" onClick={() => setToggle(false)}>
               Login
-            </Link>
+            </MobileLink>
             <Link
               to="/signup"
               onClick={() => setToggle(false)}
-              className="block text-sm px-2 my-2 py-2 rounded bg-blue-500 text-white"
+              className="block text-sm px-2 my-2 py-2 rounded-sm bg-blue-500 text-white"
             >
               Sign Up
             </Link>

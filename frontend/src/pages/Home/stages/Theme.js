@@ -35,7 +35,7 @@ const ThemeStage = ({ theme, setTheme, fullSuffix }) => {
         },
       ].map((card, index) => (
         <button
-          className="w-1/3 p-4"
+          className="w-full sm:w-1/2 lg:w-1/3 p-2 lg:p-4"
           key={index}
           type="button"
           onClick={() => setTheme(card.imageSrc)}

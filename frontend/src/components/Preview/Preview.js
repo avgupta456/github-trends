@@ -37,7 +37,7 @@ const Preview = () => {
   }, [page]);
 
   return (
-    <div className="w-7/8 mx-auto p-8 my-8 rounded-lg bg-white shadow">
+    <div className="w-7/8 mx-auto p-8 my-8 rounded-sm bg-white shadow">
       <p
         className={classnames(
           'text-gray-700 text-xl font-bold',

@@ -29,7 +29,7 @@ const WrappedCard = (props) => {
     <div className="w-full h-full p-2">
       <div
         className={classnames(
-          'shadow bg-gray-50 w-full h-full p-8 flex flex-col justify-center',
+          'shadow rounded-sm bg-gray-100 w-full h-full p-8 flex flex-col justify-center',
           props.className,
         )}
       >

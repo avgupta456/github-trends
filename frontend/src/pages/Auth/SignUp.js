@@ -26,7 +26,7 @@ const SignUpScreen = () => {
       <div className="w-full h-full lg:w-1/2 flex lg:flex-col">
         <div
           className={classnames(
-            'bg-gray-100 rounded-lg w-full h-full m-auto p-8 shadow',
+            'bg-gray-100 rounded-sm w-full h-full m-auto p-8 shadow',
             'lg:w-96 lg:h-auto 2xl:w-1/2 2xl:h-1/2 2xl:flex 2xl:flex-col 2xl:justify-between',
           )}
         >
@@ -34,8 +34,8 @@ const SignUpScreen = () => {
             Sign up for GitHub Trends
           </h3>
           <div>
-            <a href={GITHUB_PUBLIC_AUTH_URL} className="w-full">
-              <Button className="w-full h-12 flex justify-center items-center text-white bg-blue-500 hover:bg-blue-600">
+            <a href={GITHUB_PUBLIC_AUTH_URL} className="flex justify-center">
+              <Button className="h-12 flex justify-center items-center text-white bg-blue-500 hover:bg-blue-600">
                 <GithubIcon className="w-4 h-4 2xl:w-6 2xl:h-6" />
                 <span className="ml-2 xl:text-lg 2xl:text-xl">
                   GitHub Public Access
@@ -43,8 +43,8 @@ const SignUpScreen = () => {
               </Button>
             </a>
             <div className="mt-4" />
-            <a href={GITHUB_PRIVATE_AUTH_URL} className="w-full">
-              <Button className="w-full h-12 flex justify-center items-center text-black border border-black bg-white hover:bg-gray-100">
+            <a href={GITHUB_PRIVATE_AUTH_URL} className="flex justify-center">
+              <Button className="h-12 flex justify-center items-center text-black border border-black bg-white hover:bg-gray-100">
                 <GithubIcon className="w-4 h-4 2xl:w-6 2xl:h-6" />
                 <span className="ml-2 xl:text-lg 2xl:text-xl">
                   GitHub Private Access

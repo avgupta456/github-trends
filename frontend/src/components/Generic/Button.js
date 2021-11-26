@@ -11,7 +11,7 @@ const Button = (props) => {
       {...props}
       className={classnames(
         props.className,
-        'border-0 py-2 px-6 inline-flex focus:outline-none rounded text-lg',
+        'border-0 py-2 px-6 inline-flex focus:outline-none rounded-sm text-lg',
       )}
     >
       {props.children}

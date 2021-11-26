@@ -99,7 +99,7 @@ const DisplayStage = ({ userId, themeSuffix }) => {
         draggable={false}
         pauseOnHover={false}
       />
-      <div className="h-auto lg:w-2/5 md:w-1/2 pr-10 p-10 rounded bg-gray-100">
+      <div className="h-auto lg:w-2/5 md:w-1/2 pr-10 p-10 rounded-sm bg-gray-200">
         <div>
           Share your GitHub Trends card through multiple channels, including
           GitHub, Twitter, and Linkedin. Or, download the PNG and share
