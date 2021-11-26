@@ -142,7 +142,7 @@ const HomeScreen = () => {
           currItem={stage}
           setCurrItem={setStage}
         />
-        <div className="m-4 rounded-lg">
+        <div className="m-4 rounded-sm">
           <div className="p-4">
             <div className="text-2xl text-gray-600 font-semibold">
               {

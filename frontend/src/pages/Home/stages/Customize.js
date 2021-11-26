@@ -20,7 +20,7 @@ const CustomizeStage = ({
 }) => {
   return (
     <div className="w-full flex flex-wrap">
-      <div className="h-auto lg:w-2/5 md:w-1/2 pr-10 p-10 rounded bg-gray-200">
+      <div className="h-auto lg:w-2/5 md:w-1/2 pr-10 p-10 rounded-sm bg-gray-200">
         <DateRangeSection
           selectedTimeRange={selectedTimeRange}
           setSelectedTimeRange={setSelectedTimeRange}

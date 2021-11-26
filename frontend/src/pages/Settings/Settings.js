@@ -153,13 +153,13 @@ const SettingsScreen = () => {
                 <br />
                 {privateAccess ? (
                   <>
-                    <Button className="bg-gray-200 rounded-lg opacity-50 cursor-not-allowed">
+                    <Button className="bg-gray-200 rounded-sm opacity-50 cursor-not-allowed">
                       Downgrade to Public Access
                     </Button>
                   </>
                 ) : (
                   <a href={GITHUB_PRIVATE_AUTH_URL}>
-                    <Button className="bg-blue-500 text-white rounded-lg">
+                    <Button className="bg-blue-500 text-white rounded-sm">
                       Upgrade to Private Access
                     </Button>
                   </a>
@@ -181,7 +181,7 @@ const SettingsScreen = () => {
                 </p>
                 <br />
                 <Button
-                  className="bg-gray-200 rounded-lg text-red-600 border-2"
+                  className="bg-gray-200 rounded-sm text-red-600 border-2"
                   onClick={openDeleteModal}
                 >
                   Permenantly Delete Account
@@ -196,7 +196,7 @@ const SettingsScreen = () => {
           <div className="fixed left-0 top-0 w-full h-full">
             <div className="w-full h-full flex justify-center items-center">
               <div
-                className="w-96 p-4 bg-white rounded-lg border-2 border-gray-200"
+                className="w-96 p-4 bg-white rounded-sm border-2 border-gray-200"
                 ref={wrapperRef}
               >
                 <p className="mb-1 text-2xl text-gray-700">Delete Account</p>
@@ -209,13 +209,13 @@ const SettingsScreen = () => {
                 <br />
                 <div className="flex flex-wrap">
                   <Button
-                    className="bg-blue-500 text-white rounded-lg"
+                    className="bg-blue-500 text-white rounded-sm"
                     onClick={() => setDeleteModal(false)}
                   >
                     Cancel
                   </Button>
                   <Button
-                    className="bg-gray-200 ml-auto rounded-lg text-red-600 border-2"
+                    className="bg-gray-200 ml-auto rounded-sm text-red-600 border-2"
                     onClick={async () => {
                       const success = await deleteAccount(userId, userKey);
                       if (success) {

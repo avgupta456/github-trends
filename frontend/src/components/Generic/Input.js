@@ -14,7 +14,7 @@ const Input = ({
   return (
     <select
       className={classnames(
-        'text-gray-700 bg-white select select-sm w-40 rounded mt-4',
+        'text-gray-700 bg-white select select-sm w-40 rounded-sm mt-4',
         className,
       )}
       value={selectedOption.label}

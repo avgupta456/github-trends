@@ -23,7 +23,7 @@ const LoginScreen = () => {
       <div className="w-full h-full lg:w-1/2 flex lg:flex-col">
         <div
           className={classnames(
-            'bg-gray-100 rounded-lg w-full h-full m-auto p-8 shadow',
+            'bg-gray-100 rounded-sm w-full h-full m-auto p-8 shadow',
             'lg:w-96 lg:h-auto 2xl:w-1/2 2xl:h-1/2 2xl:flex 2xl:flex-col 2xl:justify-between',
           )}
         >

@@ -34,21 +34,21 @@ const Header = () => {
         <div className="hidden md:flex">
           <Link
             to={isAuthenticated ? `/wrapped/${userId}` : 'wrapped'}
-            className="px-4 py-1 mr-3 rounded bg-blue-500 hover:bg-blue-600 text-white"
+            className="px-4 py-1 mr-3 rounded-sm bg-blue-500 hover:bg-blue-600 text-white"
           >
             Wrapped
           </Link>
           {isAuthenticated ? (
             <Link
               to="/user"
-              className="px-4 py-1 mr-3 rounded bg-gray-100 hover:bg-gray-300 text-gray-700"
+              className="px-4 py-1 mr-3 rounded-sm bg-gray-200 hover:bg-gray-300 text-gray-700"
             >
               Dashboard
             </Link>
           ) : (
             <Link
               to="/demo"
-              className="px-4 py-1 mr-3 rounded bg-gray-100 hover:bg-gray-300 text-gray-700"
+              className="px-4 py-1 mr-3 rounded-sm bg-gray-200 hover:bg-gray-300 text-gray-700"
             >
               Demo
             </Link>
@@ -63,7 +63,7 @@ const Header = () => {
               </Link>
               <Link
                 to="/"
-                className="px-4 py-1 mr-3 rounded text-gray-700 bg-gray-100 hover:bg-gray-300"
+                className="px-4 py-1 mr-3 rounded-sm text-gray-700 bg-gray-200 hover:bg-gray-300"
                 onClick={logout}
               >
                 Sign Out
@@ -73,13 +73,13 @@ const Header = () => {
             <>
               <Link
                 to="/login"
-                className="px-4 py-1 mr-3 rounded text-gray-700 bg-gray-100 hover:bg-gray-300"
+                className="px-4 py-1 mr-3 rounded-sm text-gray-700 bg-gray-200 hover:bg-gray-300"
               >
                 Login
               </Link>
               <Link
                 to="/signup"
-                className="px-4 py-1 mr-3 rounded bg-blue-500 hover:bg-blue-700 hover:text-gray-300"
+                className="px-4 py-1 mr-3 rounded-sm bg-blue-500 hover:bg-blue-700 hover:text-gray-300"
               >
                 Sign Up
               </Link>
@@ -104,14 +104,14 @@ const Header = () => {
             <Link
               to={`/wrapped/${userId}`}
               onClick={() => setToggle(false)}
-              className="block text-sm px-2 my-2 py-2 rounded bg-gray-100 text-gray-700"
+              className="block text-sm px-2 my-2 py-2 rounded-sm bg-gray-200 text-gray-700"
             >
               Wrapped
             </Link>
             <Link
               to="/user"
               onClick={() => setToggle(false)}
-              className="block text-sm px-2 my-2 py-2 rounded bg-gray-100 text-gray-700"
+              className="block text-sm px-2 my-2 py-2 rounded-sm bg-gray-200 text-gray-700"
             >
               Dashboard
             </Link>
@@ -121,7 +121,7 @@ const Header = () => {
                 setToggle(false);
                 logout();
               }}
-              className="block text-sm px-2 my-2 py-2 rounded bg-gray-100 text-gray-700"
+              className="block text-sm px-2 my-2 py-2 rounded-sm bg-gray-200 text-gray-700"
             >
               Settings
             </Link>
@@ -131,7 +131,7 @@ const Header = () => {
                 setToggle(false);
                 logout();
               }}
-              className="block text-sm px-2 my-2 py-2 rounded bg-gray-100 text-gray-700"
+              className="block text-sm px-2 my-2 py-2 rounded-sm bg-gray-200 text-gray-700"
             >
               Sign Out
             </Link>
@@ -141,28 +141,28 @@ const Header = () => {
             <Link
               to="/wrapped"
               onClick={() => setToggle(false)}
-              className="block text-sm px-2 my-2 py-2 rounded bg-gray-100 text-gray-700"
+              className="block text-sm px-2 my-2 py-2 rounded-sm bg-gray-200 text-gray-700"
             >
               Wrapped
             </Link>
             <Link
               to="/demo"
               onClick={() => setToggle(false)}
-              className="block text-sm px-2 my-2 py-2 rounded bg-gray-100 text-gray-700"
+              className="block text-sm px-2 my-2 py-2 rounded-sm bg-gray-200 text-gray-700"
             >
               Demo
             </Link>
             <Link
               to="/login"
               onClick={() => setToggle(false)}
-              className="block text-sm px-2 my-2 py-2 rounded bg-gray-100 text-gray-700"
+              className="block text-sm px-2 my-2 py-2 rounded-sm bg-gray-200 text-gray-700"
             >
               Login
             </Link>
             <Link
               to="/signup"
               onClick={() => setToggle(false)}
-              className="block text-sm px-2 my-2 py-2 rounded bg-blue-500 text-white"
+              className="block text-sm px-2 my-2 py-2 rounded-sm bg-blue-500 text-white"
             >
               Sign Up
             </Link>
