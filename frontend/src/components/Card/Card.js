@@ -35,7 +35,7 @@ export const Card = ({ title, description, imageSrc, selected, compact }) => {
   return (
     <div
       className={classnames(
-        'p-6 rounded  border-2',
+        'p-6 rounded border-2',
         selected
           ? 'border-blue-500 bg-blue-50'
           : 'border-gray-200 bg-white hover:bg-gray-50',
