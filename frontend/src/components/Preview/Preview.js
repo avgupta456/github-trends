@@ -37,15 +37,7 @@ const Preview = () => {
   }, [page]);
 
   return (
-    <div className="w-7/8 mx-auto p-8 my-8 rounded-sm bg-white shadow">
-      <p
-        className={classnames(
-          'text-gray-700 text-xl font-bold',
-          'lg:text-xl xl:text-2xl 2xl:text-3xl',
-        )}
-      >
-        Create cards like these...
-      </p>
+    <div className="w-7/8 mx-auto p-8 rounded-sm bg-gray-200">
       <br />
       <div className="flex items-center">
         <ArrowLeftIcon
