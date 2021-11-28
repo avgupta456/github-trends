@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom';
 import { FaGithub as GithubIcon, FaCheck as CheckIcon } from 'react-icons/fa';
 
 import { Button, Preview } from '../../components';
-import { classnames } from '../../utils';
 
 import mockup from '../../assets/mockup.png';
 import wrapped from '../../assets/wrapped.png';
@@ -19,23 +18,18 @@ const LandingScreen = () => {
 
   return (
     <section>
-      <div className="bg-blue-500 text-gray-100 w-full flex flex-wrap py-24 px-4">
-        <div className="w-1/2 flex flex-col justify-center p-4">
-          <div className="w-full text-center text-5xl font-bold mb-6">
+      <div className="min-h-screen bg-blue-500 text-gray-100 w-full flex flex-wrap -mt-8 py-16 px-4">
+        <div className="w-full xl:w-1/2 flex flex-col justify-center p-4">
+          <div className="w-full 3xl:w-2/3 mx-auto text-center text-3xl md:text-5xl 3xl:text-6xl font-bold mb-6">
             Discover and share code contribution insights
           </div>
-          <div className="w-full text-center text-lg mb-2">
+          <div className="w-full 3xl:w-2/3 mx-auto text-center md:text-lg 3xl:text-2xl mb-2">
             GitHub Trends dives deep into the GitHub API to bring you insightful
             metrics on your contributions, broken by repository and language.
           </div>
           <div className="w-full flex flex-wrap justify-center">
             <Link to={isAuthenticated ? '/user' : '/signup'} className="w-auto">
-              <Button
-                className={classnames(
-                  'my-4 mr-4 w-auto justify-center bg-gray-700 hover:bg-gray-800',
-                  'text-xl',
-                )}
-              >
+              <Button className="my-4 mr-4 w-auto justify-center bg-gray-700 hover:bg-gray-800 text-xl 3xl:text-2xl">
                 {isAuthenticated ? 'Visit Dashboard' : 'Get Started'}
               </Button>
             </Link>
@@ -45,27 +39,22 @@ const LandingScreen = () => {
               rel="noopener noreferrer"
               className="w-auto"
             >
-              <Button
-                className={classnames(
-                  'my-4 w-auto flex justify-center items-center bg-gray-100 hover:bg-gray-200',
-                  'text-gray-700 text-xl',
-                )}
-              >
+              <Button className="my-4 w-auto flex justify-center items-center bg-gray-100 hover:bg-gray-200 text-gray-700 text-xl 3xl:text-2xl">
                 Star on
                 <GithubIcon className="ml-2 w-6 h-6" />
               </Button>
             </a>
           </div>
         </div>
-        <div className="w-1/2 flex items-center p-4">
+        <div className="hidden md:flex w-3/4 xl:w-1/2 mx-auto items-center p-4">
           <img src={mockup} alt="preview" />
         </div>
       </div>
       <div className="bg-gray-200 text-gray-700 w-full flex flex-wrap items-center py-4 px-4">
-        <div className="w-1/2 p-8 flex justify-center">
+        <div className="w-full lg:w-1/2 p-8 flex justify-center">
           <Preview />
         </div>
-        <div className="w-1/2 p-8 flex flex-col">
+        <div className="w-full lg:w-1/2 3xl:w-1/3 mx-auto p-8 flex flex-col">
           <h1 className="text-4xl text-gray-900 font-medium mb-12">
             Display your GitHub stats
             <div>with embeddable cards</div>
@@ -91,13 +80,13 @@ const LandingScreen = () => {
           <br />
           <div>
             <Link to={isAuthenticated ? '/user' : '/demo'} className="w-auto">
-              <Button className="my-4 mr-4 w-auto justify-center text-white text-xl bg-gray-700 hover:bg-gray-800">
+              <Button className="my-4 mr-4 w-auto justify-center text-white text-xl 3xl:text-2xl bg-gray-700 hover:bg-gray-800">
                 {isAuthenticated ? 'Visit Dashboard' : 'Try the Demo'}
               </Button>
             </Link>
             {!isAuthenticated && (
               <Link to="/signup" className="w-auto">
-                <Button className="my-4 mr-4 w-auto justify-center text-white text-xl bg-blue-500 hover:bg-blue-600">
+                <Button className="my-4 mr-4 w-auto justify-center text-white text-xl 3xl:text-2xl bg-blue-500 hover:bg-blue-600">
                   Get Started
                 </Button>
               </Link>
@@ -106,7 +95,7 @@ const LandingScreen = () => {
         </div>
       </div>
       <div className="text-gray-700 w-full flex flex-wrap items-center py-4 px-4">
-        <div className="w-1/2 p-8 flex flex-col">
+        <div className="w-full lg:w-1/2 3xl:w-1/3 mx-auto p-8 flex flex-col">
           <h1 className="text-4xl text-gray-900 font-medium mb-12">
             Reflect on your year
             <div>
@@ -137,7 +126,7 @@ const LandingScreen = () => {
           <br />
           <div>
             <Link to="/wrapped/avgupta456" className="w-auto">
-              <Button className="my-4 mr-4 w-auto justify-center text-white text-xl bg-gray-700 hover:bg-gray-800">
+              <Button className="my-4 mr-4 w-auto justify-center text-white text-xl 3xl:text-2xl bg-gray-700 hover:bg-gray-800">
                 Example
               </Button>
             </Link>
@@ -145,13 +134,13 @@ const LandingScreen = () => {
               to={isAuthenticated ? `/wrapped/${userId}` : '/wrapped'}
               className="w-auto"
             >
-              <Button className="my-4 mr-4 w-auto justify-center text-white text-xl bg-blue-500 hover:bg-blue-600">
+              <Button className="my-4 mr-4 w-auto justify-center text-white text-xl 3xl:text-2xl bg-blue-500 hover:bg-blue-600">
                 Get your Wrapped
               </Button>
             </Link>
           </div>
         </div>
-        <div className="w-1/2 p-8">
+        <div className="w-full lg:w-1/2 p-8">
           <div className="flex justify-center">
             <img src={wrapped} alt="preview" />
           </div>
@@ -167,9 +156,9 @@ const LandingScreen = () => {
         <div className="w-4/5 mx-auto py-8 flex flex-wrap items-center justify-center">
           {[
             {
-              header: 'Measures Contribution',
+              header: 'Measures Contribs',
               text:
-                'GitHub Trends calculates your stats on a per-contribution level, allowing for deeper insights',
+                'Calculates your stats on a per-contribution level, allowing for deeper insights',
             },
             {
               header: 'LOC Insights',
@@ -198,7 +187,7 @@ const LandingScreen = () => {
             },
           ].map((item, index) => (
             // eslint-disable-next-line react/no-array-index-key
-            <div className="flex w-1/3 p-4" key={index}>
+            <div className="flex w-full md:w-1/2 lg:w-1/3 p-4" key={index}>
               <div className="w-4 h-4 mt-1 mr-2">
                 <CheckIcon className="w-full h-full text-green-600" />
               </div>
@@ -216,12 +205,12 @@ const LandingScreen = () => {
           <p className="text-3xl font-medium">Create an account today.</p>
           <div className="mt-2">
             <Link to="/demo" className="w-auto">
-              <Button className="my-4 mr-4 w-auto justify-center text-white text-xl bg-gray-700 hover:bg-gray-800">
+              <Button className="my-4 mr-4 w-auto justify-center text-white text-xl 3xl:text-2xl bg-gray-700 hover:bg-gray-800">
                 Try Demo
               </Button>
             </Link>
             <Link to="/signup" className="w-auto">
-              <Button className="my-4 mr-4 w-auto justify-center text-white text-xl bg-blue-500 hover:bg-blue-600">
+              <Button className="my-4 mr-4 w-auto justify-center text-white text-xl 3xl:text-2xl bg-blue-500 hover:bg-blue-600">
                 Sign Up
               </Button>
             </Link>
