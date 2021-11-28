@@ -4,7 +4,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
-import { FaGithub as GithubIcon } from 'react-icons/fa';
+import { FaGithub as GithubIcon, FaCheck as CheckIcon } from 'react-icons/fa';
 
 import { Button, Preview } from '../../components';
 import { classnames } from '../../utils';
@@ -157,6 +157,77 @@ const LandingScreen = () => {
           </div>
         </div>
       </div>
+      <div className="bg-gray-200 text-gray-700 w-full flex flex-col justify-center items-center pt-16 py-4 px-4">
+        <h1 className="text-4xl font-medium mb-4">GitHub Trends</h1>
+        <h2 className="w-2/3 text-center text-lg">
+          GitHub Trends dives deep into the GitHub API to bring you insightful
+          metrics and shareable visualizations. We access individual commits,
+          enabling a range of metrics to be displayed.
+        </h2>
+        <div className="w-4/5 mx-auto py-8 flex flex-wrap items-center justify-center">
+          {[
+            {
+              header: 'Measures Contribution',
+              text:
+                'GitHub Trends calculates your stats on a per-contribution level, allowing for deeper insights',
+            },
+            {
+              header: 'LOC Insights',
+              text:
+                'See aggregate stats on lines of code (LOC) written across all contributions',
+            },
+            {
+              header: 'Language Breakdowns',
+              text:
+                'Showcase your favorite languages with LOC language breakdowns',
+            },
+            {
+              header: 'Private Mode',
+              text:
+                'Use a personal access token to avoid rate limiting and include private contributions',
+            },
+            {
+              header: 'Exciting Visualizations',
+              text:
+                'Visualize your contributions with bar charts, swarm plots, pie charts, and more',
+            },
+            {
+              header: 'Shareable Stats',
+              text:
+                'Easily add your cards to your GitHub profile and share them on Twitter or Linkedin',
+            },
+          ].map((item, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <div className="flex w-1/3 p-4" key={index}>
+              <div className="w-4 h-4 mt-1 mr-2">
+                <CheckIcon className="w-full h-full text-green-600" />
+              </div>
+              <div className="w-4/5 flex flex-col justify-top">
+                <p className="text-xl mb-1 font-medium">{item.header}</p>
+                <p>{item.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      {!isAuthenticated && (
+        <div className="text-gray-700 w-full flex flex-col justify-center items-center py-16 px-4">
+          <p className="text-3xl font-medium">Ready to get started?</p>
+          <p className="text-3xl font-medium">Create an account today.</p>
+          <div className="mt-2">
+            <Link to="/demo" className="w-auto">
+              <Button className="my-4 mr-4 w-auto justify-center text-white text-xl bg-gray-700 hover:bg-gray-800">
+                Try Demo
+              </Button>
+            </Link>
+            <Link to="/signup" className="w-auto">
+              <Button className="my-4 mr-4 w-auto justify-center text-white text-xl bg-blue-500 hover:bg-blue-600">
+                Sign Up
+              </Button>
+            </Link>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
