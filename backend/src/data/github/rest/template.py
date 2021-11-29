@@ -71,11 +71,7 @@ def get_template(
     :param accept_header: The accept header to be sent to the GitHub API
     :return: The response from the GitHub API
     """
-
-    try:
-        return _get_template(query, {}, accept_header, access_token)
-    except Exception as e:
-        raise e
+    return _get_template(query, {}, accept_header, access_token)
 
 
 def get_template_plural(
@@ -95,7 +91,4 @@ def get_template_plural(
     :return: The response from the GitHub API
     """
     params: Dict[str, str] = {"per_page": str(per_page), "page": str(page)}
-    try:
-        return _get_template(query, params, accept_header, access_token)
-    except Exception as e:
-        raise e
+    return _get_template(query, params, accept_header, access_token)

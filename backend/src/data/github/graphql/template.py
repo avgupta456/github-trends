@@ -30,17 +30,18 @@ class GraphQLErrorTimeout(Exception):
 
 
 def get_template(
-    query: Dict[str, Any], access_token: Optional[str] = None
+    query: Dict[str, Any], access_token: Optional[str] = None, retries: int = 0
 ) -> Dict[str, Any]:
     """
     Template for interacting with the GitHub GraphQL API
     :param query: The query to be sent to the GitHub GraphQL API
     :param access_token: The access token to be used for the query
+    :param retries: The number of retries to be made for Auth Exceptions
     :return: The response from the GitHub GraphQL API
     """
     start = datetime.now()
-    access_token = get_access_token(access_token)
-    headers: Dict[str, str] = {"Authorization": "bearer " + access_token}
+    new_access_token = get_access_token(access_token)
+    headers: Dict[str, str] = {"Authorization": "bearer " + new_access_token}
 
     try:
         r = s.post(  # type: ignore
@@ -52,7 +53,7 @@ def get_template(
     except ReadTimeout:
         raise GraphQLErrorTimeout("GraphQL Error: Request Timeout")
 
-    print("GraphQL", access_token, datetime.now() - start)
+    print("GraphQL", new_access_token, datetime.now() - start)
     if r.status_code == 200:
         data = r.json()  # type: ignore
         if "errors" in data:
@@ -69,6 +70,9 @@ def get_template(
         return data
 
     if r.status_code in [401, 403]:
+        if retries < 2:
+            print("GraphQL Error, Retrying:", new_access_token)
+            return get_template(query, access_token, retries + 1)
         raise GraphQLErrorAuth("GraphQL Error: Unauthorized")
 
     if r.status_code == 502:
