@@ -7,7 +7,7 @@ from svgwrite.container import Group
 from svgwrite.shapes import Circle
 
 from src.constants import DEFAULT_COLOR
-from src.publisher.render.style import themes, styles, styles_no_animation
+from src.publisher.render.style import styles, styles_no_animation, themes
 
 
 def get_template(

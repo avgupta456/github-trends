@@ -23,12 +23,7 @@ from src.constants import (
     PUBSUB_TOKEN,
     SENTRY_DSN,
 )
-from src.publisher.routers import (
-    asset_router,
-    auth_router,
-    pubsub_router,
-    user_router,
-)
+from src.publisher.routers import asset_router, auth_router, pubsub_router, user_router
 from src.utils.pubsub import create_push_subscription, create_topic
 
 """

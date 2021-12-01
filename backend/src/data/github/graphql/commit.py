@@ -1,6 +1,7 @@
 import logging
 from typing import List, Optional
 
+from src.constants import PR_FILES
 from src.data.github.graphql.models import RawCommit
 from src.data.github.graphql.template import (
     GraphQLError,
@@ -21,14 +22,29 @@ def get_commits(
     :return: List of commits
     """
     query = {
-        "variables": {"ids": node_ids},
+        "variables": {"ids": node_ids, "first": PR_FILES},
         "query": """
-        query getCommits($ids: [ID!]!) {
+        query getCommits($ids: [ID!]!, $first: Int!) {
             nodes(ids: $ids) {
                 ... on Commit {
                     additions
                     deletions
                     changedFiles
+                    url
+                    associatedPullRequests(first: 1) {
+                        nodes {
+                            changedFiles
+                            additions
+                            deletions
+                            files(first: $first) {
+                                nodes {
+                                    path
+                                    additions
+                                    deletions
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

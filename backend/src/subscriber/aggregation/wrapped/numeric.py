@@ -2,13 +2,7 @@ from collections import defaultdict
 from datetime import datetime
 from typing import Dict
 
-from src.models import (
-    FullUserPackage,
-    NumericData,
-    ContribStats,
-    LOCStats,
-    MiscStats,
-)
+from src.models import ContribStats, FullUserPackage, LOCStats, MiscStats, NumericData
 
 
 def get_contrib_stats(data: FullUserPackage) -> ContribStats:

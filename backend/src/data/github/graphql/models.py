@@ -3,10 +3,33 @@ from typing import List, Optional
 from pydantic import BaseModel, Field
 
 
+class RawCommitPRFileNode(BaseModel):
+    path: str
+    additions: int
+    deletions: int
+
+
+class RawCommitPRFile(BaseModel):
+    nodes: List[RawCommitPRFileNode]
+
+
+class RawCommitPRNode(BaseModel):
+    changed_files: int = Field(alias="changedFiles")
+    additions: int
+    deletions: int
+    files: RawCommitPRFile
+
+
+class RawCommitPR(BaseModel):
+    nodes: List[RawCommitPRNode]
+
+
 class RawCommit(BaseModel):
     additions: int
     deletions: int
     changed_files: int = Field(alias="changedFiles")
+    url: str
+    prs: RawCommitPR = Field(alias="associatedPullRequests")
 
 
 class RawRepoLanguageNode(BaseModel):
