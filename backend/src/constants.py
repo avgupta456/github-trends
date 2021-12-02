@@ -19,7 +19,7 @@ NODE_QUERIES = 50  # max number of node queries to make
 CUTOFF = 2000  # if less than cutoff, count LOC
 FILE_CUTOFF = 1000  # if less than cutoff in file, count LOC
 
-WRAPPED_VERSION = 0.0393  # determines when to overwrite MongoDB data
+WRAPPED_VERSION = 0.04  # determines when to overwrite MongoDB data
 
 # CUSTOMIZATION
 BLACKLIST = ["Jupyter Notebook", "HTML"]  # languages to ignore

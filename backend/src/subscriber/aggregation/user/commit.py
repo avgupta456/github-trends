@@ -26,6 +26,10 @@ def get_commit_languages(
     if max(commit.additions, commit.deletions) == 0:
         return {}
 
+    if max(commit.additions, commit.deletions) > 10 * CUTOFF:
+        # assummed to be auto-generated or copied
+        return {}
+
     pr_coverage = 0
     if len(commit.prs.nodes) > 0:
         pr_obj = commit.prs.nodes[0]

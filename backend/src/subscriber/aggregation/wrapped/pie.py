@@ -1,5 +1,6 @@
 from typing import List
 
+from src.constants import DEFAULT_COLOR
 from src.models import (
     FullUserPackage,
     Language,
@@ -73,6 +74,21 @@ def get_pie_data(data: FullUserPackage) -> PieData:
                 "color": v.color,
             }
             lang_objs.append(PieDatum.parse_obj(lang_data))
+
+        # remaining languages
+        total_count = 0
+        for (k, v) in list(langs)[5:]:
+            total_count += _count_loc(v, m)
+        lang_data = {
+            "id": -1,
+            "label": "other",
+            "value": total_count,
+            "formatted_value": format_number(total_count),
+            "color": DEFAULT_COLOR,
+        }
+        if total_count > 100:
+            lang_objs.append(PieDatum.parse_obj(lang_data))
+
         out["langs_" + m] = lang_objs
 
     return PieData.parse_obj(out)

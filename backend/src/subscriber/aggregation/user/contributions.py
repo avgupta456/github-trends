@@ -247,11 +247,12 @@ async def get_contributions(
         max_threads=max_threads,
     )
 
+    # gets NODE_QUERIES largest commits
     temp_commit_languages: List[Optional[GraphQLRawCommit]] = []
     for commit_language_chunk in commit_language_chunks:
         temp_commit_languages.extend(commit_language_chunk)
     filtered_commits: List[GraphQLRawCommit] = filter(
-        # returns commits with no associated PR or with more files than PR query threshold
+        # returns commits with no associated PR or incomplete PR
         lambda x: x is not None
         and (len(x.prs.nodes) == 0 or x.prs.nodes[0].changed_files > PR_FILES)
         and (x.additions + x.deletions > 100),
@@ -286,7 +287,6 @@ async def get_contributions(
     commit_languages: List[t_languages] = [[{} for _ in repo] for repo in commit_infos]
     for raw_commits, node_ids in zip(commit_language_chunks, node_id_chunks):
         for raw_commit, node_id in zip(raw_commits, node_ids):
-            # commit_languages[repo][commit_index] = language breakdown
             curr_commit_files: Optional[List[RawCommitFile]] = None
             if raw_commit is not None and raw_commit.url in commit_files_dict:
                 curr_commit_files = commit_files_dict[raw_commit.url]
@@ -305,6 +305,8 @@ async def get_contributions(
 
     print("Step 5 Took ", datetime.now() - start)
     start = datetime.now()
+
+    # Below is strictly aggregation, no more GitHub API calls
 
     def get_stats() -> Dict[str, Union[int, Dict[str, int]]]:
         return {
