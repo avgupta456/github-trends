@@ -65,6 +65,11 @@ def get_template(
                 and data["errors"][0]["path"][0] == "nodes"
             ):
                 raise GraphQLErrorMissingNode(node=int(data["errors"][0]["path"][1]))  # type: ignore
+
+            if retries < 2:
+                print("GraphQL Error, Retrying:", new_access_token)
+                return get_template(query, access_token, retries + 1)
+
             raise GraphQLError("GraphQL Error: " + str(data["errors"]))
 
         return data

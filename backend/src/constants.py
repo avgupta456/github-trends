@@ -14,8 +14,8 @@ TIMEOUT = 15  # max seconds to wait for api response
 NODE_CHUNK_SIZE = 100  # number of nodes (commits) to query (max 100)
 NODE_THREADS = 5  # number of node queries simultaneously (avoid blacklisting)
 
-PR_FILES = 10  # max number of files to query for PRs
-NODE_QUERIES = 50  # max number of node queries to make
+PR_FILES = 5  # max number of files to query for PRs
+NODE_QUERIES = 20  # max number of node queries to make
 CUTOFF = 2000  # if less than cutoff, count LOC
 FILE_CUTOFF = 1000  # if less than cutoff in file, count LOC
 
