@@ -2,7 +2,7 @@ from collections import defaultdict
 from json import load
 from typing import Dict, List, Optional, Union
 
-from src.constants import BLACKLIST, CUTOFF, DEFAULT_COLOR
+from src.constants import BLACKLIST, CUTOFF, DEFAULT_COLOR, FILE_CUTOFF
 from src.data.github.graphql import RawCommit, RawRepo
 from src.data.github.rest import RawCommitFile
 
@@ -26,9 +26,12 @@ def get_commit_languages(
     if max(commit.additions, commit.deletions) == 0:
         return {}
 
-    if commit.additions + commit.deletions > CUTOFF:
-        # assummed to be auto generated
-        return {}
+    pr_coverage = 0
+    if len(commit.prs.nodes) > 0:
+        pr_obj = commit.prs.nodes[0]
+        pr_files = pr_obj.files.nodes
+        total_changed = sum([x.additions + x.deletions for x in pr_files])
+        pr_coverage = total_changed / max(1, (pr_obj.additions + pr_obj.deletions))
 
     if files is not None:
         for file in files:
@@ -39,11 +42,12 @@ def get_commit_languages(
                 lang is not None
                 and lang["name"] not in BLACKLIST
                 and max(file.additions, file.deletions) > 0
+                and max(file.additions, file.deletions) < FILE_CUTOFF
             ):
                 out[lang["name"]]["color"] = lang["color"]
                 out[lang["name"]]["additions"] += file.additions  # type: ignore
                 out[lang["name"]]["deletions"] += file.deletions  # type: ignore
-    elif len(commit.prs.nodes) > 0:
+    elif len(commit.prs.nodes) > 0 and pr_coverage > 0.25:
         pr = commit.prs.nodes[0]
         total_additions, total_deletions = 0, 0
         for file in pr.files.nodes:
@@ -54,6 +58,7 @@ def get_commit_languages(
                 lang is not None
                 and lang["name"] not in BLACKLIST
                 and max(file.additions, file.deletions) > 0
+                and max(file.additions, file.deletions) < FILE_CUTOFF
             ):
                 out[lang["name"]]["color"] = lang["color"]
                 out[lang["name"]]["additions"] += file.additions  # type: ignore
@@ -62,11 +67,18 @@ def get_commit_languages(
             total_deletions += file.deletions
         for lang in out:
             out[lang]["additions"] = round(
-                commit.additions * out[lang]["additions"] / max(1, total_additions)
+                min(pr.additions, commit.additions)
+                * out[lang]["additions"]
+                / max(1, total_additions)
             )
             out[lang]["deletions"] = round(
-                commit.deletions * out[lang]["deletions"] / max(1, total_deletions)
+                min(pr.deletions, commit.deletions)
+                * out[lang]["deletions"]
+                / max(1, total_deletions)
             )
+    elif commit.additions + commit.deletions > CUTOFF:
+        # assummed to be auto generated
+        return {}
     else:
         repo_info = repo.languages.edges
         languages = [x for x in repo_info if x.node.name not in BLACKLIST]
@@ -83,11 +95,5 @@ def get_commit_languages(
                     "deletions": deletions,
                     "color": lang_color or DEFAULT_COLOR,
                 }
-
-    # print(commit)
-    # print(files)
-    # print(repo)
-    # print(out)
-    # print()
 
     return dict(out)

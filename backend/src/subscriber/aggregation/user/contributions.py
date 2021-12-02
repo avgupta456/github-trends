@@ -4,7 +4,7 @@ from typing import Any, DefaultDict, Dict, List, Optional, Set, Union
 
 import pytz
 
-from src.constants import CUTOFF, NODE_CHUNK_SIZE, NODE_QUERIES, NODE_THREADS, PR_FILES
+from src.constants import NODE_CHUNK_SIZE, NODE_QUERIES, NODE_THREADS, PR_FILES
 from src.data.github.graphql import (
     RawCalendar,
     RawCommit as GraphQLRawCommit,
@@ -254,8 +254,7 @@ async def get_contributions(
         # returns commits with no associated PR or with more files than PR query threshold
         lambda x: x is not None
         and (len(x.prs.nodes) == 0 or x.prs.nodes[0].changed_files > PR_FILES)
-        and (x.additions + x.deletions > 100)
-        and (x.additions + x.deletions < CUTOFF),
+        and (x.additions + x.deletions > 100),
         temp_commit_languages,
     )  # type: ignore
     sorted_commits = sorted(
