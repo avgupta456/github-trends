@@ -23,7 +23,7 @@ def get_repo(
                 isPrivate,
                 forkCount,
                 stargazerCount,
-                languages(first: 5){
+                languages(first: 10){
                     totalCount,
                     totalSize,
                     edges{

@@ -13,11 +13,13 @@ BACKEND_URL = "https://api.githubtrends.io" if PROD else "http://localhost:8000"
 TIMEOUT = 15  # max seconds to wait for api response
 NODE_CHUNK_SIZE = 100  # number of nodes (commits) to query (max 100)
 NODE_THREADS = 5  # number of node queries simultaneously (avoid blacklisting)
-CUTOFF = 500  # if less than cutoff, count LOC (or below line)
-CUTOFF_PER_FILE = 100  # if less than cutoff per file, count LOC
-MAX_CUTOFF = 5000  # if more than max cutoff, don't count LOC
 
-WRAPPED_VERSION = 0.03  # determines when to overwrite MongoDB data
+PR_FILES = 10  # max number of files to query for PRs
+NODE_QUERIES = 50  # max number of node queries to make
+CUTOFF = 2000  # if less than cutoff, count LOC
+FILE_CUTOFF = 1000  # if less than cutoff in file, count LOC
+
+WRAPPED_VERSION = 0.04  # determines when to overwrite MongoDB data
 
 # CUSTOMIZATION
 BLACKLIST = ["Jupyter Notebook", "HTML"]  # languages to ignore
@@ -52,3 +54,4 @@ TEST_NODE_IDS = [
     "C_kwDOD_-BVNoAKDFhNTIxNWE1MGM4ZDllOGEwYTFhNjhmYWZkYzE5MzA5YTRkMDMwZmM",
     "C_kwDOD_-BVNoAKDRiZTQ4MTQ0MzgwYjBlNGEwNjQ4YjY4YWI4ZjFjYmQ3MWU4M2VhMzU",
 ]
+TEST_SHA = "ad83e6340377904fa0295745b5314202b23d2f3f"

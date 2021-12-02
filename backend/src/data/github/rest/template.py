@@ -27,6 +27,7 @@ def _get_template(
     params: Dict[str, Any],
     accept_header: str,
     access_token: Optional[str] = None,
+    retries: int = 0,
 ) -> Any:
     """
     Internal template for interacting with the GitHub REST API
@@ -38,10 +39,10 @@ def _get_template(
     """
     start = datetime.now()
 
-    access_token = get_access_token(access_token)
+    new_access_token = get_access_token(access_token)
     headers: Dict[str, str] = {
         "Accept": str(accept_header),
-        "Authorization": "bearer " + access_token,
+        "Authorization": "bearer " + new_access_token,
     }
 
     try:
@@ -50,12 +51,15 @@ def _get_template(
         raise RESTErrorTimeout("REST Error: Request Timeout")
 
     if r.status_code == 200:
-        print("REST API", access_token, datetime.now() - start)
+        print("REST API", new_access_token, datetime.now() - start)
         return r.json()  # type: ignore
 
     if r.status_code == 409:
         raise RESTErrorEmptyRepo("REST Error: Empty Repository")
 
+    if retries < 3:
+        print("REST Error, Retrying:", new_access_token)
+        return _get_template(query, params, accept_header, access_token, retries + 1)
     raise RESTError("REST Error: " + str(r.status_code))
 
 

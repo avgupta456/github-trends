@@ -3,7 +3,7 @@
 from svgwrite import Drawing
 
 from src.constants import BACKEND_URL
-from src.publisher.render.style import themes, styles_no_animation
+from src.publisher.render.style import styles_no_animation, themes
 from src.publisher.render.template import get_template
 
 THEME = "classic"

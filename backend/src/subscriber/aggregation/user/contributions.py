@@ -4,24 +4,28 @@ from typing import Any, DefaultDict, Dict, List, Optional, Set, Union
 
 import pytz
 
-from src.constants import NODE_CHUNK_SIZE, NODE_THREADS
+from src.constants import NODE_CHUNK_SIZE, NODE_QUERIES, NODE_THREADS, PR_FILES
 from src.data.github.graphql import (
     RawCalendar,
+    RawCommit as GraphQLRawCommit,
     RawEventsCommit,
     RawEventsEvent,
     RawRepo,
+    get_commits,
     get_repo,
     get_user_contribution_calendar,
     get_user_contribution_events,
     get_user_contribution_years,
 )
-from src.data.github.rest import RawCommit
+from src.data.github.rest import (
+    RawCommit as RESTRawCommit,
+    RawCommitFile,
+    get_commit_files,
+    get_repo_commits,
+)
 from src.models import UserContributions
 from src.models.user.contribs import FullUserContributions
-from src.subscriber.aggregation.user.commit import (
-    get_all_commit_info,
-    get_commits_languages,
-)
+from src.subscriber.aggregation.user.commit import get_commit_languages
 from src.utils import date_to_datetime, gather
 
 t_stats = DefaultDict[str, Dict[str, List[Union[RawEventsEvent, RawEventsCommit]]]]
@@ -39,8 +43,8 @@ def get_user_all_contribution_events(
         lambda: {"commits": [], "issues": [], "prs": [], "reviews": [], "repos": []}
     )
     after: Optional[str] = ""
-    index, cont = 0, True
-    while index < 10 and cont:
+    cont = True
+    while cont:
         after_str = after if isinstance(after, str) else ""
         response = get_user_contribution_events(
             user_id=user_id,
@@ -74,9 +78,32 @@ def get_user_all_contribution_events(
                 RawEventsEvent(occurredAt=str(repo.occurred_at))
             )
 
-        index += 1
-
     return repo_contribs
+
+
+def get_all_commit_info(
+    user_id: str,
+    name_with_owner: str,
+    start_date: datetime,
+    end_date: datetime,
+    access_token: Optional[str] = None,
+) -> List[RESTRawCommit]:
+    """Gets all user's commit times for a given repository"""
+    owner, repo = name_with_owner.split("/")
+    data: List[RESTRawCommit] = []
+
+    def _get_repo_commits(page: int):
+        return get_repo_commits(
+            owner, repo, user_id, start_date, end_date, page, access_token
+        )
+
+    for i in range(10):
+        if len(data) == 100 * i:
+            data.extend(_get_repo_commits(i + 1))
+
+    # sort ascending
+    sorted_data = sorted(data, key=lambda x: x.timestamp)
+    return sorted_data
 
 
 async def get_contributions(
@@ -89,7 +116,9 @@ async def get_contributions(
 ) -> Union[UserContributions, FullUserContributions]:
     tz = pytz.timezone(timezone_str)
 
-    # get years for contribution calendar
+    start = datetime.now()
+
+    # Step 1: get years for contribution calendar (GraphQL)
     years = sorted(
         filter(
             lambda x: start_date.year <= x <= end_date.year,
@@ -107,7 +136,10 @@ async def get_contributions(
         for year in years
     ]
 
-    # async get contribution calendars
+    print("Step 1 Took ", datetime.now() - start)
+    start = datetime.now()
+
+    # Step 2A: get contribution calendars (GraphQL)
     calendars: List[RawCalendar] = await gather(
         funcs=[get_user_contribution_calendar for _ in years],
         args_dicts=[
@@ -121,6 +153,7 @@ async def get_contributions(
         ],
     )
 
+    # Step 2B: get contribution events (GraphQL)
     all_events: List[t_stats] = await gather(
         funcs=[get_user_all_contribution_events for _ in years],
         args_dicts=[
@@ -140,7 +173,11 @@ async def get_contributions(
             repos_set.add(repo)
     repos = list(repos_set)
 
-    commit_infos: List[List[RawCommit]] = await gather(
+    print("Step 2 Took ", datetime.now() - start)
+    start = datetime.now()
+
+    # Step 3A: get all commit node_ids, timestamps (REST)
+    commit_infos: List[List[RESTRawCommit]] = await gather(
         funcs=[get_all_commit_info for _ in repos],
         args_dicts=[
             {
@@ -155,6 +192,7 @@ async def get_contributions(
         max_threads=100,
     )
 
+    # Step 3B: get all repositories (REST)
     _repo_infos: List[Optional[RawRepo]] = await gather(
         funcs=[get_repo for _ in repos],
         args_dicts=[
@@ -187,42 +225,88 @@ async def get_contributions(
             all_node_ids.append(node_id)
 
     node_id_chunks: List[List[str]] = []
-    commit_repo_chunks: List[List[str]] = []
     for i in range(0, len(all_node_ids), NODE_CHUNK_SIZE):
         node_id_chunks.append(
             all_node_ids[i : min(len(all_node_ids), i + NODE_CHUNK_SIZE)]
         )
-        commit_repo_chunks.append(
-            [repo_mapping[node_id] for node_id in node_id_chunks[-1]]
-        )
 
+    print("Step 3 Took ", datetime.now() - start)
+    start = datetime.now()
+
+    # Step 4: Get commit languages (GraphQL)
     max_threads = NODE_THREADS * (5 if access_token is None else 1)
-    commit_language_chunks = await gather(
-        funcs=[get_commits_languages for _ in node_id_chunks],
+    commit_language_chunks: List[List[Optional[GraphQLRawCommit]]] = await gather(
+        funcs=[get_commits for _ in node_id_chunks],
         args_dicts=[
             {
                 "node_ids": node_id_chunk,
-                "commit_repos": commit_repo_chunk,
-                "repo_infos": repo_infos,
                 "access_token": access_token,
             }
-            for (node_id_chunk, commit_repo_chunk) in zip(
-                node_id_chunks, commit_repo_chunks
-            )
+            for node_id_chunk in node_id_chunks
         ],
         max_threads=max_threads,
     )
 
+    # gets NODE_QUERIES largest commits
+    temp_commit_languages: List[Optional[GraphQLRawCommit]] = []
+    for commit_language_chunk in commit_language_chunks:
+        temp_commit_languages.extend(commit_language_chunk)
+    filtered_commits: List[GraphQLRawCommit] = filter(
+        # returns commits with no associated PR or incomplete PR
+        lambda x: x is not None
+        and (len(x.prs.nodes) == 0 or x.prs.nodes[0].changed_files > PR_FILES)
+        and (x.additions + x.deletions > 100),
+        temp_commit_languages,
+    )  # type: ignore
+    sorted_commits = sorted(
+        filtered_commits, key=lambda x: x.additions + x.deletions, reverse=True
+    )[:NODE_QUERIES]
+
+    print("Step 4 Took ", datetime.now() - start)
+    start = datetime.now()
+
+    # Step 5: Get commit files for largest commits (REST)
+    commit_files: List[List[RawCommitFile]] = await gather(
+        funcs=[get_commit_files for _ in sorted_commits],
+        args_dicts=[
+            {
+                "owner": url[3],
+                "repo": url[4],
+                "sha": url[6],
+                "access_token": access_token,
+            }
+            for url in [commit.url.split("/") for commit in sorted_commits]
+        ],
+        max_threads=100,
+    )
+
+    commit_files_dict: Dict[str, List[RawCommitFile]] = {}
+    for commit, commit_file in zip(sorted_commits, commit_files):
+        commit_files_dict[commit.url] = commit_file
+
     commit_languages: List[t_languages] = [[{} for _ in repo] for repo in commit_infos]
-    for languages, node_ids in zip(commit_language_chunks, node_id_chunks):
-        for language, node_id in zip(languages, node_ids):
-            commit_languages[id_mapping[node_id][0]][id_mapping[node_id][1]] = language
+    for raw_commits, node_ids in zip(commit_language_chunks, node_id_chunks):
+        for raw_commit, node_id in zip(raw_commits, node_ids):
+            curr_commit_files: Optional[List[RawCommitFile]] = None
+            if raw_commit is not None and raw_commit.url in commit_files_dict:
+                curr_commit_files = commit_files_dict[raw_commit.url]
+            lang_breakdown = get_commit_languages(
+                raw_commit, curr_commit_files, repo_infos[repo_mapping[node_id]]
+            )
+            commit_languages[id_mapping[node_id][0]][
+                id_mapping[node_id][1]
+            ] = lang_breakdown
 
     commit_times_dict: Dict[str, List[datetime]] = {}
     commit_languages_dict: Dict[str, t_languages] = {}
     for repo, times, languages in zip(repos, commit_times, commit_languages):
         commit_times_dict[repo] = times
         commit_languages_dict[repo] = languages
+
+    print("Step 5 Took ", datetime.now() - start)
+    start = datetime.now()
+
+    # Below is strictly aggregation, no more GitHub API calls
 
     def get_stats() -> Dict[str, Union[int, Dict[str, int]]]:
         return {
@@ -395,5 +479,7 @@ async def get_contributions(
             "repos": repositories_list,
         }
     )
+
+    print("Step 6 Took", datetime.now() - start)
 
     return output

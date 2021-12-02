@@ -1,11 +1,11 @@
 from typing import Optional
 
 from src.data.mongo.secret import update_keys
-from src.data.mongo.user import get_user_metadata, UserMetadata
+from src.data.mongo.user import UserMetadata, get_user_metadata
 from src.data.mongo.wrapped import (
+    WrappedModel,
     get_wrapped_user as db_get_wrapped_user,
     set_wrapped_user,
-    WrappedModel,
 )
 from src.models import WrappedPackage
 from src.subscriber.aggregation import get_wrapped_data
@@ -37,8 +37,6 @@ async def query_wrapped_user(
     private = False
     if user is not None and user.private_access is not None:
         private = user.private_access
-
-    print(user, access_token, private)
 
     # attempt to fetch wrapped data from MongoDB
     db_record: Optional[WrappedModel] = await db_get_wrapped_user(

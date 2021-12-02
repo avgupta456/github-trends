@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "gen-lang-map": "poetry run python src/data/github/language_map.py",
     "start-pub": "poetry run uvicorn src.main_pub:app --reload --port=8000",
     "start-sub": "poetry run uvicorn src.main_sub:app --reload --port=8001",
     "set-reqs": "poetry lock && poetry export -f requirements.txt --output requirements.txt --without-hashes",
