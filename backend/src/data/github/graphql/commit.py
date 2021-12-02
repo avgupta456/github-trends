@@ -21,35 +21,53 @@ def get_commits(
     :param node_ids: List of node ids
     :return: List of commits
     """
-    query = {
-        "variables": {"ids": node_ids, "first": PR_FILES},
-        "query": """
-        query getCommits($ids: [ID!]!, $first: Int!) {
-            nodes(ids: $ids) {
-                ... on Commit {
-                    additions
-                    deletions
-                    changedFiles
-                    url
-                    associatedPullRequests(first: 1) {
-                        nodes {
-                            changedFiles
-                            additions
-                            deletions
-                            files(first: $first) {
-                                nodes {
-                                    path
-                                    additions
-                                    deletions
+
+    if PR_FILES == 0:  # type: ignore
+        query = {
+            "variables": {"ids": node_ids},
+            "query": """
+            query getCommits($ids: [ID!]!) {
+                nodes(ids: $ids) {
+                    ... on Commit {
+                        additions
+                        deletions
+                        changedFiles
+                        url
+                    }
+                }
+            }
+            """,
+        }
+    else:
+        query = {
+            "variables": {"ids": node_ids, "first": PR_FILES},
+            "query": """
+            query getCommits($ids: [ID!]!, $first: Int!) {
+                nodes(ids: $ids) {
+                    ... on Commit {
+                        additions
+                        deletions
+                        changedFiles
+                        url
+                        associatedPullRequests(first: 1) {
+                            nodes {
+                                changedFiles
+                                additions
+                                deletions
+                                files(first: $first) {
+                                    nodes {
+                                        path
+                                        additions
+                                        deletions
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+            """,
         }
-        """,
-    }
 
     try:
         raw_commits = get_template(query, access_token)["data"]["nodes"]
@@ -68,6 +86,8 @@ def get_commits(
     out: List[Optional[RawCommit]] = []
     for raw_commit in raw_commits:
         try:
+            if "associatedPullRequests" not in raw_commit:
+                raw_commit["associatedPullRequests"] = {"nodes": []}
             out.append(RawCommit.parse_obj(raw_commit))
         except Exception as e:
             logging.exception(e)

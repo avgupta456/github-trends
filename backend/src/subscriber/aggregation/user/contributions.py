@@ -116,6 +116,8 @@ async def get_contributions(
 ) -> Union[UserContributions, FullUserContributions]:
     tz = pytz.timezone(timezone_str)
 
+    start = datetime.now()
+
     # Step 1: get years for contribution calendar (GraphQL)
     years = sorted(
         filter(
@@ -133,6 +135,9 @@ async def get_contributions(
         ]
         for year in years
     ]
+
+    print("Step 1 Took ", datetime.now() - start)
+    start = datetime.now()
 
     # Step 2A: get contribution calendars (GraphQL)
     calendars: List[RawCalendar] = await gather(
@@ -167,6 +172,9 @@ async def get_contributions(
         for repo in events_year:
             repos_set.add(repo)
     repos = list(repos_set)
+
+    print("Step 2 Took ", datetime.now() - start)
+    start = datetime.now()
 
     # Step 3A: get all commit node_ids, timestamps (REST)
     commit_infos: List[List[RESTRawCommit]] = await gather(
@@ -222,6 +230,9 @@ async def get_contributions(
             all_node_ids[i : min(len(all_node_ids), i + NODE_CHUNK_SIZE)]
         )
 
+    print("Step 3 Took ", datetime.now() - start)
+    start = datetime.now()
+
     # Step 4: Get commit languages (GraphQL)
     max_threads = NODE_THREADS * (5 if access_token is None else 1)
     commit_language_chunks: List[List[Optional[GraphQLRawCommit]]] = await gather(
@@ -242,7 +253,7 @@ async def get_contributions(
     filtered_commits: List[GraphQLRawCommit] = filter(
         # returns commits with no associated PR or with more files than PR query threshold
         lambda x: x is not None
-        and (len(x.prs.nodes) == 0 or x.changed_files > PR_FILES)
+        and (len(x.prs.nodes) == 0 or x.prs.nodes[0].changed_files > PR_FILES)
         and (x.additions + x.deletions > 100)
         and (x.additions + x.deletions < CUTOFF),
         temp_commit_languages,
@@ -250,6 +261,9 @@ async def get_contributions(
     sorted_commits = sorted(
         filtered_commits, key=lambda x: x.additions + x.deletions, reverse=True
     )[:NODE_QUERIES]
+
+    print("Step 4 Took ", datetime.now() - start)
+    start = datetime.now()
 
     # Step 5: Get commit files for largest commits (REST)
     commit_files: List[List[RawCommitFile]] = await gather(
@@ -259,6 +273,7 @@ async def get_contributions(
                 "owner": url[3],
                 "repo": url[4],
                 "sha": url[6],
+                "access_token": access_token,
             }
             for url in [commit.url.split("/") for commit in sorted_commits]
         ],
@@ -288,6 +303,9 @@ async def get_contributions(
     for repo, times, languages in zip(repos, commit_times, commit_languages):
         commit_times_dict[repo] = times
         commit_languages_dict[repo] = languages
+
+    print("Step 5 Took ", datetime.now() - start)
+    start = datetime.now()
 
     def get_stats() -> Dict[str, Union[int, Dict[str, int]]]:
         return {
@@ -460,5 +478,7 @@ async def get_contributions(
             "repos": repositories_list,
         }
     )
+
+    print("Step 6 Took", datetime.now() - start)
 
     return output
