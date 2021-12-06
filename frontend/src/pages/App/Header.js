@@ -80,7 +80,7 @@ const Header = () => {
         {/* Pages: Wrapped, Dashboard, Demo */}
         <div className="hidden md:flex">
           <Link
-            to={isAuthenticated ? `/wrapped/${userId}` : 'wrapped'}
+            to={isAuthenticated ? `/wrapped/${userId}` : '/wrapped'}
             className="px-4 py-1 mr-3 rounded-sm bg-blue-500 hover:bg-blue-600 text-white"
           >
             Wrapped
