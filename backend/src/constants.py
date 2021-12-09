@@ -3,7 +3,7 @@ import os
 # GLOBAL
 PROD = os.getenv("PROD", "False") == "True"
 DOCKER = os.getenv("DOCKER", "False") == "True"
-PROJECT_ID = "github-298920"
+PROJECT_ID = "github-334619"
 BACKEND_URL = "https://api.githubtrends.io" if PROD else "http://localhost:8000"
 
 # API

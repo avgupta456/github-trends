@@ -26,7 +26,7 @@ services:
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/backend/gcloud_key.json
       - PUBSUB_EMULATOR_HOST=pubsub:8085
-      - PROJECT_ID=github-298920
+      - PROJECT_ID=github-334619
       - DOCKER=True
     depends_on:
       - pubsub
@@ -43,7 +43,7 @@ services:
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/backend/gcloud_key.json
       - PUBSUB_EMULATOR_HOST=pubsub:8085
-      - PROJECT_ID=github-298920
+      - PROJECT_ID=github-334619
       - DOCKER=True
     depends_on:
       - pubsub
