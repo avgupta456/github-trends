@@ -1,0 +1,6 @@
+dispatch:
+- url: "*/sub/*"
+  service: sub
+
+- url: "*/.*"
+  service: default
