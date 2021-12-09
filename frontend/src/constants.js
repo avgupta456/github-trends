@@ -14,5 +14,5 @@ export const BACKEND_URL = PROD
   : 'http://localhost:8000';
 
 export const SUBSCRIBER_URL = PROD
-  ? 'https://sub-dot-github-298920.uc.r.appspot.com'
+  ? 'https://sub-dot-github-334619.uc.r.appspot.com'
   : 'http://localhost:8001';

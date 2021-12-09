@@ -3,7 +3,7 @@ import os
 # GLOBAL
 PROD = os.getenv("PROD", "False") == "True"
 DOCKER = os.getenv("DOCKER", "False") == "True"
-PROJECT_ID = "github-298920"
+PROJECT_ID = "github-334619"
 BACKEND_URL = "https://api.githubtrends.io" if PROD else "http://localhost:8000"
 
 # API
@@ -11,8 +11,9 @@ BACKEND_URL = "https://api.githubtrends.io" if PROD else "http://localhost:8000"
 # https://docs.github.com/en/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits
 # https://docs.github.com/en/graphql/overview/resource-limitations
 TIMEOUT = 15  # max seconds to wait for api response
-NODE_CHUNK_SIZE = 100  # number of nodes (commits) to query (max 100)
-NODE_THREADS = 5  # number of node queries simultaneously (avoid blacklisting)
+GRAPHQL_NODE_CHUNK_SIZE = 100  # number of nodes (commits) to query (max 100)
+GRAPHQL_NODE_THREADS = 5  # number of node queries simultaneously (avoid blacklisting)
+REST_NODE_THREADS = 50  # number of node queries simultaneously (avoid blacklisting)
 
 PR_FILES = 5  # max number of files to query for PRs
 NODE_QUERIES = 20  # max number of node queries to make

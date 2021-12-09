@@ -4,7 +4,13 @@ from typing import Any, DefaultDict, Dict, List, Optional, Set, Union
 
 import pytz
 
-from src.constants import NODE_CHUNK_SIZE, NODE_QUERIES, NODE_THREADS, PR_FILES
+from src.constants import (
+    GRAPHQL_NODE_CHUNK_SIZE,
+    GRAPHQL_NODE_THREADS,
+    NODE_QUERIES,
+    PR_FILES,
+    REST_NODE_THREADS,
+)
 from src.data.github.graphql import (
     RawCalendar,
     RawCommit as GraphQLRawCommit,
@@ -189,7 +195,7 @@ async def get_contributions(
             }
             for repo in repos
         ],
-        max_threads=100,
+        max_threads=REST_NODE_THREADS,
     )
 
     # Step 3B: get all repositories (REST)
@@ -203,7 +209,7 @@ async def get_contributions(
             }
             for repo in repos
         ],
-        max_threads=100,
+        max_threads=REST_NODE_THREADS,
     )
 
     repo_infos = {
@@ -225,16 +231,16 @@ async def get_contributions(
             all_node_ids.append(node_id)
 
     node_id_chunks: List[List[str]] = []
-    for i in range(0, len(all_node_ids), NODE_CHUNK_SIZE):
+    for i in range(0, len(all_node_ids), GRAPHQL_NODE_CHUNK_SIZE):
         node_id_chunks.append(
-            all_node_ids[i : min(len(all_node_ids), i + NODE_CHUNK_SIZE)]
+            all_node_ids[i : min(len(all_node_ids), i + GRAPHQL_NODE_CHUNK_SIZE)]
         )
 
     print("Step 3 Took ", datetime.now() - start)
     start = datetime.now()
 
     # Step 4: Get commit languages (GraphQL)
-    max_threads = NODE_THREADS * (5 if access_token is None else 1)
+    max_threads = GRAPHQL_NODE_THREADS * (5 if access_token is None else 1)
     commit_language_chunks: List[List[Optional[GraphQLRawCommit]]] = await gather(
         funcs=[get_commits for _ in node_id_chunks],
         args_dicts=[
@@ -277,7 +283,7 @@ async def get_contributions(
             }
             for url in [commit.url.split("/") for commit in sorted_commits]
         ],
-        max_threads=100,
+        max_threads=REST_NODE_THREADS,
     )
 
     commit_files_dict: Dict[str, List[RawCommitFile]] = {}
