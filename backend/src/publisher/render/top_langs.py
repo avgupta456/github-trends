@@ -54,11 +54,12 @@ def get_top_langs_svg(
         dataset.append(("", "", data_row))
         padding, width = 30, 260
     else:
+        max_length = max(data[i].loc for i in range(1, len(data)))
         for x in data[1:6]:
             if use_percent:
                 dataset.append((x.lang, str(x.percent) + "%", [(x.percent, x.color)]))
             else:
-                percent = 100 * x.loc / data[1].loc
+                percent = 100 * x.loc / max_length
                 dataset.append((x.lang, format_number(x.loc), [(percent, x.color)]))
         padding, width = 45, 210 if use_percent else 195
 
