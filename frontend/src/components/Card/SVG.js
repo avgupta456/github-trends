@@ -12,9 +12,14 @@ const SvgInline = (props) => {
   // eslint-disable-next-line no-unused-vars
   const [loaded, setLoaded] = useState(false);
 
+  let url = `${props.url.split('?')[0]}?cache=${Date.now()}`;
+  if (props.url.split('?').length > 1) {
+    url += `&${props.url.split('?')[1]}`;
+  }
+
   useEffect(() => {
     setLoaded(false);
-    fetch(props.url)
+    fetch(url)
       .then((res) => res.text())
       .then(setSvg)
       .then(() => setLoaded(true))
