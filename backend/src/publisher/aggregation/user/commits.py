@@ -71,20 +71,18 @@ def get_top_repos(
                 }
                 for x in list(repo_stats.languages.items())
             ],
-            "loc": sum(
-                [
-                    loc_metric_func(loc_metric, x.additions, x.deletions)
-                    for x in repo_stats.languages.values()
-                ]
-            ),
         }
         for repo, repo_stats in data.contribs.repo_stats.items()
         if include_private or not repo_stats.private
     ]
 
+    for repo in repos:
+        repo["loc"] = sum(x["loc"] for x in repo["langs"])  # first estimate
     repos = list(filter(lambda x: x["loc"] > 0, repos))
+
     for repo in repos:
         repo["langs"] = [x for x in repo["langs"] if x["loc"] > 0.05 * repo["loc"]]
+        repo["loc"] = sum(x["loc"] for x in repo["langs"])  # final estimate
     repos = sorted(repos, key=lambda x: x["loc"], reverse=True)
 
     new_repos = [

@@ -70,16 +70,20 @@ def get_commit_languages(
             total_additions += file.additions
             total_deletions += file.deletions
         for lang in out:
-            out[lang]["additions"] = round(
+            raw_additions: int = out[lang]["additions"]  # type: ignore
+            additions = round(
                 min(pr.additions, commit.additions)
-                * out[lang]["additions"]
+                * raw_additions
                 / max(1, total_additions)
             )
-            out[lang]["deletions"] = round(
+            raw_deletions: int = out[lang]["deletions"]  # type: ignore
+            deletions = round(
                 min(pr.deletions, commit.deletions)
-                * out[lang]["deletions"]
+                * raw_deletions
                 / max(1, total_deletions)
             )
+            out[lang]["additions"] = additions
+            out[lang]["deletions"] = deletions
     elif commit.additions + commit.deletions > CUTOFF:
         # assummed to be auto generated
         return {}
