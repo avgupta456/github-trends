@@ -3,49 +3,37 @@ from typing import Any, Dict, Optional
 from pydantic.error_wrappers import ValidationError
 
 from src.data.mongo.main import USERS
-from src.data.mongo.user.compression import decompress
-from src.data.mongo.user.models import UserMetadata, UserModel
+from src.data.mongo.user.models import FullUserModel, PublicUserModel
 from src.utils import alru_cache
 
 
 @alru_cache()
-async def get_user_metadata(
+async def get_public_user(
     user_id: str, no_cache: bool = False
-) -> Optional[UserMetadata]:
-    # excludes raw data from database query
-    user: Optional[Dict[str, Any]] = await USERS.find_one(  # type: ignore
-        {"user_id": user_id}, {"raw_data": 0}
-    )
+) -> Optional[PublicUserModel]:
+    user: Optional[Dict[str, Any]] = await USERS.find_one({"user_id": user_id})  # type: ignore
 
     if user is None:
         # flag is false, don't cache
         return (False, None)  # type: ignore
 
     try:
-        return (True, UserMetadata.parse_obj(user))  # type: ignore
+        return (True, PublicUserModel.parse_obj(user))  # type: ignore
     except (TypeError, KeyError, ValidationError):
         return (False, None)  # type: ignore
 
 
 @alru_cache()
-async def get_user_by_user_id(
+async def get_full_user(
     user_id: str, no_cache: bool = False
-) -> Optional[UserModel]:
+) -> Optional[FullUserModel]:
     user: Optional[Dict[str, Any]] = await USERS.find_one({"user_id": user_id})  # type: ignore
-
-    # (flag, value) output through decorator returns value
 
     if user is None:
         # flag is false, don't cache
         return (False, None)  # type: ignore
 
-    if "raw_data" not in user:
-        # flag is false, don't cache
-        return (False, UserModel.parse_obj(user))  # type: ignore
-
     try:
-        raw_data = decompress(user["raw_data"])
-        # flag is true, do cache
-        return (True, UserModel.parse_obj({**user, "raw_data": raw_data}))  # type: ignore
+        return (True, FullUserModel.parse_obj(user))  # type: ignore
     except (TypeError, KeyError, ValidationError):
-        return (False, UserModel.parse_obj({**user, "raw_data": None}))  # type: ignore
+        return (False, None)  # type: ignore

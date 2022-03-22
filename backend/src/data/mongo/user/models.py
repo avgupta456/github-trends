@@ -3,8 +3,6 @@ from typing import Optional, Union
 
 from pydantic import BaseModel, validator
 
-from src.models import UserPackage
-
 """
 Input Models
 """
@@ -20,7 +18,7 @@ Database Models
 """
 
 
-class UserMetadata(BaseModel):
+class PublicUserModel(BaseModel):
     user_id: str
     access_token: str
     private_access: Optional[bool]
@@ -33,10 +31,9 @@ class UserMetadata(BaseModel):
         return False if private_access is None else private_access
 
 
-class UserModel(UserMetadata):
+class FullUserModel(PublicUserModel):
     user_key: Optional[str]
     last_updated: Optional[datetime]
-    raw_data: Optional[UserPackage]
     lock: Optional[datetime]
 
     @validator("lock", pre=True, always=True)
@@ -44,7 +41,3 @@ class UserModel(UserMetadata):
         if not isinstance(lock, datetime):
             return datetime(1970, 1, 1)
         return lock
-
-
-class ExternalUserModel(UserMetadata):
-    raw_data: Optional[UserPackage]
