@@ -1,6 +1,9 @@
+from datetime import date
+from typing import Any, Dict
+
 from pydantic import BaseModel
 
-from src.models.user.contribs import FullUserContributions, UserContributions
+from src.models.user.contribs import UserContributions
 
 # from src.models.user.follows import UserFollows
 
@@ -8,7 +11,19 @@ from src.models.user.contribs import FullUserContributions, UserContributions
 class UserPackage(BaseModel):
     contribs: UserContributions
 
+    def compress(self):
+        return {
+            "c": self.contribs.compress(),
+        }
 
-class FullUserPackage(BaseModel):
-    contribs: FullUserContributions
-    # follows: UserFollows
+    @classmethod
+    def decompress(cls, data: Dict[str, Any]) -> "UserPackage":
+        return UserPackage(
+            contribs=UserContributions.decompress(data["c"]),
+        )
+
+    def __add__(self, other: "UserPackage") -> "UserPackage":
+        return UserPackage(contribs=self.contribs + other.contribs)
+
+    def trim(self, start: date, end: date) -> "UserPackage":
+        return UserPackage(contribs=self.contribs.trim(start, end))
