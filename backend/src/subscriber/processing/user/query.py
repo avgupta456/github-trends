@@ -1,17 +1,48 @@
+from calendar import monthrange
 from datetime import date, timedelta
-from typing import Optional
+from typing import List, Optional
 
 import requests
 
-from src.constants import BACKEND_URL, DOCKER, LOCAL_PUBLISHER, PROD
+from src.constants import API_VERSION
 from src.data.mongo.secret import update_keys
-from src.data.mongo.user import lock_user, update_user_raw_data
+from src.data.mongo.user import lock_user, update_user_last_access
+from src.data.mongo.user_months import get_user_months, set_user_month, UserMonth
+from src.models import UserPackage
 from src.subscriber.aggregation import get_user_data
-from src.utils.alru_cache import alru_cache
+from src.utils import alru_cache, date_to_datetime
 
 s = requests.Session()
 
 # NOTE: query user from PubSub, not from subscriber user router
+
+
+async def query_user_month(user_id: str, start_date: date, access_token: Optional[str]):
+    year, month = start_date.year, start_date.month
+    end_day = monthrange(year, month)[1]
+    end_date = date(year, month, end_day)
+
+    data = await get_user_data(
+        user_id=user_id,
+        start_date=start_date,
+        end_date=end_date,
+        timezone_str="US/Eastern",
+        access_token=access_token,
+    )
+
+    user_month = UserMonth.parse_obj(
+        {
+            "user_id": user_id,
+            "month": date_to_datetime(start_date),
+            "version": API_VERSION,
+            "complete": True,  # TODO: revisit
+            "data": data,
+        }
+    )
+
+    await set_user_month(user_month)
+
+    return data
 
 
 @alru_cache()
@@ -19,39 +50,26 @@ async def query_user(user_id: str, access_token: Optional[str]) -> bool:
     await update_keys()
     await lock_user(user_id)
 
-    # standard policy is to check past year of data
     start_date = date.today() - timedelta(365)
     end_date = date.today()
-    timezone_str = "US/Eastern"
 
-    # TODO: if a user just signed up, sometimes GitHub
-    # hasn't updated their access token immediately
-    # Not a major problem because querying on website
-    # will re-trigger this function
+    curr_data: List[UserMonth] = await get_user_months(user_id, start_date, end_date)
+    curr_months = [x.month for x in curr_data]
 
-    # TODO: historical data is never updated,
-    # don't query full history each time, instead
-    # define function to build on previous results
+    month, year = start_date.month, start_date.year
+    months: List[date] = []
+    while date(year, month, 1) <= end_date:
+        start = date(year, month, 1)
+        if date_to_datetime(start) not in curr_months:
+            months.append(start)
+        month = month % 12 + 1
+        year = year + (month == 1)
 
-    # TODO: improve performance to store > 1 year
-    # ideally five years, leads to issues currently
+    user_packages: List[UserPackage] = []
+    for month in months:
+        data = await query_user_month(user_id, month, access_token)
+        user_packages.append(data)
 
-    output = await get_user_data(
-        user_id=user_id,
-        start_date=start_date,
-        end_date=end_date,
-        timezone_str=timezone_str,
-        access_token=access_token,
-    )
-
-    await update_user_raw_data(user_id, output)
-
-    # cache buster for publisher
-    if PROD:
-        s.get(BACKEND_URL + "/user/db/get/metadata/" + user_id + "?no_cache=True")
-        s.get(BACKEND_URL + "/user/db/get/" + user_id + "?no_cache=True")
-    elif DOCKER:
-        s.get(LOCAL_PUBLISHER + "/user/db/get/metadata/" + user_id + "?no_cache=True")
-        s.get(LOCAL_PUBLISHER + "/user/db/get/" + user_id + "?no_cache=True")
+    await update_user_last_access(user_id)
 
     return (True, True)  # type: ignore

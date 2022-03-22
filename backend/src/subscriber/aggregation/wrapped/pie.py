@@ -1,13 +1,7 @@
 from typing import List
 
 from src.constants import DEFAULT_COLOR
-from src.models import (
-    FullUserPackage,
-    Language,
-    PieData,
-    PieDatum,
-    RepoContributionStats,
-)
+from src.models import Language, PieData, PieDatum, RepoContributionStats, UserPackage
 from src.utils import format_number
 
 
@@ -21,7 +15,7 @@ def _count_repo_loc(x: RepoContributionStats, metric: str) -> int:
     return sum(_count_loc(lang, metric) for lang in x.languages.values())
 
 
-def get_pie_data(data: FullUserPackage) -> PieData:
+def get_pie_data(data: UserPackage) -> PieData:
     # REPO PIE CHART
     out = {}
     for m in ["changed", "added"]:

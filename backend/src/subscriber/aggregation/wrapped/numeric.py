@@ -2,10 +2,10 @@ from collections import defaultdict
 from datetime import datetime
 from typing import Dict
 
-from src.models import ContribStats, FullUserPackage, LOCStats, MiscStats, NumericData
+from src.models import ContribStats, LOCStats, MiscStats, NumericData, UserPackage
 
 
-def get_contrib_stats(data: FullUserPackage) -> ContribStats:
+def get_contrib_stats(data: UserPackage) -> ContribStats:
     return ContribStats.parse_obj(
         {
             "contribs": data.contribs.total_stats.contribs_count,
@@ -18,7 +18,7 @@ def get_contrib_stats(data: FullUserPackage) -> ContribStats:
     )
 
 
-def get_misc_stats(data: FullUserPackage) -> MiscStats:
+def get_misc_stats(data: UserPackage) -> MiscStats:
     weekdays: Dict[int, int] = defaultdict(int)
     yeardays, distinct_days, total_contribs = {}, 0, 0
     for item in data.contribs.total:
@@ -53,7 +53,7 @@ def format_loc_number(number: int) -> str:
     return str(round(number / 1e6)) + ",000,000"
 
 
-def get_loc_stats(data: FullUserPackage) -> LOCStats:
+def get_loc_stats(data: UserPackage) -> LOCStats:
     dataset = data.contribs.total_stats.languages.values()
     return LOCStats.parse_obj(
         {
@@ -80,7 +80,7 @@ def get_loc_stats(data: FullUserPackage) -> LOCStats:
     )
 
 
-def get_numeric_data(data: FullUserPackage) -> NumericData:
+def get_numeric_data(data: UserPackage) -> NumericData:
     return NumericData.parse_obj(
         {
             "contribs": get_contrib_stats(data),

@@ -1,7 +1,7 @@
 from typing import Optional
 
 from src.data.mongo.secret import update_keys
-from src.data.mongo.user import UserMetadata, get_user_metadata
+from src.data.mongo.user import PublicUserModel, get_public_user as db_get_public_user
 from src.data.mongo.wrapped import (
     WrappedModel,
     get_wrapped_user as db_get_wrapped_user,
@@ -32,7 +32,7 @@ async def query_wrapped_user(
     user_id: str, year: int, no_cache: bool = False
 ) -> WrappedPackage:
     # query user, determine if private or public request
-    user: Optional[UserMetadata] = await get_user_metadata(user_id)
+    user: Optional[PublicUserModel] = await db_get_public_user(user_id)
     access_token = None if user is None else user.access_token
     private = False
     if user is not None and user.private_access is not None:

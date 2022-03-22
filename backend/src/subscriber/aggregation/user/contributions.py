@@ -1,6 +1,6 @@
 from collections import defaultdict
-from datetime import date, datetime, timedelta
-from typing import Any, DefaultDict, Dict, List, Optional, Set, Union
+from datetime import date, datetime
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import pytz
 
@@ -21,7 +21,6 @@ from src.data.github.graphql import (
     get_repo,
     get_user_contribution_calendar,
     get_user_contribution_events,
-    get_user_contribution_years,
 )
 from src.data.github.rest import (
     RawCommit as RESTRawCommit,
@@ -30,13 +29,32 @@ from src.data.github.rest import (
     get_repo_commits,
 )
 from src.models import UserContributions
-from src.models.user.contribs import FullUserContributions
-from src.subscriber.aggregation.user.commit import get_commit_languages
+from src.subscriber.aggregation.user.languages import (
+    CommitLanguages,
+    get_commit_languages,
+)
 from src.utils import date_to_datetime, gather
 
-t_stats = DefaultDict[str, Dict[str, List[Union[RawEventsEvent, RawEventsCommit]]]]
-t_commits = List[Dict[str, Union[Dict[str, Dict[str, Union[str, int]]], str]]]
-t_languages = List[Dict[str, Dict[str, Union[str, int]]]]
+
+class ContribsList:
+    def __init__(self):
+        self.commits: List[RawEventsCommit] = []
+        self.issues: List[RawEventsEvent] = []
+        self.prs: List[RawEventsEvent] = []
+        self.reviews: List[RawEventsEvent] = []
+        self.repos: List[RawEventsEvent] = []
+
+    def add(self, label: str, event: Union[RawEventsCommit, RawEventsEvent]):
+        if label == "commit" and isinstance(event, RawEventsCommit):
+            self.commits.append(event)
+        elif label == "issue" and isinstance(event, RawEventsEvent):
+            self.issues.append(event)
+        elif label == "pr" and isinstance(event, RawEventsEvent):
+            self.prs.append(event)
+        elif label == "review" and isinstance(event, RawEventsEvent):
+            self.reviews.append(event)
+        elif label == "repo" and isinstance(event, RawEventsEvent):
+            self.repos.append(event)
 
 
 def get_user_all_contribution_events(
@@ -44,10 +62,8 @@ def get_user_all_contribution_events(
     start_date: datetime,
     end_date: datetime,
     access_token: Optional[str] = None,
-) -> t_stats:
-    repo_contribs: t_stats = defaultdict(
-        lambda: {"commits": [], "issues": [], "prs": [], "reviews": [], "repos": []}
-    )
+) -> Dict[str, ContribsList]:
+    repo_contribs: Dict[str, ContribsList] = defaultdict(lambda: ContribsList())
     after: Optional[str] = ""
     cont = True
     while cont:
@@ -61,28 +77,25 @@ def get_user_all_contribution_events(
         )
 
         cont = False
-        for event_type, event_list in zip(
-            ["commits", "issues", "prs", "reviews"],
-            [
-                response.commit_contribs_by_repo,
-                response.issue_contribs_by_repo,
-                response.pr_contribs_by_repo,
-                response.review_contribs_by_repo,
-            ],
-        ):
+        node_lists = [
+            ("commit", response.commit_contribs_by_repo),
+            ("issue", response.issue_contribs_by_repo),
+            ("pr", response.pr_contribs_by_repo),
+            ("review", response.review_contribs_by_repo),
+        ]
+        for event_type, event_list in node_lists:
             for repo in event_list:
                 name = repo.repo.name
                 for event in repo.contribs.nodes:
-                    repo_contribs[name][event_type].append(event)
+                    repo_contribs[name].add(event_type, event)
                 if repo.contribs.page_info.has_next_page:
                     after = repo.contribs.page_info.end_cursor
                     cont = True
 
         for repo in response.repo_contribs.nodes:
             name = repo.repo.name
-            repo_contribs[name]["repos"].append(
-                RawEventsEvent(occurredAt=str(repo.occurred_at))
-            )
+            node = RawEventsEvent(occurredAt=str(repo.occurred_at))
+            repo_contribs[name].add("repo", node)
 
     return repo_contribs
 
@@ -94,103 +107,132 @@ def get_all_commit_info(
     end_date: datetime,
     access_token: Optional[str] = None,
 ) -> List[RESTRawCommit]:
-    """Gets all user's commit times for a given repository"""
     owner, repo = name_with_owner.split("/")
     data: List[RESTRawCommit] = []
-
-    def _get_repo_commits(page: int):
-        return get_repo_commits(
-            owner, repo, user_id, start_date, end_date, page, access_token
-        )
-
     for i in range(10):
         if len(data) == 100 * i:
-            data.extend(_get_repo_commits(i + 1))
+            new_data = get_repo_commits(
+                owner, repo, user_id, start_date, end_date, i + 1, access_token
+            )
+            data.extend(new_data)
 
     # sort ascending
-    sorted_data = sorted(data, key=lambda x: x.timestamp)
-    return sorted_data
+    return sorted(data, key=lambda x: x.timestamp)
 
 
-async def get_contributions(
-    user_id: str,
-    start_date: date = date.today() - timedelta(365),
-    end_date: date = date.today(),
-    timezone_str: str = "US/Eastern",
-    full: bool = False,
+async def get_all_commit_languages(
+    commit_infos: List[List[RESTRawCommit]],
+    repos: List[str],
+    repo_infos: Dict[str, RawRepo],
     access_token: Optional[str] = None,
-) -> Union[UserContributions, FullUserContributions]:
-    tz = pytz.timezone(timezone_str)
+) -> Dict[str, List[CommitLanguages]]:
+    commit_node_ids = [[x.node_id for x in repo] for repo in commit_infos]
 
-    start = datetime.now()
+    id_mapping: Dict[str, Tuple[int, int]] = {}
+    repo_mapping: Dict[str, str] = {}
+    all_node_ids: List[str] = []
+    for i, repo_node_ids in enumerate(commit_node_ids):
+        for j, node_id in enumerate(repo_node_ids):
+            id_mapping[node_id] = (i, j)
+            repo_mapping[node_id] = repos[i]
+            all_node_ids.append(node_id)
 
-    # Step 1: get years for contribution calendar (GraphQL)
-    years = sorted(
-        filter(
-            lambda x: start_date.year <= x <= end_date.year,
-            get_user_contribution_years(user_id, access_token),
+    node_id_chunks: List[List[str]] = []
+    for i in range(0, len(all_node_ids), GRAPHQL_NODE_CHUNK_SIZE):
+        node_id_chunks.append(
+            all_node_ids[i : min(len(all_node_ids), i + GRAPHQL_NODE_CHUNK_SIZE)]
         )
+
+    commit_language_chunks: List[List[Optional[GraphQLRawCommit]]] = await gather(
+        funcs=[get_commits for _ in node_id_chunks],
+        args_dicts=[
+            {"node_ids": node_id_chunk, "access_token": access_token}
+            for node_id_chunk in node_id_chunks
+        ],
+        max_threads=GRAPHQL_NODE_THREADS,
     )
 
-    dates = [
-        [
-            date_to_datetime(max(date(year, 1, 1), start_date)),
-            date_to_datetime(
-                min(date(year, 12, 31), end_date), hour=23, minute=59, second=59
-            ),
-        ]
-        for year in years
+    temp_commit_languages: List[Optional[GraphQLRawCommit]] = []
+    for commit_language_chunk in commit_language_chunks:
+        temp_commit_languages.extend(commit_language_chunk)
+
+    # returns commits with no associated PR or incomplete PR
+    filtered_commits: List[GraphQLRawCommit] = filter(
+        lambda x: x is not None
+        and (len(x.prs.nodes) == 0 or x.prs.nodes[0].changed_files > PR_FILES)
+        and (x.additions + x.deletions > 100),
+        temp_commit_languages,
+    )  # type: ignore
+
+    # get NODE_QUERIES largest commits with no associated PR or incomplete PR
+    sorted_commits = sorted(
+        filtered_commits, key=lambda x: x.additions + x.deletions, reverse=True
+    )[:NODE_QUERIES]
+
+    sorted_commit_urls = [commit.url.split("/") for commit in sorted_commits]
+    commit_files: List[List[RawCommitFile]] = await gather(
+        funcs=[get_commit_files for _ in sorted_commit_urls],
+        args_dicts=[
+            {
+                "owner": url[3],
+                "repo": url[4],
+                "sha": url[6],
+                "access_token": access_token,
+            }
+            for url in sorted_commit_urls
+        ],
+        max_threads=REST_NODE_THREADS,
+    )
+
+    commit_files_dict: Dict[str, List[RawCommitFile]] = {}
+    for commit, commit_file in zip(sorted_commits, commit_files):
+        commit_files_dict[commit.url] = commit_file
+
+    commit_languages: List[List[CommitLanguages]] = [
+        [CommitLanguages() for _ in repo] for repo in commit_infos
     ]
+    for raw_commits, node_ids in zip(commit_language_chunks, node_id_chunks):
+        for raw_commit, node_id in zip(raw_commits, node_ids):
+            curr_commit_files: Optional[List[RawCommitFile]] = None
+            if raw_commit is not None and raw_commit.url in commit_files_dict:
+                curr_commit_files = commit_files_dict[raw_commit.url]
+            lang_breakdown = get_commit_languages(
+                raw_commit, curr_commit_files, repo_infos[repo_mapping[node_id]]
+            )
+            i, j = id_mapping[node_id]
+            commit_languages[i][j] = lang_breakdown
 
-    print("Step 1 Took ", datetime.now() - start)
-    start = datetime.now()
+    commit_languages_dict: Dict[str, List[CommitLanguages]] = {}
+    for repo, languages in zip(repos, commit_languages):
+        commit_languages_dict[repo] = languages
 
-    # Step 2A: get contribution calendars (GraphQL)
-    calendars: List[RawCalendar] = await gather(
-        funcs=[get_user_contribution_calendar for _ in years],
-        args_dicts=[
-            {
-                "user_id": user_id,
-                "start_date": dates[i][0],
-                "end_date": dates[i][1],
-                "access_token": access_token,
-            }
-            for i in range(len(years))
-        ],
+    return commit_languages_dict
+
+
+async def get_cleaned_contributions(
+    user_id: str, start_date: datetime, end_date: datetime, access_token: Optional[str]
+) -> Tuple[
+    RawCalendar,
+    Dict[str, ContribsList],
+    Dict[str, RawRepo],
+    Dict[str, List[CommitLanguages]],
+]:
+    calendar = get_user_contribution_calendar(
+        user_id, start_date, end_date, access_token
     )
-
-    # Step 2B: get contribution events (GraphQL)
-    all_events: List[t_stats] = await gather(
-        funcs=[get_user_all_contribution_events for _ in years],
-        args_dicts=[
-            {
-                "user_id": user_id,
-                "start_date": dates[i][0],
-                "end_date": dates[i][1],
-                "access_token": access_token,
-            }
-            for i in range(len(years))
-        ],
+    contrib_events = get_user_all_contribution_events(
+        user_id, start_date, end_date, access_token
     )
+    repos: List[str] = list(set(contrib_events.keys()))
 
-    repos_set: Set[str] = set()
-    for events_year in all_events:
-        for repo in events_year:
-            repos_set.add(repo)
-    repos = list(repos_set)
-
-    print("Step 2 Took ", datetime.now() - start)
-    start = datetime.now()
-
-    # Step 3A: get all commit node_ids, timestamps (REST)
     commit_infos: List[List[RESTRawCommit]] = await gather(
         funcs=[get_all_commit_info for _ in repos],
         args_dicts=[
             {
                 "user_id": user_id,
                 "name_with_owner": repo,
-                "start_date": dates[0][0],  # first start
-                "end_date": dates[-1][1],  # last end
+                "start_date": start_date,
+                "end_date": end_date,
                 "access_token": access_token,
             }
             for repo in repos
@@ -198,7 +240,6 @@ async def get_contributions(
         max_threads=REST_NODE_THREADS,
     )
 
-    # Step 3B: get all repositories (REST)
     _repo_infos: List[Optional[RawRepo]] = await gather(
         funcs=[get_repo for _ in repos],
         args_dicts=[
@@ -212,280 +253,187 @@ async def get_contributions(
         max_threads=REST_NODE_THREADS,
     )
 
-    repo_infos = {
-        repo: repo_info
-        for repo, repo_info in zip(repos, _repo_infos)
-        if repo_info is not None
-    }
+    repo_infos = {k: v for k, v in zip(repos, _repo_infos) if v is not None}
 
-    commit_times = [[x.timestamp for x in repo] for repo in commit_infos]
-    commit_node_ids = [[x.node_id for x in repo] for repo in commit_infos]
-
-    id_mapping: Dict[str, List[int]] = {}
-    repo_mapping: Dict[str, str] = {}
-    all_node_ids: List[str] = []
-    for i, repo_node_ids in enumerate(commit_node_ids):
-        for j, node_id in enumerate(repo_node_ids):
-            id_mapping[node_id] = [i, j]
-            repo_mapping[node_id] = repos[i]
-            all_node_ids.append(node_id)
-
-    node_id_chunks: List[List[str]] = []
-    for i in range(0, len(all_node_ids), GRAPHQL_NODE_CHUNK_SIZE):
-        node_id_chunks.append(
-            all_node_ids[i : min(len(all_node_ids), i + GRAPHQL_NODE_CHUNK_SIZE)]
-        )
-
-    print("Step 3 Took ", datetime.now() - start)
-    start = datetime.now()
-
-    # Step 4: Get commit languages (GraphQL)
-    max_threads = GRAPHQL_NODE_THREADS * (5 if access_token is None else 1)
-    commit_language_chunks: List[List[Optional[GraphQLRawCommit]]] = await gather(
-        funcs=[get_commits for _ in node_id_chunks],
-        args_dicts=[
-            {
-                "node_ids": node_id_chunk,
-                "access_token": access_token,
-            }
-            for node_id_chunk in node_id_chunks
-        ],
-        max_threads=max_threads,
+    commit_languages_dict = await get_all_commit_languages(
+        commit_infos, repos, repo_infos, access_token
     )
 
-    # gets NODE_QUERIES largest commits
-    temp_commit_languages: List[Optional[GraphQLRawCommit]] = []
-    for commit_language_chunk in commit_language_chunks:
-        temp_commit_languages.extend(commit_language_chunk)
-    filtered_commits: List[GraphQLRawCommit] = filter(
-        # returns commits with no associated PR or incomplete PR
-        lambda x: x is not None
-        and (len(x.prs.nodes) == 0 or x.prs.nodes[0].changed_files > PR_FILES)
-        and (x.additions + x.deletions > 100),
-        temp_commit_languages,
-    )  # type: ignore
-    sorted_commits = sorted(
-        filtered_commits, key=lambda x: x.additions + x.deletions, reverse=True
-    )[:NODE_QUERIES]
-
-    print("Step 4 Took ", datetime.now() - start)
-    start = datetime.now()
-
-    # Step 5: Get commit files for largest commits (REST)
-    commit_files: List[List[RawCommitFile]] = await gather(
-        funcs=[get_commit_files for _ in sorted_commits],
-        args_dicts=[
-            {
-                "owner": url[3],
-                "repo": url[4],
-                "sha": url[6],
-                "access_token": access_token,
-            }
-            for url in [commit.url.split("/") for commit in sorted_commits]
-        ],
-        max_threads=REST_NODE_THREADS,
+    return (
+        calendar,
+        contrib_events,
+        repo_infos,
+        commit_languages_dict,
     )
 
-    commit_files_dict: Dict[str, List[RawCommitFile]] = {}
-    for commit, commit_file in zip(sorted_commits, commit_files):
-        commit_files_dict[commit.url] = commit_file
 
-    commit_languages: List[t_languages] = [[{} for _ in repo] for repo in commit_infos]
-    for raw_commits, node_ids in zip(commit_language_chunks, node_id_chunks):
-        for raw_commit, node_id in zip(raw_commits, node_ids):
-            curr_commit_files: Optional[List[RawCommitFile]] = None
-            if raw_commit is not None and raw_commit.url in commit_files_dict:
-                curr_commit_files = commit_files_dict[raw_commit.url]
-            lang_breakdown = get_commit_languages(
-                raw_commit, curr_commit_files, repo_infos[repo_mapping[node_id]]
-            )
-            commit_languages[id_mapping[node_id][0]][
-                id_mapping[node_id][1]
-            ] = lang_breakdown
+class StatsContainer:
+    def __init__(self):
+        self.contribs: int = 0
+        self.commits: int = 0
+        self.issues: int = 0
+        self.prs: int = 0
+        self.reviews: int = 0
+        self.repos: int = 0
+        self.other: int = 0
+        self.languages = CommitLanguages()
 
-    commit_times_dict: Dict[str, List[datetime]] = {}
-    commit_languages_dict: Dict[str, t_languages] = {}
-    for repo, times, languages in zip(repos, commit_times, commit_languages):
-        commit_times_dict[repo] = times
-        commit_languages_dict[repo] = languages
+    def add_stat(self, label: str, count: int, add: bool = False) -> None:
+        if label == "commit":
+            self.commits += count
+        elif label == "issue":
+            self.issues += count
+        elif label == "pr":
+            self.prs += count
+        elif label == "review":
+            self.reviews += count
+        elif label == "repo":
+            self.repos += count
 
-    print("Step 5 Took ", datetime.now() - start)
-    start = datetime.now()
+        if add:
+            self.contribs += count
+        else:
+            self.other -= count
 
-    # Below is strictly aggregation, no more GitHub API calls
-
-    def get_stats() -> Dict[str, Union[int, Dict[str, int]]]:
+    def to_dict(self) -> Dict[str, Any]:
         return {
-            "contribs_count": 0,
-            "commits_count": 0,
-            "issues_count": 0,
-            "prs_count": 0,
-            "reviews_count": 0,
-            "repos_count": 0,
-            "other_count": 0,
-            "languages": {},
+            "contribs_count": self.contribs,
+            "commits_count": self.commits,
+            "issues_count": self.issues,
+            "prs_count": self.prs,
+            "reviews_count": self.reviews,
+            "repos_count": self.repos,
+            "other_count": self.other,
+            "languages": self.languages.to_dict(),
         }
 
-    def get_lists() -> Dict[str, Any]:
+
+class DateContainer:
+    def __init__(self):
+        self.date = ""
+        self.weekday = 0
+        self.stats = StatsContainer()
+
+    def add_stat(self, label: str, count: int, add: bool = False):
+        self.stats.add_stat(label, count, add)
+
+    def to_dict(self) -> Dict[str, Any]:
         return {
-            "commits": [],
-            "issues": [],
-            "prs": [],
-            "reviews": [],
-            "repos": [],
+            "date": self.date,
+            "weekday": self.weekday,
+            "stats": self.stats.to_dict(),
         }
 
-    total_stats = get_stats()
-    public_stats = get_stats()
-    total: Dict[str, Dict[str, Any]] = defaultdict(
-        lambda: {"date": "", "weekday": 0, "stats": get_stats(), "lists": get_lists()}
-    )
-    public: Dict[str, Dict[str, Any]] = defaultdict(
-        lambda: {"date": "", "weekday": 0, "stats": get_stats(), "lists": get_lists()}
-    )
-    repo_stats: Dict[str, Dict[str, Union[int, Dict[str, int]]]] = defaultdict(
-        get_stats
-    )
-    repositories: Dict[str, Dict[str, Dict[str, Any]]] = defaultdict(
-        lambda: defaultdict(
-            lambda: {
-                "date": "",
-                "weekday": 0,
-                "stats": get_stats(),
-                "lists": get_lists(),
-            }
-        )
+
+# assumed one month span, can be no more than one year
+async def get_contributions(
+    user_id: str,
+    start_date: date,
+    end_date: date,
+    timezone_str: str = "US/Eastern",
+    access_token: Optional[str] = None,
+) -> UserContributions:
+    tz = pytz.timezone(timezone_str)
+
+    start_month = date_to_datetime(start_date)
+    end_month = date_to_datetime(end_date, hour=23, minute=59, second=59)
+    (
+        calendar,
+        contrib_events,
+        repo_infos,
+        commit_languages_dict,
+    ) = await get_cleaned_contributions(user_id, start_month, end_month, access_token)
+
+    total_stats = StatsContainer()
+    public_stats = StatsContainer()
+    total: Dict[str, DateContainer] = defaultdict(DateContainer)
+    public: Dict[str, DateContainer] = defaultdict(DateContainer)
+    repo_stats: Dict[str, StatsContainer] = defaultdict(StatsContainer)
+    repositories: Dict[str, Dict[str, DateContainer]] = defaultdict(
+        lambda: defaultdict(DateContainer)
     )
 
-    for calendar_year in calendars:
-        for week in calendar_year.weeks:
-            for day in week.contribution_days:
-                day_str = str(day.date)
-                total[day_str]["date"] = day.date.isoformat()
-                total[day_str]["weekday"] = day.weekday
-                total[day_str]["stats"]["contribs_count"] = day.count
-                total[day_str]["stats"]["other_count"] = day.count
-                public[day_str]["date"] = day.date.isoformat()
-                public[day_str]["weekday"] = day.weekday
-                public[day_str]["stats"]["contribs_count"] = day.count
-                public[day_str]["stats"]["other_count"] = day.count
-                total_stats["contribs_count"] += day.count  # type: ignore
-                total_stats["other_count"] += day.count  # type: ignore
-                public_stats["contribs_count"] += day.count  # type: ignore
-                public_stats["other_count"] += day.count  # type: ignore
+    for week in calendar.weeks:
+        for day in week.contribution_days:
+            day_str = str(day.date)
+            for (obj, stats_obj) in [(total, total_stats), (public, public_stats)]:
+                obj[day_str].date = day.date.isoformat()
+                obj[day_str].weekday = day.weekday
+                obj[day_str].stats.contribs = day.count
+                obj[day_str].stats.other = day.count
+                stats_obj.contribs += day.count
+                stats_obj.other += day.count
 
-    def update(date_str: str, repo: str, event: str, count: int):
+    def update_stats(date_str: str, repo: str, event: str, count: int):
         # update global counts for this event
-        total[date_str]["stats"][event + "_count"] += count
-        total[date_str]["stats"]["other_count"] -= count
-        total_stats[event + "_count"] += count  # type: ignore
-        total_stats["other_count"] -= count  # type: ignore
-        is_private = repo_infos[repo].is_private
-        if not is_private:
-            public[date_str]["stats"][event + "_count"] += count
-            public[date_str]["stats"]["other_count"] -= count
-            public_stats[event + "_count"] += count  # type: ignore
-            public_stats["other_count"] -= count  # type: ignore
-        # update repo counts for this event
-        repositories[repo][date_str]["stats"][event + "_count"] += count
-        repositories[repo][date_str]["stats"]["contribs_count"] += count
-        repo_stats[repo][event + "_count"] += count  # type: ignore
-        repo_stats[repo]["contribs_count"] += count  # type: ignore
+        total[date_str].add_stat(event, count)
+        total_stats.add_stat(event, count)
+        if not repo_infos[repo].is_private:
+            public[date_str].add_stat(event, count)
+            public_stats.add_stat(event, count)
+        repositories[repo][date_str].add_stat(event, count, add=True)
+        repo_stats[repo].add_stat(event, count, add=True)
 
-    def update_langs(
-        date_str: str,
-        repo: str,
-        langs_list: t_languages,
-    ):
-        is_private = repo_infos[repo].is_private
-        for langs in langs_list:
-            for lang, lang_data in langs.items():
-                stores = [
-                    total[date_str]["stats"]["languages"],
-                    total_stats["languages"],
-                    repositories[repo][date_str]["stats"]["languages"],
-                    repo_stats[repo]["languages"],
-                ]
-                if not is_private:
-                    stores.append(public[date_str]["stats"]["languages"])
-                    stores.append(public_stats["languages"])
-                for store in stores:
-                    if lang not in store:  # type: ignore
-                        store[lang] = {"color": lang_data["color"], "additions": 0, "deletions": 0}  # type: ignore
-                    store[lang]["additions"] += lang_data["additions"]  # type: ignore
-                    store[lang]["deletions"] += lang_data["deletions"]  # type: ignore
+    def update_langs(date_str: str, repo: str, langs: CommitLanguages):
+        stores = [
+            total[date_str].stats.languages,
+            total_stats.languages,
+            repositories[repo][date_str].stats.languages,
+            repo_stats[repo].languages,
+        ]
+        if not repo_infos[repo].is_private:
+            stores.append(public[date_str].stats.languages)
+            stores.append(public_stats.languages)
 
-    for events_year in all_events:
-        for repo, repo_events in events_year.items():
-            for event_type in ["commits", "issues", "prs", "reviews", "repos"]:
-                events = sorted(repo_events[event_type], key=lambda x: x.occurred_at)
-                for event in events:
-                    datetime_obj = event.occurred_at.astimezone(tz)
-                    date_str = datetime_obj.date().isoformat()
-                    datetime_str = datetime_obj.isoformat()
-                    repositories[repo][date_str]["date"] = date_str
-                    if isinstance(event, RawEventsCommit):
-                        commit_info: t_commits = []
-                        langs_list: t_languages = []
-                        count = 0
-                        while len(commit_times_dict[repo]) > 0 and count < event.count:
-                            raw_time = commit_times_dict[repo].pop(0)
-                            langs = commit_languages_dict[repo].pop(0)
-                            langs_list.append(langs)
-                            time = pytz.utc.localize(raw_time).astimezone(tz)
-                            commit_info.append(
-                                {"timestamp": time.isoformat(), "languages": langs}
-                            )
-                            count += 1
+        for store in stores:
+            store += langs
 
-                        # record timestamps
-                        total[date_str]["lists"]["commits"].extend(commit_info)
-                        repositories[repo][date_str]["lists"]["commits"].extend(
-                            commit_info
-                        )
-                        if not repo_infos[repo].is_private:
-                            public[date_str]["lists"]["commits"].extend(commit_info)
+    for repo, repo_events in contrib_events.items():
+        for (label, events) in [
+            ("commit", repo_events.commits),
+            ("issue", repo_events.issues),
+            ("pr", repo_events.prs),
+            ("review", repo_events.reviews),
+            ("repo", repo_events.repos),
+        ]:
+            events = sorted(events, key=lambda x: x.occurred_at)
+            for event in events:
+                datetime_obj = event.occurred_at.astimezone(tz)
+                date_str = datetime_obj.date().isoformat()
+                repositories[repo][date_str].date = date_str
+                if isinstance(event, RawEventsCommit):
+                    count = 0
+                    while len(commit_languages_dict[repo]) > 0 and count < event.count:
+                        langs = commit_languages_dict[repo].pop(0)
+                        update_langs(date_str, repo, langs)
+                        count += 1
+                    update_stats(date_str, repo, "commit", event.count)
+                else:
+                    update_stats(date_str, repo, label, 1)
 
-                        # update stats
-                        update(date_str, repo, "commits", event.count)
-                        update_langs(date_str, repo, langs_list)
-                    else:
-                        # record timestamps
-                        total[date_str]["lists"][event_type].append(datetime_str)
-                        repositories[repo][date_str]["lists"][event_type].append(
-                            datetime_str
-                        )
-                        if not repo_infos[repo].is_private:
-                            public[date_str]["lists"][event_type].append(datetime_str)
-
-                        # update stats
-                        update(date_str, repo, event_type, 1)
-
-    total_list = list(
-        filter(lambda x: x["stats"]["contribs_count"] > 0, list(total.values()))
-    )
-    public_list = list(
-        filter(lambda x: x["stats"]["contribs_count"] > 0, list(public.values()))
-    )
-    repositories_list = {
-        name: list(repo.values()) for name, repo in repositories.items()
-    }
+    total_stats_dict = total_stats.to_dict()
+    public_stats_dict = public_stats.to_dict()
+    repo_stats_dict = {name: stats.to_dict() for name, stats in repo_stats.items()}
 
     for repo in repo_stats:
-        repo_stats[repo]["private"] = repo_infos[repo].is_private
+        repo_stats_dict[repo]["private"] = repo_infos[repo].is_private
 
-    cls = FullUserContributions if full else UserContributions
-    output = cls.parse_obj(
+    total_list = [v.to_dict() for v in total.values() if v.stats.contribs > 0]
+    public_list = [v.to_dict() for v in public.values() if v.stats.contribs > 0]
+    repositories_list = {
+        name: list([v.to_dict() for v in repo.values()])
+        for name, repo in repositories.items()
+    }
+
+    output = UserContributions.parse_obj(
         {
-            "total_stats": total_stats,
-            "public_stats": public_stats,
+            "total_stats": total_stats_dict,
+            "public_stats": public_stats_dict,
             "total": total_list,
             "public": public_list,
-            "repo_stats": repo_stats,
+            "repo_stats": repo_stats_dict,
             "repos": repositories_list,
         }
     )
-
-    print("Step 6 Took", datetime.now() - start)
 
     return output
