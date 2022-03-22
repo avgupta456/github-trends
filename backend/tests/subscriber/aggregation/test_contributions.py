@@ -12,6 +12,7 @@ class TestTemplate(AsyncTestCase):
         response = await get_contributions(
             user_id=USER_ID,
             start_date=date.today() - timedelta(days=30),
+            end_date=date.today(),
             access_token=TOKEN,
         )
         self.assertIsInstance(response, UserContributions)
