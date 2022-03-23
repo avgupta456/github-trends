@@ -13,6 +13,7 @@ async def get_user_data(
     end_date: date,
     timezone_str: str,
     access_token: Optional[str],
+    catch_errors: bool = False,
 ) -> UserPackage:
     """packages all processing steps for the user query"""
 
@@ -22,5 +23,6 @@ async def get_user_data(
         end_date=end_date,
         timezone_str=timezone_str,
         access_token=access_token,
+        catch_errors=catch_errors,
     )
     return UserPackage(contribs=contribs)

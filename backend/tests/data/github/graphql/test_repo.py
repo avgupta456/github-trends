@@ -10,7 +10,9 @@ from src.data.github.graphql import RawRepo, get_repo
 
 class TestTemplate(unittest.TestCase):
     def test_get_repo(self):
-        repo: RawRepo = get_repo(access_token=TOKEN, owner=USER_ID, repo=REPO)  # type: ignore
+        repo: RawRepo = get_repo(  # type: ignore
+            access_token=TOKEN, owner=USER_ID, repo=REPO, catch_errors=True
+        )
 
         # assert returns equal number of commits
         self.assertIsInstance(repo, RawRepo)
@@ -19,12 +21,14 @@ class TestTemplate(unittest.TestCase):
         self.assertGreater(repo.stargazer_count, 0)
 
     def test_get_repo_invalid_access_token(self):
-        repo = get_repo(access_token="", owner=USER_ID, repo=REPO)
+        repo = get_repo(access_token="", owner=USER_ID, repo=REPO, catch_errors=True)
 
         # assert returns None
         self.assertIsInstance(repo, type(None))
 
     def test_get_commits_invalid_args(self):
-        repo = get_repo(access_token=TOKEN, owner="abc123", repo=REPO)
+        repo = get_repo(
+            access_token=TOKEN, owner="abc123", repo=REPO, catch_errors=True
+        )
 
         self.assertIsInstance(repo, type(None))

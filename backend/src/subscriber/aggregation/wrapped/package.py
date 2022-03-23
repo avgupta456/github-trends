@@ -27,6 +27,7 @@ async def main(
         end_date=end_date,
         timezone_str=timezone_str,
         access_token=access_token,
+        catch_errors=True,
     )
 
     bar_data = get_bar_data(user_package)

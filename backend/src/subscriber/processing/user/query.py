@@ -8,7 +8,7 @@ from src.constants import API_VERSION
 from src.data.mongo.secret import update_keys
 from src.data.mongo.user_months import UserMonth, get_user_months, set_user_month
 from src.subscriber.aggregation import get_user_data
-from src.utils import alru_cache, date_to_datetime
+from src.utils import date_to_datetime
 
 s = requests.Session()
 
@@ -17,11 +17,12 @@ s = requests.Session()
 
 async def query_user_month(
     user_id: str, start_date: date, access_token: Optional[str]
-) -> bool:
+) -> None:
     year, month = start_date.year, start_date.month
     end_day = monthrange(year, month)[1]
     end_date = date(year, month, end_day)
 
+    complete = True
     try:
         data = await get_user_data(
             user_id=user_id,
@@ -29,13 +30,27 @@ async def query_user_month(
             end_date=end_date,
             timezone_str="US/Eastern",
             access_token=access_token,
+            catch_errors=False,
         )
     except Exception as e:
         print("Failed to get user data", user_id, start_date, end_date)
         print(e)
-        print()
 
-        return False
+        try:
+            data = await get_user_data(
+                user_id=user_id,
+                start_date=start_date,
+                end_date=end_date,
+                timezone_str="US/Eastern",
+                access_token=access_token,
+                catch_errors=False,
+            )
+            complete = False
+        except Exception as e:
+            print("Again failed to get user data", user_id, start_date, end_date)
+            print(e)
+
+            return
 
     month_completed = datetime.now() > date_to_datetime(end_date) + timedelta(days=1)
     user_month = UserMonth.parse_obj(
@@ -43,17 +58,14 @@ async def query_user_month(
             "user_id": user_id,
             "month": date_to_datetime(start_date),
             "version": API_VERSION,
-            "complete": month_completed,
+            "complete": complete and month_completed,
             "data": data,
         }
     )
 
     await set_user_month(user_month)
 
-    return True
 
-
-@alru_cache()
 async def query_user(user_id: str, access_token: Optional[str]) -> bool:
     await update_keys()
 
@@ -72,10 +84,7 @@ async def query_user(user_id: str, access_token: Optional[str]) -> bool:
         month = month % 12 + 1
         year = year + (month == 1)
 
-    success = True
     for month in months:
-        status = await query_user_month(user_id, month, access_token)
-        success = success and status
+        await query_user_month(user_id, month, access_token)
 
-    # only cache if successful
-    return (success, success)  # type: ignore
+    return True

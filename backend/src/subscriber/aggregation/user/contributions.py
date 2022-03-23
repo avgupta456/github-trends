@@ -125,6 +125,7 @@ async def get_all_commit_languages(
     repos: List[str],
     repo_infos: Dict[str, RawRepo],
     access_token: Optional[str] = None,
+    catch_errors: bool = False,
 ) -> Dict[str, List[CommitLanguages]]:
     commit_node_ids = [[x.node_id for x in repo] for repo in commit_infos]
 
@@ -146,7 +147,11 @@ async def get_all_commit_languages(
     commit_language_chunks: List[List[Optional[GraphQLRawCommit]]] = await gather(
         funcs=[get_commits for _ in node_id_chunks],
         args_dicts=[
-            {"node_ids": node_id_chunk, "access_token": access_token}
+            {
+                "node_ids": node_id_chunk,
+                "access_token": access_token,
+                "catch_errors": catch_errors,
+            }
             for node_id_chunk in node_id_chunks
         ],
         max_threads=GRAPHQL_NODE_THREADS,
@@ -210,7 +215,11 @@ async def get_all_commit_languages(
 
 
 async def get_cleaned_contributions(
-    user_id: str, start_date: datetime, end_date: datetime, access_token: Optional[str]
+    user_id: str,
+    start_date: datetime,
+    end_date: datetime,
+    access_token: Optional[str],
+    catch_errors: bool = False,
 ) -> Tuple[
     RawCalendar,
     Dict[str, ContribsList],
@@ -247,6 +256,7 @@ async def get_cleaned_contributions(
                 "owner": repo.split("/")[0],
                 "repo": repo.split("/")[1],
                 "access_token": access_token,
+                "catch_errors": catch_errors,
             }
             for repo in repos
         ],
@@ -256,7 +266,11 @@ async def get_cleaned_contributions(
     repo_infos = {k: v for k, v in zip(repos, _repo_infos) if v is not None}
 
     commit_languages_dict = await get_all_commit_languages(
-        commit_infos, repos, repo_infos, access_token
+        commit_infos,
+        repos,
+        repo_infos,
+        access_token,
+        catch_errors,
     )
 
     return (
@@ -332,6 +346,7 @@ async def get_contributions(
     end_date: date,
     timezone_str: str = "US/Eastern",
     access_token: Optional[str] = None,
+    catch_errors: bool = False,
 ) -> UserContributions:
     tz = pytz.timezone(timezone_str)
 
@@ -342,7 +357,9 @@ async def get_contributions(
         contrib_events,
         repo_infos,
         commit_languages_dict,
-    ) = await get_cleaned_contributions(user_id, start_month, end_month, access_token)
+    ) = await get_cleaned_contributions(
+        user_id, start_month, end_month, access_token, catch_errors
+    )
 
     total_stats = StatsContainer()
     public_stats = StatsContainer()

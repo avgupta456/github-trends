@@ -63,5 +63,6 @@ async def get_user_demo(
         end_date=end_date,
         timezone_str=timezone_str,
         access_token=None,
+        catch_errors=True,
     )
     return (True, data)  # type: ignore
