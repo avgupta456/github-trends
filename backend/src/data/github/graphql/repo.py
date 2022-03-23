@@ -1,4 +1,3 @@
-import logging
 from typing import Optional
 
 from src.data.github.graphql.models import RawRepo
@@ -39,9 +38,5 @@ def get_repo(
         """,
     }
 
-    try:
-        raw_repo = get_template(query, access_token)["data"]["repository"]
-        return RawRepo.parse_obj(raw_repo)
-    except Exception as e:
-        logging.exception(e)
-        return None
+    raw_repo = get_template(query, access_token)["data"]["repository"]
+    return RawRepo.parse_obj(raw_repo)

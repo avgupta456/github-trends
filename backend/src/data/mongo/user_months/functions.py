@@ -1,5 +1,5 @@
-from src.data.mongo.user_months.models import UserMonth
 from src.data.mongo.main import USER_MONTHS
+from src.data.mongo.user_months.models import UserMonth
 
 
 async def set_user_month(user_month: UserMonth):

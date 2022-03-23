@@ -1,15 +1,8 @@
-import logging
 from typing import List, Optional
 
 from src.constants import PR_FILES
 from src.data.github.graphql.models import RawCommit
-from src.data.github.graphql.template import (
-    GraphQLError,
-    GraphQLErrorAuth,
-    GraphQLErrorMissingNode,
-    GraphQLErrorTimeout,
-    get_template,
-)
+from src.data.github.graphql.template import GraphQLErrorMissingNode, get_template
 
 
 def get_commits(
@@ -77,19 +70,10 @@ def get_commits(
             + [None]
             + get_commits(node_ids[e.node + 1 :], access_token)
         )
-    except (GraphQLErrorAuth, GraphQLErrorTimeout):
-        return [None for _ in node_ids]
-    except GraphQLError as e:
-        logging.exception(e)
-        return [None for _ in node_ids]
 
     out: List[Optional[RawCommit]] = []
     for raw_commit in raw_commits:
-        try:
-            if "associatedPullRequests" not in raw_commit:
-                raw_commit["associatedPullRequests"] = {"nodes": []}
-            out.append(RawCommit.parse_obj(raw_commit))
-        except Exception as e:
-            logging.exception(e)
-            out.append(None)
+        if "associatedPullRequests" not in raw_commit:
+            raw_commit["associatedPullRequests"] = {"nodes": []}
+        out.append(RawCommit.parse_obj(raw_commit))
     return out

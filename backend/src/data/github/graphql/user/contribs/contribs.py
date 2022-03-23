@@ -55,7 +55,6 @@ def get_user_contribution_calendar(
                                 contributionCount
                             }
                         }
-                        totalContributions
                     }
                 }
             }
