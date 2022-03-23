@@ -2,7 +2,7 @@ from src.data.github.graphql.commit import get_commits
 from src.data.github.graphql.models import RawCommit, RawRepo
 from src.data.github.graphql.repo import get_repo
 from src.data.github.graphql.template import (
-    GraphQLErrorAuth,
+    GraphQLErrorRateLimit,
     GraphQLErrorMissingNode,
     GraphQLErrorTimeout,
     get_query_limit,
@@ -40,7 +40,7 @@ __all__ = [
     "RawEventsEvent",
     "RawFollows",
     "get_query_limit",
-    "GraphQLErrorAuth",
+    "GraphQLErrorRateLimit",
     "GraphQLErrorTimeout",
     "GraphQLErrorMissingNode",
 ]

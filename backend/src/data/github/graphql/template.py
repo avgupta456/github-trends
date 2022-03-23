@@ -21,7 +21,7 @@ class GraphQLErrorMissingNode(Exception):
         self.node = node
 
 
-class GraphQLErrorAuth(Exception):
+class GraphQLErrorRateLimit(Exception):
     pass
 
 
@@ -78,7 +78,7 @@ def get_template(
         if retries < 2:
             print("GraphQL Error, Retrying:", new_access_token)
             return get_template(query, access_token, retries + 1)
-        raise GraphQLErrorAuth("GraphQL Error: Unauthorized")
+        raise GraphQLErrorRateLimit("GraphQL Error: Unauthorized")
 
     if r.status_code == 502:
         raise GraphQLErrorTimeout("GraphQL Error: Request Timeout")

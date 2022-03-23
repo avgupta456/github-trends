@@ -12,7 +12,7 @@ from src.subscriber.aggregation import get_user_data
 from src.utils import alru_cache
 
 
-@alru_cache(ttl=timedelta(hours=6))
+@alru_cache()
 async def update_user(user_id: str, access_token: Optional[str] = None) -> bool:
     """Sends a message to pubsub to request a user update (auto cache updates)"""
     if access_token is None:

@@ -4,7 +4,7 @@ from src.constants import PR_FILES
 from src.data.github.graphql.models import RawCommit
 from src.data.github.graphql.template import (
     GraphQLError,
-    GraphQLErrorAuth,
+    GraphQLErrorRateLimit,
     GraphQLErrorMissingNode,
     GraphQLErrorTimeout,
     get_template,
@@ -76,11 +76,7 @@ def get_commits(
             + [None]
             + get_commits(node_ids[e.node + 1 :], access_token)
         )
-    except (GraphQLErrorAuth, GraphQLErrorTimeout) as e:
-        if catch_errors:
-            return [None for _ in node_ids]
-        raise e
-    except GraphQLError as e:
+    except (GraphQLErrorRateLimit, GraphQLErrorTimeout, GraphQLError) as e:
         if catch_errors:
             return [None for _ in node_ids]
         raise e
