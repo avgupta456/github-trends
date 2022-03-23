@@ -12,17 +12,20 @@ async def get_user_months(
 ) -> List[UserMonth]:
     start = datetime(start_month.year, start_month.month, 1)
     end = datetime(end_month.year, end_month.month, 28)
+    today = datetime.now()
+
     months: List[Dict[str, Any]] = await USER_MONTHS.find(  # type: ignore
         {
             "user_id": user_id,
             "month": {"$gte": start, "$lte": end},
             "version": API_VERSION,
-            "complete": True,
         }
     ).to_list(length=None)
 
     months_data: List[UserMonth] = []
     for month in months:
+        date_obj: datetime = month["month"]
+        complete = not (date_obj.year == today.year and date_obj.month == today.month)
         try:
             data = UserPackage.decompress(month["data"])
             months_data.append(
@@ -31,7 +34,7 @@ async def get_user_months(
                         "user_id": user_id,
                         "month": month["month"],
                         "version": API_VERSION,
-                        "complete": True,
+                        "complete": complete,
                         "data": data.dict(),
                     }
                 )

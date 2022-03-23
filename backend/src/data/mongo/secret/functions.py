@@ -23,7 +23,7 @@ secret_keys: List[str] = []
 
 async def update_keys() -> None:
     global secret_keys
-    secret_keys = await get_keys(no_cache=True)
+    secret_keys = await get_keys()
 
 
 def get_random_key() -> str:
