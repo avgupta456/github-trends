@@ -13,21 +13,18 @@ from src.utils import alru_cache
 
 
 @alru_cache()
-async def update_user(user_id: str, access_token: Optional[str] = None) -> bool:
+async def update_user(
+    user_id: str, access_token: Optional[str], private_access: bool
+) -> bool:
     """Sends a message to pubsub to request a user update (auto cache updates)"""
-    if access_token is None:
-        user: Optional[PublicUserModel] = await db_get_public_user(user_id)
-        if user is None:
-            return (False, False)  # type: ignore
-        access_token = user.access_token
-    publish_user(user_id, access_token)
+    publish_user(user_id, access_token, private_access)
     return (True, True)  # type: ignore
 
 
 async def _get_user(
-    user_id: str, start_date: date, end_date: date
+    user_id: str, private_access: bool, start_date: date, end_date: date
 ) -> Optional[UserPackage]:
-    user_months = await get_user_months(user_id, start_date, end_date)
+    user_months = await get_user_months(user_id, private_access, start_date, end_date)
     if len(user_months) == 0:
         return None
 
@@ -46,8 +43,13 @@ async def get_user(
     end_date: date,
     no_cache: bool = False,
 ) -> Optional[UserPackage]:
-    await update_user(user_id)
-    user_data = await _get_user(user_id, start_date, end_date)
+    user: Optional[PublicUserModel] = await db_get_public_user(user_id)
+    if user is None:
+        return (False, None)  # type: ignore
+
+    private_access = user.private_access or False
+    await update_user(user_id, user.access_token, private_access)
+    user_data = await _get_user(user_id, private_access, start_date, end_date)
     return (user_data is not None, user_data)  # type: ignore
 
 

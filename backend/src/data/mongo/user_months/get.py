@@ -8,19 +8,22 @@ from src.models import UserPackage
 
 
 async def get_user_months(
-    user_id: str, start_month: date, end_month: date
+    user_id: str, private_access: bool, start_month: date, end_month: date
 ) -> List[UserMonth]:
     start = datetime(start_month.year, start_month.month, 1)
     end = datetime(end_month.year, end_month.month, 28)
     today = datetime.now()
 
-    months: List[Dict[str, Any]] = await USER_MONTHS.find(  # type: ignore
-        {
-            "user_id": user_id,
-            "month": {"$gte": start, "$lte": end},
-            "version": API_VERSION,
-        }
-    ).to_list(length=None)
+    filters = {
+        "user_id": user_id,
+        "month": {"$gte": start, "$lte": end},
+        "version": API_VERSION,
+    }
+
+    if private_access:
+        filters["private"] = True
+
+    months: List[Dict[str, Any]] = await USER_MONTHS.find(filters).to_list(length=None)  # type: ignore
 
     months_data: List[UserMonth] = []
     for month in months:
@@ -34,6 +37,7 @@ async def get_user_months(
                         "user_id": user_id,
                         "month": month["month"],
                         "version": API_VERSION,
+                        "private": month["private"],
                         "complete": complete,
                         "data": data.dict(),
                     }

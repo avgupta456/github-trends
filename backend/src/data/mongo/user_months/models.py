@@ -9,5 +9,6 @@ class UserMonth(BaseModel):
     user_id: str
     month: datetime
     version: float
+    private: bool
     complete: bool
     data: UserPackage

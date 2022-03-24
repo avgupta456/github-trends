@@ -18,7 +18,11 @@ s = requests.Session()
 
 
 async def query_user_month(
-    user_id: str, start_date: date, access_token: Optional[str], retries: int = 0
+    user_id: str,
+    access_token: Optional[str],
+    private_access: bool,
+    start_date: date,
+    retries: int = 0,
 ) -> Optional[UserMonth]:
     year, month = start_date.year, start_date.month
     end_day = monthrange(year, month)[1]
@@ -38,7 +42,9 @@ async def query_user_month(
     except Exception:
         # Retry, catching exceptions and marking incomplete this time
         if retries < 1:
-            await query_user_month(user_id, start_date, access_token, retries + 1)
+            await query_user_month(
+                user_id, access_token, private_access, start_date, retries + 1
+            )
         return None
 
     month_completed = datetime.now() > date_to_datetime(end_date) + timedelta(days=1)
@@ -47,6 +53,7 @@ async def query_user_month(
             "user_id": user_id,
             "month": date_to_datetime(start_date),
             "version": API_VERSION,
+            "private": private_access,
             "complete": retries == 0 and month_completed,
             "data": data,
         }
@@ -61,12 +68,15 @@ async def query_user_month(
 async def query_user(
     user_id: str,
     access_token: Optional[str],
+    private_access: bool = False,
     start_date: date = date.today() - timedelta(365),
     end_date: date = date.today(),
 ) -> Optional[UserPackage]:
     await update_keys()
 
-    curr_data: List[UserMonth] = await get_user_months(user_id, start_date, end_date)
+    curr_data: List[UserMonth] = await get_user_months(
+        user_id, private_access, start_date, end_date
+    )
     curr_months = [x.month for x in curr_data if x.complete]
 
     month, year = start_date.month, start_date.year
@@ -80,7 +90,7 @@ async def query_user(
 
     all_user_packages: List[UserPackage] = [x.data for x in curr_data]
     for month in months:
-        temp = await query_user_month(user_id, month, access_token)
+        temp = await query_user_month(user_id, access_token, private_access, month)
         if temp is not None:
             all_user_packages.append(temp.data)
 
