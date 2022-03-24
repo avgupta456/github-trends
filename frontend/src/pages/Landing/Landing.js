@@ -112,8 +112,7 @@ const LandingScreen = () => {
           <p className="text-lg font-bold">2. Visual</p>
           <p>
             Understand your coding contributions like never before with an
-            interactive calendar, bar charts, pie charts, swarm graphs, and
-            more.
+            interactive calendar, bar charts, pie charts, and more.
           </p>
           <br />
           <p className="text-lg font-bold">3. Public</p>
@@ -178,7 +177,7 @@ const LandingScreen = () => {
             {
               header: 'Exciting Visualizations',
               text:
-                'Visualize your contributions with bar charts, swarm plots, pie charts, and more',
+                'Visualize your contributions with bar graphs, pie charts, and more',
             },
             {
               header: 'Shareable Stats',
