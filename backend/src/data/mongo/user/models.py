@@ -1,26 +1,9 @@
-from datetime import datetime
-from typing import Optional, Union
+from typing import Optional
 
 from pydantic import BaseModel, validator
 
-from src.models import UserPackage
 
-"""
-Input Models
-"""
-
-
-class CreateUserModel(BaseModel):
-    user_id: str
-    access_token: str
-
-
-"""
-Database Models
-"""
-
-
-class UserMetadata(BaseModel):
+class PublicUserModel(BaseModel):
     user_id: str
     access_token: str
     private_access: Optional[bool]
@@ -33,18 +16,5 @@ class UserMetadata(BaseModel):
         return False if private_access is None else private_access
 
 
-class UserModel(UserMetadata):
+class FullUserModel(PublicUserModel):
     user_key: Optional[str]
-    last_updated: Optional[datetime]
-    raw_data: Optional[UserPackage]
-    lock: Optional[datetime]
-
-    @validator("lock", pre=True, always=True)
-    def set_name(cls, lock: Union[None, bool, datetime]) -> datetime:
-        if not isinstance(lock, datetime):
-            return datetime(1970, 1, 1)
-        return lock
-
-
-class ExternalUserModel(UserMetadata):
-    raw_data: Optional[UserPackage]

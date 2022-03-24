@@ -1,15 +1,11 @@
 from datetime import date, timedelta
-from typing import Optional, Union
+from typing import Optional
 
 from fastapi import APIRouter, Response, status
 
 from src.data.mongo.secret import update_keys
-from src.models import FullUserPackage, UserPackage, WrappedPackage
-from src.subscriber.aggregation import (
-    get_full_user_data,
-    get_user_data,
-    get_wrapped_data,
-)
+from src.models import UserPackage, WrappedPackage
+from src.subscriber.aggregation import get_user_data, get_wrapped_data
 from src.utils import async_fail_gracefully, use_time_range
 
 router = APIRouter()
@@ -26,11 +22,12 @@ async def get_user_raw(
     time_range: str = "one_month",
     timezone_str: str = "US/Eastern",
     full: bool = False,
-) -> Union[UserPackage, FullUserPackage]:
+) -> UserPackage:
     await update_keys()
     start_date, end_date, _ = use_time_range(time_range, start_date, end_date)
-    func = get_user_data if not full else get_full_user_data
-    data = await func(user_id, start_date, end_date, timezone_str, access_token)
+    data = await get_user_data(
+        user_id, start_date, end_date, timezone_str, access_token
+    )
     return data
 
 
@@ -43,5 +40,8 @@ async def get_wrapped_user_raw(
     access_token: Optional[str] = None,
 ) -> WrappedPackage:
     await update_keys()
-    data = await get_wrapped_data(user_id, year, access_token)
-    return data
+    user_data = await get_user_data(
+        user_id, date(year, 1, 1), date(year, 12, 31), "US/Eastern", access_token
+    )
+    wrapped_data = get_wrapped_data(user_data)
+    return wrapped_data

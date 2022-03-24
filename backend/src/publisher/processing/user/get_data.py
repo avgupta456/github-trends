@@ -1,15 +1,10 @@
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 from typing import Optional
 
 from src.data.mongo.secret.functions import update_keys
-from src.data.mongo.user import (
-    UserMetadata,
-    UserModel,
-    get_user_by_user_id,
-    get_user_metadata,
-)
+from src.data.mongo.user import PublicUserModel, get_public_user as db_get_public_user
+from src.data.mongo.user_months import get_user_months
 from src.models import UserPackage
-from src.publisher.aggregation import trim_package
 from src.publisher.processing.pubsub import publish_user
 
 # TODO: replace with call to subscriber so compute not on publisher
@@ -17,53 +12,28 @@ from src.subscriber.aggregation import get_user_data
 from src.utils import alru_cache
 
 
-def validate_raw_data(data: Optional[UserPackage]) -> bool:
-    """Returns False if invalid data"""
-    # NOTE: add more validation as more fields are required
-    if data is None or data.contribs is None:
-        return False
-
-    if (
-        data.contribs.total_stats.commits_count > 0
-        and len(data.contribs.total_stats.languages) == 0
-    ):
-        return False
-
-    return True
-
-
-def validate_dt(dt: Optional[datetime], td: timedelta):
-    """Returns false if invalid date"""
-    last_updated = dt if dt is not None else datetime(1970, 1, 1)
-    time_diff = datetime.now() - last_updated
-    return time_diff <= td
-
-
-async def update_user(user_id: str, access_token: Optional[str] = None) -> bool:
+@alru_cache()
+async def update_user(
+    user_id: str, access_token: Optional[str], private_access: bool
+) -> bool:
     """Sends a message to pubsub to request a user update (auto cache updates)"""
-    if access_token is None:
-        user: Optional[UserMetadata] = await get_user_metadata(user_id)
-        if user is None:
-            return False
-        access_token = user.access_token
-    publish_user(user_id, access_token)
-    return True
+    publish_user(user_id, access_token, private_access)
+    return (True, True)  # type: ignore
 
 
-async def _get_user(user_id: str, no_cache: bool = False) -> Optional[UserPackage]:
-    db_user: Optional[UserModel] = await get_user_by_user_id(user_id, no_cache=no_cache)
-    if db_user is None or db_user.access_token == "":
-        raise LookupError("Invalid UserId")
+async def _get_user(
+    user_id: str, private_access: bool, start_date: date, end_date: date
+) -> Optional[UserPackage]:
+    user_months = await get_user_months(user_id, private_access, start_date, end_date)
+    if len(user_months) == 0:
+        return None
 
-    valid_dt = validate_dt(db_user.last_updated, timedelta(hours=6))
-    if not valid_dt or not validate_raw_data(db_user.raw_data):
-        if not validate_dt(db_user.lock, timedelta(minutes=1)):
-            await update_user(user_id, db_user.access_token)
+    user_data = user_months[0].data
+    for user_month in user_months[1:]:
+        user_data += user_month.data
 
-    if validate_raw_data(db_user.raw_data):
-        return db_user.raw_data  # type: ignore
-
-    return None
+    # TODO: handle timezone_str here
+    return user_data.trim(start_date, end_date)
 
 
 @alru_cache()
@@ -73,16 +43,14 @@ async def get_user(
     end_date: date,
     no_cache: bool = False,
 ) -> Optional[UserPackage]:
-    output = await _get_user(user_id, no_cache=no_cache)
-
-    if output is None:
+    user: Optional[PublicUserModel] = await db_get_public_user(user_id)
+    if user is None:
         return (False, None)  # type: ignore
 
-    output = trim_package(output, start_date, end_date)
-
-    # TODO: handle timezone_str here
-
-    return (True, output)  # type: ignore
+    private_access = user.private_access or False
+    await update_user(user_id, user.access_token, private_access)
+    user_data = await _get_user(user_id, private_access, start_date, end_date)
+    return (user_data is not None, user_data)  # type: ignore
 
 
 @alru_cache(ttl=timedelta(minutes=15))
@@ -97,5 +65,6 @@ async def get_user_demo(
         end_date=end_date,
         timezone_str=timezone_str,
         access_token=None,
+        catch_errors=True,
     )
     return (True, data)  # type: ignore

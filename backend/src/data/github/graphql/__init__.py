@@ -2,7 +2,7 @@ from src.data.github.graphql.commit import get_commits
 from src.data.github.graphql.models import RawCommit, RawRepo
 from src.data.github.graphql.repo import get_repo
 from src.data.github.graphql.template import (
-    GraphQLErrorAuth,
+    GraphQLErrorRateLimit,
     GraphQLErrorMissingNode,
     GraphQLErrorTimeout,
     get_query_limit,
@@ -10,7 +10,6 @@ from src.data.github.graphql.template import (
 from src.data.github.graphql.user.contribs.contribs import (
     get_user_contribution_calendar,
     get_user_contribution_events,
-    get_user_contribution_years,
 )
 from src.data.github.graphql.user.contribs.models import (
     RawCalendar,
@@ -27,7 +26,6 @@ from src.data.github.graphql.user.follows.models import RawFollows
 __all__ = [
     "get_user_contribution_calendar",
     "get_user_contribution_events",
-    "get_user_contribution_years",
     "get_user_followers",
     "get_user_following",
     "get_commits",
@@ -40,7 +38,7 @@ __all__ = [
     "RawEventsEvent",
     "RawFollows",
     "get_query_limit",
-    "GraphQLErrorAuth",
+    "GraphQLErrorRateLimit",
     "GraphQLErrorTimeout",
     "GraphQLErrorMissingNode",
 ]

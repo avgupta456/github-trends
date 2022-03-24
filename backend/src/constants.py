@@ -17,10 +17,10 @@ REST_NODE_THREADS = 50  # number of node queries simultaneously (avoid blacklist
 
 PR_FILES = 5  # max number of files to query for PRs
 NODE_QUERIES = 20  # max number of node queries to make
-CUTOFF = 2000  # if less than cutoff, count LOC
+CUTOFF = 1000  # if additions or deletions > CUTOFF, or sum > 2 * CUTOFF, ignore LOC
 FILE_CUTOFF = 1000  # if less than cutoff in file, count LOC
 
-WRAPPED_VERSION = 0.04  # determines when to overwrite MongoDB data
+API_VERSION = 0.01  # determines when to overwrite MongoDB data
 
 # CUSTOMIZATION
 BLACKLIST = ["Jupyter Notebook", "HTML"]  # languages to ignore

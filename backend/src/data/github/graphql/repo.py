@@ -1,4 +1,3 @@
-import logging
 from typing import Optional
 
 from src.data.github.graphql.models import RawRepo
@@ -6,7 +5,10 @@ from src.data.github.graphql.template import get_template
 
 
 def get_repo(
-    owner: str, repo: str, access_token: Optional[str] = None
+    owner: str,
+    repo: str,
+    access_token: Optional[str] = None,
+    catch_errors: bool = False,
 ) -> Optional[RawRepo]:
     """
     Gets all repository data from graphql
@@ -43,5 +45,6 @@ def get_repo(
         raw_repo = get_template(query, access_token)["data"]["repository"]
         return RawRepo.parse_obj(raw_repo)
     except Exception as e:
-        logging.exception(e)
-        return None
+        if catch_errors:
+            return None
+        raise e

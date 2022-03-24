@@ -2,13 +2,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Response, status
 
-from src.data.mongo.user import (
-    UserMetadata,
-    UserModel,
-    get_user_by_user_id,
-    get_user_metadata,
-)
-from src.data.mongo.user.models import ExternalUserModel
+from src.data.mongo.user import PublicUserModel, get_public_user as db_get_public_user
 from src.utils import async_fail_gracefully
 
 router = APIRouter()
@@ -18,12 +12,13 @@ router = APIRouter()
     "/get/metadata/{user_id}", status_code=status.HTTP_200_OK, include_in_schema=False
 )
 @async_fail_gracefully
-async def get_db_user_metadata(
+async def get_db_public_user(
     response: Response, user_id: str, no_cache: bool = False
-) -> Optional[UserMetadata]:
-    return await get_user_metadata(user_id, no_cache=no_cache)
+) -> Optional[PublicUserModel]:
+    return await db_get_public_user(user_id, no_cache=no_cache)
 
 
+"""
 @router.get("/get/{user_id}", status_code=status.HTTP_200_OK, include_in_schema=False)
 @async_fail_gracefully
 async def get_db_user(
@@ -33,3 +28,4 @@ async def get_db_user(
     if user is None:
         return None
     return ExternalUserModel.parse_obj(user.dict())
+"""

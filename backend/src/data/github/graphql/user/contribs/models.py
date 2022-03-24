@@ -15,7 +15,6 @@ class RawCalendarWeek(BaseModel):
 
 
 class RawCalendar(BaseModel):
-    total_contributions: int = Field(alias="totalContributions")
     weeks: List[RawCalendarWeek]
 
 

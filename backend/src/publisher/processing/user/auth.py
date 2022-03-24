@@ -2,10 +2,10 @@ from typing import Any, Dict, Optional
 
 from src.data.github.auth import authenticate as github_authenticate
 from src.data.mongo.user import (
-    UserMetadata,
+    PublicUserModel,
     delete_user as db_delete_user,
-    get_user_metadata,
-    update_user_metadata,
+    get_public_user as db_get_public_user,
+    update_user as db_update_user,
 )
 from src.publisher.processing.user.get_data import update_user
 
@@ -23,7 +23,7 @@ async def set_user_key(code: str, user_key: str) -> str:
 async def authenticate(code: str, private_access: bool) -> str:
     user_id, access_token = await github_authenticate(code)
 
-    curr_user: Optional[UserMetadata] = await get_user_metadata(user_id)
+    curr_user: Optional[PublicUserModel] = await db_get_public_user(user_id)
 
     raw_user: Dict[str, Any] = {
         "user_id": user_id,
@@ -43,7 +43,7 @@ async def authenticate(code: str, private_access: bool) -> str:
         # first time sign up
         await update_user(user_id, access_token)
 
-    await update_user_metadata(user_id, raw_user)
+    await db_update_user(user_id, raw_user)
     return user_id
 
 

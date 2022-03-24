@@ -2,11 +2,11 @@ from collections import defaultdict
 from datetime import datetime
 from typing import Dict, List, Union
 
-from src.models import BarData, BarDatum, FullUserPackage
+from src.models import BarData, BarDatum, UserPackage
 from src.utils import format_number
 
 
-def get_bar_data(data: FullUserPackage) -> BarData:
+def get_bar_data(data: UserPackage) -> BarData:
     months: Dict[int, Dict[str, int]] = defaultdict(
         lambda: {"contribs": 0, "loc_changed": 0}
     )

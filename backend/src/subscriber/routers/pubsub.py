@@ -17,5 +17,5 @@ USER PUBSUB
 @pubsub_fail_gracefully
 async def sub_user(response: Response, token: str, request: Request) -> Any:
     data: Dict[str, Any] = await parse_request(token, request)
-    await query_user(data["user_id"], data["access_token"])
+    await query_user(data["user_id"], data["access_token"], data["private_access"])
     return data

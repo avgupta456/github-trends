@@ -22,6 +22,7 @@ else:
     )
     DB = CLIENT.dev_backend
 
-USERS = DB.users
 SECRETS = DB.secrets
-WRAPPED = DB.wrapped
+
+USERS = DB.users
+USER_MONTHS = DB.user_months
