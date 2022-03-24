@@ -1,31 +1,9 @@
 # import json
 from datetime import datetime
-from typing import List, Optional
+from typing import Optional
 
 from src.data.github.graphql.template import get_template
 from src.data.github.graphql.user.contribs.models import RawCalendar, RawEvents
-
-
-def get_user_contribution_years(
-    user_id: str, access_token: Optional[str] = None
-) -> List[int]:
-    """Gets years where the user had activity"""
-    query = {
-        "variables": {"login": user_id},
-        "query": """
-        query getUser($login: String!) {
-            user(login: $login){
-                contributionsCollection{
-                    contributionYears
-                }
-            }
-        }
-        """,
-    }
-
-    raw_data = get_template(query, access_token)
-    years = raw_data["data"]["user"]["contributionsCollection"]["contributionYears"]
-    return years
 
 
 def get_user_contribution_calendar(

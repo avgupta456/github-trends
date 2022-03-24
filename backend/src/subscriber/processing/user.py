@@ -8,6 +8,7 @@ from src.constants import API_VERSION, BACKEND_URL, DOCKER, LOCAL_PUBLISHER, PRO
 from src.data.github.graphql import GraphQLErrorRateLimit
 from src.data.mongo.secret import update_keys
 from src.data.mongo.user_months import UserMonth, get_user_months, set_user_month
+from src.models.user.main import UserPackage
 from src.subscriber.aggregation import get_user_data
 from src.utils import alru_cache, date_to_datetime
 
@@ -18,7 +19,7 @@ s = requests.Session()
 
 async def query_user_month(
     user_id: str, start_date: date, access_token: Optional[str], retries: int = 0
-) -> None:
+) -> Optional[UserMonth]:
     year, month = start_date.year, start_date.month
     end_day = monthrange(year, month)[1]
     end_date = date(year, month, end_day)
@@ -33,12 +34,12 @@ async def query_user_month(
             catch_errors=retries > 0,
         )
     except GraphQLErrorRateLimit:
-        return
+        return None
     except Exception:
         # Retry, catching exceptions and marking incomplete this time
         if retries < 1:
             await query_user_month(user_id, start_date, access_token, retries + 1)
-        return
+        return None
 
     month_completed = datetime.now() > date_to_datetime(end_date) + timedelta(days=1)
     user_month = UserMonth.parse_obj(
@@ -52,15 +53,18 @@ async def query_user_month(
     )
 
     await set_user_month(user_month)
+    return user_month
 
 
 # NOTE: can only be called once every 1-2 minutes from publisher due to separate alru_cache
 @alru_cache(ttl=timedelta(hours=6))
-async def query_user(user_id: str, access_token: Optional[str]) -> bool:
+async def query_user(
+    user_id: str,
+    access_token: Optional[str],
+    start_date: date = date.today() - timedelta(365),
+    end_date: date = date.today(),
+) -> Optional[UserPackage]:
     await update_keys()
-
-    start_date = date.today() - timedelta(365)
-    end_date = date.today()
 
     curr_data: List[UserMonth] = await get_user_months(user_id, start_date, end_date)
     curr_months = [x.month for x in curr_data if x.complete]
@@ -74,8 +78,17 @@ async def query_user(user_id: str, access_token: Optional[str]) -> bool:
         month = month % 12 + 1
         year = year + (month == 1)
 
+    all_user_packages: List[UserPackage] = [x.data for x in curr_data]
     for month in months:
-        await query_user_month(user_id, month, access_token)
+        temp = await query_user_month(user_id, month, access_token)
+        if temp is not None:
+            all_user_packages.append(temp.data)
+
+    out: Optional[UserPackage] = None
+    if len(all_user_packages) > 0:
+        out = all_user_packages[0]
+        for user_package in all_user_packages[1:]:
+            out += user_package
 
     if len(months) > 1:
         # cache buster for publisher
@@ -84,7 +97,7 @@ async def query_user(user_id: str, access_token: Optional[str]) -> bool:
         elif DOCKER:
             s.get(LOCAL_PUBLISHER + "/user/" + user_id + "?no_cache=True")
 
-        return (False, False)  # type: ignore
+        return (False, out)  # type: ignore
 
     # only cache if just the current month updated
-    return (True, True)  # type: ignore
+    return (True, out)  # type: ignore

@@ -21,7 +21,6 @@ CUTOFF = 1000  # if additions or deletions > CUTOFF, or sum > 2 * CUTOFF, ignore
 FILE_CUTOFF = 1000  # if less than cutoff in file, count LOC
 
 API_VERSION = 0.01  # determines when to overwrite MongoDB data
-WRAPPED_VERSION = 0.04  # determines when to overwrite MongoDB data
 
 # CUSTOMIZATION
 BLACKLIST = ["Jupyter Notebook", "HTML"]  # languages to ignore

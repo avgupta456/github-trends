@@ -26,5 +26,3 @@ SECRETS = DB.secrets
 
 USERS = DB.users
 USER_MONTHS = DB.user_months
-
-WRAPPED = DB.wrapped
