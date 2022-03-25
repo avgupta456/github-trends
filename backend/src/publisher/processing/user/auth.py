@@ -38,10 +38,10 @@ async def authenticate(code: str, private_access: bool) -> str:
         raw_user["private_access"] = new_private_access
 
         if new_private_access != curr_private_access:
-            await update_user(user_id, access_token)
+            await update_user(user_id, access_token, new_private_access)
     else:
         # first time sign up
-        await update_user(user_id, access_token)
+        await update_user(user_id, access_token, private_access)
 
     await db_update_user(user_id, raw_user)
     return user_id
