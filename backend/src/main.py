@@ -1,5 +1,3 @@
-import os
-
 import sentry_sdk
 from dotenv import load_dotenv
 from fastapi import FastAPI
@@ -9,8 +7,6 @@ from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 
 load_dotenv()
 
-os.environ["PUBSUB_PUB"] = "True"
-
 # flake8: noqa E402
 
 # add endpoints here (after load dotenv)
@@ -19,11 +15,20 @@ from src.constants import (
     LOCAL_SUBSCRIBER,
     PROD,
     PROJECT_ID,
-    PUBSUB_PUB,
     PUBSUB_TOKEN,
     SENTRY_DSN,
 )
-from src.publisher.routers import asset_router, auth_router, pubsub_router, user_router
+from src.publisher.routers import (
+    asset_router,
+    auth_router,
+    pubsub_router as pub_router,
+    user_router,
+)
+from src.subscriber.routers import (
+    dev_router,
+    pubsub_router as sub_router,
+    wrapped_router,
+)
 from src.utils.pubsub import create_push_subscription, create_topic
 
 """
@@ -86,10 +91,16 @@ async def read_root():
 
 @app.get("/info")
 def get_info():
-    return {"PUBSUB_PUB": PUBSUB_PUB, "PROD": PROD}
+    return {"PROD": PROD}
 
 
+# (Originally Publisher)
 app.include_router(user_router, prefix="/user", tags=["Users"])
-app.include_router(pubsub_router, prefix="/pubsub", tags=["PubSub"])
+app.include_router(pub_router, prefix="/pubsub", tags=["PubSub"])
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 app.include_router(asset_router, prefix="/assets", tags=["Assets"])
+
+# (Originally Subscriber)
+app.include_router(dev_router, prefix="/dev", tags=["Dev"])
+app.include_router(sub_router, prefix="/pubsub", tags=["PubSub"])
+app.include_router(wrapped_router, prefix="/wrapped", tags=["Wrapped"])

@@ -1,6 +1,6 @@
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8
 
-ENV APP_MODULE=src.main_pub:app
+ENV APP_MODULE=src.main:app
 ENV PORT=8000
 
 WORKDIR /backend

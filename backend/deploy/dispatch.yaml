@@ -1,6 +1,3 @@
 dispatch:
-- url: "*/sub/*"
-  service: sub
-
-- url: "*/.*"
-  service: default
+  - url: "*/.*"
+    service: default

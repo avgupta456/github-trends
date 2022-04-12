@@ -17,7 +17,7 @@ async def update_user(
     user_id: str, access_token: Optional[str], private_access: bool
 ) -> bool:
     """Sends a message to pubsub to request a user update (auto cache updates)"""
-    publish_user(user_id, access_token, private_access)
+    await publish_user(user_id, access_token, private_access)
     return (True, True)  # type: ignore
 
 
