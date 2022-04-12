@@ -4,8 +4,8 @@ from src.constants import PR_FILES
 from src.data.github.graphql.models import RawCommit
 from src.data.github.graphql.template import (
     GraphQLError,
-    GraphQLErrorRateLimit,
     GraphQLErrorMissingNode,
+    GraphQLErrorRateLimit,
     GraphQLErrorTimeout,
     get_template,
 )

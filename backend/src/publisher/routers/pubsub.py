@@ -14,6 +14,8 @@ router = APIRouter()
     include_in_schema=False,
 )
 @fail_gracefully
-def pub_user(response: Response, user_id: str, access_token: Optional[str]) -> str:
-    publish_user(user_id, access_token)
+async def pub_user(
+    response: Response, user_id: str, access_token: Optional[str]
+) -> str:
+    await publish_user(user_id, access_token)
     return user_id

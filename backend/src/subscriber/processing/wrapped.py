@@ -3,8 +3,8 @@ from typing import Optional
 
 from src.data.mongo.user import PublicUserModel, get_public_user as db_get_public_user
 from src.models import UserPackage, WrappedPackage
-from src.subscriber.processing.user import query_user
 from src.subscriber.aggregation import get_wrapped_data
+from src.subscriber.processing.user import query_user
 from src.utils import alru_cache
 
 

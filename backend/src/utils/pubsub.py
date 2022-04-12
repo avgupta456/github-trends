@@ -2,18 +2,10 @@ import base64
 import json
 from typing import Any, Dict
 
-import requests
 from fastapi import HTTPException, Request
 from google.cloud import pubsub_v1  # type: ignore
 
-from src.constants import (
-    DOCKER,
-    LOCAL_SUBSCRIBER,
-    PROD,
-    PROJECT_ID,
-    PUBSUB_PUB,
-    PUBSUB_TOKEN,
-)
+from src.constants import DOCKER, PROD, PROJECT_ID, PUBSUB_TOKEN
 
 """
 EMULATOR FUNTIONS
@@ -56,9 +48,6 @@ publisher = pubsub_v1.PublisherClient()
 
 
 def publish_to_topic(topic: str, message: Dict[str, Any]) -> None:
-    if PROD and not PUBSUB_PUB:
-        raise HTTPException(400, "Publishing is disabled")
-
     # Encode data
     data = json.dumps(message).encode("utf-8")
 
@@ -67,14 +56,10 @@ def publish_to_topic(topic: str, message: Dict[str, Any]) -> None:
         topic_path: str = publisher.topic_path(PROJECT_ID, topic)  # type: ignore
         publisher.publish(topic_path, data=data)  # type: ignore
     else:
-        # Send message directly (not async)
-        url = LOCAL_SUBSCRIBER + "/pubsub/sub/" + topic + "/" + PUBSUB_TOKEN
-        requests.post(url, data=data)
+        raise HTTPException(400, "Must be in production or docker")
 
 
 async def parse_request(token: str, request: Request) -> Dict[str, Any]:
-    if PROD and PUBSUB_PUB:
-        raise HTTPException(400, "Subscribing is disabled")
     if token != PUBSUB_TOKEN:
         raise HTTPException(400, "Invalid token")
 

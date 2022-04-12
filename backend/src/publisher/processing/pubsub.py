@@ -1,18 +1,23 @@
 from typing import Optional
 
+from src.constants import DOCKER, PROD
+from src.subscriber.processing import query_user
 from src.utils.pubsub import publish_to_topic
 
 
-def publish_user(
+async def publish_user(
     user_id: str,
     access_token: Optional[str] = None,
     private_access: bool = False,
 ):
-    publish_to_topic(
-        "user",
-        {
-            "user_id": user_id,
-            "access_token": access_token,
-            "private_access": private_access,
-        },
-    )
+    if PROD or DOCKER:
+        publish_to_topic(
+            "user",
+            {
+                "user_id": user_id,
+                "access_token": access_token,
+                "private_access": private_access,
+            },
+        )
+    else:
+        return await query_user(user_id, access_token, private_access)
