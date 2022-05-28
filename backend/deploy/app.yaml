@@ -1,9 +1,9 @@
 service: default
 runtime: python37
-entrypoint: gunicorn -w 4 -k uvicorn.workers.UvicornWorker src.main:app
+entrypoint: gunicorn -w 2 -k uvicorn.workers.UvicornWorker src.main:app
 
 #smallest instance class
-instance_class: F2
+instance_class: F1
 
 #prevents creating additional instances
 automatic_scaling:
