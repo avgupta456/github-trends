@@ -22,13 +22,13 @@ import { Header, LoadingScreen } from './sections';
 const WrappedScreen = () => {
   // eslint-disable-next-line prefer-const
   let { userId, year } = useParams();
-  year = year || 2021;
+  year = year || 2022;
 
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(async () => {
-    if (userId?.length > 0 && year > 2010 && year <= 2021) {
+    if (userId?.length > 0 && year > 2010 && year <= 2022) {
       const output = await getWrapped(userId, year);
       if (output !== null && output !== undefined && output !== {}) {
         setData(output);

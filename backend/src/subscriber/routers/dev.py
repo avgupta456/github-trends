@@ -36,7 +36,7 @@ async def get_user_raw(
 async def get_wrapped_user_raw(
     response: Response,
     user_id: str,
-    year: int = 2021,
+    year: int = 2022,
     access_token: Optional[str] = None,
 ) -> WrappedPackage:
     await update_keys()

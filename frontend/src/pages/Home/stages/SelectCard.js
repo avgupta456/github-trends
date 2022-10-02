@@ -16,7 +16,7 @@ const SelectCardStage = ({ selectedCard, setSelectedCard }) => {
         },
         {
           title: 'Repository Contributions',
-          description: 'See your most contributed repository by lines of code',
+          description: 'See your most contributed repositories',
           imageSrc: 'repos',
         },
       ].map((card, index) => (
