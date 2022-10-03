@@ -11,7 +11,7 @@ from src.models.wrapped.calendar import CalendarDayData, CalendarLanguageDayData
 from src.models.wrapped.main import WrappedPackage
 from src.models.wrapped.numeric import ContribStats, LOCStats, MiscStats, NumericData
 from src.models.wrapped.pie import PieData, PieDatum
-from src.models.wrapped.swarm import SwarmData, SwarmDatum
+from src.models.wrapped.timestamp import TimestampData, TimestampDatum
 
 __all__ = [
     # User
@@ -34,6 +34,6 @@ __all__ = [
     "MiscStats",
     "PieData",
     "PieDatum",
-    "SwarmData",
-    "SwarmDatum",
+    "TimestampData",
+    "TimestampDatum",
 ]

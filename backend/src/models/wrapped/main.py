@@ -6,7 +6,7 @@ from src.models.wrapped.month import MonthData
 from src.models.wrapped.calendar import CalendarDayData
 from src.models.wrapped.numeric import NumericData
 from src.models.wrapped.pie import PieData
-from src.models.wrapped.swarm import SwarmData
+from src.models.wrapped.timestamp import TimestampData
 
 
 class WrappedPackage(BaseModel):
@@ -14,4 +14,4 @@ class WrappedPackage(BaseModel):
     calendar_data: List[CalendarDayData]
     numeric_data: NumericData
     pie_data: PieData
-    swarm_data: SwarmData
+    timestamp_data: TimestampData
