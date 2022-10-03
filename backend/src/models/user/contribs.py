@@ -86,16 +86,35 @@ class ContributionStats(BaseModel):
         )
 
 
+class ContributionLists(BaseModel):
+    commits: List[datetime]
+    issues: List[datetime]
+    prs: List[datetime]
+    reviews: List[datetime]
+    repos: List[datetime]
+
+    def compress(self) -> List[Any]:
+        return [self.commits, self.issues, self.prs, self.reviews, self.repos]
+
+    @classmethod
+    def decompress(cls, data: List[Any]) -> "ContributionLists":
+        return ContributionLists(
+            commits=data[0], issues=data[1], prs=data[2], reviews=data[3], repos=data[4]
+        )
+
+
 class ContributionDay(BaseModel):
     date: str
     weekday: int
     stats: ContributionStats
+    lists: ContributionLists
 
     def compress(self) -> List[Any]:
         return [
             self.date,
             self.weekday,
             self.stats.compress(),
+            self.lists.compress(),
         ]
 
     @classmethod
@@ -104,6 +123,7 @@ class ContributionDay(BaseModel):
             date=data[0],
             weekday=data[1],
             stats=ContributionStats.decompress(data[2]),
+            lists=ContributionLists.decompress(data[3]),
         )
 
 

@@ -13,6 +13,8 @@ import {
   BarContribs,
   PieLangs,
   PieRepos,
+  SwarmType,
+  SwarmDay,
   NumericPlusLOC,
   NumericMinusLOC,
   NumericBothLOC,
@@ -22,13 +24,13 @@ import { Header, LoadingScreen } from './sections';
 const WrappedScreen = () => {
   // eslint-disable-next-line prefer-const
   let { userId, year } = useParams();
-  year = year || 2021;
+  year = year || 2022;
 
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(async () => {
-    if (userId?.length > 0 && year > 2010 && year <= 2021) {
+    if (userId?.length > 0 && year > 2010 && year <= 2022) {
       const output = await getWrapped(userId, year);
       if (output !== null && output !== undefined && output !== {}) {
         setData(output);
@@ -113,7 +115,7 @@ const WrappedScreen = () => {
           </div>
         </WrappedSection>
         <WrappedSection title="Contribution Breakdown">
-          <div className="w-full lg:w-1/2 flex flex-wrap">
+          <div className="w-full lg:w-1/3 flex flex-wrap">
             {[
               { num: data?.numeric_data?.contribs?.commits, label: 'Commits' },
               { num: data?.numeric_data?.contribs?.issues, label: 'Issues' },
@@ -128,7 +130,15 @@ const WrappedScreen = () => {
               </div>
             ))}
           </div>
-          <div className="w-full lg:w-1/2">
+          <div className="w-full lg:w-2/3">
+            <SwarmType data={data} />
+          </div>
+        </WrappedSection>
+        <WrappedSection title="Fun Plots and Stats">
+          <div className="w-full lg:w-2/3">
+            <SwarmDay data={data} />
+          </div>
+          <div className="w-full lg:w-1/3">
             <Numeric
               key="weekend_percent"
               num={data?.numeric_data?.misc?.weekend_percent}

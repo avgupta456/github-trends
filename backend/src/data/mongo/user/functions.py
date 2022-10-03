@@ -1,6 +1,6 @@
 from typing import Any, Dict, Optional
 
-from src.data.mongo.main import USERS
+from src.data.mongo.main import USERS  # type: ignore
 
 
 async def is_user_key(user_id: str, user_key: str) -> bool:

@@ -16,6 +16,8 @@ import {
   NumericBothLOC,
   PieLangs,
   PieRepos,
+  SwarmType,
+  SwarmDay,
 } from './Wrapped';
 
 export {
@@ -41,4 +43,6 @@ export {
   NumericBothLOC,
   PieLangs,
   PieRepos,
+  SwarmType,
+  SwarmDay,
 };

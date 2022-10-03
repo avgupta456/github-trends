@@ -20,7 +20,7 @@ NODE_QUERIES = 20  # max number of node queries to make
 CUTOFF = 1000  # if additions or deletions > CUTOFF, or sum > 2 * CUTOFF, ignore LOC
 FILE_CUTOFF = 1000  # if less than cutoff in file, count LOC
 
-API_VERSION = 0.01  # determines when to overwrite MongoDB data
+API_VERSION = 0.02  # determines when to overwrite MongoDB data
 
 # CUSTOMIZATION
 BLACKLIST = ["Jupyter Notebook", "HTML"]  # languages to ignore
@@ -56,3 +56,8 @@ TEST_NODE_IDS = [
     "C_kwDOD_-BVNoAKDRiZTQ4MTQ0MzgwYjBlNGEwNjQ4YjY4YWI4ZjFjYmQ3MWU4M2VhMzU",
 ]
 TEST_SHA = "ad83e6340377904fa0295745b5314202b23d2f3f"
+
+
+print("PROD", PROD)
+print("API_VERSION", API_VERSION)
+print()
