@@ -39,6 +39,7 @@ const SwarmPlot = ({
             simulationIterations={60}
             colors={{ scheme: 'category10' }}
             gridYValues={tickValues}
+            valueScale={{ type: 'linear', min: 0, max: 86400, reverse: true }}
             margin={{ top: 40, right: 0, bottom: 60, left: 100 }}
             axisTop={null}
             axisRight={null}

@@ -4,6 +4,12 @@ import PropTypes from 'prop-types';
 import { SwarmPlot } from '../Templates';
 
 const formatYAxis = (value) => {
+  if (value === 3600 * 12) {
+    return 'Noon';
+  }
+  if (value === 3600 * 24) {
+    return 'Midnight';
+  }
   let hours = Math.floor(value / 3600);
   const suffix = hours % 24 >= 12 ? 'PM' : 'AM';
   hours = hours % 12 === 0 ? 12 : hours % 12;
