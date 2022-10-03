@@ -11,7 +11,7 @@ import { Button, Preview } from '../../components';
 import mockup from '../../assets/mockup.png';
 import wrapped from '../../assets/wrapped.png';
 
-const LandingScreen = () => {
+function LandingScreen() {
   const userId = useSelector((state) => state.user.userId);
 
   const isAuthenticated = userId && userId.length > 0;
@@ -156,33 +156,27 @@ const LandingScreen = () => {
           {[
             {
               header: 'Measures Contribs',
-              text:
-                'Calculates your stats on a per-contribution level, allowing for deeper insights',
+              text: 'Calculates your stats on a per-contribution level, allowing for deeper insights',
             },
             {
               header: 'LOC Insights',
-              text:
-                'See aggregate stats on lines of code (LOC) written across all contributions',
+              text: 'See aggregate stats on lines of code (LOC) written across all contributions',
             },
             {
               header: 'Language Breakdowns',
-              text:
-                'Showcase your favorite languages with LOC language breakdowns',
+              text: 'Showcase your favorite languages with LOC language breakdowns',
             },
             {
               header: 'Private Mode',
-              text:
-                'Use a personal access token to avoid rate limiting and include private contributions',
+              text: 'Use a personal access token to avoid rate limiting and include private contributions',
             },
             {
               header: 'Exciting Visualizations',
-              text:
-                'Visualize your contributions with bar graphs, pie charts, and more',
+              text: 'Visualize your contributions with bar graphs, pie charts, and more',
             },
             {
               header: 'Shareable Stats',
-              text:
-                'Easily add your cards to your GitHub profile and share them on Twitter or Linkedin',
+              text: 'Easily add your cards to your GitHub profile and share them on Twitter or Linkedin',
             },
           ].map((item, index) => (
             // eslint-disable-next-line react/no-array-index-key
@@ -218,6 +212,6 @@ const LandingScreen = () => {
       )}
     </section>
   );
-};
+}
 
 export default LandingScreen;

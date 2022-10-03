@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const SvgInline = (props) => {
   const [svg, setSvg] = useState(null);

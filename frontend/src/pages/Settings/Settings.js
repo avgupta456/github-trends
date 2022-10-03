@@ -152,11 +152,9 @@ const SettingsScreen = () => {
                 )}
                 <br />
                 {privateAccess ? (
-                  <>
-                    <Button className="bg-gray-200 rounded-sm opacity-50 cursor-not-allowed">
-                      Downgrade to Public Access
-                    </Button>
-                  </>
+                  <Button className="bg-gray-200 rounded-sm opacity-50 cursor-not-allowed">
+                    Downgrade to Public Access
+                  </Button>
                 ) : (
                   <a href={GITHUB_PRIVATE_AUTH_URL}>
                     <Button className="bg-blue-500 text-white rounded-sm">

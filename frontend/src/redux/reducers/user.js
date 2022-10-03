@@ -6,6 +6,7 @@ const initialState = {
   privateAccess: null,
 };
 
+// eslint-disable-next-line default-param-last
 export default (state = initialState, action) => {
   switch (action.type) {
     case types.LOGIN:

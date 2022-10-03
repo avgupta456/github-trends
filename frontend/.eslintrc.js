@@ -17,6 +17,8 @@ module.exports = {
     'react/forbid-prop-types': 'off',
     'react/destructuring-assignment': 'off',
     'import/prefer-default-export': 'off',
+    'react/function-component-definition': 'off',
+    'react/no-unstable-nested-components': 'off',
     'no-console': 'off',
     'prettier/prettier': [
       'error',
