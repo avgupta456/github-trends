@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { BarGraph } from '../Templates';
 
 const BarContribs = ({ data }) => {
-  const newData = data?.bar_data?.months || [];
+  const newData = data?.month_data?.months || [];
 
   return (
     <BarGraph
@@ -23,7 +23,7 @@ BarContribs.propTypes = {
 };
 
 const BarLOCChanged = ({ data }) => {
-  const newData = data?.bar_data?.months || [];
+  const newData = data?.month_data?.months || [];
 
   return (
     <BarGraph
