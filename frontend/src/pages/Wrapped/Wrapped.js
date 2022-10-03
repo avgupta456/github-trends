@@ -29,14 +29,17 @@ const WrappedScreen = () => {
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(async () => {
-    if (userId?.length > 0 && year > 2010 && year <= 2022) {
-      const output = await getWrapped(userId, year);
-      if (output !== null && output !== undefined && output !== {}) {
-        setData(output);
-        setIsLoading(false);
+  useEffect(() => {
+    async function getData() {
+      if (userId?.length > 0 && year > 2010 && year <= 2022) {
+        const output = await getWrapped(userId, year);
+        if (output !== null && output !== undefined && output !== {}) {
+          setData(output);
+          setIsLoading(false);
+        }
       }
     }
+    getData();
   }, []);
 
   if (isLoading) {

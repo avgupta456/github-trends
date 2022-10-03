@@ -86,27 +86,31 @@ const HomeScreen = () => {
   const [theme, setTheme] = useState('classic');
   const themeSuffix = `${fullSuffix}&theme=${theme}`;
 
-  useEffect(async () => {
-    // After requesting Github access, Github redirects back to your app with a code parameter
-    const url = window.location.href;
+  useEffect(() => {
+    async function redirectCode() {
+      // After requesting Github access, Github redirects back to your app with a code parameter
+      const url = window.location.href;
 
-    if (url.includes('error=')) {
-      navigate('/');
+      if (url.includes('error=')) {
+        navigate('/');
+      }
+
+      // If Github API returns the code parameter
+      if (url.includes('code=')) {
+        const tempPrivateAccess = url.includes('private');
+        const newUrl = url.split('?code=');
+        const subStr = PROD ? 'githubtrends.io' : 'localhost:3000';
+        const redirect = `${url.split(subStr)[0]}${subStr}/user`;
+        window.history.pushState({}, null, redirect);
+        setIsLoading(true);
+        const userKey = await setUserKey(newUrl[1]);
+        const newUserId = await authenticate(newUrl[1], tempPrivateAccess);
+        login(newUserId, userKey);
+        setIsLoading(false);
+      }
     }
 
-    // If Github API returns the code parameter
-    if (url.includes('code=')) {
-      const tempPrivateAccess = url.includes('private');
-      const newUrl = url.split('?code=');
-      const subStr = PROD ? 'githubtrends.io' : 'localhost:3000';
-      const redirect = `${url.split(subStr)[0]}${subStr}/user`;
-      window.history.pushState({}, null, redirect);
-      setIsLoading(true);
-      const userKey = await setUserKey(newUrl[1]);
-      const newUserId = await authenticate(newUrl[1], tempPrivateAccess);
-      login(newUserId, userKey);
-      setIsLoading(false);
-    }
+    redirectCode();
   }, []);
 
   if (isLoading) {

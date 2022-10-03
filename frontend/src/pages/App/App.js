@@ -24,13 +24,16 @@ function App() {
   const dispatch = useDispatch();
   const setPrivateAccess = (access) => dispatch(_setPrivateAccess(access));
 
-  useEffect(async () => {
-    if (userId && userId.length > 0) {
-      const result = await getUserMetadata(userId);
-      if (result !== null && result.private_access !== undefined) {
-        setPrivateAccess(result.private_access);
+  useEffect(() => {
+    async function getPrivateAccess() {
+      if (userId && userId.length > 0) {
+        const result = await getUserMetadata(userId);
+        if (result !== null && result.private_access !== undefined) {
+          setPrivateAccess(result.private_access);
+        }
       }
     }
+    getPrivateAccess();
   }, [userId]);
 
   return (
