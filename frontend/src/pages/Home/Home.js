@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import BounceLoader from 'react-spinners/BounceLoader';
 
@@ -18,7 +18,7 @@ import { login as _login } from '../../redux/actions/userActions';
 import { PROD } from '../../constants';
 
 const HomeScreen = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -91,7 +91,7 @@ const HomeScreen = () => {
     const url = window.location.href;
 
     if (url.includes('error=')) {
-      history.push('/');
+      navigate('/');
     }
 
     // If Github API returns the code parameter

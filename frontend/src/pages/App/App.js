@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Header from './Header';
 import LandingScreen from '../Landing';
@@ -38,25 +38,25 @@ function App() {
       <Router>
         <Header />
         <section className="bg-white text-gray-700 flex-grow">
-          <Switch>
+          <Routes>
             {!isAuthenticated && (
               <Route path="/login" component={LoginScreen} />
             )}
             {!isAuthenticated && (
-              <Route path="/signup" component={SignUpScreen} />
+              <Route path="/signup" element={<SignUpScreen />} />
             )}
-            <Route path="/demo" component={DemoScreen} />
-            <Route path="/user/redirect" component={RedirectScreen} />
-            <Route path="/user" component={HomeScreen} />
-            <Route path="/wrapped/:userId/:year" component={WrappedScreen} />
-            <Route path="/wrapped/:userId" component={WrappedScreen} />
-            <Route path="/wrapped" component={SelectUserScreen} />
+            <Route path="/demo" element={<DemoScreen />} />
+            <Route path="/user/redirect" element={<RedirectScreen />} />
+            <Route path="/user" element={<HomeScreen />} />
+            <Route path="/wrapped/:userId/:year" element={<WrappedScreen />} />
+            <Route path="/wrapped/:userId" element={<WrappedScreen />} />
+            <Route path="/wrapped" element={<SelectUserScreen />} />
             {isAuthenticated && (
-              <Route path="/settings" component={SettingsScreen} />
+              <Route path="/settings" element={<SettingsScreen />} />
             )}
-            <Route exact path="/" component={LandingScreen} />
-            <Route path="*" component={NoMatchScreen} />
-          </Switch>
+            <Route exact path="/" element={<LandingScreen />} />
+            <Route path="*" element={<NoMatchScreen />} />
+          </Routes>
         </section>
         <footer className="body-font">
           <div className="bg-gray-100 border-t border-gray-300">

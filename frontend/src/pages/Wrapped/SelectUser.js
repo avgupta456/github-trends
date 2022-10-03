@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Button } from '../../components';
 import { sleep } from '../../utils';
@@ -8,7 +8,7 @@ import { sleep } from '../../utils';
 const SelectUserScreen = () => {
   const [userName, setUserName] = useState('');
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   let userNameInput;
 
@@ -18,7 +18,7 @@ const SelectUserScreen = () => {
 
   const handleSubmit = async () => {
     await sleep(100);
-    history.push(`/wrapped/${userName}`);
+    navigate(`/wrapped/${userName}`);
   };
 
   return (
