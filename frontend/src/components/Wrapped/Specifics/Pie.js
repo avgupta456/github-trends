@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { PieChart } from '../Templates';
 
 const PieLangs = ({ data, metric }) => {
-  const newData = data?.pie_data?.[`langs_${metric}`] || [];
+  const newData = data?.lang_data?.[`langs_${metric}`] || [];
 
   return (
     <PieChart
@@ -25,7 +25,7 @@ PieLangs.propTypes = {
 };
 
 const PieRepos = ({ data, metric }) => {
-  const newData = data?.pie_data?.[`repos_${metric}`] || [];
+  const newData = data?.repo_data?.[`repos_${metric}`] || [];
 
   return (
     <PieChart

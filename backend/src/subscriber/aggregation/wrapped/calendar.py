@@ -1,9 +1,9 @@
 from typing import Any, Dict, List
 
-from src.models import CalendarDayData, UserPackage
+from src.models import CalendarDayDatum, CalendarData, UserPackage
 
 
-def get_calendar_data(data: UserPackage) -> List[CalendarDayData]:
+def get_calendar_data(data: UserPackage) -> CalendarData:
     top_langs = [
         x[0]
         for x in sorted(
@@ -13,7 +13,7 @@ def get_calendar_data(data: UserPackage) -> List[CalendarDayData]:
         )[:5]
     ]
 
-    total_out: List[CalendarDayData] = []
+    total_out: List[CalendarDayDatum] = []
     for item in data.contribs.total:
         out: Dict[str, Any] = {
             "day": item.date,
@@ -34,7 +34,7 @@ def get_calendar_data(data: UserPackage) -> List[CalendarDayData]:
             out["loc_added"] += v.additions - v.deletions  # type: ignore
             out["loc_changed"] += v.additions + v.deletions  # type: ignore
 
-        out_obj = CalendarDayData.parse_obj(out)
+        out_obj = CalendarDayDatum.parse_obj(out)
         total_out.append(out_obj)
 
-    return total_out
+    return CalendarData.parse_obj({"days": total_out})

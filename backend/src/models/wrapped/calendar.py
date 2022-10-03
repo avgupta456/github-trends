@@ -1,14 +1,14 @@
-from typing import Dict
+from typing import Dict, List
 
 from pydantic import BaseModel
 
 
-class CalendarLanguageDayData(BaseModel):
+class CalendarLanguageDayDatum(BaseModel):
     loc_added: int
     loc_changed: int
 
 
-class CalendarDayData(BaseModel):
+class CalendarDayDatum(BaseModel):
     day: str
     contribs: int
     commits: int
@@ -17,4 +17,8 @@ class CalendarDayData(BaseModel):
     reviews: int
     loc_added: int
     loc_changed: int
-    top_langs: Dict[str, CalendarLanguageDayData]
+    top_langs: Dict[str, CalendarLanguageDayDatum]
+
+
+class CalendarData(BaseModel):
+    days: List[CalendarDayDatum]
