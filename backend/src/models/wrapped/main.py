@@ -1,17 +1,17 @@
-from typing import List
-
 from pydantic import BaseModel
 
-from src.models.wrapped.bar import BarData
-from src.models.wrapped.calendar import CalendarDayData
+from src.models.wrapped.months import MonthData
+from src.models.wrapped.calendar import CalendarData
 from src.models.wrapped.numeric import NumericData
-from src.models.wrapped.pie import PieData
-from src.models.wrapped.swarm import SwarmData
+from src.models.wrapped.repos import RepoData
+from src.models.wrapped.langs import LangData
+from src.models.wrapped.timestamps import TimestampData
 
 
 class WrappedPackage(BaseModel):
-    bar_data: BarData
-    calendar_data: List[CalendarDayData]
+    month_data: MonthData
+    calendar_data: CalendarData
     numeric_data: NumericData
-    pie_data: PieData
-    swarm_data: SwarmData
+    repo_data: RepoData
+    lang_data: LangData
+    timestamp_data: TimestampData

@@ -20,7 +20,7 @@ const formatYAxis = (value) => {
 };
 
 const SwarmType = ({ data }) => {
-  const newData = data?.swarm_data?.contribs || [];
+  const newData = data?.timestamp_data?.contribs || [];
 
   return (
     <SwarmPlot
@@ -47,7 +47,7 @@ SwarmType.propTypes = {
 };
 
 const SwarmDay = ({ data }) => {
-  const newData = data?.swarm_data?.contribs || [];
+  const newData = data?.timestamp_data?.contribs || [];
 
   return (
     <SwarmPlot

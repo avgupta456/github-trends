@@ -3,7 +3,7 @@ from datetime import datetime
 from random import shuffle
 from typing import Any, Dict, List
 
-from src.models import SwarmData, SwarmDatum, UserPackage
+from src.models import TimestampData, TimestampDatum, UserPackage
 
 MAX_ITEMS = 200
 
@@ -12,7 +12,7 @@ def date_to_seconds_since_midnight(date: datetime) -> int:
     return (date.hour * 60 * 60) + (date.minute * 60) + date.second
 
 
-def get_swarm_data(data: UserPackage) -> SwarmData:
+def get_timestamp_data(data: UserPackage) -> TimestampData:
     out: List[Any] = []
     counts: Dict[str, int] = defaultdict(int)
     for item in data.contribs.total:
@@ -30,7 +30,7 @@ def get_swarm_data(data: UserPackage) -> SwarmData:
                     "timestamp": date_to_seconds_since_midnight(obj),
                 }
 
-                out.append(SwarmDatum.parse_obj(_obj))
+                out.append(TimestampDatum.parse_obj(_obj))
                 counts[type] += 1
 
-    return SwarmData(contribs=out)
+    return TimestampData(contribs=out)

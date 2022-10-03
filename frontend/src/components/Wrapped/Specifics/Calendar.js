@@ -8,7 +8,7 @@ import { theme } from '../Templates/theme';
 import { WrappedCard } from '../Organization';
 
 const Calendar = ({ data, startDate, endDate }) => {
-  const newData = data?.calendar_data || [];
+  const newData = data?.calendar_data?.days || [];
 
   const valueOptions = [
     { value: 'contribs', label: 'Contributions', disabled: false },

@@ -3,11 +3,11 @@ from typing import List
 from pydantic import BaseModel
 
 
-class SwarmDatum(BaseModel):
+class TimestampDatum(BaseModel):
     type: str
     weekday: int
     timestamp: int
 
 
-class SwarmData(BaseModel):
-    contribs: List[SwarmDatum]
+class TimestampData(BaseModel):
+    contribs: List[TimestampDatum]
