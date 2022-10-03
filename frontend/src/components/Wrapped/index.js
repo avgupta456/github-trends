@@ -11,6 +11,8 @@ import {
   NumericBothLOC,
   PieLangs,
   PieRepos,
+  SwarmType,
+  SwarmDay,
 } from './Specifics';
 
 export {
@@ -25,4 +27,6 @@ export {
   NumericBothLOC,
   PieLangs,
   PieRepos,
+  SwarmType,
+  SwarmDay,
 };

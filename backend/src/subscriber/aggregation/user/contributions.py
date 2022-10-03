@@ -126,8 +126,9 @@ async def get_all_commit_languages(
     repo_infos: Dict[str, RawRepo],
     access_token: Optional[str] = None,
     catch_errors: bool = False,
-) -> Dict[str, List[CommitLanguages]]:
+) -> Tuple[Dict[str, List[datetime]], Dict[str, List[CommitLanguages]]]:
     commit_node_ids = [[x.node_id for x in repo] for repo in commit_infos]
+    commit_times = [[x.timestamp for x in repo] for repo in commit_infos]
 
     id_mapping: Dict[str, Tuple[int, int]] = {}
     repo_mapping: Dict[str, str] = {}
@@ -207,11 +208,13 @@ async def get_all_commit_languages(
             i, j = id_mapping[node_id]
             commit_languages[i][j] = lang_breakdown
 
+    commit_times_dict: Dict[str, List[datetime]] = {}
     commit_languages_dict: Dict[str, List[CommitLanguages]] = {}
-    for repo, languages in zip(repos, commit_languages):
+    for repo, times, languages in zip(repos, commit_times, commit_languages):
+        commit_times_dict[repo] = times
         commit_languages_dict[repo] = languages
 
-    return commit_languages_dict
+    return commit_times_dict, commit_languages_dict
 
 
 async def get_cleaned_contributions(
@@ -224,6 +227,7 @@ async def get_cleaned_contributions(
     RawCalendar,
     Dict[str, ContribsList],
     Dict[str, RawRepo],
+    Dict[str, List[datetime]],
     Dict[str, List[CommitLanguages]],
 ]:
     calendar = get_user_contribution_calendar(
@@ -265,7 +269,7 @@ async def get_cleaned_contributions(
 
     repo_infos = {k: v for k, v in zip(repos, _repo_infos) if v is not None}
 
-    commit_languages_dict = await get_all_commit_languages(
+    commit_times_dict, commit_languages_dict = await get_all_commit_languages(
         commit_infos,
         repos,
         repo_infos,
@@ -277,6 +281,7 @@ async def get_cleaned_contributions(
         calendar,
         contrib_events,
         repo_infos,
+        commit_times_dict,
         commit_languages_dict,
     )
 
@@ -322,20 +327,55 @@ class StatsContainer:
         }
 
 
+class ListsContainer:
+    def __init__(self):
+        self.commits: List[datetime] = []
+        self.issues: List[datetime] = []
+        self.prs: List[datetime] = []
+        self.reviews: List[datetime] = []
+        self.repos: List[datetime] = []
+
+    def add_list(self, label: str, times: List[datetime]) -> None:
+        if label == "commit":
+            self.commits.extend(times)
+        elif label == "issue":
+            self.issues.extend(times)
+        elif label == "pr":
+            self.prs.extend(times)
+        elif label == "review":
+            self.reviews.extend(times)
+        elif label == "repo":
+            self.repos.extend(times)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "commits": self.commits,
+            "issues": self.issues,
+            "prs": self.prs,
+            "reviews": self.reviews,
+            "repos": self.repos,
+        }
+
+
 class DateContainer:
     def __init__(self):
         self.date = ""
         self.weekday = 0
         self.stats = StatsContainer()
+        self.lists = ListsContainer()
 
-    def add_stat(self, label: str, count: int, add: bool = False):
+    def add_stat(
+        self, label: str, count: int, times: List[datetime], add: bool = False
+    ):
         self.stats.add_stat(label, count, add)
+        self.lists.add_list(label, times)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
             "date": self.date,
             "weekday": self.weekday,
             "stats": self.stats.to_dict(),
+            "lists": self.lists.to_dict(),
         }
 
 
@@ -356,6 +396,7 @@ async def get_contributions(
         calendar,
         contrib_events,
         repo_infos,
+        commit_times_dict,
         commit_languages_dict,
     ) = await get_cleaned_contributions(
         user_id, start_month, end_month, access_token, catch_errors
@@ -381,14 +422,16 @@ async def get_contributions(
                 stats_obj.contribs += day.count
                 stats_obj.other += day.count
 
-    def update_stats(date_str: str, repo: str, event: str, count: int):
+    def update_stats(
+        date_str: str, repo: str, event: str, count: int, times: List[datetime]
+    ):
         # update global counts for this event
-        total[date_str].add_stat(event, count)
+        total[date_str].add_stat(event, count, times)
         total_stats.add_stat(event, count)
         if not repo_infos[repo].is_private:
-            public[date_str].add_stat(event, count)
+            public[date_str].add_stat(event, count, times)
             public_stats.add_stat(event, count)
-        repositories[repo][date_str].add_stat(event, count, add=True)
+        repositories[repo][date_str].add_stat(event, count, times, add=True)
         repo_stats[repo].add_stat(event, count, add=True)
 
     def update_langs(date_str: str, repo: str, langs: CommitLanguages):
@@ -420,13 +463,15 @@ async def get_contributions(
                 repositories[repo][date_str].date = date_str
                 if isinstance(event, RawEventsCommit):
                     count = 0
+                    commit_times: List[datetime] = []
                     while len(commit_languages_dict[repo]) > 0 and count < event.count:
+                        commit_times.append(commit_times_dict[repo].pop(0))
                         langs = commit_languages_dict[repo].pop(0)
                         update_langs(date_str, repo, langs)
                         count += 1
-                    update_stats(date_str, repo, "commit", event.count)
+                    update_stats(date_str, repo, "commit", event.count, commit_times)
                 else:
-                    update_stats(date_str, repo, label, 1)
+                    update_stats(date_str, repo, label, 1, [datetime_obj])
 
     total_stats_dict = total_stats.to_dict()
     public_stats_dict = public_stats.to_dict()

@@ -1,4 +1,4 @@
-from src.data.mongo.main import USER_MONTHS
+from src.data.mongo.main import USER_MONTHS  # type: ignore
 from src.data.mongo.user_months.models import UserMonth
 
 

@@ -1,5 +1,5 @@
 import sentry_sdk
-from dotenv import load_dotenv
+from dotenv import load_dotenv  # type: ignore
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from google.api_core.exceptions import AlreadyExists

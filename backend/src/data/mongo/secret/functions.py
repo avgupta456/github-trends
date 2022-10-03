@@ -3,7 +3,7 @@ from random import randint
 from typing import Any, Dict, List, Optional
 
 from src.constants import TEST_TOKEN
-from src.data.mongo.main import SECRETS
+from src.data.mongo.main import SECRETS  # type: ignore
 from src.data.mongo.secret.models import SecretModel
 from src.utils import alru_cache
 

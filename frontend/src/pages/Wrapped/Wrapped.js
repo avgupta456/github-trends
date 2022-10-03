@@ -13,6 +13,8 @@ import {
   BarContribs,
   PieLangs,
   PieRepos,
+  SwarmType,
+  SwarmDay,
   NumericPlusLOC,
   NumericMinusLOC,
   NumericBothLOC,
@@ -113,7 +115,7 @@ const WrappedScreen = () => {
           </div>
         </WrappedSection>
         <WrappedSection title="Contribution Breakdown">
-          <div className="w-full lg:w-1/2 flex flex-wrap">
+          <div className="w-full lg:w-1/3 flex flex-wrap">
             {[
               { num: data?.numeric_data?.contribs?.commits, label: 'Commits' },
               { num: data?.numeric_data?.contribs?.issues, label: 'Issues' },
@@ -128,7 +130,15 @@ const WrappedScreen = () => {
               </div>
             ))}
           </div>
-          <div className="w-full lg:w-1/2">
+          <div className="w-full lg:w-2/3">
+            <SwarmType data={data} />
+          </div>
+        </WrappedSection>
+        <WrappedSection title="Fun Plots and Stats">
+          <div className="w-full lg:w-2/3">
+            <SwarmDay data={data} />
+          </div>
+          <div className="w-full lg:w-1/3">
             <Numeric
               key="weekend_percent"
               num={data?.numeric_data?.misc?.weekend_percent}
