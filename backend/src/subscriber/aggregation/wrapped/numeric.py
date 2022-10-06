@@ -38,9 +38,9 @@ def get_misc_stats(data: UserPackage) -> MiscStats:
 
     return MiscStats.parse_obj(
         {
-            "total_days": str(distinct_days) + " Days",
-            "longest_streak": str(longest_streak) + " Days",
-            "weekend_percent": str(round(100 * weekend_percent)) + "%",
+            "total_days": distinct_days,
+            "longest_streak": longest_streak,
+            "weekend_percent": round(100 * weekend_percent),
         }
     )
 

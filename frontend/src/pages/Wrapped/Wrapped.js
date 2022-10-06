@@ -9,6 +9,7 @@ import {
   FloatingIcon,
   WrappedSection,
   Numeric,
+  NumericOutOf,
   Calendar,
   BarContribs,
   PieLangs,
@@ -63,24 +64,23 @@ const WrappedScreen = () => {
             startDate={`${year}-01-02`}
             endDate={`${year}-12-31`}
           />
-          {[
-            {
-              num: data?.numeric_data?.contribs?.contribs,
-              label: 'Contributions',
-            },
-            {
-              num: data?.numeric_data?.misc?.total_days,
-              label: 'With Contributions',
-            },
-            {
-              num: data?.numeric_data?.misc?.longest_streak,
-              label: 'Longest Streak',
-            },
-          ].map((item) => (
-            <div className="w-full md:w-1/3">
-              <Numeric key={item.type} num={item.num} label={item.label} />
-            </div>
-          ))}
+          <div className="w-full flex">
+            <NumericOutOf
+              num={data?.numeric_data?.contribs?.contribs || 0}
+              outOf={1000}
+              label="Contributions"
+            />
+            <NumericOutOf
+              num={data?.numeric_data?.misc?.total_days || 0}
+              outOf={365}
+              label="Days with Contributions"
+            />
+            <NumericOutOf
+              num={data?.numeric_data?.misc?.longest_streak || 0}
+              outOf={100}
+              label="Longest Streak"
+            />
+          </div>
         </WrappedSection>
         <WrappedSection title="Lines of Code (LOC) Analysis">
           <div className="w-full md:w-1/2 xl:w-1/3">

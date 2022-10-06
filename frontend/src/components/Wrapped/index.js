@@ -1,6 +1,6 @@
 import { WrappedSection, WrappedCard } from './Organization';
 
-import { Numeric } from './Templates';
+import { Numeric, NumericOutOf } from './Templates';
 
 import {
   BarContribs,
@@ -19,6 +19,7 @@ export {
   WrappedSection,
   WrappedCard,
   Numeric,
+  NumericOutOf,
   BarContribs,
   BarLOCChanged,
   Calendar,

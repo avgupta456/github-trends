@@ -11,9 +11,9 @@ class ContribStats(BaseModel):
 
 
 class MiscStats(BaseModel):
-    total_days: str
-    longest_streak: str
-    weekend_percent: str
+    total_days: int
+    longest_streak: int
+    weekend_percent: int
 
 
 class LOCStats(BaseModel):
