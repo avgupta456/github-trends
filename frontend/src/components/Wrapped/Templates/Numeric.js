@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -25,7 +28,7 @@ Numeric.defaultProps = {
   num: 'N/A',
 };
 
-const NumericOutOf = ({ num, outOf, label }) => {
+const NumericOutOf = ({ num, outOf, label, color, onClick }) => {
   // eslint-disable-next-line react/prop-types
   const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
     let total = 0;
@@ -48,10 +51,10 @@ const NumericOutOf = ({ num, outOf, label }) => {
   };
   return (
     <WrappedCard>
-      <div className="w-full h-32 mb-4">
+      <div className="w-full h-32 mb-4" onClick={onClick}>
         <ResponsivePie
           data={[
-            { id: '1', value: num, color: '#30A14E' },
+            { id: '1', value: num, color },
             { id: '2', value: outOf - num, color: '#E5E7EB' },
           ]}
           innerRadius={0.8}
@@ -87,6 +90,13 @@ NumericOutOf.propTypes = {
   num: PropTypes.number.isRequired,
   outOf: PropTypes.number.isRequired,
   label: PropTypes.string.isRequired,
+  color: PropTypes.string,
+  onClick: PropTypes.func,
+};
+
+NumericOutOf.defaultProps = {
+  color: '#30A14E',
+  onClick: () => {},
 };
 
 export { Numeric, NumericOutOf };

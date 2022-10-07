@@ -43,5 +43,5 @@ async def get_wrapped_user_raw(
     user_data = await get_user_data(
         user_id, date(year, 1, 1), date(year, 12, 31), "US/Eastern", access_token
     )
-    wrapped_data = get_wrapped_data(user_data)
+    wrapped_data = get_wrapped_data(user_data, year)
     return wrapped_data

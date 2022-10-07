@@ -18,7 +18,7 @@ def get_contrib_stats(data: UserPackage) -> ContribStats:
     )
 
 
-def get_misc_stats(data: UserPackage) -> MiscStats:
+def get_misc_stats(data: UserPackage, year: int) -> MiscStats:
     weekdays: Dict[int, int] = defaultdict(int)
     yeardays, distinct_days, total_contribs = {}, 0, 0
     for item in data.contribs.total:
@@ -29,17 +29,42 @@ def get_misc_stats(data: UserPackage) -> MiscStats:
             date = datetime.fromisoformat(item.date)
             yeardays[date.timetuple().tm_yday - 1] = 1
             distinct_days += 1
-    curr, best = 0, 0
+    curr, best, best_dates = 0, 0, (1, 1)
     for i in range(366):
-        best = max(best, curr)
         curr = curr + 1 if i in yeardays else 0
+        if curr > best:
+            best = curr
+            best_dates = (i - curr + 2, i + 1)
     longest_streak = max(best, curr)
+    longest_streak_days = (
+        best_dates[0],
+        best_dates[1],
+        datetime.fromordinal(max(1, best_dates[0])).strftime("%b %d"),
+        datetime.fromordinal(max(1, best_dates[1])).strftime("%b %d"),
+    )
+    curr, best, best_dates = 0, 0, (1, 1)
+    days = (datetime.now() - datetime(year, 1, 1)).days
+    for i in range(min(days, 365)):
+        curr = 0 if i in yeardays else curr + 1
+        if curr > best:
+            best = curr
+            best_dates = (i - curr + 2, i + 1)
+    longest_gap = max(best, curr)
+    longest_gap_days = (
+        best_dates[0],
+        best_dates[1],
+        datetime.fromordinal(max(1, best_dates[0])).strftime("%b %d"),
+        datetime.fromordinal(max(1, best_dates[1])).strftime("%b %d"),
+    )
     weekend_percent = (weekdays[0] + weekdays[6]) / max(1, total_contribs)
 
     return MiscStats.parse_obj(
         {
             "total_days": distinct_days,
             "longest_streak": longest_streak,
+            "longest_streak_days": longest_streak_days,
+            "longest_gap": longest_gap,
+            "longest_gap_days": longest_gap_days,
             "weekend_percent": round(100 * weekend_percent),
         }
     )
@@ -80,11 +105,11 @@ def get_loc_stats(data: UserPackage) -> LOCStats:
     )
 
 
-def get_numeric_data(data: UserPackage) -> NumericData:
+def get_numeric_data(data: UserPackage, year: int) -> NumericData:
     return NumericData.parse_obj(
         {
             "contribs": get_contrib_stats(data),
-            "misc": get_misc_stats(data),
+            "misc": get_misc_stats(data, year),
             "loc": get_loc_stats(data),
         }
     )

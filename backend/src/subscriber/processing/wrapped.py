@@ -21,5 +21,5 @@ async def query_wrapped_user(
     )
     if user_package is None:
         return (False, None)  # type: ignore
-    wrapped_package = get_wrapped_data(user_package)
+    wrapped_package = get_wrapped_data(user_package, year)
     return (True, wrapped_package)  # type: ignore

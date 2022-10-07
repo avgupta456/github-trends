@@ -29,6 +29,8 @@ const WrappedScreen = () => {
 
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [startRange, setStartRange] = useState(0);
+  const [endRange, setEndRange] = useState(0);
 
   useEffect(() => {
     async function getData() {
@@ -47,6 +49,11 @@ const WrappedScreen = () => {
     return <LoadingScreen />;
   }
 
+  const startStreak = data?.numeric_data?.misc?.longest_streak_days?.[0] || 0;
+  const endStreak = data?.numeric_data?.misc?.longest_streak_days?.[1] || 0;
+  const startGap = data?.numeric_data?.misc?.longest_gap_days?.[0] || 0;
+  const endGap = data?.numeric_data?.misc?.longest_gap_days?.[1] || 0;
+
   return (
     <div className="container px-2 lg:px-4 xl:px-16 py-2 lg:py-4 xl:py-8 mx-auto">
       <div className="h-full w-full flex flex-row flex-wrap justify-center items-center">
@@ -62,7 +69,9 @@ const WrappedScreen = () => {
           <Calendar
             data={data}
             startDate={`${year}-01-02`}
-            endDate={`${year}-12-31`}
+            endDate={`${year + 1}-01-01`}
+            startRange={startRange}
+            endRange={endRange}
           />
           <div className="w-full flex">
             <NumericOutOf
@@ -79,6 +88,20 @@ const WrappedScreen = () => {
               num={data?.numeric_data?.misc?.longest_streak || 0}
               outOf={100}
               label="Longest Streak"
+              onClick={() => {
+                setStartRange(startStreak);
+                setEndRange(endStreak);
+              }}
+            />
+            <NumericOutOf
+              num={data?.numeric_data?.misc?.longest_gap || 0}
+              outOf={100}
+              label="Longest Gap"
+              color="#EF4444"
+              onClick={() => {
+                setStartRange(startGap);
+                setEndRange(endGap);
+              }}
             />
           </div>
         </WrappedSection>

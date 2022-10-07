@@ -9,12 +9,12 @@ from src.subscriber.aggregation.wrapped.timestamps import get_timestamp_data
 # from src.processing.user.follows import get_user_follows
 
 
-def main(user_package: UserPackage) -> WrappedPackage:
+def main(user_package: UserPackage, year: int) -> WrappedPackage:
     """packages all processing steps for the user query"""
 
     month_data = get_month_data(user_package)
-    calendar_data = get_calendar_data(user_package)
-    numeric_data = get_numeric_data(user_package)
+    calendar_data = get_calendar_data(user_package, year)
+    numeric_data = get_numeric_data(user_package, year)
     repo_data = get_repo_data(user_package)
     lang_data = get_lang_data(user_package)
     timestamp_data = get_timestamp_data(user_package)

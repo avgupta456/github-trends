@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -7,7 +9,7 @@ import { Input } from '../../Generic';
 import { theme } from '../Templates/theme';
 import { WrappedCard } from '../Organization';
 
-const Calendar = ({ data, startDate, endDate }) => {
+const Calendar = ({ data, startDate, endDate, startRange, endRange }) => {
   const newData = data?.calendar_data?.days || [];
 
   const valueOptions = [
@@ -18,15 +20,49 @@ const Calendar = ({ data, startDate, endDate }) => {
     { value: 'reviews', label: 'Reviews', disabled: false },
   ];
 
-  // eslint-disable-next-line no-unused-vars
   const [value, setValue] = React.useState(valueOptions[0]);
-
-  // eslint-disable-next-line no-unused-vars
-  const [selectedDay, setSelectedDay] = React.useState(null);
 
   const numEvents = Array.isArray(newData)
     ? newData.reduce((acc, x) => acc + x[value.value], 0)
     : 0;
+
+  let c = 1;
+  const max = Math.max(...newData.map((x) => x[value.value]));
+  const quantiles = [
+    Math.floor(max * 0.25),
+    Math.floor(max * 0.5),
+    Math.floor(max * 0.75),
+    max,
+  ];
+
+  const colorScale = ['#EBEDF0', '#9BE9A8', '#40C463', '#30A14E', '#216E39'];
+
+  // midpoint between colorScale and sky 200 (maybe too light)
+  const colorScale2 = ['#D3EAF7', '#ABE8D3', '#7DD5B0', '#75C4A6', '#6EAA9B'];
+
+  const colorScaleFn = (x) => {
+    const count = (c % 365) + 1;
+    c += 1;
+
+    let myColorScale = colorScale;
+    if (startRange <= count && count <= endRange) {
+      myColorScale = colorScale2;
+    }
+
+    if (x === 0) {
+      return myColorScale[0];
+    }
+    if (x <= quantiles[0]) {
+      return myColorScale[1];
+    }
+    if (x <= quantiles[1]) {
+      return myColorScale[2];
+    }
+    if (x <= quantiles[2]) {
+      return myColorScale[3];
+    }
+    return myColorScale[4];
+  };
 
   return (
     <div className="w-full">
@@ -47,12 +83,10 @@ const Calendar = ({ data, startDate, endDate }) => {
           {Array.isArray(newData) && newData.length > 0 ? (
             <ResponsiveCalendar
               theme={theme}
-              data={newData
-                .map((item) => ({
-                  day: item.day,
-                  value: item[value.value],
-                }))
-                .filter((item) => item.value !== 0)}
+              data={newData.map((item) => ({
+                day: item.day,
+                value: item[value.value],
+              }))}
               from={startDate}
               to={endDate}
               emptyColor="#EBEDF0"
@@ -61,10 +95,7 @@ const Calendar = ({ data, startDate, endDate }) => {
               monthBorderColor="#ffffff"
               dayBorderWidth={2}
               dayBorderColor="#ffffff"
-              // eslint-disable-next-line no-unused-vars
-              onClick={(dayData, event) => {
-                setSelectedDay(dayData.day);
-              }}
+              colorScale={colorScaleFn}
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
@@ -81,6 +112,13 @@ Calendar.propTypes = {
   data: PropTypes.object.isRequired,
   startDate: PropTypes.string.isRequired,
   endDate: PropTypes.string.isRequired,
+  startRange: PropTypes.number,
+  endRange: PropTypes.number,
+};
+
+Calendar.defaultProps = {
+  startRange: 0,
+  endRange: 0,
 };
 
 export default Calendar;
