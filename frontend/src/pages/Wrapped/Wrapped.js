@@ -25,7 +25,7 @@ import { Header, LoadingScreen } from './sections';
 const WrappedScreen = () => {
   // eslint-disable-next-line prefer-const
   let { userId, year } = useParams();
-  year = year || 2022;
+  year = year || '2022';
 
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -69,7 +69,7 @@ const WrappedScreen = () => {
           <Calendar
             data={data}
             startDate={`${year}-01-02`}
-            endDate={`${year + 1}-01-01`}
+            endDate={`${parseInt(year) + 1}-01-01`}
             startRange={startRange}
             endRange={endRange}
           />
@@ -151,8 +151,8 @@ const WrappedScreen = () => {
               },
               { num: data?.numeric_data?.contribs?.reviews, label: 'Reviews' },
             ].map((item) => (
-              <div className="w-full md:w-1/2">
-                <Numeric key={item.label} num={item.num} label={item.label} />
+              <div className="w-full md:w-1/2" key={item.label}>
+                <Numeric num={item.num} label={item.label} />
               </div>
             ))}
           </div>

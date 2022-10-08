@@ -37,8 +37,9 @@ const Calendar = ({ data, startDate, endDate, startRange, endRange }) => {
 
   const colorScale = ['#EBEDF0', '#9BE9A8', '#40C463', '#30A14E', '#216E39'];
 
-  // midpoint between colorScale and sky 200 (maybe too light)
-  const colorScale2 = ['#D3EAF7', '#ABE8D3', '#7DD5B0', '#75C4A6', '#6EAA9B'];
+  // eslint-disable-next-line no-unused-vars
+  const colorScale2 = ['#A6C9F5', '#7EC7D1', '#50B5AF', '#48A3A4', '#418A9A'];
+  const colorScale3 = ['#60a5fa', '#60a5fa', '#60a5fa', '#60a5fa', '#60a5fa'];
 
   const colorScaleFn = (x) => {
     const count = (c % 365) + 1;
@@ -46,7 +47,7 @@ const Calendar = ({ data, startDate, endDate, startRange, endRange }) => {
 
     let myColorScale = colorScale;
     if (startRange <= count && count <= endRange) {
-      myColorScale = colorScale2;
+      myColorScale = colorScale3;
     }
 
     if (x === 0) {
