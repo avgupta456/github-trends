@@ -1,5 +1,3 @@
-/* eslint-disable no-nested-ternary */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -35,20 +33,15 @@ const Calendar = ({ data, startDate, endDate, startRange, endRange }) => {
     max,
   ];
 
-  const colorScale = ['#EBEDF0', '#9BE9A8', '#40C463', '#30A14E', '#216E39'];
-
-  // eslint-disable-next-line no-unused-vars
-  const colorScale2 = ['#A6C9F5', '#7EC7D1', '#50B5AF', '#48A3A4', '#418A9A'];
-  const colorScale3 = ['#60a5fa', '#60a5fa', '#60a5fa', '#60a5fa', '#60a5fa'];
+  const scale = ['#EBEDF0', '#9BE9A8', '#40C463', '#30A14E', '#216E39'];
+  const hoverScale = ['#A6C9F5', '#7EC7D1', '#50B5AF', '#48A3A4', '#418A9A'];
 
   const colorScaleFn = (x) => {
     const count = (c % 365) + 1;
     c += 1;
 
-    let myColorScale = colorScale;
-    if (startRange <= count && count <= endRange) {
-      myColorScale = colorScale3;
-    }
+    const myColorScale =
+      startRange <= count && count <= endRange ? hoverScale : scale;
 
     if (x === 0) {
       return myColorScale[0];

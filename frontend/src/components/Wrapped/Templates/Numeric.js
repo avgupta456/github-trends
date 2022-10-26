@@ -1,5 +1,4 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/mouse-events-have-key-events */
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -28,7 +27,15 @@ Numeric.defaultProps = {
   num: 'N/A',
 };
 
-const NumericOutOf = ({ num, outOf, label, color, onClick }) => {
+const NumericOutOf = ({
+  num,
+  outOf,
+  label,
+  color,
+  className,
+  onMouseOver,
+  onMouseOut,
+}) => {
   // eslint-disable-next-line react/prop-types
   const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
     let total = 0;
@@ -50,8 +57,12 @@ const NumericOutOf = ({ num, outOf, label, color, onClick }) => {
     );
   };
   return (
-    <WrappedCard>
-      <div className="w-full h-32 mb-4" onClick={onClick}>
+    <WrappedCard className={className}>
+      <div
+        className="w-full h-32 mb-4"
+        onMouseOver={onMouseOver}
+        onMouseOut={onMouseOut}
+      >
         <ResponsivePie
           data={[
             { id: '1', value: num, color },
@@ -91,12 +102,16 @@ NumericOutOf.propTypes = {
   outOf: PropTypes.number.isRequired,
   label: PropTypes.string.isRequired,
   color: PropTypes.string,
-  onClick: PropTypes.func,
+  className: PropTypes.string,
+  onMouseOver: PropTypes.func,
+  onMouseOut: PropTypes.func,
 };
 
 NumericOutOf.defaultProps = {
   color: '#30A14E',
-  onClick: () => {},
+  className: '',
+  onMouseOver: () => {},
+  onMouseOut: () => {},
 };
 
 export { Numeric, NumericOutOf };

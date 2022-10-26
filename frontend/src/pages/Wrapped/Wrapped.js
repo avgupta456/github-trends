@@ -43,7 +43,7 @@ const WrappedScreen = () => {
       }
     }
     getData();
-  }, []);
+  }, [userId, year]);
 
   if (isLoading) {
     return <LoadingScreen />;
@@ -88,9 +88,14 @@ const WrappedScreen = () => {
               num={data?.numeric_data?.misc?.longest_streak || 0}
               outOf={100}
               label="Longest Streak"
-              onClick={() => {
+              className="hover:bg-gray-300 cursor-pointer"
+              onMouseOver={() => {
                 setStartRange(startStreak);
                 setEndRange(endStreak);
+              }}
+              onMouseOut={() => {
+                setStartRange(0);
+                setEndRange(0);
               }}
             />
             <NumericOutOf
@@ -98,9 +103,14 @@ const WrappedScreen = () => {
               outOf={100}
               label="Longest Gap"
               color="#EF4444"
-              onClick={() => {
+              className="hover:bg-gray-300 cursor-pointer"
+              onMouseOver={() => {
                 setStartRange(startGap);
                 setEndRange(endGap);
+              }}
+              onMouseOut={() => {
+                setStartRange(0);
+                setEndRange(0);
               }}
             />
           </div>
