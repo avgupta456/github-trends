@@ -36,7 +36,7 @@ const BarGraph = ({
   return (
     <div className="h-96 w-full">
       <WrappedCard>
-        <p className="text-xl font-semibold">Contributions by Month</p>
+        <p className="text-xl font-semibold">Contributions by {xTitle}</p>
         <p>{subheader}</p>
         {Array.isArray(data) && data.length > 0 ? (
           <ResponsiveBarCanvas

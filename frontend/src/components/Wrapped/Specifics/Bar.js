@@ -4,18 +4,18 @@ import PropTypes from 'prop-types';
 import { BarGraph } from '../Templates';
 
 const monthNames = [
-  'January',
-  'February',
+  'Jan',
+  'Feb',
   'March',
   'April',
   'May',
   'June',
   'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
 ];
 
 const dayNames = [
@@ -68,7 +68,7 @@ BarDayContribs.propTypes = {
   data: PropTypes.object.isRequired,
 };
 
-const BarLOCChanged = ({ data }) => {
+const BarMonthLOCChanged = ({ data }) => {
   const newData = data?.month_data?.months || [];
 
   return (
@@ -84,8 +84,33 @@ const BarLOCChanged = ({ data }) => {
   );
 };
 
-BarLOCChanged.propTypes = {
+BarMonthLOCChanged.propTypes = {
   data: PropTypes.object.isRequired,
 };
 
-export { BarMonthContribs, BarDayContribs, BarLOCChanged };
+const BarDayLOCChanged = ({ data }) => {
+  const newData = data?.day_data?.days || [];
+
+  return (
+    <BarGraph
+      data={newData}
+      labels={dayNames}
+      xTitle="Day"
+      subheader="By Lines of Code Changed"
+      type="loc_changed"
+      getLabel={(d) => d.formatted_loc_changed.split(' ')[0]}
+      legendText="LOC Changed"
+    />
+  );
+};
+
+BarDayLOCChanged.propTypes = {
+  data: PropTypes.object.isRequired,
+};
+
+export {
+  BarMonthContribs,
+  BarDayContribs,
+  BarMonthLOCChanged,
+  BarDayLOCChanged,
+};
