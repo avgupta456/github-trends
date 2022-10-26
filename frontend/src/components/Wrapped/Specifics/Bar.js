@@ -3,12 +3,39 @@ import PropTypes from 'prop-types';
 
 import { BarGraph } from '../Templates';
 
-const BarContribs = ({ data }) => {
+const monthNames = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
+const dayNames = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
+
+const BarMonthContribs = ({ data }) => {
   const newData = data?.month_data?.months || [];
 
   return (
     <BarGraph
-      months={newData}
+      data={newData}
+      labels={monthNames}
+      xTitle="Month"
       subheader="By Contribution Count"
       type="contribs"
       getTooltip={(d) => `${d.contribs} Contributions`}
@@ -18,7 +45,28 @@ const BarContribs = ({ data }) => {
   );
 };
 
-BarContribs.propTypes = {
+BarMonthContribs.propTypes = {
+  data: PropTypes.object.isRequired,
+};
+
+const BarDayContribs = ({ data }) => {
+  const newData = data?.day_data?.days || [];
+
+  return (
+    <BarGraph
+      data={newData}
+      labels={dayNames}
+      xTitle="Day"
+      subheader="By Contribution Count"
+      type="contribs"
+      getTooltip={(d) => `${d.contribs} Contributions`}
+      getLabel={(d) => d.contribs}
+      legendText="Contributions"
+    />
+  );
+};
+
+BarDayContribs.propTypes = {
   data: PropTypes.object.isRequired,
 };
 
@@ -27,7 +75,9 @@ const BarLOCChanged = ({ data }) => {
 
   return (
     <BarGraph
-      months={newData}
+      data={newData}
+      labels={monthNames}
+      xTitle="Month"
       subheader="By Lines of Code Changed"
       type="loc_changed"
       getTooltip={(d) => `${d.formatted_loc_changed}`}
@@ -41,4 +91,4 @@ BarLOCChanged.propTypes = {
   data: PropTypes.object.isRequired,
 };
 
-export { BarContribs, BarLOCChanged };
+export { BarMonthContribs, BarDayContribs, BarLOCChanged };

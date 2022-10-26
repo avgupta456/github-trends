@@ -9,38 +9,25 @@ import { theme } from './theme';
 import { WrappedCard } from '../Organization';
 
 const BarGraph = ({
-  months,
+  data,
+  labels,
+  xTitle,
   subheader,
   type,
   getTooltip,
   getLabel,
   legendText,
 }) => {
-  const monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-
   return (
     <div className="h-96 w-full">
       <WrappedCard>
         <p className="text-xl font-semibold">Contributions by Month</p>
         <p>{subheader}</p>
-        {Array.isArray(months) && months.length > 0 ? (
+        {Array.isArray(data) && data.length > 0 ? (
           <ResponsiveBar
             theme={theme}
-            data={months}
-            indexBy="month"
+            data={data}
+            indexBy="index"
             keys={[type]}
             margin={{ top: 30, right: 0, bottom: 50, left: 80 }}
             padding={0.3}
@@ -56,7 +43,7 @@ const BarGraph = ({
                   boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
                 }}
               >
-                <strong>{monthNames[bar.data.month || 0]}</strong>
+                <strong>{labels[bar.data.index || 0]}</strong>
                 {`: ${getTooltip(bar.data)}`}
               </div>
             )}
@@ -66,10 +53,10 @@ const BarGraph = ({
               tickSize: 5,
               tickPadding: 5,
               tickRotation: 0,
-              legend: 'Month',
+              legend: xTitle,
               legendPosition: 'middle',
               legendOffset: 32,
-              format: (value) => monthNames[value],
+              format: (value) => labels[value],
             }}
             axisLeft={{
               tickSize: 5,
@@ -95,7 +82,9 @@ const BarGraph = ({
 };
 
 BarGraph.propTypes = {
-  months: PropTypes.array.isRequired,
+  data: PropTypes.array.isRequired,
+  labels: PropTypes.array.isRequired,
+  xTitle: PropTypes.string.isRequired,
   subheader: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   getTooltip: PropTypes.func.isRequired,

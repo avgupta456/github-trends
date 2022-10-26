@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from typing import Any, Dict, List
 
-from src.models import CalendarDayDatum, CalendarData, UserPackage
+from src.models import CalendarData, CalendarDayDatum, UserPackage
 
 
 def get_calendar_data(data: UserPackage, year: int) -> CalendarData:

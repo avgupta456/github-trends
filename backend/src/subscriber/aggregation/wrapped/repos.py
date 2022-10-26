@@ -1,6 +1,6 @@
 from typing import List
 
-from src.models import Language, RepoData, RepoDatum, RepoContributionStats, UserPackage
+from src.models import Language, RepoContributionStats, RepoData, RepoDatum, UserPackage
 from src.utils import format_number
 
 

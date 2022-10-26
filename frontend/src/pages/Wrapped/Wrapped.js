@@ -11,7 +11,8 @@ import {
   Numeric,
   NumericOutOf,
   Calendar,
-  BarContribs,
+  BarMonthContribs,
+  BarDayContribs,
   PieLangs,
   PieRepos,
   SwarmType,
@@ -114,6 +115,8 @@ const WrappedScreen = () => {
               }}
             />
           </div>
+          <BarMonthContribs data={data} />
+          <BarDayContribs data={data} />
         </WrappedSection>
         <WrappedSection title="Lines of Code (LOC) Analysis">
           <div className="w-full md:w-1/2 xl:w-1/3">
@@ -181,7 +184,6 @@ const WrappedScreen = () => {
               label="Weekend Activity"
             />
           </div>
-          <BarContribs data={data} />
         </WrappedSection>
       </div>
       <FloatingIcon />

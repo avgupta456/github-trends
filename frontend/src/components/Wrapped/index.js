@@ -3,7 +3,8 @@ import { WrappedSection, WrappedCard } from './Organization';
 import { Numeric, NumericOutOf } from './Templates';
 
 import {
-  BarContribs,
+  BarMonthContribs,
+  BarDayContribs,
   BarLOCChanged,
   Calendar,
   NumericPlusLOC,
@@ -20,7 +21,8 @@ export {
   WrappedCard,
   Numeric,
   NumericOutOf,
-  BarContribs,
+  BarMonthContribs,
+  BarDayContribs,
   BarLOCChanged,
   Calendar,
   NumericPlusLOC,
