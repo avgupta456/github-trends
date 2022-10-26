@@ -57,12 +57,12 @@ const NumericOutOf = ({
     );
   };
   return (
-    <WrappedCard className={className}>
-      <div
-        className="w-full h-32 mb-4"
-        onMouseOver={onMouseOver}
-        onMouseOut={onMouseOut}
-      >
+    <WrappedCard
+      className={className}
+      onMouseOver={onMouseOver}
+      onMouseOut={onMouseOut}
+    >
+      <div className="w-full h-32 mb-4">
         <ResponsivePie
           data={[
             { id: '1', value: num, color },
