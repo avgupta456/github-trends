@@ -38,7 +38,6 @@ const BarMonthContribs = ({ data }) => {
       xTitle="Month"
       subheader="By Contribution Count"
       type="contribs"
-      getTooltip={(d) => `${d.contribs} Contributions`}
       getLabel={(d) => d.contribs}
       legendText="Contributions"
     />
@@ -59,7 +58,6 @@ const BarDayContribs = ({ data }) => {
       xTitle="Day"
       subheader="By Contribution Count"
       type="contribs"
-      getTooltip={(d) => `${d.contribs} Contributions`}
       getLabel={(d) => d.contribs}
       legendText="Contributions"
     />
@@ -80,7 +78,6 @@ const BarLOCChanged = ({ data }) => {
       xTitle="Month"
       subheader="By Lines of Code Changed"
       type="loc_changed"
-      getTooltip={(d) => `${d.formatted_loc_changed}`}
       getLabel={(d) => d.formatted_loc_changed.split(' ')[0]}
       legendText="LOC Changed"
     />
