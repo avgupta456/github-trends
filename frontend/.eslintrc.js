@@ -20,6 +20,7 @@ module.exports = {
     'react/function-component-definition': 'off',
     'react/no-unstable-nested-components': 'off',
     'no-console': 'off',
+    radix: 'off',
     'prettier/prettier': [
       'error',
       {

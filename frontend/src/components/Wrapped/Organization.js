@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/mouse-events-have-key-events */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { classnames } from '../../utils';
@@ -26,10 +28,14 @@ WrappedSection.defaultProps = {
 
 const WrappedCard = (props) => {
   return (
-    <div className="w-full h-full p-2">
+    <div
+      className="w-full h-full p-1"
+      onMouseOver={props.onMouseOver}
+      onMouseOut={props.onMouseOut}
+    >
       <div
         className={classnames(
-          'shadow rounded-sm bg-gray-100 w-full h-full p-8 flex flex-col justify-center',
+          'shadow rounded-sm bg-gray-100 w-full h-full p-4 flex flex-col justify-center',
           props.className,
         )}
       >
@@ -42,10 +48,14 @@ const WrappedCard = (props) => {
 WrappedCard.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
+  onMouseOver: PropTypes.func,
+  onMouseOut: PropTypes.func,
 };
 
 WrappedCard.defaultProps = {
   className: '',
+  onMouseOver: () => {},
+  onMouseOut: () => {},
 };
 
 export { WrappedSection, WrappedCard };

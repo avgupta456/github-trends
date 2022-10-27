@@ -3,73 +3,59 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { ResponsiveBar } from '@nivo/bar';
+import { ResponsiveBarCanvas } from '@nivo/bar';
 
 import { theme } from './theme';
 import { WrappedCard } from '../Organization';
 
 const BarGraph = ({
-  months,
+  data,
+  labels,
+  xTitle,
   subheader,
   type,
-  getTooltip,
   getLabel,
   legendText,
 }) => {
-  const monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
+  const maxData = Math.max(...data.map((d) => d[type]));
+  const minData = Math.min(
+    ...data.filter((d) => d.index < 11).map((d) => d[type]),
+  );
+
+  const getColor = (d) => {
+    // eslint-disable-next-line no-nested-ternary
+    return d.value === maxData
+      ? '#2BA02C'
+      : d.value === minData
+      ? '#D62728'
+      : '#468CBF';
+  };
 
   return (
     <div className="h-96 w-full">
       <WrappedCard>
-        <p className="text-xl font-semibold">Contributions by Month</p>
+        <p className="text-xl font-semibold">Contributions by {xTitle}</p>
         <p>{subheader}</p>
-        {Array.isArray(months) && months.length > 0 ? (
-          <ResponsiveBar
+        {Array.isArray(data) && data.length > 0 ? (
+          <ResponsiveBarCanvas
             theme={theme}
-            data={months}
-            indexBy="month"
+            colors={getColor}
+            data={data}
+            indexBy="index"
             keys={[type]}
             margin={{ top: 30, right: 0, bottom: 50, left: 80 }}
             padding={0.3}
             layout="vertical"
-            colors={{ scheme: 'category10' }}
-            // eslint-disable-next-line no-unused-vars
-            tooltip={(bar, color, label) => (
-              <div
-                style={{
-                  fontSize: '14px',
-                  padding: 6,
-                  background: '#fff',
-                  boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-                }}
-              >
-                <strong>{monthNames[bar.data.month || 0]}</strong>
-                {`: ${getTooltip(bar.data)}`}
-              </div>
-            )}
             axisTop={null}
             axisRight={null}
             axisBottom={{
               tickSize: 5,
               tickPadding: 5,
               tickRotation: 0,
-              legend: 'Month',
+              legend: xTitle,
               legendPosition: 'middle',
               legendOffset: 32,
-              format: (value) => monthNames[value],
+              format: (value) => labels[value],
             }}
             axisLeft={{
               tickSize: 5,
@@ -95,10 +81,11 @@ const BarGraph = ({
 };
 
 BarGraph.propTypes = {
-  months: PropTypes.array.isRequired,
+  data: PropTypes.array.isRequired,
+  labels: PropTypes.array.isRequired,
+  xTitle: PropTypes.string.isRequired,
   subheader: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  getTooltip: PropTypes.func.isRequired,
   getLabel: PropTypes.func.isRequired,
   legendText: PropTypes.string.isRequired,
 };

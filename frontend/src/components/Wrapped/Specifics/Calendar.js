@@ -4,10 +4,16 @@ import PropTypes from 'prop-types';
 import { ResponsiveCalendar } from '@nivo/calendar';
 
 import { Input } from '../../Generic';
-import { theme } from '../Templates/theme';
+import { theme, scale } from '../Templates/theme';
 import { WrappedCard } from '../Organization';
 
-const Calendar = ({ data, startDate, endDate }) => {
+const Calendar = ({
+  data,
+  startDate,
+  endDate,
+  highlightDays,
+  highlightColors,
+}) => {
   const newData = data?.calendar_data?.days || [];
 
   const valueOptions = [
@@ -18,15 +24,43 @@ const Calendar = ({ data, startDate, endDate }) => {
     { value: 'reviews', label: 'Reviews', disabled: false },
   ];
 
-  // eslint-disable-next-line no-unused-vars
   const [value, setValue] = React.useState(valueOptions[0]);
-
-  // eslint-disable-next-line no-unused-vars
-  const [selectedDay, setSelectedDay] = React.useState(null);
 
   const numEvents = Array.isArray(newData)
     ? newData.reduce((acc, x) => acc + x[value.value], 0)
     : 0;
+
+  let c = 1;
+  const max = Math.max(...newData.map((x) => x[value.value]));
+  const quantiles = [
+    Math.floor(max * 0.25),
+    Math.floor(max * 0.5),
+    Math.floor(max * 0.75),
+    max,
+  ];
+
+  const colorScaleFn = (x) => {
+    const count = (c % 365) + 1;
+    c += 1;
+
+    const myColorScale = highlightDays.includes(count)
+      ? highlightColors
+      : scale;
+
+    if (x === 0) {
+      return myColorScale[0];
+    }
+    if (x <= quantiles[0]) {
+      return myColorScale[1];
+    }
+    if (x <= quantiles[1]) {
+      return myColorScale[2];
+    }
+    if (x <= quantiles[2]) {
+      return myColorScale[3];
+    }
+    return myColorScale[4];
+  };
 
   return (
     <div className="w-full">
@@ -42,17 +76,15 @@ const Calendar = ({ data, startDate, endDate }) => {
             setSelectedOption={setValue}
           />
         </div>
-        <div className="h-32 lg:h-60 flex flex-col">
+        <div className="flex flex-col h-48">
           <p className="lg:text-lg">{`${numEvents} ${value.label}`}</p>
           {Array.isArray(newData) && newData.length > 0 ? (
             <ResponsiveCalendar
               theme={theme}
-              data={newData
-                .map((item) => ({
-                  day: item.day,
-                  value: item[value.value],
-                }))
-                .filter((item) => item.value !== 0)}
+              data={newData.map((item) => ({
+                day: item.day,
+                value: item[value.value],
+              }))}
               from={startDate}
               to={endDate}
               emptyColor="#EBEDF0"
@@ -61,10 +93,7 @@ const Calendar = ({ data, startDate, endDate }) => {
               monthBorderColor="#ffffff"
               dayBorderWidth={2}
               dayBorderColor="#ffffff"
-              // eslint-disable-next-line no-unused-vars
-              onClick={(dayData, event) => {
-                setSelectedDay(dayData.day);
-              }}
+              colorScale={colorScaleFn}
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
@@ -81,6 +110,12 @@ Calendar.propTypes = {
   data: PropTypes.object.isRequired,
   startDate: PropTypes.string.isRequired,
   endDate: PropTypes.string.isRequired,
+  highlightDays: PropTypes.arrayOf(PropTypes.number),
+  highlightColors: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
+
+Calendar.defaultProps = {
+  highlightDays: [],
 };
 
 export default Calendar;

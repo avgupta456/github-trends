@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from pydantic import BaseModel
 
 
@@ -11,9 +13,15 @@ class ContribStats(BaseModel):
 
 
 class MiscStats(BaseModel):
-    total_days: str
-    longest_streak: str
-    weekend_percent: str
+    total_days: int
+    longest_streak: int
+    longest_streak_days: Tuple[int, int, str, str]
+    longest_gap: int
+    longest_gap_days: Tuple[int, int, str, str]
+    weekend_percent: int
+    best_day_count: int
+    best_day_date: str
+    best_day_index: int
 
 
 class LOCStats(BaseModel):

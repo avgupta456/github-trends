@@ -64,4 +64,46 @@ NumericBothLOC.defaultProps = {
   num2: 'N/A',
 };
 
-export { NumericPlusLOC, NumericMinusLOC, NumericBothLOC };
+const NumericBestDay = ({
+  num,
+  date,
+  label,
+  className,
+  onMouseOver,
+  onMouseOut,
+}) => {
+  return (
+    <WrappedCard
+      className={className}
+      onMouseOver={onMouseOver}
+      onMouseOut={onMouseOut}
+    >
+      <div className="h-24 mb-2 flex flex-col justify-center">
+        <p className="text-2xl 2xl:text-3xl 3xl:text-4xl font-bold text-center text-green-600">
+          {num} Contributions
+        </p>
+        <p className="text-2xl 2xl:text-3xl 3xl:text-4xl font-bold text-center">
+          on {date}
+        </p>
+      </div>
+      <p className="text-lg 2xl:text-xl w-full text-center">{label}</p>
+    </WrappedCard>
+  );
+};
+
+NumericBestDay.propTypes = {
+  num: PropTypes.number.isRequired,
+  date: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  className: PropTypes.string,
+  onMouseOver: PropTypes.func,
+  onMouseOut: PropTypes.func,
+};
+
+NumericBestDay.defaultProps = {
+  className: '',
+  onMouseOver: () => {},
+  onMouseOut: () => {},
+};
+
+export { NumericPlusLOC, NumericMinusLOC, NumericBothLOC, NumericBestDay };
