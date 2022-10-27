@@ -154,10 +154,16 @@ const WrappedScreen = () => {
               className="hover:bg-gray-200 cursor-pointer"
               onMouseOver={() => {
                 const Sunday = Array.from({ length: 55 }, (_, i) => i).map(
-                  (x) => x * 7 + 1,
+                  (x) =>
+                    x * 7 -
+                    ((year % 7) + 6) +
+                    Math.max(0, Math.floor((2024 - year) / 4)),
                 );
                 const Saturday = Array.from({ length: 55 }, (_, i) => i).map(
-                  (x) => x * 7 + 2,
+                  (x) =>
+                    x * 7 -
+                    (year % 7) +
+                    Math.max(0, Math.floor((2024 - year) / 4)),
                 );
                 setHighlightDays([...Sunday, ...Saturday]);
               }}

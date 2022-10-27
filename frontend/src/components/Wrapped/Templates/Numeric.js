@@ -72,25 +72,9 @@ const NumericOutOf = ({
           innerRadius={0.8}
           enableArcLabels={false}
           enableArcLinkLabels={false}
-          activeInnerRadiusOffset={8}
-          activeOuterRadiusOffset={0}
           colors={{ datum: 'data.color' }}
           layers={['arcs', CenteredMetric]}
-          tooltip={({ datum }) => (
-            <div
-              style={{
-                fontSize: '14px',
-                padding: 6,
-                color: datum.color,
-                background: '#fff',
-                boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-              }}
-            >
-              <strong>
-                {datum.value} / {outOf}
-              </strong>
-            </div>
-          )}
+          tooltip={() => null}
         />
       </div>
       <p className="text-lg 2xl:text-xl w-full text-center">{label}</p>
