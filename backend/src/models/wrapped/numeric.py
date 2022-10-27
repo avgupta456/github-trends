@@ -19,6 +19,9 @@ class MiscStats(BaseModel):
     longest_gap: int
     longest_gap_days: Tuple[int, int, str, str]
     weekend_percent: int
+    best_day_count: int
+    best_day_date: str
+    best_day_index: int
 
 
 class LOCStats(BaseModel):

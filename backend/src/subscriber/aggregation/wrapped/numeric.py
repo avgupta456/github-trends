@@ -58,6 +58,9 @@ def get_misc_stats(data: UserPackage, year: int) -> MiscStats:
     )
     weekend_percent = (weekdays[0] + weekdays[6]) / max(1, total_contribs)
 
+    best_day = max(data.contribs.total, key=lambda x: x.stats.contribs_count)
+    best_day_index = datetime.fromisoformat(best_day.date).timetuple().tm_yday
+
     return MiscStats.parse_obj(
         {
             "total_days": distinct_days,
@@ -66,6 +69,9 @@ def get_misc_stats(data: UserPackage, year: int) -> MiscStats:
             "longest_gap": longest_gap,
             "longest_gap_days": longest_gap_days,
             "weekend_percent": round(100 * weekend_percent),
+            "best_day_count": best_day.stats.contribs_count,
+            "best_day_date": best_day.date,
+            "best_day_index": best_day_index,
         }
     )
 

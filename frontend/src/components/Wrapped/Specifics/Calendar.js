@@ -4,10 +4,16 @@ import PropTypes from 'prop-types';
 import { ResponsiveCalendar } from '@nivo/calendar';
 
 import { Input } from '../../Generic';
-import { theme } from '../Templates/theme';
+import { theme, scale } from '../Templates/theme';
 import { WrappedCard } from '../Organization';
 
-const Calendar = ({ data, startDate, endDate, startRange, endRange }) => {
+const Calendar = ({
+  data,
+  startDate,
+  endDate,
+  highlightDays,
+  highlightColors,
+}) => {
   const newData = data?.calendar_data?.days || [];
 
   const valueOptions = [
@@ -33,15 +39,13 @@ const Calendar = ({ data, startDate, endDate, startRange, endRange }) => {
     max,
   ];
 
-  const scale = ['#EBEDF0', '#9BE9A8', '#40C463', '#30A14E', '#216E39'];
-  const hoverScale = ['#A6C9F5', '#7EC7D1', '#50B5AF', '#48A3A4', '#418A9A'];
-
   const colorScaleFn = (x) => {
     const count = (c % 365) + 1;
     c += 1;
 
-    const myColorScale =
-      startRange <= count && count <= endRange ? hoverScale : scale;
+    const myColorScale = highlightDays.includes(count)
+      ? highlightColors
+      : scale;
 
     if (x === 0) {
       return myColorScale[0];
@@ -72,7 +76,7 @@ const Calendar = ({ data, startDate, endDate, startRange, endRange }) => {
             setSelectedOption={setValue}
           />
         </div>
-        <div className="h-32 lg:h-60 flex flex-col">
+        <div className="flex flex-col h-48">
           <p className="lg:text-lg">{`${numEvents} ${value.label}`}</p>
           {Array.isArray(newData) && newData.length > 0 ? (
             <ResponsiveCalendar
@@ -106,13 +110,12 @@ Calendar.propTypes = {
   data: PropTypes.object.isRequired,
   startDate: PropTypes.string.isRequired,
   endDate: PropTypes.string.isRequired,
-  startRange: PropTypes.number,
-  endRange: PropTypes.number,
+  highlightDays: PropTypes.arrayOf(PropTypes.number),
+  highlightColors: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 Calendar.defaultProps = {
-  startRange: 0,
-  endRange: 0,
+  highlightDays: [],
 };
 
 export default Calendar;

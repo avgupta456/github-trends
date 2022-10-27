@@ -23,8 +23,6 @@ const BarGraph = ({
   );
 
   const getColor = (d) => {
-    console.log(d);
-
     // eslint-disable-next-line no-nested-ternary
     return d.value === maxData
       ? '#2BA02C'

@@ -29,13 +29,13 @@ WrappedSection.defaultProps = {
 const WrappedCard = (props) => {
   return (
     <div
-      className="w-full h-full p-2"
+      className="w-full h-full p-1"
       onMouseOver={props.onMouseOver}
       onMouseOut={props.onMouseOut}
     >
       <div
         className={classnames(
-          'shadow rounded-sm bg-gray-100 w-full h-full p-8 flex flex-col justify-center',
+          'shadow rounded-sm bg-gray-100 w-full h-full p-4 flex flex-col justify-center',
           props.className,
         )}
       >

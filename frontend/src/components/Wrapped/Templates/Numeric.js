@@ -30,6 +30,7 @@ Numeric.defaultProps = {
 const NumericOutOf = ({
   num,
   outOf,
+  format,
   label,
   color,
   className,
@@ -52,7 +53,7 @@ const NumericOutOf = ({
         dominantBaseline="central"
         className="text-2xl 2xl:text-3xl 3xl:text-4xl font-bold"
       >
-        {total}
+        {format(total)}
       </text>
     );
   };
@@ -62,11 +63,11 @@ const NumericOutOf = ({
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
     >
-      <div className="w-full h-32 mb-4">
+      <div className="w-full h-24 mb-2">
         <ResponsivePie
           data={[
             { id: '1', value: num, color },
-            { id: '2', value: outOf - num, color: '#E5E7EB' },
+            { id: '2', value: outOf - num, color: '#d1d5db' },
           ]}
           innerRadius={0.8}
           enableArcLabels={false}
@@ -100,6 +101,7 @@ const NumericOutOf = ({
 NumericOutOf.propTypes = {
   num: PropTypes.number.isRequired,
   outOf: PropTypes.number.isRequired,
+  format: PropTypes.func,
   label: PropTypes.string.isRequired,
   color: PropTypes.string,
   className: PropTypes.string,
@@ -108,6 +110,7 @@ NumericOutOf.propTypes = {
 };
 
 NumericOutOf.defaultProps = {
+  format: (x) => x,
   color: '#30A14E',
   className: '',
   onMouseOver: () => {},
