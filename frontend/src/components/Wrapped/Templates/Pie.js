@@ -35,7 +35,7 @@ const PieChart = ({ data, getArcLinkLabel, getFormattedValue, colors }) => {
       arcLinkLabelsStraightLength={5}
       arcLinkLabelsThickness={0}
       // Arc Label Settings
-      arcLabel={(e) => getFormattedValue(e)}
+      arcLabel={(e) => getFormattedValue(e.data)}
       arcLabelsSkipAngle={45}
       arcLabelsTextColor="#fff"
       // Tooltip
