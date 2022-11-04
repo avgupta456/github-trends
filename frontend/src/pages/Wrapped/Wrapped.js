@@ -191,10 +191,10 @@ const WrappedScreen = () => {
         </WrappedSection>
         <WrappedSection title="Lines of Code (LOC) Analysis">
           <div className="w-full md:w-1/2 xl:w-1/3">
-            <PieLangs data={data} metric="changed" />
+            <PieLangs data={data} />
           </div>
           <div className="w-full md:w-1/2 xl:w-1/3">
-            <PieRepos data={data} metric="changed" />
+            <PieRepos data={data} />
           </div>
           <div className="w-full xl:w-1/3 flex flex-wrap">
             <div className="w-full md:w-1/2 lg:w-1/4 xl:w-1/2">
