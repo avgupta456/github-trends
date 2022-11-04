@@ -14,10 +14,8 @@ import {
   Calendar,
   hoverScale,
   singleHoverScale,
-  BarMonthContribs,
-  BarDayContribs,
-  BarMonthLOCChanged,
-  BarDayLOCChanged,
+  BarMonth,
+  BarDay,
   PieLangs,
   PieRepos,
   SwarmType,
@@ -188,18 +186,8 @@ const WrappedScreen = () => {
           </div>
         </WrappedSection>
         <WrappedSection title="Languages">
-          <div className="w-full md:w-1/2">
-            <BarMonthContribs data={data} />
-          </div>
-          <div className="w-full md:w-1/2">
-            <BarMonthLOCChanged data={data} />
-          </div>
-          <div className="w-full md:w-1/2">
-            <BarDayContribs data={data} />
-          </div>
-          <div className="w-full md:w-1/2">
-            <BarDayLOCChanged data={data} />
-          </div>
+          <BarMonth data={data} />
+          <BarDay data={data} />
         </WrappedSection>
         <WrappedSection title="Lines of Code (LOC) Analysis">
           <div className="w-full md:w-1/2 xl:w-1/3">
