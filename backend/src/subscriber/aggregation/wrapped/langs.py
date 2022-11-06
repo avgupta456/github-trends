@@ -1,7 +1,7 @@
 from typing import List
 
 from src.constants import DEFAULT_COLOR
-from src.models import Language, LangData, LangDatum, UserPackage
+from src.models import LangData, LangDatum, Language, UserPackage
 from src.utils import format_number
 
 
