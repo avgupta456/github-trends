@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
+import { WrappedCard } from '../Organization';
 import { BarGraph } from '../Templates';
 
 const monthNames = [
@@ -28,89 +29,111 @@ const dayNames = [
   'Saturday',
 ];
 
-const BarMonthContribs = ({ data }) => {
+const BarMonth = ({ data }) => {
   const newData = data?.month_data?.months || [];
 
+  // eslint-disable-next-line no-unused-vars
+  const [displayContribs, setDisplayContribs] = useState(false);
+
   return (
-    <BarGraph
-      data={newData}
-      labels={monthNames}
-      xTitle="Month"
-      subheader="By Contribution Count"
-      type="contribs"
-      getLabel={(d) => d.contribs}
-      legendText="Contributions"
-    />
+    <div className="h-96 w-full">
+      <WrappedCard>
+        <div className="flex">
+          <div className="flex-grow">
+            <p className="text-xl font-semibold">Contributions by Month</p>
+            <p>
+              {displayContribs ? 'By Contribution Count' : 'By LOC Changed'}
+            </p>
+          </div>
+          <div className="flex-shrink-0">
+            <button
+              type="button"
+              className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+              onClick={() => setDisplayContribs(!displayContribs)}
+            >
+              <span>Toggle</span>
+            </button>
+          </div>
+        </div>
+        {displayContribs ? (
+          <BarGraph
+            data={newData}
+            labels={monthNames}
+            xTitle="Month"
+            type="contribs"
+            getLabel={(d) => d.contribs}
+            legendText="Contributions"
+          />
+        ) : (
+          <BarGraph
+            data={newData}
+            labels={monthNames}
+            xTitle="Month"
+            type="loc_changed"
+            getLabel={(d) => d.formatted_loc_changed.split(' ')[0]}
+            legendText="LOC Changed"
+          />
+        )}
+      </WrappedCard>
+    </div>
   );
 };
 
-BarMonthContribs.propTypes = {
+BarMonth.propTypes = {
   data: PropTypes.object.isRequired,
 };
 
-const BarDayContribs = ({ data }) => {
+const BarDay = ({ data }) => {
   const newData = data?.day_data?.days || [];
 
+  const [displayContribs, setDisplayContribs] = useState(false);
+
   return (
-    <BarGraph
-      data={newData}
-      labels={dayNames}
-      xTitle="Day"
-      subheader="By Contribution Count"
-      type="contribs"
-      getLabel={(d) => d.contribs}
-      legendText="Contributions"
-    />
+    <div className="h-96 w-full">
+      <WrappedCard>
+        <div className="flex">
+          <div className="flex-grow">
+            <p className="text-xl font-semibold">Contributions by Day</p>
+            <p>
+              {displayContribs ? 'By Contribution Count' : 'By LOC Changed'}
+            </p>
+          </div>
+          <div className="flex-shrink-0">
+            <button
+              type="button"
+              className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+              onClick={() => setDisplayContribs(!displayContribs)}
+            >
+              <span>Toggle</span>
+            </button>
+          </div>
+        </div>
+        {displayContribs ? (
+          <BarGraph
+            data={newData}
+            labels={dayNames}
+            xTitle="Day"
+            type="contribs"
+            getLabel={(d) => d.contribs}
+            legendText="Contributions"
+          />
+        ) : (
+          <BarGraph
+            data={newData}
+            labels={dayNames}
+            xTitle="Day"
+            type="loc_changed"
+            getLabel={(d) => d.formatted_loc_changed.split(' ')[0]}
+            legendText="LOC Changed"
+          />
+        )}
+      </WrappedCard>
+    </div>
   );
 };
 
-BarDayContribs.propTypes = {
+BarDay.propTypes = {
   data: PropTypes.object.isRequired,
 };
 
-const BarMonthLOCChanged = ({ data }) => {
-  const newData = data?.month_data?.months || [];
-
-  return (
-    <BarGraph
-      data={newData}
-      labels={monthNames}
-      xTitle="Month"
-      subheader="By Lines of Code Changed"
-      type="loc_changed"
-      getLabel={(d) => d.formatted_loc_changed.split(' ')[0]}
-      legendText="LOC Changed"
-    />
-  );
-};
-
-BarMonthLOCChanged.propTypes = {
-  data: PropTypes.object.isRequired,
-};
-
-const BarDayLOCChanged = ({ data }) => {
-  const newData = data?.day_data?.days || [];
-
-  return (
-    <BarGraph
-      data={newData}
-      labels={dayNames}
-      xTitle="Day"
-      subheader="By Lines of Code Changed"
-      type="loc_changed"
-      getLabel={(d) => d.formatted_loc_changed.split(' ')[0]}
-      legendText="LOC Changed"
-    />
-  );
-};
-
-BarDayLOCChanged.propTypes = {
-  data: PropTypes.object.isRequired,
-};
-
-export {
-  BarMonthContribs,
-  BarDayContribs,
-  BarMonthLOCChanged,
-  BarDayLOCChanged,
-};
+export { BarMonth, BarDay };

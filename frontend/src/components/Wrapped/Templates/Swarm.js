@@ -29,7 +29,7 @@ const SwarmPlot = ({
     <div className="w-full h-96">
       <WrappedCard>
         <p className="text-lg lg:text-xl font-semibold">{header}</p>
-        <p className="lg:text-lg">{`${data.length} Sampled Contributions, Eastern Time`}</p>
+        <p>{`${data.length} Sampled Contributions, Eastern Time`}</p>
         {Array.isArray(data) && data.length > 0 ? (
           <MemoizedResponsiveSwarmPlot
             theme={theme}
@@ -46,7 +46,7 @@ const SwarmPlot = ({
             colors={{ scheme: 'category10' }}
             gridYValues={tickValues}
             valueScale={{ type: 'linear', min: 0, max: 86400, reverse: true }}
-            margin={{ top: 40, right: 0, bottom: 60, left: 100 }}
+            margin={{ top: 20, right: 0, bottom: 20, left: 70 }}
             axisTop={null}
             axisRight={null}
             axisBottom={{

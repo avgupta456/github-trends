@@ -14,19 +14,17 @@ import {
   Calendar,
   hoverScale,
   singleHoverScale,
-  BarMonthContribs,
-  BarDayContribs,
-  BarMonthLOCChanged,
-  BarDayLOCChanged,
+  BarMonth,
+  BarDay,
   PieLangs,
   PieRepos,
-  SwarmType,
   SwarmDay,
   NumericPlusLOC,
   NumericMinusLOC,
   NumericBothLOC,
   NumericBestDay,
 } from '../../components';
+import Radar from '../../components/Wrapped/Specifics/Radar';
 import { LoadingScreen } from './sections';
 
 const WrappedScreen = () => {
@@ -187,26 +185,12 @@ const WrappedScreen = () => {
             />
           </div>
         </WrappedSection>
-        <WrappedSection title="Languages">
-          <div className="w-full md:w-1/2">
-            <BarMonthContribs data={data} />
-          </div>
-          <div className="w-full md:w-1/2">
-            <BarMonthLOCChanged data={data} />
-          </div>
-          <div className="w-full md:w-1/2">
-            <BarDayContribs data={data} />
-          </div>
-          <div className="w-full md:w-1/2">
-            <BarDayLOCChanged data={data} />
-          </div>
-        </WrappedSection>
         <WrappedSection title="Lines of Code (LOC) Analysis">
           <div className="w-full md:w-1/2 xl:w-1/3">
-            <PieLangs data={data} metric="changed" />
+            <PieLangs data={data} />
           </div>
           <div className="w-full md:w-1/2 xl:w-1/3">
-            <PieRepos data={data} metric="changed" />
+            <PieRepos data={data} />
           </div>
           <div className="w-full xl:w-1/3 flex flex-wrap">
             <div className="w-full md:w-1/2 lg:w-1/4 xl:w-1/2">
@@ -237,27 +221,16 @@ const WrappedScreen = () => {
           </div>
         </WrappedSection>
         <WrappedSection title="Contribution Breakdown">
-          <div className="w-full lg:w-1/3 flex flex-wrap">
-            {[
-              { num: data?.numeric_data?.contribs?.commits, label: 'Commits' },
-              { num: data?.numeric_data?.contribs?.issues, label: 'Issues' },
-              {
-                num: data?.numeric_data?.contribs?.prs,
-                label: 'Pull Requests',
-              },
-              { num: data?.numeric_data?.contribs?.reviews, label: 'Reviews' },
-            ].map((item) => (
-              <div className="w-full md:w-1/2" key={item.label}>
-                <Numeric num={item.num} label={item.label} />
-              </div>
-            ))}
+          <div className="w-full md:w-1/3">
+            <Radar data={data} />
           </div>
-          <div className="w-full lg:w-2/3">
-            <SwarmType data={data} />
+          <div className="w-full md:w-2/3">
+            <BarMonth data={data} />
           </div>
-        </WrappedSection>
-        <WrappedSection title="Fun Plots and Stats">
-          <div className="w-full lg:w-2/3">
+          <div className="w-full md:w-2/3">
+            <BarDay data={data} />
+          </div>
+          <div className="w-full md:w-1/3">
             <SwarmDay data={data} />
           </div>
         </WrappedSection>
