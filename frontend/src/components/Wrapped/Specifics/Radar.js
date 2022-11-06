@@ -41,7 +41,7 @@ const Radar = ({ data }) => {
           keys={['count']}
           indexBy="name"
           valueFormat={(d) => Math.round(Math.exp(d) - 1)}
-          margin={{ top: 30, right: 50, bottom: 30, left: 50 }}
+          margin={{ top: 30, right: 50, bottom: 30, left: 60 }}
           dotSize={10}
           colors={{ scheme: 'category10' }}
           blendMode="multiply"
