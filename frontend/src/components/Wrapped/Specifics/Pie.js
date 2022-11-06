@@ -56,9 +56,7 @@ const PieRepos = ({ data }) => {
       <WrappedCard>
         <div className="flex">
           <div className="flex-grow">
-            <p className="text-xl font-semibold">
-              Most Contributed Repositories
-            </p>
+            <p className="text-xl font-semibold">Most Active Repositories</p>
             <p>{useLOCAdded ? 'By LOC Added' : 'By LOC Changed'}</p>
           </div>
           <div className="flex-shrink-0">

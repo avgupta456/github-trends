@@ -29,7 +29,7 @@ const SwarmPlot = ({
     <div className="w-full h-96">
       <WrappedCard>
         <p className="text-lg lg:text-xl font-semibold">{header}</p>
-        <p className="lg:text-lg">{`${data.length} Sampled Contributions, Eastern Time`}</p>
+        <p>{`${data.length} Sampled Contributions, Eastern Time`}</p>
         {Array.isArray(data) && data.length > 0 ? (
           <MemoizedResponsiveSwarmPlot
             theme={theme}
