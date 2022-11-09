@@ -89,7 +89,7 @@ const WrappedScreen = () => {
           </div>
         </WrappedSection>
         <WrappedSection title="Contribution Calendar">
-          <div className="w-4/5">
+          <div className="w-full lg:w-4/5">
             <Calendar
               data={data}
               startDate={`${year}-01-02`}
@@ -98,14 +98,14 @@ const WrappedScreen = () => {
               highlightColors={highlightColors}
             />
           </div>
-          <div className="w-1/5">
+          <div className="w-1/2 md:w-1/4 lg:w-1/5">
             <NumericOutOf
               num={data?.numeric_data?.misc?.total_days || 0}
               outOf={365}
-              label="Days with Contributions"
+              label="Active Days"
             />
           </div>
-          <div className="w-1/4">
+          <div className="w-1/2 md:w-1/4">
             <NumericOutOf
               num={data?.numeric_data?.misc?.longest_streak || 0}
               outOf={100}
@@ -124,7 +124,7 @@ const WrappedScreen = () => {
               }}
             />
           </div>
-          <div className="w-1/4">
+          <div className="w-1/2 md:w-1/4">
             <NumericOutOf
               num={data?.numeric_data?.misc?.longest_gap || 0}
               outOf={100}
@@ -142,7 +142,7 @@ const WrappedScreen = () => {
               onMouseOut={() => setHighlightDays([])}
             />
           </div>
-          <div className="w-1/4">
+          <div className="w-1/2 md:w-1/4">
             <NumericOutOf
               num={data?.numeric_data?.misc?.weekend_percent}
               outOf={100}
@@ -168,7 +168,7 @@ const WrappedScreen = () => {
               onMouseOut={() => setHighlightDays([])}
             />
           </div>
-          <div className="w-1/4">
+          <div className="hidden lg:block w-1/4">
             <NumericBestDay
               num={data?.numeric_data?.misc?.best_day_count}
               date={`${bestDayMonth}/${bestDayDay}/${bestDayYear}`}
@@ -221,16 +221,16 @@ const WrappedScreen = () => {
           </div>
         </WrappedSection>
         <WrappedSection title="Contribution Breakdown">
-          <div className="w-full md:w-1/3">
+          <div className="w-full lg:w-1/3">
             <Radar data={data} />
           </div>
-          <div className="w-full md:w-2/3">
+          <div className="w-full lg:w-2/3">
             <BarMonth data={data} />
           </div>
-          <div className="w-full md:w-2/3">
+          <div className="w-full lg:w-2/3">
             <BarDay data={data} />
           </div>
-          <div className="w-full md:w-1/3">
+          <div className="w-full lg:w-1/3">
             <SwarmDay data={data} />
           </div>
         </WrappedSection>
