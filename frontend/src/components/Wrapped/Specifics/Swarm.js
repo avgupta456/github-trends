@@ -21,10 +21,11 @@ const formatYAxis = (value) => {
 
 const SwarmDay = ({ data }) => {
   let newData = data?.timestamp_data?.contribs || [];
-  newData = newData.map((d) => {
+  newData = newData.map((d, i) => {
     return {
       ...d,
-      id: 0,
+      groupById: 0,
+      id: i,
     };
   });
 
@@ -32,7 +33,7 @@ const SwarmDay = ({ data }) => {
     <SwarmPlot
       header="Contributions by Time"
       data={newData}
-      groupBy="id"
+      groupBy="groupById"
       groups={[0]}
       legend=""
       formatXAxis={() => ''}
