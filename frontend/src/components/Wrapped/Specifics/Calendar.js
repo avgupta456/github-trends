@@ -30,7 +30,7 @@ const Calendar = ({
     ? newData.reduce((acc, x) => acc + x[value.value], 0)
     : 0;
 
-  let c = 1;
+  let c = 0;
   const max = Math.max(...newData.map((x) => x[value.value]));
   const quantiles = [
     Math.floor(max * 0.25),
