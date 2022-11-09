@@ -10,6 +10,7 @@ from src.models.user.contribs import UserContributions
 
 class UserPackage(BaseModel):
     contribs: UserContributions
+    incomplete: bool = False
 
     def compress(self):
         return {

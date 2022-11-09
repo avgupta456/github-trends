@@ -17,9 +17,11 @@ async def query_wrapped_user(
     access_token = None if user is None else user.access_token
     private_access = False if user is None else user.private_access or False
     user_package: Optional[UserPackage] = await query_user(
-        user_id, access_token, private_access, start_date, end_date
+        user_id, access_token, private_access, start_date, end_date, no_cache=True
     )
     if user_package is None:
         return (False, None)  # type: ignore
     wrapped_package = get_wrapped_data(user_package, year)
-    return (True, wrapped_package)  # type: ignore
+
+    # Don't cache if incomplete
+    return (not wrapped_package.incomplete, wrapped_package)  # type: ignore

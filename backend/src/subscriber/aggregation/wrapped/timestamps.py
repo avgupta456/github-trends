@@ -1,9 +1,8 @@
-from collections import defaultdict
 from datetime import datetime
 from random import shuffle
-from typing import Any, Dict, List
+from typing import Any, List
 
-from src.models import TimestampData, TimestampDatum, UserPackage
+from src.models import TimestampData, UserPackage, TimestampDatum
 
 MAX_ITEMS = 200
 
@@ -14,23 +13,21 @@ def date_to_seconds_since_midnight(date: datetime) -> int:
 
 def get_timestamp_data(data: UserPackage) -> TimestampData:
     out: List[Any] = []
-    counts: Dict[str, int] = defaultdict(int)
     for item in data.contribs.total:
         lists = item.lists
         lists = [lists.commits, lists.issues, lists.prs, lists.reviews]
         for type, list in zip(["commit", "issue", "pr", "review"], lists):
-            shuffle(list)
             for obj in list:
-                if counts[type] > MAX_ITEMS:
-                    continue
+                out.append(
+                    {
+                        "type": type,
+                        "weekday": item.weekday,
+                        "timestamp": date_to_seconds_since_midnight(obj),
+                    }
+                )
 
-                _obj = {
-                    "type": type,
-                    "weekday": item.weekday,
-                    "timestamp": date_to_seconds_since_midnight(obj),
-                }
-
-                out.append(TimestampDatum.parse_obj(_obj))
-                counts[type] += 1
+    shuffle(out)
+    out = out[:MAX_ITEMS]
+    out = [TimestampDatum.parse_obj(x) for x in out]
 
     return TimestampData(contribs=out)

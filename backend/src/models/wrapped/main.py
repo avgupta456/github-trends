@@ -16,3 +16,4 @@ class WrappedPackage(BaseModel):
     repo_data: RepoData
     lang_data: LangData
     timestamp_data: TimestampData
+    incomplete: bool = False
