@@ -85,6 +85,11 @@ const WrappedScreen = () => {
                 Private Access:{' '}
                 {userId === currUserId && usePrivate ? 'True' : 'False'}
               </p>
+              {data?.incomplete && (
+                <p className="mt-2 text-md text-center w-full text-red-600">
+                  Incomplete Data. Please refresh later to finish loading.
+                </p>
+              )}
             </div>
           </div>
         </WrappedSection>

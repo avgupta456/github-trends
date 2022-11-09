@@ -28,4 +28,5 @@ def main(user_package: UserPackage, year: int) -> WrappedPackage:
         repo_data=repo_data,
         lang_data=lang_data,
         timestamp_data=timestamp_data,
+        incomplete=user_package.incomplete,
     )

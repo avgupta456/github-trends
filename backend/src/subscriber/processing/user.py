@@ -71,7 +71,12 @@ async def query_user(
     private_access: bool = False,
     start_date: date = date.today() - timedelta(365),
     end_date: date = date.today(),
+    no_cache: bool = False,
 ) -> Optional[UserPackage]:
+    # Return (possibly incomplete) within 45 seconds
+    start_time = datetime.now()
+    incomplete = False
+
     await update_keys()
 
     curr_data: List[UserMonth] = await get_user_months(
@@ -90,15 +95,19 @@ async def query_user(
 
     all_user_packages: List[UserPackage] = [x.data for x in curr_data]
     for month in months:
-        temp = await query_user_month(user_id, access_token, private_access, month)
-        if temp is not None:
-            all_user_packages.append(temp.data)
+        if datetime.now() - start_time < timedelta(seconds=40):
+            temp = await query_user_month(user_id, access_token, private_access, month)
+            if temp is not None:
+                all_user_packages.append(temp.data)
+        else:
+            incomplete = True
 
     out: Optional[UserPackage] = None
     if len(all_user_packages) > 0:
         out = all_user_packages[0]
         for user_package in all_user_packages[1:]:
             out += user_package
+        out.incomplete = incomplete
 
     if len(months) > 1:
         # cache buster for publisher
