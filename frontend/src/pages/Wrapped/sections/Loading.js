@@ -18,7 +18,7 @@ const LoadingScreen = () => {
     }, 8000);
     const timer2 = setTimeout(() => {
       setShowLoadingErrorMessage(true);
-    }, 32000);
+    }, 50000);
     return () => {
       clearTimeout(timer);
       clearTimeout(timer2);
@@ -47,9 +47,11 @@ const LoadingScreen = () => {
             <PulseLoader color="#3B82F6" speedMultiplier={0.5} />
           </div>
           {showLoadingMessage ? (
-            <TypistLoop interval={2000}>
+            <TypistLoop interval={200}>
               {[
+                'Loading your Data...',
                 'Crunching Numbers...',
+                'Analyzing Trends...',
                 'Drawing Figures...',
                 'Almost there!',
               ].map((text, i) => (
@@ -60,7 +62,7 @@ const LoadingScreen = () => {
                 >
                   <Typist.Delay ms={500 * i} />
                   {text}
-                  <Typist.Delay ms={3000} />
+                  <Typist.Delay ms={i === 4 ? 20000 : 3000} />
                   <Typist.Backspace count={text.length} />
                 </Typist>
               ))}
