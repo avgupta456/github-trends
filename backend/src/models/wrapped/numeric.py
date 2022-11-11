@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Optional, Tuple
 
 from pydantic import BaseModel
 
@@ -20,8 +20,8 @@ class MiscStats(BaseModel):
     longest_gap_days: Tuple[int, int, str, str]
     weekend_percent: int
     best_day_count: int
-    best_day_date: str
-    best_day_index: int
+    best_day_date: Optional[str]
+    best_day_index: Optional[int]
 
 
 class LOCStats(BaseModel):

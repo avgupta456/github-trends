@@ -28,3 +28,7 @@ class UserPackage(BaseModel):
 
     def trim(self, start: date, end: date) -> "UserPackage":
         return UserPackage(contribs=self.contribs.trim(start, end))
+
+    @classmethod
+    def empty(cls) -> "UserPackage":
+        return UserPackage(contribs=UserContributions.empty())
