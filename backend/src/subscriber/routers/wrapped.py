@@ -12,5 +12,4 @@ router = APIRouter()
 async def get_wrapped_user(
     response: Response, user_id: str, year: int = 2022, no_cache: bool = False
 ) -> WrappedPackage:
-    data = await query_wrapped_user(user_id, year, no_cache=no_cache)
-    return data
+    return await query_wrapped_user(user_id, year, no_cache=no_cache)

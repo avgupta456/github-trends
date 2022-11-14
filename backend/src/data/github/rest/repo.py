@@ -156,9 +156,9 @@ def get_repo_commits(
     user = user if user is not None else owner
     query = BASE_URL + owner + "/" + repo + "/commits?author=" + user
     if since is not None:
-        query += "&since=" + str(since)
+        query += f"&since={str(since)}"
     if until is not None:
-        query += "&until=" + str(until)
+        query += f"&until={str(until)}"
     try:
         data = get_template_plural(query, access_token, page=page)
 

@@ -11,8 +11,8 @@ from fastapi.responses import Response
 def pubsub_fail_gracefully(func: Callable[..., Any]):
     @wraps(func)  # needed to play nice with FastAPI decorator
     async def wrapper(
-        response: Response, *args: List[Any], **kwargs: Dict[str, Any]
-    ) -> Any:
+            response: Response, *args: List[Any], **kwargs: Dict[str, Any]
+        ) -> Any:
         start = datetime.now()
         try:
             data = await func(response, *args, **kwargs)
@@ -22,8 +22,9 @@ def pubsub_fail_gracefully(func: Callable[..., Any]):
             response.status_code = status.HTTP_200_OK
             return {
                 "data": [],
-                "message": "Error " + str(e),
+                "message": f"Error {str(e)}",
                 "time": datetime.now() - start,
             }
+
 
     return wrapper

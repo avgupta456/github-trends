@@ -41,9 +41,10 @@ def _get_template(
 
     new_access_token = get_access_token(access_token)
     headers: Dict[str, str] = {
-        "Accept": str(accept_header),
-        "Authorization": "bearer " + new_access_token,
+        "Accept": accept_header,
+        "Authorization": f"bearer {new_access_token}",
     }
+
 
     try:
         r = s.get(query, params=params, headers=headers, timeout=TIMEOUT)
@@ -60,7 +61,7 @@ def _get_template(
     if retries < 3:
         print("REST Error, Retrying:", new_access_token)
         return _get_template(query, params, accept_header, access_token, retries + 1)
-    raise RESTError("REST Error: " + str(r.status_code))
+    raise RESTError(f"REST Error: {str(r.status_code)}")
 
 
 def get_template(

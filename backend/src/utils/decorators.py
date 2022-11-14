@@ -18,9 +18,10 @@ def fail_gracefully(func: Callable[..., Any]):
             response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
             return {
                 "data": [],
-                "message": "Error " + str(e),
+                "message": f"Error {str(e)}",
                 "time": datetime.now() - start,
             }
+
 
     return wrapper
 
@@ -28,8 +29,8 @@ def fail_gracefully(func: Callable[..., Any]):
 def async_fail_gracefully(func: Callable[..., Any]):
     @wraps(func)  # needed to play nice with FastAPI decorator
     async def wrapper(
-        response: Response, *args: List[Any], **kwargs: Dict[str, Any]
-    ) -> Any:
+            response: Response, *args: List[Any], **kwargs: Dict[str, Any]
+        ) -> Any:
         start = datetime.now()
         try:
             data = await func(response, *args, **kwargs)
@@ -39,8 +40,9 @@ def async_fail_gracefully(func: Callable[..., Any]):
             response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
             return {
                 "data": [],
-                "message": "Error " + str(e),
+                "message": f"Error {str(e)}",
                 "time": datetime.now() - start,
             }
+
 
     return wrapper

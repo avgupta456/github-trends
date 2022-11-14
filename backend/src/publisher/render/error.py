@@ -23,19 +23,25 @@ def get_error_svg() -> Drawing:
         )
     )
 
-    d.add(d.text("Unknown Error", insert=(25, 35), class_=THEME + "-header"))
+    d.add(d.text("Unknown Error", insert=(25, 35), class_=f"{THEME}-header"))
 
     d.add(
         d.text(
             "Please try again later or raise a ticket on GitHub",
             insert=(25, 60),
-            class_=THEME + "-lang-name",
+            class_=f"{THEME}-lang-name",
         )
     )
 
+
     d.add(
-        d.image(BACKEND_URL + "/assets/error", insert=(85, 100), style="opacity: 50%")
+        d.image(
+            f"{BACKEND_URL}/assets/error",
+            insert=(85, 100),
+            style="opacity: 50%",
+        )
     )
+
 
     return d
 
@@ -54,21 +60,25 @@ def get_empty_demo_svg(header: str) -> Drawing:
         )
     )
 
-    d.add(d.text(header, insert=(25, 35), class_=THEME + "-header"))
+    d.add(d.text(header, insert=(25, 35), class_=f"{THEME}-header"))
 
     d.add(
         d.text(
             "Enter your username to start!",
             insert=(25, 60),
-            class_=THEME + "-lang-name",
+            class_=f"{THEME}-lang-name",
         )
     )
 
+
     d.add(
         d.image(
-            BACKEND_URL + "/assets/stopwatch", insert=(85, 100), style="opacity: 50%"
+            f"{BACKEND_URL}/assets/stopwatch",
+            insert=(85, 100),
+            style="opacity: 50%",
         )
     )
+
 
     return d
 
@@ -88,22 +98,31 @@ def get_loading_svg() -> Drawing:
     )
 
     d.add(
-        d.text("Loading data, hang tight!", insert=(25, 35), class_=THEME + "-header")
+        d.text(
+            "Loading data, hang tight!",
+            insert=(25, 35),
+            class_=f"{THEME}-header",
+        )
     )
+
 
     d.add(
         d.text(
             "Please wait a couple seconds and refresh the page.",
             insert=(25, 60),
-            class_=THEME + "-lang-name",
+            class_=f"{THEME}-lang-name",
         )
     )
 
+
     d.add(
         d.image(
-            BACKEND_URL + "/assets/stopwatch", insert=(85, 100), style="opacity: 50%"
+            f"{BACKEND_URL}/assets/stopwatch",
+            insert=(85, 100),
+            style="opacity: 50%",
         )
     )
+
 
     return d
 
@@ -119,8 +138,20 @@ def get_no_data_svg(header: str, subheader: str) -> Drawing:
         theme=THEME,
     )
 
-    d.add(d.image(BACKEND_URL + "/assets/error", insert=(85, 80), style="opacity: 50%"))
-    dp.add(d.text("No data to show", insert=(55, 220), class_=THEME + "-image-text"))
+    d.add(
+        d.image(
+            f"{BACKEND_URL}/assets/error",
+            insert=(85, 80),
+            style="opacity: 50%",
+        )
+    )
+
+    dp.add(
+        d.text(
+            "No data to show", insert=(55, 220), class_=f"{THEME}-image-text"
+        )
+    )
+
 
     d.add(dp)
     return d

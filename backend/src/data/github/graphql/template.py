@@ -41,7 +41,7 @@ def get_template(
     """
     start = datetime.now()
     new_access_token = get_access_token(access_token)
-    headers: Dict[str, str] = {"Authorization": "bearer " + new_access_token}
+    headers: Dict[str, str] = {"Authorization": f"bearer {new_access_token}"}
 
     try:
         r = s.post(  # type: ignore
@@ -83,7 +83,7 @@ def get_template(
     if r.status_code == 502:
         raise GraphQLErrorTimeout("GraphQL Error: Request Timeout")
 
-    raise GraphQLError("GraphQL Error: " + str(r.status_code))
+    raise GraphQLError(f"GraphQL Error: {str(r.status_code)}")
 
 
 def get_query_limit(access_token: str) -> int:

@@ -39,7 +39,7 @@ EMULATOR SETUP
 if not PROD and DOCKER:
     topics = ["user"]
     subscriptions = ["user_sub"]
-    endpoints = [LOCAL_SUBSCRIBER + "/pubsub/sub/user/" + PUBSUB_TOKEN]
+    endpoints = [f"{LOCAL_SUBSCRIBER}/pubsub/sub/user/{PUBSUB_TOKEN}"]
 
     for topic, subscription, endpoint in zip(topics, subscriptions, endpoints):
         try:

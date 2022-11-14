@@ -72,14 +72,14 @@ def get_commit_languages(
     if len(commit.prs.nodes) > 0:
         pr_obj = commit.prs.nodes[0]
         pr_files = pr_obj.files.nodes
-        total_changed = sum([x.additions + x.deletions for x in pr_files])
+        total_changed = sum(x.additions + x.deletions for x in pr_files)
         pr_coverage = total_changed / max(1, (pr_obj.additions + pr_obj.deletions))
 
     if files is not None:
         for file in files:
             filename = file.filename.split(".")
             extension = "" if len(filename) <= 1 else filename[-1]
-            lang = EXTENSIONS.get("." + extension, None)
+            lang = EXTENSIONS.get(f".{extension}", None)
             if lang is not None:
                 out.add_lines(
                     lang["name"], lang["color"], file.additions, file.deletions
@@ -90,7 +90,7 @@ def get_commit_languages(
         for file in pr.files.nodes:
             filename = file.path.split(".")
             extension = "" if len(filename) <= 1 else filename[-1]
-            lang = EXTENSIONS.get("." + extension, None)
+            lang = EXTENSIONS.get(f".{extension}", None)
             if lang is not None:
                 out.add_lines(
                     lang["name"], lang["color"], file.additions, file.deletions
@@ -106,7 +106,7 @@ def get_commit_languages(
     else:
         repo_info = repo.languages.edges
         languages = [x for x in repo_info if x.node.name not in BLACKLIST]
-        total_repo_size = sum([language.size for language in languages])
+        total_repo_size = sum(language.size for language in languages)
         for language in languages:
             lang_name = language.node.name
             lang_color = language.node.color

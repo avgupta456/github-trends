@@ -15,16 +15,18 @@ class TestTemplate(unittest.TestCase):
         response = get_user_contribution_calendar(
             user_id=USER_ID,
             access_token=TOKEN,
-            start_date=datetime.today() - timedelta(days=30),
-            end_date=datetime.today(),
+            start_date=datetime.now() - timedelta(days=30),
+            end_date=datetime.now(),
         )
+
         self.assertIsInstance(response, RawCalendar)
 
     def test_get_user_contribution_events(self):
         response = get_user_contribution_events(
             user_id=USER_ID,
             access_token=TOKEN,
-            start_date=datetime.today() - timedelta(days=30),
-            end_date=datetime.today(),
+            start_date=datetime.now() - timedelta(days=30),
+            end_date=datetime.now(),
         )
+
         self.assertIsInstance(response, RawEvents)

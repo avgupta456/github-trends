@@ -24,7 +24,7 @@ def use_time_range(
     end_str = end_date.strftime("X%m/X%d/%Y").replace("X0", "X").replace("X", "")
     if end_date == date.today():
         end_str = "Present"
-    time_str = start_str + " - " + end_str
+    time_str = f"{start_str} - {end_str}"
 
     if time_range in duration_options:
         days, time_str = duration_options[time_range]
@@ -36,10 +36,10 @@ def use_time_range(
 
 def format_number(num: int) -> str:
     if num > 10000:
-        return "~" + str(int(num / 1000)) + "k lines"
+        return f"~{str(num // 1000)}k lines"
     elif num > 1000:
-        return "~" + str(int(num / 100) / 10) + "k lines"
+        return f"~{str(num // 100 / 10)}k lines"
     elif num > 100:
-        return "~" + str(int(num / 100) * 100) + " lines"
+        return f"~{str(num // 100 * 100)} lines"
     else:
         return "<100 lines"
