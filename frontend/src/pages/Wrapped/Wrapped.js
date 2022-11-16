@@ -220,7 +220,7 @@ const WrappedScreen = () => {
             <div className="w-full md:w-1/2 lg:w-1/4 xl:w-1/2">
               <Numeric
                 num={data?.numeric_data?.loc?.loc_changed_per_day}
-                label="Lines Changed Per Day"
+                label="Lines Changed / Day"
               />
             </div>
           </div>
