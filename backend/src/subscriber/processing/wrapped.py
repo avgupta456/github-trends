@@ -7,15 +7,20 @@ from src.models import UserPackage, WrappedPackage
 from src.subscriber.aggregation import (
     get_repo_stargazers,
     get_user_stars,
-    get_valid_user,
+    get_valid_github_user,
+    get_valid_db_user,
     get_wrapped_data,
 )
 from src.subscriber.processing.user import query_user
 from src.utils import alru_cache
 
 
-async def check_user_exists(user_id: str) -> bool:
-    return await get_valid_user(user_id)
+async def check_github_user_exists(user_id: str) -> bool:
+    return await get_valid_github_user(user_id)
+
+
+async def check_db_user_exists(user_id: str) -> bool:
+    return await get_valid_db_user(user_id)
 
 
 async def check_user_starred_repo(

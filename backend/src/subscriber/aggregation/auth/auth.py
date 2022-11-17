@@ -8,17 +8,23 @@ from src.data.github.rest import (
     get_user as github_get_user,
     get_user_starred_repos as github_get_user_starred_repos,
 )
+from src.data.mongo.user import get_public_user as db_get_public_user
 from src.data.github.utils import get_access_token
 from src.utils import alru_cache
 
 
-async def get_valid_user(user_id: str) -> bool:
+async def get_valid_github_user(user_id: str) -> bool:
     access_token = get_access_token()
     try:
         github_get_user(user_id, access_token)
         return True
     except RESTError:
         return False
+
+
+async def get_valid_db_user(user_id: str) -> bool:
+    user = await db_get_public_user(user_id)
+    return user is not None
 
 
 @alru_cache(ttl=timedelta(minutes=15))
