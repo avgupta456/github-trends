@@ -25,7 +25,7 @@ async def get_wrapped_user(
 
     valid_db_user = await check_db_user_exists(user_id)
     user_starred = await check_user_starred_repo(user_id)
-    if not user_starred and not valid_db_user:
+    if not (user_starred or valid_db_user):
         data = WrappedPackage.empty()
         data.message = "User has not starred GitHub Trends"
         return data
