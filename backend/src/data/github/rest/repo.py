@@ -41,7 +41,6 @@ def get_repo_languages(
     )
 
 
-# NOTE: unused, untested
 def get_repo_stargazers(
     access_token: str, owner: str, repo: str, per_page: int = 100, page: int = 1
 ) -> List[Dict[str, Any]]:

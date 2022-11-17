@@ -1,7 +1,11 @@
 from fastapi import APIRouter, Response, status
 
 from src.models import WrappedPackage
-from src.subscriber.processing import check_user_starred_repo, query_wrapped_user
+from src.subscriber.processing import (
+    check_user_exists,
+    check_user_starred_repo,
+    query_wrapped_user,
+)
 from src.utils import async_fail_gracefully
 
 router = APIRouter()
@@ -12,8 +16,12 @@ router = APIRouter()
 async def get_wrapped_user(
     response: Response, user_id: str, year: int = 2022, no_cache: bool = False
 ) -> WrappedPackage:
-    # TODO: check if user_id is valid GitHub username
-    # TODO: check if user has starred GitHub Trends
+    valid_user = await check_user_exists(user_id)
+    if not valid_user:
+        data = WrappedPackage.empty()
+        data.message = "User not found"
+        return data
+
     user_starred = await check_user_starred_repo(user_id)
     if not user_starred:
         data = WrappedPackage.empty()

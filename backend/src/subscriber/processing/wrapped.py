@@ -4,9 +4,18 @@ from typing import Optional
 from src.constants import OWNER, REPO
 from src.data.mongo.user import PublicUserModel, get_public_user as db_get_public_user
 from src.models import UserPackage, WrappedPackage
-from src.subscriber.aggregation import get_repo_stargazers, get_wrapped_data
+from src.subscriber.aggregation import (
+    get_repo_stargazers,
+    get_user_stars,
+    get_valid_user,
+    get_wrapped_data,
+)
 from src.subscriber.processing.user import query_user
 from src.utils import alru_cache
+
+
+async def check_user_exists(user_id: str) -> bool:
+    return await get_valid_user(user_id)
 
 
 async def check_user_starred_repo(
@@ -18,7 +27,9 @@ async def check_user_starred_repo(
         return True
 
     # Checks the user's 30 most recent starred repos (no cache)
-    # TODO
+    user_stars = await get_user_stars(user_id)
+    if f"{owner}/{repo}" in user_stars:
+        return True
 
     return False
 
