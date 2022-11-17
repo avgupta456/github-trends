@@ -17,7 +17,6 @@ class WrappedPackage(BaseModel):
     lang_data: LangData
     timestamp_data: TimestampData
     incomplete: bool = False
-    message: str = ""
 
     @classmethod
     def empty(cls) -> "WrappedPackage":
