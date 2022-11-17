@@ -22,3 +22,7 @@ class CalendarDayDatum(BaseModel):
 
 class CalendarData(BaseModel):
     days: List[CalendarDayDatum]
+
+    @classmethod
+    def empty(cls) -> "CalendarData":
+        return CalendarData(days=[])

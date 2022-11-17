@@ -14,3 +14,7 @@ class LangDatum(BaseModel):
 class LangData(BaseModel):
     langs_changed: List[LangDatum]
     langs_added: List[LangDatum]
+
+    @classmethod
+    def empty(cls) -> "LangData":
+        return LangData(langs_changed=[], langs_added=[])

@@ -11,3 +11,7 @@ class TimestampDatum(BaseModel):
 
 class TimestampData(BaseModel):
     contribs: List[TimestampDatum]
+
+    @classmethod
+    def empty(cls) -> "TimestampData":
+        return TimestampData(contribs=[])

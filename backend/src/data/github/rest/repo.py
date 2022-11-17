@@ -43,7 +43,7 @@ def get_repo_languages(
 
 # NOTE: unused, untested
 def get_repo_stargazers(
-    access_token: str, owner: str, repo: str, per_page: int = 100
+    access_token: str, owner: str, repo: str, per_page: int = 100, page: int = 1
 ) -> List[Dict[str, Any]]:
     """
     Returns stargazers with timestamp for repository
@@ -51,12 +51,14 @@ def get_repo_stargazers(
     :param owner: repository owner
     :param repo: repository name
     :param per_page: number of items per page
+    :param page: page number
     :return: stargazers with timestamp for repository
     """
     return get_template_plural(
         BASE_URL + owner + "/" + repo + "/stargazers",
         access_token,
         per_page=per_page,
+        page=page,
         accept_header="applicaiton/vnd.github.v3.star+json",
     )
 
