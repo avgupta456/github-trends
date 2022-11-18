@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Response, status
 
 from src.models import WrappedPackage
-from src.subscriber.processing import query_wrapped_user, get_is_valid_user
+from src.subscriber.processing import get_is_valid_user, query_wrapped_user
 from src.utils import async_fail_gracefully
 
 router = APIRouter()
