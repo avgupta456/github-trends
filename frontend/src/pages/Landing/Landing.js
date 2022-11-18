@@ -10,6 +10,10 @@ import { Button, Preview } from '../../components';
 
 import mockup from '../../assets/mockup.png';
 import wrapped from '../../assets/wrapped.png';
+import avgupta456Langs from '../../assets/avgupta456_langs.png';
+import tiangoloRepos from '../../assets/tiangolo_repos.png';
+import reininkRepos from '../../assets/reinink_repos.png';
+import dhermesLangs from '../../assets/dhermes_langs.png';
 
 function LandingScreen() {
   const userId = useSelector((state) => state.user.userId);
@@ -52,7 +56,16 @@ function LandingScreen() {
       </div>
       <div className="bg-gray-200 text-gray-700 w-full flex flex-wrap items-center py-4 px-4">
         <div className="w-full lg:w-1/2 p-8 flex justify-center">
-          <Preview />
+          <Preview
+            pages={[avgupta456Langs, tiangoloRepos, reininkRepos, dhermesLangs]}
+            details={[
+              'Abhijit Gupta (avgupta456): GitHub Trends',
+              'Sebastián Ramírez (tiangolo): FastAPI',
+              'Jonathan Reinink (reinink): TailwindCSS',
+              'Danny Hermes (dhermes): Google PubSub',
+            ]}
+            showArrows
+          />
         </div>
         <div className="w-full lg:w-1/2 3xl:w-1/3 mx-auto p-8 flex flex-col">
           <h1 className="text-4xl text-gray-900 font-medium mb-12">
@@ -168,7 +181,7 @@ function LandingScreen() {
             },
             {
               header: 'Private Mode',
-              text: 'Use a personal access token to avoid rate limiting and include private contributions',
+              text: 'Use a PAT to avoid rate limiting and include private contributions',
             },
             {
               header: 'Exciting Visualizations',
@@ -176,7 +189,7 @@ function LandingScreen() {
             },
             {
               header: 'Shareable Stats',
-              text: 'Easily add your cards to your GitHub profile and share them on Twitter or Linkedin',
+              text: 'Easily add your cards to your GitHub and share them online',
             },
           ].map((item, index) => (
             // eslint-disable-next-line react/no-array-index-key

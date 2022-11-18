@@ -51,7 +51,7 @@ const NumericOutOf = ({
         y={centerY}
         textAnchor="middle"
         dominantBaseline="central"
-        className="text-2xl 2xl:text-3xl 3xl:text-4xl font-bold"
+        className="text-2xl 2xl:text-3xl font-bold"
       >
         {format(total)}
       </text>

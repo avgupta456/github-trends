@@ -2,7 +2,7 @@ from datetime import datetime
 from random import shuffle
 from typing import Any, List
 
-from src.models import TimestampData, UserPackage, TimestampDatum
+from src.models import TimestampData, TimestampDatum, UserPackage
 
 MAX_ITEMS = 200
 

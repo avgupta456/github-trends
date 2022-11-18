@@ -6,6 +6,9 @@ DOCKER = os.getenv("DOCKER", "False") == "True"
 PROJECT_ID = "github-334619"
 BACKEND_URL = "https://api.githubtrends.io" if PROD else "http://localhost:8000"
 
+OWNER = "avgupta456"
+REPO = "github-trends"
+
 # API
 # https://docs.github.com/en/rest/reference/rate-limit
 # https://docs.github.com/en/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits

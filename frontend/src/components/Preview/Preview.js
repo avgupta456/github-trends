@@ -1,26 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 import {
   FaArrowRight as ArrowRightIcon,
   FaArrowLeft as ArrowLeftIcon,
 } from 'react-icons/fa';
 
-import avgupta456Langs from '../../assets/avgupta456_langs.png';
-import tiangoloRepos from '../../assets/tiangolo_repos.png';
-import reininkRepos from '../../assets/reinink_repos.png';
-import dhermesLangs from '../../assets/dhermes_langs.png';
 import { classnames } from '../../utils';
 
-const Preview = () => {
-  const totalPages = 4;
-  const pages = [avgupta456Langs, tiangoloRepos, reininkRepos, dhermesLangs];
-  const details = [
-    'Abhijit Gupta (avgupta456): GitHub Trends',
-    'Sebastián Ramírez (tiangolo): FastAPI',
-    'Jonathan Reinink (reinink): TailwindCSS',
-    'Danny Hermes (dhermes): Google PubSub',
-  ];
-
+const Preview = ({ pages, details, showArrows }) => {
+  const totalPages = pages.length;
   const [page, setPage] = useState(0);
 
   const prevPage = () => {
@@ -37,30 +26,48 @@ const Preview = () => {
   }, [page]);
 
   return (
-    <div className="w-7/8 mx-auto p-8 rounded-sm bg-gray-200">
+    <div className="w-7/8 mx-auto p-8 rounded-sm">
       <br />
       <div className="flex items-center">
-        <ArrowLeftIcon
-          className="mr-4 w-8 h-8 text-gray-300 hover:text-gray-600"
-          onClick={prevPage}
+        {showArrows && (
+          <ArrowLeftIcon
+            className="mr-4 w-8 h-8 text-gray-300 hover:text-gray-600"
+            onClick={prevPage}
+          />
+        )}
+        <img
+          src={pages[page]}
+          alt="preview"
+          className={showArrows ? 'w-3/4 mx-auto' : 'w-full'}
         />
-        <img src={pages[page]} alt="preview" className="w-3/4 mx-auto" />
-        <ArrowRightIcon
-          className="ml-4 w-8 h-8 text-gray-300 hover:text-gray-600"
-          onClick={nextPage}
-        />
+        {showArrows && (
+          <ArrowRightIcon
+            className="ml-4 w-8 h-8 text-gray-300 hover:text-gray-600"
+            onClick={nextPage}
+          />
+        )}
       </div>
       <br />
       <p
         className={classnames(
           'w-full text-center',
-          'lg:text-lg xl:text-xl 2xl:text-2xl',
+          'text-sm lg:text-lg xl:text-xl 2xl:text-2xl',
         )}
       >
         {details[page]}
       </p>
     </div>
   );
+};
+
+Preview.propTypes = {
+  pages: PropTypes.arrayOf(PropTypes.any).isRequired,
+  details: PropTypes.arrayOf(PropTypes.string).isRequired,
+  showArrows: PropTypes.bool,
+};
+
+Preview.defaultProps = {
+  showArrows: true,
 };
 
 export default Preview;

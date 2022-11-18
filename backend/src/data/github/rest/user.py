@@ -5,7 +5,6 @@ from src.data.github.rest.template import get_template, get_template_plural
 BASE_URL = "https://api.github.com/users/"
 
 
-# NOTE: unused, untested
 def get_user(user_id: str, access_token: str) -> Dict[str, Any]:
     """
     Returns raw user data
@@ -15,7 +14,6 @@ def get_user(user_id: str, access_token: str) -> Dict[str, Any]:
     return get_template(BASE_URL + user_id, access_token)
 
 
-# NOTE: unused, untested
 def get_user_starred_repos(
     user_id: str, access_token: str, per_page: int = 100, page: int = 1
 ) -> List[Dict[str, Any]]:

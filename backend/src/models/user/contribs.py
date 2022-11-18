@@ -85,6 +85,19 @@ class ContributionStats(BaseModel):
             languages=languages,
         )
 
+    @classmethod
+    def empty(cls) -> "ContributionStats":
+        return ContributionStats(
+            contribs_count=0,
+            commits_count=0,
+            issues_count=0,
+            prs_count=0,
+            reviews_count=0,
+            repos_count=0,
+            other_count=0,
+            languages={},
+        )
+
 
 class ContributionLists(BaseModel):
     commits: List[datetime]
@@ -286,4 +299,15 @@ class UserContributions(BaseModel):
             public=new_public,
             repo_stats=new_repo_stats_dict,
             repos=new_repos_dict,
+        )
+
+    @classmethod
+    def empty(cls) -> "UserContributions":
+        return UserContributions(
+            total_stats=ContributionStats.empty(),
+            public_stats=ContributionStats.empty(),
+            total=[],
+            public=[],
+            repo_stats={},
+            repos={},
         )

@@ -13,3 +13,7 @@ class RepoDatum(BaseModel):
 class RepoData(BaseModel):
     repos_changed: List[RepoDatum]
     repos_added: List[RepoDatum]
+
+    @classmethod
+    def empty(cls) -> "RepoData":
+        return RepoData(repos_changed=[], repos_added=[])

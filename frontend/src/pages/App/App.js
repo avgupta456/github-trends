@@ -57,6 +57,7 @@ function App() {
             {isAuthenticated && (
               <Route path="/settings" element={<SettingsScreen />} />
             )}
+            <Route path="/:userId" element={<WrappedScreen />} />
             <Route exact path="/" element={<LandingScreen />} />
             <Route path="*" element={<NoMatchScreen />} />
           </Routes>

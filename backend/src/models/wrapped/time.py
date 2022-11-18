@@ -13,6 +13,14 @@ class TimeDatum(BaseModel):
 class MonthData(BaseModel):
     months: List[TimeDatum]
 
+    @classmethod
+    def empty(cls) -> "MonthData":
+        return MonthData(months=[])
+
 
 class DayData(BaseModel):
     days: List[TimeDatum]
+
+    @classmethod
+    def empty(cls) -> "DayData":
+        return DayData(days=[])

@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 from typing import Optional
 
 from src.data.mongo.user import PublicUserModel, get_public_user as db_get_public_user
@@ -8,7 +8,7 @@ from src.subscriber.processing.user import query_user
 from src.utils import alru_cache
 
 
-@alru_cache()
+@alru_cache(ttl=timedelta(hours=1))
 async def query_wrapped_user(
     user_id: str, year: int, no_cache: bool = False
 ) -> Optional[WrappedPackage]:
@@ -16,11 +16,9 @@ async def query_wrapped_user(
     user: Optional[PublicUserModel] = await db_get_public_user(user_id)
     access_token = None if user is None else user.access_token
     private_access = False if user is None else user.private_access or False
-    user_package: Optional[UserPackage] = await query_user(
+    user_package: UserPackage = await query_user(
         user_id, access_token, private_access, start_date, end_date, no_cache=True
     )
-    if user_package is None:
-        return (False, None)  # type: ignore
     wrapped_package = get_wrapped_data(user_package, year)
 
     # Don't cache if incomplete

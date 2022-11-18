@@ -17,3 +17,15 @@ class WrappedPackage(BaseModel):
     lang_data: LangData
     timestamp_data: TimestampData
     incomplete: bool = False
+
+    @classmethod
+    def empty(cls) -> "WrappedPackage":
+        return WrappedPackage(
+            month_data=MonthData.empty(),
+            day_data=DayData.empty(),
+            calendar_data=CalendarData.empty(),
+            numeric_data=NumericData.empty(),
+            repo_data=RepoData.empty(),
+            lang_data=LangData.empty(),
+            timestamp_data=TimestampData.empty(),
+        )
