@@ -1,15 +1,11 @@
 from src.subscriber.processing.user import query_user
-from src.subscriber.processing.wrapped import (
-    check_db_user_exists,
-    check_github_user_exists,
-    check_user_starred_repo,
-    query_wrapped_user,
+from src.subscriber.processing.wrapped import query_wrapped_user
+from src.subscriber.processing.auth import (
+    get_is_valid_user,
 )
 
 __all__ = [
     "query_user",
-    "check_github_user_exists",
-    "check_db_user_exists",
-    "check_user_starred_repo",
     "query_wrapped_user",
+    "get_is_valid_user",
 ]

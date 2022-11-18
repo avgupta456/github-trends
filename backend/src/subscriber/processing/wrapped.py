@@ -1,45 +1,14 @@
-from datetime import date
+from datetime import date, timedelta
 from typing import Optional
 
-from src.constants import OWNER, REPO
 from src.data.mongo.user import PublicUserModel, get_public_user as db_get_public_user
 from src.models import UserPackage, WrappedPackage
-from src.subscriber.aggregation import (
-    get_repo_stargazers,
-    get_user_stars,
-    get_valid_db_user,
-    get_valid_github_user,
-    get_wrapped_data,
-)
+from src.subscriber.aggregation import get_wrapped_data
 from src.subscriber.processing.user import query_user
 from src.utils import alru_cache
 
 
-async def check_github_user_exists(user_id: str) -> bool:
-    return await get_valid_github_user(user_id)
-
-
-async def check_db_user_exists(user_id: str) -> bool:
-    return await get_valid_db_user(user_id)
-
-
-async def check_user_starred_repo(
-    user_id: str, owner: str = OWNER, repo: str = REPO
-) -> bool:
-    # Checks the repo's starred users (with cache)
-    repo_stargazers = await get_repo_stargazers(owner, repo)
-    if user_id in repo_stargazers:
-        return True
-
-    # Checks the user's 30 most recent starred repos (no cache)
-    user_stars = await get_user_stars(user_id)
-    if f"{owner}/{repo}" in user_stars:
-        return True
-
-    return False
-
-
-@alru_cache()
+@alru_cache(ttl=timedelta(hours=1))
 async def query_wrapped_user(
     user_id: str, year: int, no_cache: bool = False
 ) -> Optional[WrappedPackage]:
