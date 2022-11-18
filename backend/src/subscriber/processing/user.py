@@ -99,6 +99,8 @@ async def query_user(
             temp = await query_user_month(user_id, access_token, private_access, month)
             if temp is not None:
                 all_user_packages.append(temp.data)
+            else:
+                incomplete = True
         else:
             incomplete = True
 
@@ -109,7 +111,7 @@ async def query_user(
             out += user_package
         out.incomplete = incomplete
 
-    if len(months) > 1:
+    if incomplete or len(months) > 1:
         # cache buster for publisher
         if PROD:
             s.get(BACKEND_URL + "/user/" + user_id + "?no_cache=True")
