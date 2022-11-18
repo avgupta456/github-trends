@@ -7,8 +7,8 @@ from src.models import UserPackage, WrappedPackage
 from src.subscriber.aggregation import (
     get_repo_stargazers,
     get_user_stars,
-    get_valid_github_user,
     get_valid_db_user,
+    get_valid_github_user,
     get_wrapped_data,
 )
 from src.subscriber.processing.user import query_user

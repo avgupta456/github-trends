@@ -8,8 +8,8 @@ from src.data.github.rest import (
     get_user as github_get_user,
     get_user_starred_repos as github_get_user_starred_repos,
 )
-from src.data.mongo.user import get_public_user as db_get_public_user
 from src.data.github.utils import get_access_token
+from src.data.mongo.user import get_public_user as db_get_public_user
 from src.utils import alru_cache
 
 
