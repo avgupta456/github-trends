@@ -1,12 +1,15 @@
-/* eslint-disable jsx-a11y/media-has-caption */
+/* eslint-disable no-alert */
+/* eslint-disable no-unused-vars */
+
 import React, { useState, useEffect } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import { BsInfoCircle } from 'react-icons/bs';
 import { FaGithub as GithubIcon, FaCheck as CheckIcon } from 'react-icons/fa';
 
+import { getValidUser } from '../../api/wrapped';
 import { Button, Preview } from '../../components';
-import { sleep } from '../../utils';
+import { classnames, sleep } from '../../utils';
 import wrapped1 from '../../assets/wrapped1.png';
 import wrapped2 from '../../assets/wrapped2.png';
 import wrapped3 from '../../assets/wrapped3.png';
@@ -22,9 +25,20 @@ const SelectUserScreen = () => {
     userNameInput.focus();
   }, [userNameInput]);
 
+  const [error, setError] = useState('');
+
   const handleSubmit = async () => {
-    await sleep(100);
-    navigate(`/wrapped/${userName}`);
+    const validUser = await getValidUser(userName);
+    if (validUser === 'Valid user') {
+      await sleep(100);
+      navigate(`/wrapped/${userName}`);
+    } else if (validUser === 'GitHub user not found') {
+      setError('GitHub user not found. Check your spelling and try again.');
+    } else if (validUser === 'Repo not starred') {
+      setError(
+        'This user has not starred the GitHub Trends repository. Please star the repo and try again.',
+      );
+    }
   };
 
   return (
@@ -37,11 +51,18 @@ const SelectUserScreen = () => {
               with <strong>GitHub Wrapped</strong>
             </div>
           </h1>
-          <div className="p-8 rounded-lg bg-gray-200 shadow text-gray-800">
-            <p className="text-sm lg:text-lg mb-4 flex items-center">
-              <strong>Step 1</strong>: Star the GitHub Repository{' '}
-              <BsInfoCircle className="h-4 w-4 ml-2 text-gray-500 hover:text-gray-800 cursor-pointer" />
-            </p>
+          <div className="p-8 w-96 rounded-lg bg-gray-200 shadow text-gray-800">
+            <div className="text-sm lg:text-lg mb-4 flex items-center">
+              <p>
+                <strong>Step 1</strong>: Star the GitHub Repository.{' '}
+              </p>
+              <div
+                className="tooltip"
+                data-tip="This helps us prevent spam and ensure user privacy. Feel free to unstar after."
+              >
+                <BsInfoCircle className="h-4 w-4 ml-2 text-gray-500 hover:text-gray-800 cursor-pointer" />
+              </div>
+            </div>
             <div className="w-full flex flex-col items-center">
               <a
                 href="https://www.github.com/avgupta456/github-trends"
@@ -64,8 +85,14 @@ const SelectUserScreen = () => {
                   userNameInput = input;
                 }}
                 placeholder="Enter Username"
-                className="bg-white text-gray-700 w-full input input-bordered rounded-sm"
-                onChange={(e) => setUserName(e.target.value)}
+                className={classnames(
+                  'bg-white text-gray-700 w-full input input-bordered rounded-sm',
+                  error && 'input-error',
+                )}
+                onChange={(e) => {
+                  setUserName(e.target.value);
+                  setError('');
+                }}
                 onKeyPress={async (e) => {
                   if (e.key === 'Enter') {
                     handleSubmit();
@@ -80,6 +107,13 @@ const SelectUserScreen = () => {
                 Go
               </Button>
             </div>
+            {error ? (
+              <div className="text-red-500 text-sm mt-2">
+                <strong>Error:</strong> {error}
+              </div>
+            ) : (
+              <div className="text-sm mt-2 py-5" />
+            )}
           </div>
         </div>
         <div className="w-full lg:w-1/2 xl:w-3/5 p-8 flex flex-col items-center">

@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+import { FaArrowLeft as LeftArrowIcon } from 'react-icons/fa';
 
 import { getWrapped } from '../../api';
 import {
@@ -74,23 +75,24 @@ const WrappedScreen = () => {
       <div className="h-full w-full flex flex-row flex-wrap justify-center items-center">
         <WrappedSection useTitle={false}>
           <div className="w-full h-auto flex flex-row flex-wrap -mb-4">
-            <div className="w-full h-auto">
-              <p className="text-xl font-semibold text-center w-full">
-                {`${userId}'s`}
+            <Link to="/wrapped">
+              <LeftArrowIcon className="absolute ml-2 mt-2 h-8 w-8 text-gray-500 hover:text-gray-800" />
+            </Link>
+            <p className="text-xl font-semibold text-center w-full">
+              {`${userId}'s`}
+            </p>
+            <p className="text-3xl text-center w-full">
+              {`${year} GitHub Wrapped`}
+            </p>
+            <p className="mt-2 text-md text-center w-full text-gray-600">
+              Private Access:{' '}
+              {userId === currUserId && usePrivate ? 'True' : 'False'}
+            </p>
+            {data?.incomplete && (
+              <p className="mt-2 text-md text-center w-full text-red-600">
+                Incomplete Data. Please refresh later to finish loading.
               </p>
-              <p className="text-3xl text-center w-full">
-                {`${year} GitHub Wrapped`}
-              </p>
-              <p className="mt-2 text-md text-center w-full text-gray-600">
-                Private Access:{' '}
-                {userId === currUserId && usePrivate ? 'True' : 'False'}
-              </p>
-              {data?.incomplete && (
-                <p className="mt-2 text-md text-center w-full text-red-600">
-                  Incomplete Data. Please refresh later to finish loading.
-                </p>
-              )}
-            </div>
+            )}
           </div>
         </WrappedSection>
         <WrappedSection title="Contribution Calendar">
