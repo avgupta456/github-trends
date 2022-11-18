@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { BsInfoCircle } from 'react-icons/bs';
 import { FaGithub as GithubIcon, FaCheck as CheckIcon } from 'react-icons/fa';
 
@@ -128,6 +128,60 @@ const SelectUserScreen = () => {
               showArrows={false}
             />
           </div>
+        </div>
+      </div>
+      <div className="bg-white text-gray-700 w-full flex flex-col justify-center items-center py-8">
+        <h1 className="text-4xl font-medium mb-4">See some Examples</h1>
+        <div className="w-full flex flex-wrap justify-center items-center px-4">
+          {[
+            {
+              name: 'Linus Torvalds',
+              username: 'torvalds',
+              url: 'https://avatars.githubusercontent.com/u/1024025?v=4',
+              blurb: 'Creator of Linux',
+            },
+            {
+              name: 'Ryan Dahl',
+              username: 'ry',
+              url: 'https://avatars.githubusercontent.com/u/80?v=4',
+              blurb: 'Creator of Deno',
+            },
+            {
+              name: 'François Chollet',
+              username: 'fchollet',
+              url: 'https://avatars.githubusercontent.com/u/710255?v=4',
+              blurb: 'Creator of Keras',
+            },
+            {
+              name: 'Evan You',
+              username: 'yyx990803',
+              url: 'https://avatars.githubusercontent.com/u/499550?v=4',
+              blurb: 'Creator of Vue',
+            },
+          ].map((user) => (
+            <div className="w-full md:w-1/2 lg:w-1/4 p-4" key={user.username}>
+              <Link to={`/wrapped/${user.username}`}>
+                <div className="w-full rounded bg-gray-50 hover:bg-gray-100 shadow p-4 flex">
+                  <img
+                    src={user.url}
+                    alt={user.username}
+                    className="w-24 h-24 rounded-full mr-4 my-auto"
+                  />
+                  <div className="w-full flex flex-col items-center">
+                    <a
+                      href={`https://github.com/${user.username}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full text-center text-blue-500 hover:text-blue-600 underline mb-2"
+                    >
+                      <strong>{user.name}</strong>
+                    </a>
+                    <p className="w-full text-center">{user.blurb}</p>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          ))}
         </div>
       </div>
       <div className="bg-gray-200 text-gray-700 w-full flex flex-col justify-center items-center pt-16">

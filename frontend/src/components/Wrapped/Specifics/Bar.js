@@ -33,7 +33,7 @@ const BarMonth = ({ data }) => {
   const newData = data?.month_data?.months || [];
 
   // eslint-disable-next-line no-unused-vars
-  const [displayContribs, setDisplayContribs] = useState(false);
+  const [displayContribs, setDisplayContribs] = useState(true);
 
   return (
     <div className="h-96 w-full">
@@ -86,7 +86,7 @@ BarMonth.propTypes = {
 const BarDay = ({ data }) => {
   const newData = data?.day_data?.days || [];
 
-  const [displayContribs, setDisplayContribs] = useState(false);
+  const [displayContribs, setDisplayContribs] = useState(true);
 
   return (
     <div className="h-96 w-full">

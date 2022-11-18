@@ -12,9 +12,20 @@ from src.utils import async_fail_gracefully
 router = APIRouter()
 
 
+USER_WHITELIST = [
+    "torvalds",
+    "fchollet",
+    "ry",
+    "yyx990803",
+]
+
+
 @router.get("/valid/{user_id}", status_code=status.HTTP_200_OK)
 @async_fail_gracefully
 async def check_valid_user(response: Response, user_id: str) -> str:
+    if user_id in USER_WHITELIST:
+        return "Valid user"
+
     valid_github_user = await check_github_user_exists(user_id)
     if not valid_github_user:
         return "GitHub user not found"
@@ -32,6 +43,9 @@ async def check_valid_user(response: Response, user_id: str) -> str:
 async def get_wrapped_user(
     response: Response, user_id: str, year: int = 2022, no_cache: bool = False
 ) -> WrappedPackage:
+    if user_id in USER_WHITELIST:
+        return await query_wrapped_user(user_id, year, no_cache)
+
     # Must be a valid user
     if not await check_github_user_exists(user_id):
         return WrappedPackage.empty()
