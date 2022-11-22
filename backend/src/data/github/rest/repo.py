@@ -3,12 +3,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from src.data.github.rest.models import RawCommit
-from src.data.github.rest.template import (
-    RESTError,
-    RESTErrorEmptyRepo,
-    get_template,
-    get_template_plural,
-)
+from src.data.github.rest.template import RESTError, get_template, get_template_plural
 
 BASE_URL = "https://api.github.com/repos/"
 
@@ -172,7 +167,7 @@ def get_repo_commits(
             return RawCommit.parse_obj(temp)
 
         return list(map(extract_info, data))
-    except (RESTErrorEmptyRepo, RESTError):
+    except RESTError:
         return []
     except Exception as e:
         logging.exception(e)
