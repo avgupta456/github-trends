@@ -4,6 +4,7 @@ from typing import List
 from src.constants import OWNER, REPO
 from src.data.github.rest import (
     RESTError,
+    RESTErrorNotFound,
     get_repo_stargazers as github_get_repo_stargazers,
     get_user as github_get_user,
     get_user_starred_repos as github_get_user_starred_repos,
@@ -18,8 +19,12 @@ async def get_valid_github_user(user_id: str) -> bool:
     try:
         github_get_user(user_id, access_token)
         return True
-    except RESTError:
+    except RESTErrorNotFound:
+        # User does not exist
         return False
+    except RESTError:
+        # Rate limited, so assume user exists
+        return True
 
 
 async def get_valid_db_user(user_id: str) -> bool:
@@ -45,6 +50,13 @@ async def get_repo_stargazers(
 
 async def get_user_stars(user_id: str) -> List[str]:
     access_token = get_access_token()
-    data = github_get_user_starred_repos(user_id, access_token)
-    data = [x["repo"]["full_name"] for x in data]
-    return data
+    try:
+        data = github_get_user_starred_repos(user_id, access_token)
+        data = [x["repo"]["full_name"] for x in data]
+        return data
+    except RESTErrorNotFound:
+        # User does not exist (and rate limited previously)
+        return []
+    except RESTError:
+        # Rate limited, so assume user starred repo
+        return [OWNER + "/" + REPO]

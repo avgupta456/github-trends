@@ -14,11 +14,19 @@ class RESTError(Exception):
     pass
 
 
-class RESTErrorEmptyRepo(Exception):
+class RESTErrorUnauthorized(RESTError):
     pass
 
 
-class RESTErrorTimeout(Exception):
+class RESTErrorNotFound(RESTError):
+    pass
+
+
+class RESTErrorEmptyRepo(RESTError):
+    pass
+
+
+class RESTErrorTimeout(RESTError):
     pass
 
 
@@ -53,6 +61,12 @@ def _get_template(
     if r.status_code == 200:
         print("REST API", new_access_token, datetime.now() - start)
         return r.json()  # type: ignore
+
+    if r.status_code == 401:
+        raise RESTErrorUnauthorized("REST Error: Unauthorized")
+
+    if r.status_code == 404:
+        raise RESTErrorNotFound("REST Error: Not Found")
 
     if r.status_code == 409:
         raise RESTErrorEmptyRepo("REST Error: Empty Repository")

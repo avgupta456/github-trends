@@ -12,8 +12,8 @@ async def publish_user(
 ):
     if PROD or DOCKER:
         publish_to_topic(
-            "user",
-            {
+            topic="user",
+            message={
                 "user_id": user_id,
                 "access_token": access_token,
                 "private_access": private_access,
