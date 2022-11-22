@@ -48,6 +48,8 @@ const HomeScreen = () => {
 
   const [usePercent, setUsePercent] = useState(false);
   const [usePrivate, setUsePrivate] = useState(false);
+  const [groupOther, setGroupOther] = useState(false);
+  const [groupPrivate, setGroupPrivate] = useState(false);
   const [useLocChanged, setUseLocChanged] = useState(false);
   const [useCompact, setUseCompact] = useState(false);
 
@@ -72,6 +74,12 @@ const HomeScreen = () => {
 
   if (usePrivate) {
     fullSuffix += '&include_private=True';
+  }
+
+  if (usePrivate && groupOther && groupPrivate) {
+    fullSuffix += '&group=private';
+  } else if (groupOther) {
+    fullSuffix += '&group=other';
   }
 
   if (useLocChanged) {
@@ -182,6 +190,10 @@ const HomeScreen = () => {
               setSelectedTimeRange={setSelectedTimeRange}
               usePrivate={usePrivate}
               setUsePrivate={setUsePrivate}
+              groupOther={groupOther}
+              setGroupOther={setGroupOther}
+              groupPrivate={groupPrivate}
+              setGroupPrivate={setGroupPrivate}
               privateAccess={privateAccess}
               useCompact={useCompact}
               setUseCompact={setUseCompact}

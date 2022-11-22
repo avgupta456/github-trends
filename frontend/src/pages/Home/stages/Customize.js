@@ -9,6 +9,10 @@ const CustomizeStage = ({
   setSelectedTimeRange,
   usePrivate,
   setUsePrivate,
+  groupOther,
+  setGroupOther,
+  groupPrivate,
+  setGroupPrivate,
   privateAccess,
   useCompact,
   setUseCompact,
@@ -42,6 +46,24 @@ const CustomizeStage = ({
           setVariable={setUsePrivate}
           disabled={!privateAccess}
         />
+        {selectedCard === 'repos' && (
+          <CheckboxSection
+            title="Group Other Repositories?"
+            text="Group all remaining repositories together at the bottom of the card."
+            question="Group other repositories?"
+            variable={groupOther}
+            setVariable={setGroupOther}
+          />
+        )}
+        {selectedCard === 'repos' && usePrivate && groupOther && (
+          <CheckboxSection
+            title="Group Private Repositories?"
+            text="Force private repositories together at the bottom of the card."
+            question="Group private commits?"
+            variable={groupPrivate}
+            setVariable={setGroupPrivate}
+          />
+        )}
         {selectedCard === 'langs' && (
           <CheckboxSection
             title="Percent vs LOC"
@@ -76,6 +98,10 @@ CustomizeStage.propTypes = {
   setSelectedTimeRange: PropTypes.func.isRequired,
   usePrivate: PropTypes.bool.isRequired,
   setUsePrivate: PropTypes.func.isRequired,
+  groupOther: PropTypes.bool.isRequired,
+  setGroupOther: PropTypes.func.isRequired,
+  groupPrivate: PropTypes.bool.isRequired,
+  setGroupPrivate: PropTypes.func.isRequired,
   privateAccess: PropTypes.bool.isRequired,
   useCompact: PropTypes.bool.isRequired,
   setUseCompact: PropTypes.func.isRequired,
