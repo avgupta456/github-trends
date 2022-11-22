@@ -18,7 +18,7 @@ GitHub Trends dives deep into the GitHub API to bring you exciting and impactful
   <img align="center" src="https://api.githubtrends.io/user/svg/avgupta456/langs?time_range=one_year&include_private=True" />
 </a>
 <a href="https://githubtrends.io">
-  <img align="center" src="https://api.githubtrends.io/user/svg/avgupta456/repos?time_range=one_year&include_private=True" />
+  <img align="center" src="https://api.githubtrends.io/user/svg/avgupta456/repos?time_range=one_year&include_private=True&group=private" />
 </a>
 
 ## Quickstart

@@ -54,7 +54,7 @@ The following customization options are available:
 | `time_range`      | Specifies the time range to query statistics for. Valid options are `one_month`, `three_months`, `six_months`, and `one_year`.   | `one_month` |
 | `include_private` | Determines if private contributions are included (requires private workflow).                                                    | `false`     |
 | `compact`         | Determines if compact layout is used (forces percentages over LOC)                                                               | `false`     |
-| `use_percent`     | Valid of `compact=false`, determines if line of code (default) or percentages are displayed.                                     | `false`     |
+| `use_percent`     | Valid if `compact=false`, determines if line of code (default) or percentages are displayed.                                     | `false`     |
 | `loc_metric`      | Options are LOC added (`added`) and LOC changed (`changed`).                                                                     | `added`     |
 | `theme`           | Theme to use for the card. See [docs/THEME.md](https://github.com/avgupta456/github-trends/blob/main/docs/THEME.md) for options. | `classic`   |
 
@@ -82,7 +82,8 @@ The following customization options are available:
 | ----------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----------- |
 | `time_range`      | Specifies the time range to query statistics for. Valid options are `one_month`, `three_months`, `six_months`, and `one_year`.   | `one_month` |
 | `include_private` | Determines if private contributions are included (requires private workflow).                                                    | `false`     |
-| `use_percent`     | Valid of `compact=false`, determines if line of code (default) or percentages are displayed.                                     | `false`     |
+| `group`           | Options are `none` (default), `other` (group all other repos together), and `private` (force private repos to be grouped)        | `none`      |
+| `use_percent`     | Valid if `compact=false`, determines if line of code (default) or percentages are displayed.                                     | `false`     |
 | `loc_metric`      | Options are LOC added (`added`) and LOC changed (`changed`).                                                                     | `added`     |
 | `theme`           | Theme to use for the card. See [docs/THEME.md](https://github.com/avgupta456/github-trends/blob/main/docs/THEME.md) for options. | `classic`   |
 
@@ -90,6 +91,6 @@ Customizations can be appended to the endpoint, separated first with `?` and sub
 
 ## Example
 
-Endpoint: `https://api.githubtrends.io/user/svg/avgupta456/repos?time_range=one_year&include_private=true&loc_metric=changed&theme=dark`
+Endpoint: `https://api.githubtrends.io/user/svg/avgupta456/repos?time_range=one_year&include_private=true&group=private&loc_metric=changed&theme=dark`
 
-[![GitHub Trends SVG](https://api.githubtrends.io/user/svg/avgupta456/repos?time_range=one_year&include_private=true&loc_metric=changed&theme=dark)](https://githubtrends.io)
+[![GitHub Trends SVG](https://api.githubtrends.io/user/svg/avgupta456/repos?time_range=one_year&include_private=true&group=private&loc_metric=changed&theme=dark)](https://githubtrends.io)
