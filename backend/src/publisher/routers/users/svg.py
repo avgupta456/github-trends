@@ -72,6 +72,7 @@ async def get_user_repo_svg(
     time_range: str = "one_year",
     timezone_str: str = "US/Eastern",
     include_private: bool = False,
+    group: str = "none",
     loc_metric: str = "added",
     demo: bool = False,
     no_cache: bool = False,
@@ -87,7 +88,9 @@ async def get_user_repo_svg(
         return get_loading_svg()
 
     # get top repos
-    processed, commits_excluded = get_top_repos(output, loc_metric, include_private)
+    processed, commits_excluded = get_top_repos(
+        output, loc_metric, include_private, group
+    )
     return get_top_repos_svg(
         data=processed,
         time_str=time_str,
