@@ -46,7 +46,7 @@ def get_top_repos_svg(
     total = data[0].loc
     for x in data[:4]:
         data_row = []
-        for lang in x.langs:
+        for lang in sorted(x.langs, key=lambda x: x.loc, reverse=True):
             data_row.append((100 * lang.loc / total, lang.color))
         name = "private/repository" if x.private else x.repo
         dataset.append((name, format_number(x.loc), data_row))
