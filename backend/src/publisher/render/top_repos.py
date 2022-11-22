@@ -43,7 +43,7 @@ def get_top_repos_svg(
     )
 
     dataset: List[Tuple[str, str, List[Tuple[float, str]]]] = []
-    total = data[0].loc
+    total = max(x.loc for x in data)
     for x in data[:4]:
         data_row = []
         for lang in sorted(x.langs, key=lambda x: x.loc, reverse=True):

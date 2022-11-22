@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from src.constants import DEFAULT_COLOR
 from src.models import UserPackage
@@ -57,7 +57,7 @@ def get_top_languages(
 
 
 def get_top_repos(
-    data: UserPackage, loc_metric: str, include_private: bool
+    data: UserPackage, loc_metric: str, include_private: bool, group: str
 ) -> Tuple[List[RepoStats], int]:
     repos: List[Any] = [
         {
@@ -93,4 +93,43 @@ def get_top_repos(
     if include_private:
         commits_excluded = data.contribs.total_stats.other_count
 
-    return new_repos[:5], commits_excluded
+    # With n bars, group from n onwards into the last bar
+    bars = 4  # TODO: make this configurable (see issues)
+
+    if group == "none" or len(new_repos) <= bars:
+        return new_repos[:bars], commits_excluded
+
+    out_repos = []
+    other_repos = []
+    if group == "other":
+        out_repos = new_repos[: bars - 1]
+        other_repos = new_repos[bars - 1 :]
+    elif group == "private":
+        public_repos = [x for x in new_repos if not x.private]
+        private_repos = [x for x in new_repos if x.private]
+        if len(public_repos) < 4 and len(private_repos) > 0:
+            public_repos += private_repos[: bars - len(public_repos) - 1]
+            private_repos = private_repos[bars - len(public_repos) - 1 :]
+        out_repos = public_repos[: bars - 1]
+        other_repos = public_repos[bars - 1 :] + private_repos
+    else:
+        raise ValueError("Invalid group value")
+
+    other: Dict[str, Tuple[int, Optional[str]]] = {}
+    for repo in other_repos:
+        for _lang in repo.langs:
+            lang = _lang.lang
+            if lang not in other:
+                other[lang] = (0, _lang.color)
+            other[lang] = (other[lang][0] + _lang.loc, other[lang][1])
+
+    out_repos.append(
+        RepoStats(
+            repo="other/repos",
+            private=False,
+            langs=[{"lang": k, "loc": v[0], "color": v[1]} for k, v in other.items()],
+            loc=sum(v[0] for v in other.values()),
+        )
+    )
+
+    return out_repos, commits_excluded
