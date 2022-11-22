@@ -93,7 +93,8 @@ async def query_user(
         month = month % 12 + 1
         year = year + (month == 1)
 
-    all_user_packages: List[UserPackage] = [x.data for x in curr_data]
+    # Start with complete months and add any incomplete months
+    all_user_packages: List[UserPackage] = [x.data for x in curr_data if x.complete]
     for month in months:
         if datetime.now() - start_time < timedelta(seconds=40):
             temp = await query_user_month(user_id, access_token, private_access, month)
