@@ -80,7 +80,7 @@ const Header = () => {
         {/* Pages: Wrapped, Dashboard, Demo */}
         <div className="hidden md:flex">
           <Link
-            to={isAuthenticated ? `/wrapped/${userId}` : '/wrapped'}
+            to="/wrapped"
             className="px-4 py-1 mr-3 rounded-sm bg-blue-500 hover:bg-blue-600 text-white"
           >
             Wrapped
@@ -129,10 +129,7 @@ const Header = () => {
       <div className={classnames('p-5 pt-0', !toggle && 'hidden')}>
         {isAuthenticated ? (
           <>
-            <MobileLink
-              to={`/wrapped/${userId}`}
-              onClick={() => setToggle(false)}
-            >
+            <MobileLink to="/wrapped" onClick={() => setToggle(false)}>
               Wrapped
             </MobileLink>
             <MobileLink to="/user" onClick={() => setToggle(false)}>
