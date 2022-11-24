@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { useNavigate, Link } from 'react-router-dom';
+import { ClipLoader } from 'react-spinners';
 import { BsInfoCircle } from 'react-icons/bs';
 import { FaGithub as GithubIcon, FaCheck as CheckIcon } from 'react-icons/fa';
 
@@ -26,8 +27,10 @@ const SelectUserScreen = () => {
   }, [userNameInput]);
 
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async () => {
+    setIsLoading(true);
     const validUser = await getValidUser(userName);
     if (validUser === 'Valid user') {
       await sleep(100);
@@ -39,6 +42,7 @@ const SelectUserScreen = () => {
         'This user has not starred the GitHub Trends repository. Please star the repo and try again.',
       );
     }
+    setIsLoading(false);
   };
 
   return (
@@ -102,10 +106,14 @@ const SelectUserScreen = () => {
                 />
                 <Button
                   type="submit"
-                  className="bg-blue-500 hover:bg-blue-700 text-white"
+                  className="bg-blue-500 hover:bg-blue-700 text-white flex items-center"
                   onClick={handleSubmit}
                 >
-                  Go
+                  {isLoading ? (
+                    <ClipLoader size={22} color="#fff" speedMultiplier={0.5} />
+                  ) : (
+                    'Go'
+                  )}
                 </Button>
               </div>
               {error ? (
