@@ -50,7 +50,7 @@ const WrappedScreen = () => {
   // eslint-disable-next-line no-unused-vars
   const downloadImage = async () => {
     const dataUrl = await toPng(document.getElementById('screenshot-div'));
-    download(dataUrl, 'my-node.png');
+    download(dataUrl, 'github-wrapped.png');
   };
 
   useEffect(() => {
@@ -260,12 +260,12 @@ const WrappedScreen = () => {
           </div>
         </WrappedSection>
         {downloadLoading && (
-          <div className="text-4xl font-bold text-blue-500">
+          <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-blue-500">
             Get your own at www.githubtrends.io/wrapped
           </div>
         )}
       </div>
-      <div className="fixed bottom-8 right-8">
+      <div className="fixed bottom-2 right-2 md:bottom-4 md:right-4 lg:bottom-8 lg:right-8">
         <button
           type="button"
           className="rounded-sm shadow bg-gray-700 hover:bg-gray-800 text-gray-50 px-3 py-2"
