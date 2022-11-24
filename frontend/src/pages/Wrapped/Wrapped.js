@@ -4,11 +4,14 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useParams, Link } from 'react-router-dom';
+import { toPng } from 'html-to-image';
+import download from 'downloadjs';
 import { FaArrowLeft as LeftArrowIcon } from 'react-icons/fa';
+import { BsImage as ImageIcon } from 'react-icons/bs';
+import { ClipLoader } from 'react-spinners';
 
 import { getWrapped } from '../../api';
 import {
-  FloatingIcon,
   WrappedSection,
   Numeric,
   NumericOutOf,
@@ -27,6 +30,7 @@ import {
 } from '../../components';
 import Radar from '../../components/Wrapped/Specifics/Radar';
 import { LoadingScreen } from './sections';
+import { classnames } from '../../utils';
 
 const WrappedScreen = () => {
   // eslint-disable-next-line prefer-const
@@ -40,6 +44,14 @@ const WrappedScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [highlightDays, setHighlightDays] = useState([]);
   const [highlightColors, setHighlightColors] = useState(hoverScale);
+
+  const [downloadLoading, setDownloadLoading] = useState(false);
+
+  // eslint-disable-next-line no-unused-vars
+  const downloadImage = async () => {
+    const dataUrl = await toPng(document.getElementById('screenshot-div'));
+    download(dataUrl, 'my-node.png');
+  };
 
   useEffect(() => {
     async function getData() {
@@ -71,8 +83,14 @@ const WrappedScreen = () => {
     data?.numeric_data?.misc?.best_day_date?.split('-')?.[0] || '-';
 
   return (
-    <div className="container px-2 lg:px-4 xl:px-16 py-2 lg:py-4 mx-auto">
-      <div className="h-full w-full flex flex-row flex-wrap justify-center items-center">
+    <div className="containermx-auto">
+      <div
+        className={classnames(
+          'h-full w-full bg-white flex flex-row flex-wrap justify-center items-center',
+          'px-2 lg:px-4 xl:px-16 py-4 lg:py-8',
+        )}
+        id="screenshot-div"
+      >
         <WrappedSection useTitle={false}>
           <div className="w-full h-auto flex flex-row flex-wrap -mb-4">
             <Link to="/wrapped">
@@ -241,8 +259,36 @@ const WrappedScreen = () => {
             <SwarmDay data={data} />
           </div>
         </WrappedSection>
+        {downloadLoading && (
+          <div className="text-4xl font-bold text-blue-500">
+            Get your own at www.githubtrends.io/wrapped
+          </div>
+        )}
       </div>
-      <FloatingIcon />
+      <div className="fixed bottom-8 right-8">
+        <button
+          type="button"
+          className="rounded-sm shadow bg-gray-700 hover:bg-gray-800 text-gray-50 px-3 py-2"
+          onClick={() => {
+            setDownloadLoading(true);
+            setTimeout(() => {
+              downloadImage();
+              setDownloadLoading(false);
+            }, 1000);
+          }}
+        >
+          {downloadLoading ? (
+            <div className="w-28 h-6 flex justify-center">
+              <ClipLoader size={22} color="#fff" speedMultiplier={0.5} />
+            </div>
+          ) : (
+            <div className="w-28 h-6 flex items-center">
+              <p>Save Image</p>
+              <ImageIcon className="ml-1.5 w-5 h-5" />
+            </div>
+          )}
+        </button>
+      </div>
     </div>
   );
 };

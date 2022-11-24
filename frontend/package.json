@@ -13,6 +13,8 @@
     "@nivo/tooltip": "^0.80.0",
     "axios": "^0.27.2",
     "daisyui": "^2.31.0",
+    "downloadjs": "^1.4.7",
+    "html-to-image": "^1.10.8",
     "moment": "^2.29.4",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",

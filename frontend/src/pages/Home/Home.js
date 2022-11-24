@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useNavigate } from 'react-router-dom';
-
 import BounceLoader from 'react-spinners/BounceLoader';
+import { FaGithub as GithubIcon } from 'react-icons/fa';
 
-import { ProgressBar, FloatingIcon } from '../../components';
+import { ProgressBar } from '../../components';
 import {
   SelectCardStage,
   CustomizeStage,
@@ -216,7 +216,21 @@ const HomeScreen = () => {
           )}
         </div>
       </div>
-      <FloatingIcon />
+      <div className="fixed bottom-8 right-8">
+        <a
+          href="https://www.github.com/avgupta456/github-trends"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <button
+            type="button"
+            className="rounded-sm shadow bg-gray-700 hover:bg-gray-800 text-gray-50 px-3 py-2 flex items-center"
+          >
+            Star on
+            <GithubIcon className="ml-1.5 w-5 h-5" />
+          </button>
+        </a>
+      </div>
     </div>
   );
 };
