@@ -1,8 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { Link } from 'react-router-dom';
-
 import { FaGithub as GithubIcon } from 'react-icons/fa';
 
 import { Button } from '../../components';
@@ -54,12 +52,6 @@ const SignUpScreen = () => {
               </Button>
             </a>
           </div>
-          <h2 className="mt-8 text-gray-900 2xl:text-lg">
-            {`Already have an account? `}
-            <Link to="/login" className="text-blue-500 hover:text-blue-600">
-              Log in!
-            </Link>
-          </h2>
         </div>
       </div>
     </div>
