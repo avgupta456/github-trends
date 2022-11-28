@@ -36,5 +36,4 @@ def get_user_follows(user_id: str, access_token: Optional[str]) -> UserFollows:
 
             index += 1
 
-    output = UserFollows(followers=followers, following=following)
-    return output
+    return UserFollows(followers=followers, following=following)

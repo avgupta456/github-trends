@@ -22,11 +22,12 @@ def get_top_repos_svg(
     use_animation: bool,
     theme: str,
 ) -> Drawing:
+    # sourcery skip: simplify-len-comparison
     header = "Most Contributed Repositories"
     subheader = time_str
     subheader += " | " + ("LOC Changed" if loc_metric == "changed" else "LOC Added")
     if commits_excluded > 50:
-        subheader += " | " + str(commits_excluded) + " commits excluded"
+        subheader += f" | {commits_excluded} commits excluded"
 
     if len(data) == 0:
         return get_no_data_svg(header, subheader)
@@ -45,9 +46,11 @@ def get_top_repos_svg(
     dataset: List[Tuple[str, str, List[Tuple[float, str]]]] = []
     total = max(x.loc for x in data)
     for x in data[:4]:
-        data_row = []
-        for lang in sorted(x.langs, key=lambda x: x.loc, reverse=True):
-            data_row.append((100 * lang.loc / total, lang.color))
+        data_row = [
+            (100 * lang.loc / total, lang.color)
+            for lang in sorted(x.langs, key=lambda x: x.loc, reverse=True)
+        ]
+
         name = "private/repository" if x.private else x.repo
         dataset.append((name, format_number(x.loc), data_row))
 

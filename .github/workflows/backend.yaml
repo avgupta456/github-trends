@@ -2,39 +2,46 @@ name: CI-Backend
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
-    - name: Install dependencies
-      run: |
-        cd backend
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Test with unittest
-      run: |
-        cd backend
-        python -m unittest
-      env:
-        AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
-        MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
-    - name: Upload coverage to Coveralls
-      run: |
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          cd backend
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Sourcery lint
+        run: |
+          cd backend
+          pip install sourcery-cli
+          sourcery login --token ${{ secrets.SOURCERY_TOKEN }}
+          sourcery review --check .
+        env:
+          sourcery_token: ${{ secrets.SOURCERY_TOKEN }}
+      - name: Test with unittest
+        run: |
+          cd backend
+          python -m unittest
+        env:
+          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+          MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
+      - name: Upload coverage to Coveralls
+        run: |
           cd backend
           coverage run --source=src -m unittest
           coveralls
-      env:
-        AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
-        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-        MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
+        env:
+          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}

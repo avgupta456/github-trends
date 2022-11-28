@@ -18,7 +18,7 @@ def fail_gracefully(func: Callable[..., Any]):
             response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
             return {
                 "data": [],
-                "message": "Error " + str(e),
+                "message": f"Error {str(e)}",
                 "time": datetime.now() - start,
             }
 
@@ -39,7 +39,7 @@ def async_fail_gracefully(func: Callable[..., Any]):
             response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
             return {
                 "data": [],
-                "message": "Error " + str(e),
+                "message": f"Error {str(e)}",
                 "time": datetime.now() - start,
             }
 

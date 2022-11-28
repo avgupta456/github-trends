@@ -35,14 +35,12 @@ async def check_user_starred_repo(
 
     # Checks the user's 30 most recent starred repos (no cache)
     user_stars = await get_user_stars(user_id)
-    if f"{owner}/{repo}" in user_stars:
-        return True
-
-    return False
+    return f"{owner}/{repo}" in user_stars
 
 
 @alru_cache(ttl=timedelta(hours=1))
 async def get_is_valid_user(user_id: str) -> str:
+    # sourcery skip: assign-if-exp, reintroduce-else, swap-if-expression
     if user_id in USER_WHITELIST:
         return (True, "Valid user")  # type: ignore
 

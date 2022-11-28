@@ -72,41 +72,27 @@ def get_commit_languages(
     if len(commit.prs.nodes) > 0:
         pr_obj = commit.prs.nodes[0]
         pr_files = pr_obj.files.nodes
-        total_changed = sum([x.additions + x.deletions for x in pr_files])
+        total_changed = sum(x.additions + x.deletions for x in pr_files)
         pr_coverage = total_changed / max(1, (pr_obj.additions + pr_obj.deletions))
 
     if files is not None:
         for file in files:
             filename = file.filename.split(".")
             extension = "" if len(filename) <= 1 else filename[-1]
-            lang = EXTENSIONS.get("." + extension, None)
+            lang = EXTENSIONS.get(f".{extension}", None)
             if lang is not None:
                 out.add_lines(
                     lang["name"], lang["color"], file.additions, file.deletions
                 )
     elif len(commit.prs.nodes) > 0 and pr_coverage > 0.25:
-        pr = commit.prs.nodes[0]
-        total_additions, total_deletions = 0, 0
-        for file in pr.files.nodes:
-            filename = file.path.split(".")
-            extension = "" if len(filename) <= 1 else filename[-1]
-            lang = EXTENSIONS.get("." + extension, None)
-            if lang is not None:
-                out.add_lines(
-                    lang["name"], lang["color"], file.additions, file.deletions
-                )
-            total_additions += file.additions
-            total_deletions += file.deletions
-        add_ratio = min(pr.additions, commit.additions) / max(1, total_additions)
-        del_ratio = min(pr.deletions, commit.deletions) / max(1, total_deletions)
-        out.normalize(add_ratio, del_ratio)
+        _extracted_from_get_commit_languages_38(commit, out)
     elif commit.additions + commit.deletions > 2 * CUTOFF:
         # assummed to be auto generated
         return out
     else:
         repo_info = repo.languages.edges
         languages = [x for x in repo_info if x.node.name not in BLACKLIST]
-        total_repo_size = sum([language.size for language in languages])
+        total_repo_size = sum(language.size for language in languages)
         for language in languages:
             lang_name = language.node.name
             lang_color = language.node.color
@@ -116,3 +102,20 @@ def get_commit_languages(
             out.add_lines(lang_name, lang_color, additions, deletions)
 
     return out
+
+
+# TODO Rename this here and in `get_commit_languages`
+def _extracted_from_get_commit_languages_38(commit, out):
+    pr = commit.prs.nodes[0]
+    total_additions, total_deletions = 0, 0
+    for file in pr.files.nodes:
+        filename = file.path.split(".")
+        extension = "" if len(filename) <= 1 else filename[-1]
+        lang = EXTENSIONS.get(f".{extension}", None)
+        if lang is not None:
+            out.add_lines(lang["name"], lang["color"], file.additions, file.deletions)
+        total_additions += file.additions
+        total_deletions += file.deletions
+    add_ratio = min(pr.additions, commit.additions) / max(1, total_additions)
+    del_ratio = min(pr.deletions, commit.deletions) / max(1, total_deletions)
+    out.normalize(add_ratio, del_ratio)

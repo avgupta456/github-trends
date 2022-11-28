@@ -25,8 +25,8 @@ def get_redirect_url(
     )
 
     # add prefix to redirect to different backend routes
-    if len(prefix) > 0:
-        url += "/" + prefix
+    if prefix != "":
+        url += f"/{prefix}"
 
     # add private flag to request correct permissions
     if private:
@@ -36,7 +36,7 @@ def get_redirect_url(
 
     # add user_id to hint if provided
     if user_id is not None:
-        url += "&login=" + user_id
+        url += f"&login={user_id}"
 
     return url
 
@@ -74,7 +74,7 @@ def svg_fail_gracefully(func: Callable[..., Any]):
             sio.getvalue(),
             media_type="image/svg+xml",
             status_code=status.HTTP_200_OK,
-            headers={"Cache-Control": "public, max-age=" + str(cache_max_age)},
+            headers={"Cache-Control": f"public, max-age={cache_max_age}"},
         )
 
     return wrapper
