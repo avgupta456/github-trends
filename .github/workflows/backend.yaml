@@ -24,6 +24,7 @@ jobs:
       - name: Sourcery lint
         run: |
           cd backend
+          pip install sourcery-cli
           sourcery login --token $SOURCERY_TOKEN
           sourcery review --check --diff "git diff main" .
         env:
