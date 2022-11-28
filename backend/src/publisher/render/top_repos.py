@@ -28,7 +28,7 @@ def get_top_repos_svg(
     if commits_excluded > 50:
         subheader += f" | {commits_excluded} commits excluded"
 
-    if len(data) == 0:
+    if not data:
         return get_no_data_svg(header, subheader)
 
     d, dp = get_template(

@@ -106,7 +106,7 @@ async def query_user(
             incomplete = True
 
     out: UserPackage = UserPackage.empty()
-    if len(all_user_packages) > 0:
+    if all_user_packages:
         out = all_user_packages[0]
         for user_package in all_user_packages[1:]:
             out += user_package
