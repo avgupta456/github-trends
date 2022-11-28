@@ -84,32 +84,36 @@ def format_loc_number(number: int) -> str:
     if number < 1e3:
         return str(100 * round(number / 100))
     if number < 1e6:
-        return str(round(number / 1e3)) + ",000"
-    return str(round(number / 1e6)) + ",000,000"
+        return f"{str(round(number / 1000.0))},000"
+    return f"{str(round(number / 1000000.0))},000,000"
 
 
 def get_loc_stats(data: UserPackage) -> LOCStats:
     dataset = data.contribs.total_stats.languages.values()
     return LOCStats.parse_obj(
         {
-            "loc_additions": format_loc_number(sum([x.additions for x in dataset])),
-            "loc_deletions": format_loc_number(sum([x.deletions for x in dataset])),
+            "loc_additions": format_loc_number(sum(x.additions for x in dataset)),
+            "loc_deletions": format_loc_number(sum(x.deletions for x in dataset)),
             "loc_changed": format_loc_number(
-                sum([x.additions + x.deletions for x in dataset])
+                sum(x.additions + x.deletions for x in dataset)
             ),
             "loc_added": format_loc_number(
-                sum([x.additions - x.deletions for x in dataset])
+                sum(x.additions - x.deletions for x in dataset)
             ),
             "loc_additions_per_commit": round(
-                sum([x.additions for x in dataset])
-                / max(1, data.contribs.total_stats.commits_count)
+                (
+                    sum(x.additions for x in dataset)
+                    / max(1, data.contribs.total_stats.commits_count)
+                )
             ),
             "loc_deletions_per_commit": round(
-                sum([x.deletions for x in dataset])
-                / max(1, data.contribs.total_stats.commits_count)
+                (
+                    sum(x.deletions for x in dataset)
+                    / max(1, data.contribs.total_stats.commits_count)
+                )
             ),
             "loc_changed_per_day": round(
-                sum([x.additions + x.deletions for x in dataset]) / 365
+                sum(x.additions + x.deletions for x in dataset) / 365
             ),
         }
     )

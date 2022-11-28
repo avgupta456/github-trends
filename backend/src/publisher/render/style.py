@@ -99,10 +99,13 @@ def get_style(theme: str = "classic", use_animation: bool = True) -> str:
 
     return "\n".join(
         [
-            rule[0].replace(".", "." + theme + "-")
-            + " {"
-            + "\n".join(item[0] for item in rule[1] if (use_animation or not item[1]))
-            + "}"
+            (
+                (rule[0].replace(".", f".{theme}-") + " {")
+                + "\n".join(
+                    item[0] for item in rule[1] if (use_animation or not item[1])
+                )
+                + "}"
+            )
             for rule in _style
             if use_animation or not rule[2]
         ]

@@ -45,11 +45,8 @@ class ContributionStats(BaseModel):
                 self.repos_count,
                 self.other_count,
             ],
+            *[[name] + stats.compress() for name, stats in self.languages.items()],
         ]
-
-        out.extend(
-            [[name] + stats.compress() for name, stats in self.languages.items()]
-        )
 
         return out
 

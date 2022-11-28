@@ -35,9 +35,7 @@ def get_repo_data(data: UserPackage) -> RepoData:
             repo_objs.append(RepoDatum.parse_obj(repo_data))
 
         # remaining repositories
-        total_count = 0
-        for (k, v) in list(repos)[5:]:
-            total_count += _count_repo_loc(v, m)
+        total_count = sum(_count_repo_loc(v, m) for _, v in list(repos)[5:])
         repo_data = {
             "id": -1,
             "label": "other",
@@ -47,6 +45,6 @@ def get_repo_data(data: UserPackage) -> RepoData:
         if total_count > 100:
             repo_objs.append(RepoDatum.parse_obj(repo_data))
 
-        out["repos_" + m] = repo_objs
+        out[f"repos_{m}"] = repo_objs
 
     return RepoData.parse_obj(out)

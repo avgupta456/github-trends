@@ -22,7 +22,7 @@ def pubsub_fail_gracefully(func: Callable[..., Any]):
             response.status_code = status.HTTP_200_OK
             return {
                 "data": [],
-                "message": "Error " + str(e),
+                "message": f"Error {str(e)}",
                 "time": datetime.now() - start,
             }
 

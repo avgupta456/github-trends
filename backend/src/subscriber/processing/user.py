@@ -115,9 +115,9 @@ async def query_user(
     if incomplete or len(months) > 1:
         # cache buster for publisher
         if PROD:
-            s.get(BACKEND_URL + "/user/" + user_id + "?no_cache=True")
+            s.get(f"{BACKEND_URL}/user/{user_id}?no_cache=True")
         elif DOCKER:
-            s.get(LOCAL_PUBLISHER + "/user/" + user_id + "?no_cache=True")
+            s.get(f"{LOCAL_PUBLISHER}/user/{user_id}?no_cache=True")
 
         return (False, out)  # type: ignore
 

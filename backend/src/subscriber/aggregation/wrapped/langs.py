@@ -31,9 +31,7 @@ def get_lang_data(data: UserPackage) -> LangData:
             lang_objs.append(LangDatum.parse_obj(lang_data))
 
         # remaining languages
-        total_count = 0
-        for (k, v) in list(langs)[5:]:
-            total_count += _count_loc(v, m)
+        total_count = sum(_count_loc(v, m) for _, v in list(langs)[5:])
         lang_data = {
             "id": -1,
             "label": "other",
@@ -44,6 +42,6 @@ def get_lang_data(data: UserPackage) -> LangData:
         if total_count > 100:
             lang_objs.append(LangDatum.parse_obj(lang_data))
 
-        out["langs_" + m] = lang_objs
+        out[f"langs_{m}"] = lang_objs
 
     return LangData.parse_obj(out)

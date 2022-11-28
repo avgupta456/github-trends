@@ -15,15 +15,20 @@ def get_month_data(data: UserPackage) -> MonthData:
         month = datetime.fromisoformat(item.date).month - 1
         months[month]["contribs"] += item.stats.contribs_count
         loc_changed = sum(
-            [x.additions + x.deletions for x in item.stats.languages.values()]
+            x.additions + x.deletions for x in item.stats.languages.values()
         )
+
         months[month]["loc_changed"] += loc_changed
 
     out: List[TimeDatum] = []
     for k in range(12):
         v = months[k]
-        _obj: Dict[str, Union[str, int]] = {"index": k, **v}
-        _obj["formatted_loc_changed"] = format_number(v["loc_changed"])
+        _obj: Dict[str, Union[str, int]] = {
+            "index": k,
+            **v,
+            "formatted_loc_changed": format_number(v["loc_changed"]),
+        }
+
         out.append(TimeDatum.parse_obj(_obj))
 
     return MonthData(months=out)
@@ -38,15 +43,20 @@ def get_day_data(data: UserPackage) -> DayData:
         day = datetime.fromisoformat(item.date).weekday()
         days[day]["contribs"] += item.stats.contribs_count
         loc_changed = sum(
-            [x.additions + x.deletions for x in item.stats.languages.values()]
+            x.additions + x.deletions for x in item.stats.languages.values()
         )
+
         days[day]["loc_changed"] += loc_changed
 
     out: List[TimeDatum] = []
     for k in range(7):
         v = days[k]
-        _obj: Dict[str, Union[str, int]] = {"index": k, **v}
-        _obj["formatted_loc_changed"] = format_number(v["loc_changed"])
+        _obj: Dict[str, Union[str, int]] = {
+            "index": k,
+            **v,
+            "formatted_loc_changed": format_number(v["loc_changed"]),
+        }
+
         out.append(TimeDatum.parse_obj(_obj))
 
     return DayData(days=out)

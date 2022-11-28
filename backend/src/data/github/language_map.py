@@ -18,7 +18,7 @@ with urllib.request.urlopen(
         for extension in lang["extensions"]:
             if extension not in BLACKLIST:
                 extensions[extension] = {"color": lang["color"], "name": lang_name}
-    extensions = {k: v for k, v in sorted(extensions.items(), key=lambda x: x[0])}
+    extensions = dict(sorted(extensions.items(), key=lambda x: x[0]))
     extensions[".tsx"]["name"] = "TypeScript"
     extensions[".tsx"]["color"] = "#2B7489"
     extensions[".cs"]["name"] = "C#"
