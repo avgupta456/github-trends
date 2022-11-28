@@ -29,7 +29,7 @@ def get_top_langs_svg(
     if not use_percent:
         subheader += " | " + ("LOC Changed" if loc_metric == "changed" else "LOC Added")
     if commits_excluded > 50:
-        subheader += " | " + str(commits_excluded) + " commits excluded"
+        subheader += f" | {commits_excluded} commits excluded"
 
     if len(data) <= 1:
         return get_no_data_svg(header, subheader)
@@ -48,16 +48,14 @@ def get_top_langs_svg(
     dataset: List[Tuple[str, str, List[Tuple[float, str]]]] = []
     padding, width = 0, 0
     if compact:
-        data_row = []
-        for x in data[1:6]:
-            data_row.append((x.percent, x.color))
+        data_row = [(x.percent, x.color) for x in data[1:6]]
         dataset.append(("", "", data_row))
         padding, width = 30, 260
     else:
         max_length = max(data[i].loc for i in range(1, len(data)))
         for x in data[1:6]:
             if use_percent:
-                dataset.append((x.lang, str(x.percent) + "%", [(x.percent, x.color)]))
+                dataset.append((x.lang, f"{str(x.percent)}%", [(x.percent, x.color)]))
             else:
                 percent = 100 * x.loc / max_length
                 dataset.append((x.lang, format_number(x.loc), [(percent, x.color)]))
@@ -69,7 +67,7 @@ def get_top_langs_svg(
         )
     )
 
-    langs = [(x.lang + " " + str(x.percent) + "%", x.color) for x in data[1:6]]
+    langs = [(f"{x.lang} {str(x.percent)}%", x.color) for x in data[1:6]]
     if compact:
         dp.add(get_lang_name_section(d=d, data=langs, theme=theme))
 

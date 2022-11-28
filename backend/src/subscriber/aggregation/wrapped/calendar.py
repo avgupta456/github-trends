@@ -18,7 +18,7 @@ def get_calendar_data(data: UserPackage, year: int) -> CalendarData:
     items_dict = {item.date: item for item in data.contribs.total}
     for i in range(365):
         date = (datetime(year, 1, 1) + timedelta(days=i - 1)).strftime("%Y-%m-%d")
-        item = items_dict.get(date, None)
+        item = items_dict.get(date)
         out: Dict[str, Any] = {
             "day": date,
             "contribs": 0,

@@ -44,10 +44,10 @@ def get_template(
         )
     )
 
-    dp = Group(transform="translate(" + str(padding) + ", " + str(padding) + ")")
+    dp = Group(transform=f"translate({padding}, {padding})")
 
-    dp.add(d.text(header_text, insert=(0, 13), class_=theme + "-header"))
-    dp.add(d.text(subheader_text, insert=(0, 31), class_=theme + "-subheader"))
+    dp.add(d.text(header_text, insert=(0, 13), class_=f"{theme}-header"))
+    dp.add(d.text(subheader_text, insert=(0, 31), class_=f"{theme}-subheader"))
 
     return d, dp
 
@@ -59,14 +59,19 @@ def get_bar_section(
     padding: int = 45,
     bar_width: int = 210,
 ) -> Group:
-    section = Group(transform="translate(0, " + str(padding) + ")")
+    section = Group(transform=f"translate(0, {padding})")
     for i, (top_text, right_text, data_row) in enumerate(dataset):
-        translate = "translate(0, " + str(40 * i) + ")"
+        translate = f"translate(0, {str(40 * i)})"
         row = Group(transform=translate)
-        row.add(d.text(top_text, insert=(2, 15), class_=theme + "-lang-name"))
+        row.add(d.text(top_text, insert=(2, 15), class_=f"{theme}-lang-name"))
         row.add(
-            d.text(right_text, insert=(bar_width + 10, 33), class_=theme + "-lang-name")
+            d.text(
+                right_text,
+                insert=(bar_width + 10, 33),
+                class_=f"{theme}-lang-name",
+            )
         )
+
         progress = Drawing(width=str(bar_width), x="0", y="25")
         progress.add(
             d.rect(
@@ -110,12 +115,12 @@ def get_lang_name_section(
     columns: int = 2,
     padding: int = 80,
 ) -> Group:
-    section = Group(transform="translate(0, " + str(padding) + ")")
+    section = Group(transform=f"translate(0, {padding})")
     for i, x in enumerate(data):
         x_translate = str((260 / columns) * (i % columns))
         y_translate = str(20 * (i // columns))
-        lang = Group(transform="translate(" + x_translate + ", " + y_translate + ")")
+        lang = Group(transform=f"translate({x_translate}, {y_translate})")
         lang.add(Circle(center=(5, 5), r=5, fill=(data[i][1] or DEFAULT_COLOR)))
-        lang.add(d.text(data[i][0], insert=(14, 9), class_=theme + "-lang-name"))
+        lang.add(d.text(data[i][0], insert=(14, 9), class_=f"{theme}-lang-name"))
         section.add(lang)
     return section

@@ -28,7 +28,7 @@ async def get_user_months(
     months_data: List[UserMonth] = []
     for month in months:
         date_obj: datetime = month["month"]
-        complete = not (date_obj.year == today.year and date_obj.month == today.month)
+        complete = date_obj.year != today.year or date_obj.month != today.month
         try:
             data = UserPackage.decompress(month["data"])
             months_data.append(

@@ -106,7 +106,7 @@ async def query_user(
             incomplete = True
 
     out: UserPackage = UserPackage.empty()
-    if len(all_user_packages) > 0:
+    if all_user_packages:
         out = all_user_packages[0]
         for user_package in all_user_packages[1:]:
             out += user_package
@@ -115,9 +115,9 @@ async def query_user(
     if incomplete or len(months) > 1:
         # cache buster for publisher
         if PROD:
-            s.get(BACKEND_URL + "/user/" + user_id + "?no_cache=True")
+            s.get(f"{BACKEND_URL}/user/{user_id}?no_cache=True")
         elif DOCKER:
-            s.get(LOCAL_PUBLISHER + "/user/" + user_id + "?no_cache=True")
+            s.get(f"{LOCAL_PUBLISHER}/user/{user_id}?no_cache=True")
 
         return (False, out)  # type: ignore
 

@@ -15,9 +15,10 @@ def get_unknown_user(access_token: str) -> Optional[str]:
     :return: user_id or None if invalid access_token
     """
     headers: Dict[str, str] = {
-        "Accept": str("application/vnd.github.v3+json"),
-        "Authorization": "bearer " + access_token,
+        "Accept": "application/vnd.github.v3+json",
+        "Authorization": f"bearer {access_token}",
     }
+
 
     r = s.get("https://api.github.com/user", params={}, headers=headers)
     return r.json().get("login", None)  # type: ignore
@@ -45,7 +46,7 @@ async def authenticate(code: str) -> Tuple[str, str]:
     r = s.post("https://github.com/login/oauth/access_token", params=params)
 
     if r.status_code != 200:
-        raise OAuthError("OAuth Error: " + str(r.status_code))
+        raise OAuthError(f"OAuth Error: {str(r.status_code)}")
 
     access_token = r.text.split("&")[0].split("=")[1]
     user_id = get_unknown_user(access_token)

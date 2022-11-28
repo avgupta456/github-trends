@@ -107,7 +107,7 @@ def get_top_repos(
     elif group == "private":
         public_repos = [x for x in new_repos if not x.private]
         private_repos = [x for x in new_repos if x.private]
-        if len(public_repos) < 4 and len(private_repos) > 0:
+        if len(public_repos) < 4 and private_repos:
             public_repos += private_repos[: bars - len(public_repos) - 1]
             private_repos = private_repos[bars - len(public_repos) - 1 :]
         out_repos = sorted(public_repos[: bars - 1], key=lambda x: x.loc, reverse=True)

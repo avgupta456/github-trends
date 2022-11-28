@@ -17,14 +17,14 @@ def get_timestamp_data(data: UserPackage) -> TimestampData:
         lists = item.lists
         lists = [lists.commits, lists.issues, lists.prs, lists.reviews]
         for type, list in zip(["commit", "issue", "pr", "review"], lists):
-            for obj in list:
-                out.append(
-                    {
-                        "type": type,
-                        "weekday": item.weekday,
-                        "timestamp": date_to_seconds_since_midnight(obj),
-                    }
-                )
+            out.extend(
+                {
+                    "type": type,
+                    "weekday": item.weekday,
+                    "timestamp": date_to_seconds_since_midnight(obj),
+                }
+                for obj in list
+            )
 
     shuffle(out)
     out = out[:MAX_ITEMS]

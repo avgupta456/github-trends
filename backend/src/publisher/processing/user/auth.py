@@ -29,9 +29,10 @@ async def authenticate(code: str, private_access: bool) -> str:
         "user_id": user_id,
         "access_token": access_token,
         "user_key": code_key_map.get(code, None),
+        "private_access": private_access,
     }
 
-    raw_user["private_access"] = private_access
+
     if curr_user is not None:
         curr_private_access = curr_user.private_access
         new_private_access = curr_private_access or private_access

@@ -139,11 +139,10 @@ async def get_all_commit_languages(
             repo_mapping[node_id] = repos[i]
             all_node_ids.append(node_id)
 
-    node_id_chunks: List[List[str]] = []
-    for i in range(0, len(all_node_ids), GRAPHQL_NODE_CHUNK_SIZE):
-        node_id_chunks.append(
-            all_node_ids[i : min(len(all_node_ids), i + GRAPHQL_NODE_CHUNK_SIZE)]
-        )
+    node_id_chunks: List[List[str]] = [
+        all_node_ids[i : min(len(all_node_ids), i + GRAPHQL_NODE_CHUNK_SIZE)]
+        for i in range(0, len(all_node_ids), GRAPHQL_NODE_CHUNK_SIZE)
+    ]
 
     commit_language_chunks: List[List[Optional[GraphQLRawCommit]]] = await gather(
         funcs=[get_commits for _ in node_id_chunks],
@@ -190,9 +189,10 @@ async def get_all_commit_languages(
         max_threads=REST_NODE_THREADS,
     )
 
-    commit_files_dict: Dict[str, List[RawCommitFile]] = {}
-    for commit, commit_file in zip(sorted_commits, commit_files):
-        commit_files_dict[commit.url] = commit_file
+    commit_files_dict: Dict[str, List[RawCommitFile]] = {
+        commit.url: commit_file
+        for commit, commit_file in zip(sorted_commits, commit_files)
+    }
 
     commit_languages: List[List[CommitLanguages]] = [
         [CommitLanguages() for _ in repo] for repo in commit_infos
@@ -483,9 +483,10 @@ async def get_contributions(
     total_list = [v.to_dict() for v in total.values() if v.stats.contribs > 0]
     public_list = [v.to_dict() for v in public.values() if v.stats.contribs > 0]
     repositories_list = {
-        name: list([v.to_dict() for v in repo.values()])
+        name: [v.to_dict() for v in repo.values()]
         for name, repo in repositories.items()
     }
+
 
     output = UserContributions.parse_obj(
         {

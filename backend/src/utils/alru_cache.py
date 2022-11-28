@@ -13,15 +13,7 @@ def alru_cache(max_size: int = 128, ttl: timedelta = timedelta(minutes=1)):
 
         def in_cache(key: Any) -> bool:
             # key not in cache
-            if key not in cache:
-                return False
-
-            # key in cache but expired
-            if datetime.now() - cache[key][0] > ttl:
-                return False
-
-            # key in cache and not expired
-            return True
+            return False if key not in cache else datetime.now() - cache[key][0] <= ttl
 
         def update_cache_and_return(key: Any, flag: bool, value: Any) -> Any:
             # if flag = False, do not update cache and return value

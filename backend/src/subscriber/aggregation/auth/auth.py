@@ -59,4 +59,4 @@ async def get_user_stars(user_id: str) -> List[str]:
         return []
     except RESTError:
         # Rate limited, so assume user starred repo
-        return [OWNER + "/" + REPO]
+        return [f"{OWNER}/{REPO}"]

@@ -25,10 +25,9 @@ async def get_user_raw(
 ) -> UserPackage:
     await update_keys()
     start_date, end_date, _ = use_time_range(time_range, start_date, end_date)
-    data = await get_user_data(
+    return await get_user_data(
         user_id, start_date, end_date, timezone_str, access_token
     )
-    return data
 
 
 @router.get("/wrapped/{user_id}", status_code=status.HTTP_200_OK)
@@ -43,5 +42,4 @@ async def get_wrapped_user_raw(
     user_data = await get_user_data(
         user_id, date(year, 1, 1), date(year, 12, 31), "US/Eastern", access_token
     )
-    wrapped_data = get_wrapped_data(user_data, year)
-    return wrapped_data
+    return get_wrapped_data(user_data, year)

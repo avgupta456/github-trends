@@ -35,10 +35,7 @@ async def check_user_starred_repo(
 
     # Checks the user's 30 most recent starred repos (no cache)
     user_stars = await get_user_stars(user_id)
-    if f"{owner}/{repo}" in user_stars:
-        return True
-
-    return False
+    return f"{owner}/{repo}" in user_stars
 
 
 @alru_cache(ttl=timedelta(hours=1))
@@ -52,7 +49,8 @@ async def get_is_valid_user(user_id: str) -> str:
 
     valid_db_user = await check_db_user_exists(user_id)
     user_starred = await check_user_starred_repo(user_id)
-    if not (user_starred or valid_db_user):
-        return (False, "Repo not starred")  # type: ignore
-
-    return (True, "Valid user")  # type: ignore
+    return (
+        (True, "Valid user")
+        if (user_starred or valid_db_user)
+        else (False, "Repo not starred")
+    )
