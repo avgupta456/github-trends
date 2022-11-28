@@ -22,11 +22,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Sourcery lint
-        uses: sourcery-ai/action@v1
-        with:
+        run: |
+          cd backend
+          sourcery login --token $SOURCERY_TOKEN
+          sourcery review --check --diff "git diff main" .
+        env:
           token: ${{ secrets.SOURCERY_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          sourcery_args: --diff=git diff HEAD --no-summary
       - name: Test with unittest
         run: |
           cd backend
