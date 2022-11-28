@@ -22,7 +22,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Sourcery lint
-        uses: sourcery-ai/action
+        uses: sourcery-ai/action@v1
         with:
           token: ${{ secrets.SOURCERY_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
