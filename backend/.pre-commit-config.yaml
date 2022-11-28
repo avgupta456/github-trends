@@ -9,9 +9,3 @@ repos:
     hooks:
       - id: flake8
         args: [--config=./backend/.flake8]
-
-  - repo: https://github.com/sourcery-ai/sourcery
-    rev: v1.0.1
-    hooks:
-      - id: sourcery
-        args: [--diff=git diff HEAD, --no-summary]
