@@ -25,7 +25,7 @@ jobs:
         run: |
           cd backend
           pip install sourcery-cli
-          sourcery login
+          sourcery login --token ${{ secrets.SOURCERY_TOKEN }}
           sourcery review --check --diff "git diff main" .
         env:
           sourcery_token: ${{ secrets.SOURCERY_TOKEN }}
