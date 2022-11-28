@@ -22,6 +22,7 @@ def get_top_repos_svg(
     use_animation: bool,
     theme: str,
 ) -> Drawing:
+    # sourcery skip: simplify-len-comparison
     header = "Most Contributed Repositories"
     subheader = time_str
     subheader += " | " + ("LOC Changed" if loc_metric == "changed" else "LOC Added")
