@@ -31,6 +31,7 @@ flake8 = "^3.8.4"
 isort = "^5.10.1"
 pre-commit = "^2.9.3"
 pyinstrument = "^3.3.0"
+sourcery-cli = "^1.0.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

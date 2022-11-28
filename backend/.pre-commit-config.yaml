@@ -1,12 +1,17 @@
 repos:
--   repo: https://github.com/ambv/black
+  - repo: https://github.com/ambv/black
     rev: 21.10b0
     hooks:
-    - id: black
-      language_version: python3.8
--   repo: https://github.com/pre-commit/pre-commit-hooks
+      - id: black
+        language_version: python3.8
+  - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.3.0
     hooks:
-    - id: flake8
-      args: [--config=./backend/.flake8]
-    
+      - id: flake8
+        args: [--config=./backend/.flake8]
+
+  - repo: https://github.com/sourcery-ai/sourcery
+    rev: v1.0.1
+    hooks:
+      - id: sourcery
+        args: [--diff=git diff HEAD, --no-summary]
