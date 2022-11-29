@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Button, SvgInline } from '../../components';
-
+import { getValidUser } from '../../api/wrapped';
 import { BACKEND_URL } from '../../constants';
-import { sleep } from '../../utils';
+import { classnames } from '../../utils';
 
 const DemoScreen = () => {
   const [userName, setUserName] = useState('');
@@ -18,11 +18,17 @@ const DemoScreen = () => {
     userNameInput.focus();
   }, [userNameInput]);
 
+  const [error, setError] = useState('');
+
   const handleSubmit = async () => {
-    setLoading(true);
-    await sleep(100);
-    setSelectedUserName(userName);
-    setLoading(false);
+    const validUser = await getValidUser(userName);
+    if (validUser === 'Valid user' || validUser === 'Repo not starred') {
+      setLoading(true);
+      setSelectedUserName(userName);
+      setLoading(false);
+    } else if (validUser === 'GitHub user not found') {
+      setError('GitHub user not found. Check your spelling and try again.');
+    }
   };
 
   const firstCardUrl =
@@ -56,8 +62,14 @@ const DemoScreen = () => {
                   userNameInput = input;
                 }}
                 placeholder="Enter Username"
-                className="bg-white text-gray-700 w-full input input-bordered"
-                onChange={(e) => setUserName(e.target.value)}
+                className={classnames(
+                  'bg-white text-gray-700 w-full input input-bordered rounded-sm',
+                  error && 'input-error',
+                )}
+                onChange={(e) => {
+                  setUserName(e.target.value);
+                  setError('');
+                }}
                 onKeyPress={async (e) => {
                   if (e.key === 'Enter') {
                     handleSubmit();
@@ -72,6 +84,13 @@ const DemoScreen = () => {
                 Go
               </Button>
             </div>
+            {error ? (
+              <div className="text-red-500 text-sm mt-2">
+                <strong>Error:</strong> {error}
+              </div>
+            ) : (
+              <div className="text-sm mt-2 py-5" />
+            )}
           </div>
           <p className="text-center text-sm text-red-500">
             This demo uses a public access token that is heavily rate limited.
