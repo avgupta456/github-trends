@@ -6,7 +6,8 @@
 
 Check out your GitHub Wrapped at `githubtrends.io/wrapped/{user_id}`!
 
-![image](https://user-images.githubusercontent.com/16708871/143486536-83e85294-2839-4cf1-9e14-685c05da918b.png)
+![github-wrapped](https://user-images.githubusercontent.com/16708871/204590479-556eb628-a7bd-45c0-9b35-9171c3891f12.png)
+
 
 ---
 
@@ -15,10 +16,10 @@ Check out your GitHub Wrapped at `githubtrends.io/wrapped/{user_id}`!
 GitHub Trends dives deep into the GitHub API to bring you exciting and impactful metrics about your code contributions. Generate insights on lines written by language, repository, and time. Easily embed dynamic images into your GitHub profile to share your statistics with the world. Check out some of the examples below:
 
 <a href="https://githubtrends.io">
-  <img align="center" src="https://api.githubtrends.io/user/svg/avgupta456/langs?time_range=one_year&include_private=True" />
+  <img align="center" src="https://api.githubtrends.io/user/svg/avgupta456/langs?time_range=one_year&include_private=True&loc_metric=changed" />
 </a>
 <a href="https://githubtrends.io">
-  <img align="center" src="https://api.githubtrends.io/user/svg/avgupta456/repos?time_range=one_year&include_private=True&group=private" />
+  <img align="center" src="https://api.githubtrends.io/user/svg/avgupta456/repos?time_range=one_year&include_private=True&group=private&loc_metric=changed" />
 </a>
 
 ## Quickstart
