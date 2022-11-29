@@ -9,15 +9,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { saveSvgAsPng } from 'save-svg-as-png';
 
 import { Card, Button } from '../../../components';
-import { classnames, sleep } from '../../../utils';
+import { classnames } from '../../../utils';
 
 const DisplayStage = ({ userId, themeSuffix }) => {
   const card = themeSuffix.split('?')[0];
-
-  const openInNewTab = (url) => {
-    const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
-    if (newWindow) newWindow.opener = null;
-  };
 
   const downloadPNG = () => {
     saveSvgAsPng(document.getElementById('svg-card'), `${userId}_${card}.png`, {
@@ -26,103 +21,33 @@ const DisplayStage = ({ userId, themeSuffix }) => {
     });
   };
 
-  const redirectGitHub = () => {
-    toast.info('Copied to Clipboard, redirecting...', {
-      position: 'bottom-right',
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-    });
+  const copyUrl = () => {
     navigator.clipboard.writeText(
-      `[![GitHub Trends SVG](https://api.githubtrends.io/user/svg/${userId}/${themeSuffix})](https://githubtrends.io)`,
+      `https://api.githubtrends.io/user/svg/${userId}/${themeSuffix}`,
     );
-    sleep(3000).then(() => {
-      openInNewTab(
-        `https://github.com/${userId}/${userId}/edit/master/README.md`,
-      );
-    });
-  };
-
-  const redirectTwitter = () => {
-    toast.info('Saved card, redirecting...', {
+    toast.info('Copied to Clipboard!', {
       position: 'bottom-right',
-      autoClose: 3000,
-      hideProgressBar: false,
+      autoClose: 1000,
+      hideProgressBar: true,
       closeOnClick: false,
       pauseOnHover: false,
       draggable: false,
       progress: undefined,
-    });
-    downloadPNG();
-    sleep(3000).then(() => {
-      let twitterText =
-        card === 'repos'
-          ? 'Take a look at my most contributed GitHub repositories.'
-          : 'Take a look at my most used programming languages on GitHub.';
-      twitterText = `${twitterText} Create your own visualizations at `;
-      const urlText = twitterText.split(' ').join('%20');
-      openInNewTab(
-        `https://twitter.com/intent/tweet?text=${urlText}&url=githubtrends.io%2F`,
-      );
-    });
-  };
-
-  const redirectLinkedin = () => {
-    toast.info('Saved card, redirecting...', {
-      position: 'bottom-right',
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-    });
-    downloadPNG();
-    sleep(3000).then(() => {
-      openInNewTab(`https://linkedin.com/feed`);
     });
   };
 
   return (
     <div className="w-full flex flex-wrap">
-      <ToastContainer
-        position="bottom-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss={false}
-        draggable={false}
-        pauseOnHover={false}
-      />
+      <ToastContainer />
       <div className="h-auto lg:w-2/5 md:w-1/2 pr-10 p-10 rounded-sm bg-gray-200">
         <div>
-          Share your GitHub Trends card through multiple channels, including
-          GitHub, Twitter, and Linkedin. Or, download the PNG and share
-          anywhere!
+          Copy the image URL or download the PNG. Share on GitHub, Twitter,
+          LinkedIn, or anywhere else!
         </div>
         <br />
         <div className="flex flex-col items-center">
           {[
-            {
-              title: 'Display on GitHub',
-              active: true,
-              onClick: redirectGitHub,
-            },
-            {
-              title: 'Share on Twitter',
-              active: true,
-              onClick: redirectTwitter,
-            },
-            {
-              title: 'Share on LinkedIn',
-              active: true,
-              onClick: redirectLinkedin,
-            },
+            { title: 'Copy URL', active: true, onClick: copyUrl },
             { title: 'Download PNG', active: true, onClick: downloadPNG },
           ].map((item, index) => (
             <Button
