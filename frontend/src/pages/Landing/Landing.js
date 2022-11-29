@@ -9,7 +9,7 @@ import { FaGithub as GithubIcon, FaCheck as CheckIcon } from 'react-icons/fa';
 import { Button, Preview } from '../../components';
 
 import mockup from '../../assets/mockup.png';
-import wrapped from '../../assets/wrapped.png';
+import wrapped from '../../assets/wrapped1.png';
 import avgupta456Langs from '../../assets/avgupta456_langs.png';
 import tiangoloRepos from '../../assets/tiangolo_repos.png';
 import reininkRepos from '../../assets/reinink_repos.png';
