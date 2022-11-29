@@ -94,7 +94,7 @@ def get_user_all_contribution_events(
 
         for repo in response.repo_contribs.nodes:
             name = repo.repo.name
-            node = RawEventsEvent(occurredAt=str(repo.occurred_at))
+            node = RawEventsEvent(occurredAt=repo.occurred_at)
             repo_contribs[name].add("repo", node)
 
     return repo_contribs

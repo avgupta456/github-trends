@@ -53,6 +53,7 @@ def get_commit_languages(
     files: Optional[List[RawCommitFile]],
     repo: RawRepo,
 ) -> CommitLanguages:
+    # sourcery skip: extract-method
     out = CommitLanguages()
 
     if commit is None:
@@ -85,7 +86,21 @@ def get_commit_languages(
                     lang["name"], lang["color"], file.additions, file.deletions
                 )
     elif len(commit.prs.nodes) > 0 and pr_coverage > 0.25:
-        _extracted_from_get_commit_languages_38(commit, out)
+        pr = commit.prs.nodes[0]
+        total_additions, total_deletions = 0, 0
+        for file in pr.files.nodes:
+            filename = file.path.split(".")
+            extension = "" if len(filename) <= 1 else filename[-1]
+            lang = EXTENSIONS.get(f".{extension}", None)
+            if lang is not None:
+                out.add_lines(
+                    lang["name"], lang["color"], file.additions, file.deletions
+                )
+            total_additions += file.additions
+            total_deletions += file.deletions
+        add_ratio = min(pr.additions, commit.additions) / max(1, total_additions)
+        del_ratio = min(pr.deletions, commit.deletions) / max(1, total_deletions)
+        out.normalize(add_ratio, del_ratio)
     elif commit.additions + commit.deletions > 2 * CUTOFF:
         # assummed to be auto generated
         return out
@@ -102,20 +117,3 @@ def get_commit_languages(
             out.add_lines(lang_name, lang_color, additions, deletions)
 
     return out
-
-
-# TODO Rename this here and in `get_commit_languages`
-def _extracted_from_get_commit_languages_38(commit, out):
-    pr = commit.prs.nodes[0]
-    total_additions, total_deletions = 0, 0
-    for file in pr.files.nodes:
-        filename = file.path.split(".")
-        extension = "" if len(filename) <= 1 else filename[-1]
-        lang = EXTENSIONS.get(f".{extension}", None)
-        if lang is not None:
-            out.add_lines(lang["name"], lang["color"], file.additions, file.deletions)
-        total_additions += file.additions
-        total_deletions += file.deletions
-    add_ratio = min(pr.additions, commit.additions) / max(1, total_additions)
-    del_ratio = min(pr.deletions, commit.deletions) / max(1, total_deletions)
-    out.normalize(add_ratio, del_ratio)

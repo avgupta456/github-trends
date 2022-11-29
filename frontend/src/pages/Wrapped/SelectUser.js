@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import { useNavigate, Link } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
@@ -16,7 +17,9 @@ import wrapped2 from '../../assets/wrapped2.png';
 import wrapped3 from '../../assets/wrapped3.png';
 
 const SelectUserScreen = () => {
-  const [userName, setUserName] = useState('');
+  const userId = useSelector((state) => state.user.userId || '');
+
+  const [userName, setUserName] = useState(userId);
 
   const navigate = useNavigate();
 
@@ -94,6 +97,7 @@ const SelectUserScreen = () => {
                     'bg-white text-gray-700 w-full input input-bordered rounded-sm',
                     error && 'input-error',
                   )}
+                  defaultValue={userName}
                   onChange={(e) => {
                     setUserName(e.target.value);
                     setError('');

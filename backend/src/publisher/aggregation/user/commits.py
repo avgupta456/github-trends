@@ -128,7 +128,7 @@ def get_top_repos(
         RepoStats(
             repo="other/repos",
             private=False,
-            langs=[{"lang": k, "loc": v[0], "color": v[1]} for k, v in other.items()],
+            langs=[{"lang": k, "loc": v[0], "color": v[1]} for k, v in other.items()],  # type: ignore
             loc=sum(v[0] for v in other.values()),
         )
     )

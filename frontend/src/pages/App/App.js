@@ -8,7 +8,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './Header';
 import LandingScreen from '../Landing';
 import DemoScreen from '../Demo';
-import { LoginScreen, SignUpScreen } from '../Auth';
+import { SignUpScreen } from '../Auth';
 import HomeScreen from '../Home';
 import { SelectUserScreen, WrappedScreen } from '../Wrapped';
 import SettingsScreen from '../Settings';
@@ -43,14 +43,12 @@ function App() {
         <section className="bg-white text-gray-700 flex-grow">
           <Routes>
             {!isAuthenticated && (
-              <Route path="/login" component={LoginScreen} />
-            )}
-            {!isAuthenticated && (
               <Route path="/signup" element={<SignUpScreen />} />
             )}
             <Route path="/demo" element={<DemoScreen />} />
             <Route path="/user/redirect" element={<RedirectScreen />} />
             <Route path="/user" element={<HomeScreen />} />
+            <Route path="/user/*" element={<HomeScreen />} />
             <Route path="/wrapped/:userId/:year" element={<WrappedScreen />} />
             <Route path="/wrapped/:userId" element={<WrappedScreen />} />
             <Route path="/wrapped" element={<SelectUserScreen />} />

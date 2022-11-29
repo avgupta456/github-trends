@@ -10,6 +10,7 @@ import { MdSettings as SettingsIcon } from 'react-icons/md';
 import { logout as _logout } from '../../redux/actions/userActions';
 import rocketIcon from '../../assets/rocket.png';
 import { classnames } from '../../utils';
+import { GITHUB_PUBLIC_AUTH_URL } from '../../constants';
 
 const propTypes = {
   to: PropTypes.string.isRequired,
@@ -104,7 +105,12 @@ const Header = () => {
             </>
           ) : (
             <>
-              <StandardLink to="/login">Login</StandardLink>
+              <a
+                className="px-4 py-1 mr-3 rounded-sm bg-gray-200 hover:bg-gray-300 text-gray-700"
+                href={GITHUB_PUBLIC_AUTH_URL}
+              >
+                Login
+              </a>
               <Link
                 to="/signup"
                 className="px-4 py-1 mr-3 rounded-sm bg-blue-500 hover:bg-blue-700 hover:text-gray-300"
@@ -156,9 +162,12 @@ const Header = () => {
             <MobileLink to="/demo" onClick={() => setToggle(false)}>
               Demo
             </MobileLink>
-            <MobileLink to="/login" onClick={() => setToggle(false)}>
+            <a
+              className="block text-sm px-2 my-2 py-2 rounded-sm bg-gray-200 text-gray-700"
+              href={GITHUB_PUBLIC_AUTH_URL}
+            >
               Login
-            </MobileLink>
+            </a>
             <Link
               to="/signup"
               onClick={() => setToggle(false)}
