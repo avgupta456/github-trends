@@ -7,7 +7,7 @@ import { useParams, Link } from 'react-router-dom';
 import { toPng } from 'html-to-image';
 import download from 'downloadjs';
 import { FaArrowLeft as LeftArrowIcon } from 'react-icons/fa';
-import { BsImage as ImageIcon } from 'react-icons/bs';
+import { BsImage as ImageIcon, BsInfoCircle } from 'react-icons/bs';
 import { ClipLoader } from 'react-spinners';
 
 import { getWrapped } from '../../api';
@@ -102,10 +102,18 @@ const WrappedScreen = () => {
             <p className="text-3xl text-center w-full">
               {`${year} GitHub Wrapped`}
             </p>
-            <p className="mt-2 text-md text-center w-full text-gray-600">
+            <div className="mt-2 text-md text-center w-full text-gray-600 flex justify-center items-center">
               Private Access:{' '}
               {userId === currUserId && usePrivate ? 'True' : 'False'}
-            </p>
+              {!(userId === currUserId && usePrivate) && (
+                <div
+                  className="tooltip"
+                  data-tip="For private access, create an account with GitHub Trends and authenticate with GitHub."
+                >
+                  <BsInfoCircle className="h-4 w-4 ml-2 text-gray-500 hover:text-gray-800 cursor-pointer" />
+                </div>
+              )}
+            </div>
             {data?.incomplete && (
               <p className="mt-2 text-md text-center w-full text-red-600">
                 Incomplete Data. Please refresh later to finish loading.
