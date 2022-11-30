@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from src.constants import OWNER, REPO
+from src.data.github.rest import RESTError
 from src.subscriber.aggregation import (
     get_repo_stargazers,
     get_user_stars,
@@ -29,9 +30,12 @@ async def check_user_starred_repo(
     user_id: str, owner: str = OWNER, repo: str = REPO
 ) -> bool:
     # Checks the repo's starred users (with cache)
-    repo_stargazers = await get_repo_stargazers(owner, repo)
-    if user_id in repo_stargazers:
-        return True
+    try:
+        repo_stargazers = await get_repo_stargazers(owner, repo)
+        if user_id in repo_stargazers:
+            return True
+    except RESTError:
+        return True  # Assume the user has starred the repo
 
     # Checks the user's 30 most recent starred repos (no cache)
     user_stars = await get_user_stars(user_id)
