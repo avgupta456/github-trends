@@ -8,7 +8,7 @@ from src.subscriber.processing.user import query_user
 from src.utils import alru_cache
 
 
-@alru_cache(ttl=timedelta(hours=1))
+@alru_cache(ttl=timedelta(hours=12))
 async def query_wrapped_user(
     user_id: str, year: int, no_cache: bool = False
 ) -> Optional[WrappedPackage]:
