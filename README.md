@@ -4,7 +4,7 @@
 
 ## SPECIAL: GitHub Wrapped
 
-Check out your GitHub Wrapped at `githubtrends.io/wrapped/{user_id}`!
+Check out your GitHub Wrapped at `githubtrends.io/wrapped`!
 
 ![github-wrapped](https://user-images.githubusercontent.com/16708871/204590479-556eb628-a7bd-45c0-9b35-9171c3891f12.png)
 
