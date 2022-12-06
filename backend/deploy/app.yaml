@@ -1,6 +1,6 @@
 service: default
 runtime: python38
-entrypoint: gunicorn -w 2 -k uvicorn.workers.UvicornWorker src.main:app --timeout 600 --graceful-timeout 600
+entrypoint: gunicorn -w 2 -k uvicorn.workers.UvicornWorker src.main:app --timeout 60 --graceful-timeout 60
 
 #smallest instance class
 instance_class: F4
