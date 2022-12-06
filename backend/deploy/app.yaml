@@ -1,15 +1,14 @@
 service: default
 runtime: python38
-entrypoint: gunicorn -w 2 -k uvicorn.workers.UvicornWorker src.main:app --timeout 60 --graceful-timeout 60
+entrypoint: gunicorn -w 2 -k uvicorn.workers.UvicornWorker src.main:app
 
 #smallest instance class
 instance_class: F4
 
 #prevents creating additional instances
 automatic_scaling:
-  min_idle_instances: 1
-  min_instances: 1
-  max_instances: 3
+  min_instances: 0
+  max_instances: 2
 
 #set to minimums
 resources:
