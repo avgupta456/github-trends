@@ -12,7 +12,7 @@ from src.utils import alru_cache
 async def query_wrapped_user(
     user_id: str, year: int, no_cache: bool = False
 ) -> Optional[WrappedPackage]:
-    start_date, end_date = date(year, 1, 1), date(year, 12, 31)
+    start_date, end_date = date(year, 1, 1), date(year, 11, 31)
     user: Optional[PublicUserModel] = await db_get_public_user(user_id)
     access_token = None if user is None else user.access_token
     private_access = False if user is None else user.private_access or False
