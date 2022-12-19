@@ -126,7 +126,7 @@ const WrappedScreen = () => {
             <Calendar
               data={data}
               startDate={`${year}-01-02`}
-              endDate={`${parseInt(year) + 1}-01-01`}
+              endDate={`${year}-12-31`}
               highlightDays={highlightDays}
               highlightColors={highlightColors}
             />
