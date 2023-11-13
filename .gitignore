@@ -9,3 +9,4 @@ backend/.coverage
 backend/gcloud_key.json
 
 frontend/.env
+.DS_Store
