@@ -86,7 +86,7 @@ def get_commits(
         try:
             if "associatedPullRequests" not in raw_commit:
                 raw_commit["associatedPullRequests"] = {"nodes": []}
-            out.append(RawCommit.parse_obj(raw_commit))
+            out.append(RawCommit.model_validate(raw_commit))
         except Exception as e:
             if catch_errors:
                 out.append(None)

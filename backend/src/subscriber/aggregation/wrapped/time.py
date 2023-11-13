@@ -29,7 +29,7 @@ def get_month_data(data: UserPackage) -> MonthData:
             "formatted_loc_changed": format_number(v["loc_changed"]),
         }
 
-        out.append(TimeDatum.parse_obj(_obj))
+        out.append(TimeDatum.model_validate(_obj))
 
     return MonthData(months=out)
 
@@ -57,6 +57,6 @@ def get_day_data(data: UserPackage) -> DayData:
             "formatted_loc_changed": format_number(v["loc_changed"]),
         }
 
-        out.append(TimeDatum.parse_obj(_obj))
+        out.append(TimeDatum.model_validate(_obj))
 
     return DayData(days=out)

@@ -42,7 +42,7 @@ def get_user_contribution_calendar(
 
     raw_data = get_template(query, access_token)
     output = raw_data["data"]["user"]["contributionsCollection"]["contributionCalendar"]
-    return RawCalendar.parse_obj(output)
+    return RawCalendar.model_validate(output)
 
 
 def get_user_contribution_events(
@@ -156,4 +156,4 @@ def get_user_contribution_events(
 
     raw_data = get_template(query, access_token)
     output = raw_data["data"]["user"]["contributionsCollection"]
-    return RawEvents.parse_obj(output)
+    return RawEvents.model_validate(output)

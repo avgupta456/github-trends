@@ -32,14 +32,14 @@ async def get_user_months(
         try:
             data = UserPackage.decompress(month["data"])
             months_data.append(
-                UserMonth.parse_obj(
+                UserMonth.model_validate(
                     {
                         "user_id": user_id,
                         "month": month["month"],
                         "version": API_VERSION,
                         "private": month["private"],
                         "complete": complete,
-                        "data": data.dict(),
+                        "data": data.model_dump(),
                     }
                 )
             )

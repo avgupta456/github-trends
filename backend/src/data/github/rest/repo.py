@@ -164,7 +164,7 @@ def get_repo_commits(
                 "timestamp": datetime.strptime(dt, "%Y-%m-%dT%H:%M:%SZ"),
                 "node_id": x["node_id"],
             }
-            return RawCommit.parse_obj(temp)
+            return RawCommit.model_validate(temp)
 
         return list(map(extract_info, data))
     except RESTError:

@@ -14,7 +14,7 @@ async def get_keys(no_cache: bool = False) -> List[str]:
     if secrets is None:
         return (False, [])  # type: ignore
 
-    tokens = SecretModel.parse_obj(secrets).access_tokens
+    tokens = SecretModel.model_validate(secrets).access_tokens
     return (True, tokens)  # type: ignore
 
 

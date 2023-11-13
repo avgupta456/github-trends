@@ -1,3 +1,5 @@
+from typing import Dict
+
 import sentry_sdk
 from dotenv import load_dotenv  # type: ignore
 from fastapi import FastAPI
@@ -85,12 +87,12 @@ app.add_middleware(
 
 
 @app.get("/")
-async def read_root():
+async def read_root() -> Dict[str, str]:
     return {"Hello": "World"}
 
 
 @app.get("/info")
-def get_info():
+def get_info() -> Dict[str, bool]:
     return {"PROD": PROD}
 
 

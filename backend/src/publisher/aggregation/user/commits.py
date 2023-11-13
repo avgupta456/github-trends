@@ -22,32 +22,33 @@ def get_top_languages(
         else data.contribs.public_stats.languages
     )
 
-    languages_list: List[dict_type] = [
-        {
-            "lang": lang,
-            "color": stats.color or DEFAULT_COLOR,
-            "loc": loc_metric_func(loc_metric, stats.additions, stats.deletions),
-        }
+    languages_list = [
+        LanguageStats(
+            lang=lang,
+            color=stats.color or DEFAULT_COLOR,
+            loc=loc_metric_func(loc_metric, stats.additions, stats.deletions),
+            percent=-1,
+        )
         for lang, stats in raw_languages.items()
     ]
 
-    languages_list = list(filter(lambda x: x["loc"] > 0, languages_list))  # type: ignore
+    languages_list = list(filter(lambda x: x.loc > 0, languages_list))
 
-    total_loc: int = sum(x["loc"] for x in languages_list) + 1  # type: ignore
-    total: dict_type = {"lang": "Total", "loc": total_loc}
+    total_loc = sum(x.loc for x in languages_list) + 1
+    total = LanguageStats(lang="Total", color=None, loc=total_loc, percent=100)
 
-    languages_list = sorted(languages_list, key=lambda x: x["loc"], reverse=True)
-    other: dict_type = {"lang": "Other", "loc": 0, "color": "#ededed"}
+    languages_list = sorted(languages_list, key=lambda x: x.loc, reverse=True)
+    other = LanguageStats(lang="Other", color="#ededed", loc=0, percent=-1)
     for language in languages_list[4:]:
-        other["loc"] = int(other["loc"]) + int(language["loc"])
+        other.loc = other.loc + language.loc
 
     languages_list = [total] + languages_list[:4] + [other]
 
     new_languages_list: List[LanguageStats] = []
     for lang in languages_list:
-        lang["percent"] = float(round(100 * int(lang["loc"]) / total_loc, 2))
-        if lang["percent"] > 1:  # 1% minimum to show
-            new_languages_list.append(LanguageStats.parse_obj(lang))
+        lang.percent = float(round(100 * lang.loc / total_loc, 2))
+        if lang.percent > 1:  # 1% minimum to show
+            new_languages_list.append(LanguageStats.model_validate(lang))
 
     commits_excluded = data.contribs.public_stats.other_count
     if include_private:
@@ -87,7 +88,7 @@ def get_top_repos(
     repos = sorted(repos, key=lambda x: x["loc"], reverse=True)
 
     new_repos = [
-        RepoStats.parse_obj(x) for x in repos if x["loc"] > 0.01 * repos[0]["loc"]
+        RepoStats.model_validate(x) for x in repos if x["loc"] > 0.01 * repos[0]["loc"]
     ]
 
     commits_excluded = data.contribs.public_stats.other_count

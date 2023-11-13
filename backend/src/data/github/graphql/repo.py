@@ -43,7 +43,7 @@ def get_repo(
 
     try:
         raw_repo = get_template(query, access_token)["data"]["repository"]
-        return RawRepo.parse_obj(raw_repo)
+        return RawRepo.model_validate(raw_repo)
     except Exception as e:
         if catch_errors:
             return None
