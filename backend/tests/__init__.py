@@ -1,3 +1,3 @@
-from dotenv import load_dotenv  # type: ignore
+from dotenv import load_dotenv, find_dotenv  # type: ignore
 
-load_dotenv(dotenv_path="")
+load_dotenv(find_dotenv(), verbose=True)
