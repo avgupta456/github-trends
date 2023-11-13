@@ -19,6 +19,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'react/function-component-definition': 'off',
     'react/no-unstable-nested-components': 'off',
+    'jsx-a11y/control-has-associated-label': 'off',
     'no-console': 'off',
     radix: 'off',
     'prettier/prettier': [

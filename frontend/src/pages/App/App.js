@@ -64,7 +64,7 @@ function App() {
           <div className="bg-gray-100 border-t border-gray-300">
             <div className="container mx-auto py-4 px-5">
               <p className="text-gray-500 text-sm text-center">
-                © 2022 GitHub Trends
+                © 2023 GitHub Trends
               </p>
             </div>
           </div>
