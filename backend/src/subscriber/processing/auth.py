@@ -44,7 +44,6 @@ async def check_user_starred_repo(
 
 @alru_cache(ttl=timedelta(hours=1))
 async def get_is_valid_user(user_id: str) -> str:
-    # sourcery skip: assign-if-exp, reintroduce-else, swap-if-expression
     if user_id in USER_WHITELIST:
         return (True, "Valid user")  # type: ignore
 

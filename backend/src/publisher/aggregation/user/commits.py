@@ -60,7 +60,6 @@ def get_top_languages(
 def get_top_repos(
     data: UserPackage, loc_metric: str, include_private: bool, group: str
 ) -> Tuple[List[RepoStats], int]:
-    # sourcery skip: switch
     repos: List[Any] = [
         {
             "repo": repo,

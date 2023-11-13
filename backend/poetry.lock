@@ -1492,19 +1492,6 @@ files = [
 ]
 
 [[package]]
-name = "sourcery-cli"
-version = "1.14.0"
-description = "Magically refactor Python"
-category = "dev"
-optional = false
-python-versions = "*"
-files = [
-    {file = "sourcery_cli-1.14.0-py2.py3-none-macosx_10_9_universal2.whl", hash = "sha256:17c0cbb264c853d04f90dc25def1c077c054e8158ae9dd30c37d8e75d0e275cd"},
-    {file = "sourcery_cli-1.14.0-py2.py3-none-manylinux1_x86_64.whl", hash = "sha256:eddae39c223460d8a66b26aa04275124af4c59c833929dee6712403de295b3da"},
-    {file = "sourcery_cli-1.14.0-py2.py3-none-win_amd64.whl", hash = "sha256:941442baacaac7b2501d4e82801ec7ad71fd125b841eb5c05694ab12fe88c62e"},
-]
-
-[[package]]
 name = "starlette"
 version = "0.27.0"
 description = "The little ASGI library that shines."
@@ -1909,4 +1896,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "28f56db377025e3a15a31e4a0a9e59bef49585b59771a95486a0f31246637c72"
+content-hash = "dcaae2ec5ca3e050b55251e74f46a91c9191d1df0b29772ac11286bffa0a5a49"

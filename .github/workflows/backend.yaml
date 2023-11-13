@@ -21,14 +21,6 @@ jobs:
           cd backend
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Sourcery lint
-        run: |
-          cd backend
-          pip install sourcery-cli
-          sourcery login --token ${{ secrets.SOURCERY_TOKEN }}
-          sourcery review --check .
-        env:
-          sourcery_token: ${{ secrets.SOURCERY_TOKEN }}
       - name: Test with unittest
         run: |
           cd backend

@@ -9,7 +9,7 @@ from src.models import UserPackage
 
 async def get_user_months(
     user_id: str, private_access: bool, start_month: date, end_month: date
-) -> List[UserMonth]:  # sourcery skip: de-morgan, use-contextlib-suppress
+) -> List[UserMonth]:
     start = datetime(start_month.year, start_month.month, 1)
     end = datetime(end_month.year, end_month.month, 28)
     today = datetime.now()
