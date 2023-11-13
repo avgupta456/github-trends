@@ -13,7 +13,9 @@ USER PUBSUB
 """
 
 
-@router.post("/sub/user/{token}", status_code=status.HTTP_200_OK)
+@router.post(
+    "/sub/user/{token}", status_code=status.HTTP_200_OK, response_model=Dict[str, Any]
+)
 @pubsub_fail_gracefully
 async def sub_user(response: Response, token: str, request: Request) -> Any:
     data: Dict[str, Any] = await parse_request(token, request)

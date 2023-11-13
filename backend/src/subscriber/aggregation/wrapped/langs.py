@@ -33,7 +33,7 @@ def get_lang_data(data: UserPackage) -> LangData:
         # remaining languages
         total_count = sum(_count_loc(v, m) for _, v in list(langs)[5:])
         lang_data = {
-            "id": -1,
+            "id": "other",
             "label": "other",
             "value": total_count,
             "formatted_value": format_number(total_count),

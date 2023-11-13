@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 
 class RepoDatum(BaseModel):
-    id: str
+    id: int
     label: str
     value: int
     formatted_value: str
