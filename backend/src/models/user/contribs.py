@@ -155,16 +155,16 @@ class RepoContributionStats(ContributionStats, BaseModel):
 
     @classmethod
     def decompress(cls, data: List[Any]) -> "RepoContributionStats":
-        contribs = super().decompress(data).dict()
+        contribs = super().decompress(data).model_dump()
         contribs["private"] = data[0][7]
         return RepoContributionStats(**contribs)
 
     def __add__(  # type: ignore
         self, other: "RepoContributionStats"
     ) -> "RepoContributionStats":
-        new_self = ContributionStats(**self.dict())
-        new_other = ContributionStats(**other.dict())
-        combined = (new_self + new_other).dict()
+        new_self = ContributionStats(**self.model_dump())
+        new_other = ContributionStats(**other.model_dump())
+        combined = (new_self + new_other).model_dump()
         combined["private"] = self.private
         return RepoContributionStats(**combined)
 
@@ -284,7 +284,7 @@ class UserContributions(BaseModel):
             new_repo_total, _new_repo_stats = self.trim_contribs(repo, start, end)
             if len(new_repo_total) > 0:
                 new_repos_dict[repo_name] = new_repo_total
-                raw_new_repo_stats = _new_repo_stats.dict()
+                raw_new_repo_stats = _new_repo_stats.model_dump()
                 raw_new_repo_stats["private"] = self.repo_stats[repo_name].private
                 new_repo_stats = RepoContributionStats(**raw_new_repo_stats)
                 new_repo_stats_dict[repo_name] = new_repo_stats

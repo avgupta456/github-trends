@@ -28,6 +28,6 @@ def get_timestamp_data(data: UserPackage) -> TimestampData:
 
     shuffle(out)
     out = out[:MAX_ITEMS]
-    out = [TimestampDatum.parse_obj(x) for x in out]
+    out = [TimestampDatum.model_validate(x) for x in out]
 
     return TimestampData(contribs=out)

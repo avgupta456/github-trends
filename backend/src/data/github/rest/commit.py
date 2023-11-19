@@ -23,6 +23,6 @@ def get_commit_files(
             BASE_URL + owner + "/" + repo + "/commits/" + sha, access_token
         )
         files = output["files"]
-        return [RawCommitFile.parse_obj(f) for f in files]
+        return [RawCommitFile.model_validate(f) for f in files]
     except Exception:
         return None

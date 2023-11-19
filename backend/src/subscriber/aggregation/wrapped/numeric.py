@@ -6,7 +6,7 @@ from src.models import ContribStats, LOCStats, MiscStats, NumericData, UserPacka
 
 
 def get_contrib_stats(data: UserPackage) -> ContribStats:
-    return ContribStats.parse_obj(
+    return ContribStats.model_validate(
         {
             "contribs": data.contribs.total_stats.contribs_count,
             "commits": data.contribs.total_stats.commits_count,
@@ -65,7 +65,7 @@ def get_misc_stats(data: UserPackage, year: int) -> MiscStats:
         best_day_count = best_day.stats.contribs_count
         best_day_date = best_day.date
 
-    return MiscStats.parse_obj(
+    return MiscStats.model_validate(
         {
             "total_days": distinct_days,
             "longest_streak": longest_streak,
@@ -90,7 +90,7 @@ def format_loc_number(number: int) -> str:
 
 def get_loc_stats(data: UserPackage) -> LOCStats:
     dataset = data.contribs.total_stats.languages.values()
-    return LOCStats.parse_obj(
+    return LOCStats.model_validate(
         {
             "loc_additions": format_loc_number(sum(x.additions for x in dataset)),
             "loc_deletions": format_loc_number(sum(x.deletions for x in dataset)),
@@ -120,7 +120,7 @@ def get_loc_stats(data: UserPackage) -> LOCStats:
 
 
 def get_numeric_data(data: UserPackage, year: int) -> NumericData:
-    return NumericData.parse_obj(
+    return NumericData.model_validate(
         {
             "contribs": get_contrib_stats(data),
             "misc": get_misc_stats(data, year),

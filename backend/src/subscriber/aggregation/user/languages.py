@@ -53,7 +53,6 @@ def get_commit_languages(
     files: Optional[List[RawCommitFile]],
     repo: RawRepo,
 ) -> CommitLanguages:
-    # sourcery skip: extract-method
     out = CommitLanguages()
 
     if commit is None:

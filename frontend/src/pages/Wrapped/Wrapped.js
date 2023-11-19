@@ -35,7 +35,7 @@ import { classnames } from '../../utils';
 const WrappedScreen = () => {
   // eslint-disable-next-line prefer-const
   let { userId, year } = useParams();
-  year = year || '2022';
+  year = year || '2023';
 
   const currUserId = useSelector((state) => state.user.userId);
   const usePrivate = useSelector((state) => state.user.privateAccess);
@@ -55,9 +55,13 @@ const WrappedScreen = () => {
 
   useEffect(() => {
     async function getData() {
-      if (userId?.length > 0 && year > 2010 && year <= 2022) {
+      if (userId?.length > 0 && year > 2010 && year <= 2023) {
         const output = await getWrapped(userId, year);
-        if (output !== null && output !== undefined && output !== {}) {
+        if (
+          output !== null &&
+          output !== undefined &&
+          Object.keys(output).length > 0
+        ) {
           setData(output);
           setIsLoading(false);
         }

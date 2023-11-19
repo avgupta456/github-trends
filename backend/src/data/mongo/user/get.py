@@ -1,6 +1,6 @@
 from typing import Any, Dict, Optional
 
-from pydantic.error_wrappers import ValidationError
+from pydantic import ValidationError
 
 from src.data.mongo.main import USERS  # type: ignore
 from src.data.mongo.user.models import FullUserModel, PublicUserModel

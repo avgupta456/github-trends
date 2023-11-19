@@ -36,4 +36,4 @@ Then, just commit on the main branch (Google Cloud Run takes care of the rest)
 
 ## Adding a Secret
 
-Update cloudbuild_pub.yaml, cloudbuild_sub.yaml, .env, .env-template, and GCP Cloud Run Trigger Substitution Variables.
+Update cloudbuild.yaml, .env, .env-template, and GCP Cloud Run Trigger Substitution Variables.

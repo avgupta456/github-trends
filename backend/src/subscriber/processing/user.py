@@ -48,7 +48,7 @@ async def query_user_month(
         return None
 
     month_completed = datetime.now() > date_to_datetime(end_date) + timedelta(days=1)
-    user_month = UserMonth.parse_obj(
+    user_month = UserMonth.model_validate(
         {
             "user_id": user_id,
             "month": date_to_datetime(start_date),

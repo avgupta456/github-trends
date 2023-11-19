@@ -19,7 +19,10 @@ async def update_user(user_id: str, raw_user: Dict[str, Any]) -> None:
 
 
 async def delete_user(user_id: str, user_key: str, use_user_key: bool = True) -> bool:
-    if use_user_key and not is_user_key(user_id, user_key):
-        return False
+    if use_user_key:
+        is_key = await is_user_key(user_id, user_key)
+        if not is_key:
+            return False
+
     await USERS.delete_one({"user_id": user_id})  # type: ignore
     return True

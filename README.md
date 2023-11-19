@@ -1,13 +1,10 @@
 # GitHub Trends
 
-[![Coverage Status](https://coveralls.io/repos/github/avgupta456/github-trends/badge.svg?t=jQQ3FK)](https://coveralls.io/github/avgupta456/github-trends)
-
 ## SPECIAL: GitHub Wrapped
 
 Check out your GitHub Wrapped at `githubtrends.io/wrapped`!
 
 ![github-wrapped](https://user-images.githubusercontent.com/16708871/204590479-556eb628-a7bd-45c0-9b35-9171c3891f12.png)
-
 
 ---
 

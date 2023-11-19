@@ -414,7 +414,7 @@ async def get_contributions(
     for week in calendar.weeks:
         for day in week.contribution_days:
             day_str = str(day.date)
-            for (obj, stats_obj) in [(total, total_stats), (public, public_stats)]:
+            for obj, stats_obj in [(total, total_stats), (public, public_stats)]:
                 obj[day_str].date = day.date.isoformat()
                 obj[day_str].weekday = day.weekday
                 obj[day_str].stats.contribs = day.count
@@ -449,7 +449,7 @@ async def get_contributions(
             store += langs
 
     for repo, repo_events in contrib_events.items():
-        for (label, events) in [
+        for label, events in [
             ("commit", repo_events.commits),
             ("issue", repo_events.issues),
             ("pr", repo_events.prs),
@@ -487,7 +487,7 @@ async def get_contributions(
         for name, repo in repositories.items()
     }
 
-    output = UserContributions.parse_obj(
+    output = UserContributions.model_validate(
         {
             "total_stats": total_stats_dict,
             "public_stats": public_stats_dict,

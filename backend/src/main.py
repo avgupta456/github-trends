@@ -1,11 +1,13 @@
+from typing import Dict
+
 import sentry_sdk
-from dotenv import load_dotenv  # type: ignore
+from dotenv import find_dotenv, load_dotenv  # type: ignore
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from google.api_core.exceptions import AlreadyExists
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 
-load_dotenv()
+load_dotenv(find_dotenv())
 
 # flake8: noqa E402
 
@@ -85,12 +87,12 @@ app.add_middleware(
 
 
 @app.get("/")
-async def read_root():
+async def read_root() -> Dict[str, str]:
     return {"Hello": "World"}
 
 
 @app.get("/info")
-def get_info():
+def get_info() -> Dict[str, bool]:
     return {"PROD": PROD}
 
 

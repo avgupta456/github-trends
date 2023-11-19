@@ -45,7 +45,7 @@ def get_calendar_data(data: UserPackage, year: int) -> CalendarData:
                 out["loc_added"] += v.additions - v.deletions  # type: ignore
                 out["loc_changed"] += v.additions + v.deletions  # type: ignore
 
-        out_obj = CalendarDayDatum.parse_obj(out)
+        out_obj = CalendarDayDatum.model_validate(out)
         total_out.append(out_obj)
 
-    return CalendarData.parse_obj({"days": total_out})
+    return CalendarData.model_validate({"days": total_out})

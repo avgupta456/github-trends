@@ -9,7 +9,7 @@ from src.models import UserPackage
 
 async def get_user_months(
     user_id: str, private_access: bool, start_month: date, end_month: date
-) -> List[UserMonth]:  # sourcery skip: de-morgan, use-contextlib-suppress
+) -> List[UserMonth]:
     start = datetime(start_month.year, start_month.month, 1)
     end = datetime(end_month.year, end_month.month, 28)
     today = datetime.now()
@@ -32,14 +32,14 @@ async def get_user_months(
         try:
             data = UserPackage.decompress(month["data"])
             months_data.append(
-                UserMonth.parse_obj(
+                UserMonth.model_validate(
                     {
                         "user_id": user_id,
                         "month": month["month"],
                         "version": API_VERSION,
                         "private": month["private"],
                         "complete": complete,
-                        "data": data.dict(),
+                        "data": data.model_dump(),
                     }
                 )
             )

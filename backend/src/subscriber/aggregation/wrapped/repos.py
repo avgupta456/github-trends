@@ -32,7 +32,7 @@ def get_repo_data(data: UserPackage) -> RepoData:
                 "value": _count_repo_loc(v, m),
                 "formatted_value": format_number(_count_repo_loc(v, m)),
             }
-            repo_objs.append(RepoDatum.parse_obj(repo_data))
+            repo_objs.append(RepoDatum.model_validate(repo_data))
 
         # remaining repositories
         total_count = sum(_count_repo_loc(v, m) for _, v in list(repos)[5:])
@@ -43,8 +43,8 @@ def get_repo_data(data: UserPackage) -> RepoData:
             "formatted_value": format_number(total_count),
         }
         if total_count > 100:
-            repo_objs.append(RepoDatum.parse_obj(repo_data))
+            repo_objs.append(RepoDatum.model_validate(repo_data))
 
         out[f"repos_{m}"] = repo_objs
 
-    return RepoData.parse_obj(out)
+    return RepoData.model_validate(out)

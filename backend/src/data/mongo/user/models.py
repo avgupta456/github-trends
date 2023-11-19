@@ -12,7 +12,7 @@ class PublicUserModel(BaseModel):
         validate_assignment = True
 
     @validator("private_access", pre=True, always=True)
-    def set_name(cls, private_access: bool):
+    def set_name(cls, private_access: Optional[bool]):
         return False if private_access is None else private_access
 
 

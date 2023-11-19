@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from fastapi import APIRouter, Response, status
 
@@ -11,7 +11,9 @@ from src.utils import async_fail_gracefully, use_time_range
 router = APIRouter()
 
 
-@router.get("/user/{user_id}", status_code=status.HTTP_200_OK)
+@router.get(
+    "/user/{user_id}", status_code=status.HTTP_200_OK, response_model=Dict[str, Any]
+)
 @async_fail_gracefully
 async def get_user_raw(
     response: Response,
@@ -30,12 +32,14 @@ async def get_user_raw(
     )
 
 
-@router.get("/wrapped/{user_id}", status_code=status.HTTP_200_OK)
+@router.get(
+    "/wrapped/{user_id}", status_code=status.HTTP_200_OK, response_model=Dict[str, Any]
+)
 @async_fail_gracefully
 async def get_wrapped_user_raw(
     response: Response,
     user_id: str,
-    year: int = 2022,
+    year: int = 2023,
     access_token: Optional[str] = None,
 ) -> WrappedPackage:
     await update_keys()

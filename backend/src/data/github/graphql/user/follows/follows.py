@@ -60,7 +60,7 @@ def get_user_followers(
     }
 
     output_dict = get_template(query, access_token)["data"]["user"]["followers"]
-    return RawFollows.parse_obj(output_dict)
+    return RawFollows.model_validate(output_dict)
 
 
 def get_user_following(
@@ -118,4 +118,4 @@ def get_user_following(
     }
 
     output_dict = get_template(query, access_token)["data"]["user"]["following"]
-    return RawFollows.parse_obj(output_dict)
+    return RawFollows.model_validate(output_dict)

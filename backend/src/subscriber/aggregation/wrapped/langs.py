@@ -28,20 +28,20 @@ def get_lang_data(data: UserPackage) -> LangData:
                 "formatted_value": format_number(_count_loc(v, m)),
                 "color": v.color,
             }
-            lang_objs.append(LangDatum.parse_obj(lang_data))
+            lang_objs.append(LangDatum.model_validate(lang_data))
 
         # remaining languages
         total_count = sum(_count_loc(v, m) for _, v in list(langs)[5:])
         lang_data = {
-            "id": -1,
+            "id": "other",
             "label": "other",
             "value": total_count,
             "formatted_value": format_number(total_count),
             "color": DEFAULT_COLOR,
         }
         if total_count > 100:
-            lang_objs.append(LangDatum.parse_obj(lang_data))
+            lang_objs.append(LangDatum.model_validate(lang_data))
 
         out[f"langs_{m}"] = lang_objs
 
-    return LangData.parse_obj(out)
+    return LangData.model_validate(out)
