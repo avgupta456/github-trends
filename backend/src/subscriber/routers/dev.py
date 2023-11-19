@@ -1,7 +1,8 @@
 from datetime import date, timedelta
 from typing import Any, Dict, Optional
 
-from fastapi import APIRouter, Response, status
+import asyncio
+from fastapi import APIRouter, BackgroundTasks, Response, status
 
 from src.data.mongo.secret import update_keys
 from src.models import UserPackage, WrappedPackage
@@ -47,3 +48,16 @@ async def get_wrapped_user_raw(
         user_id, date(year, 1, 1), date(year, 12, 31), "US/Eastern", access_token
     )
     return get_wrapped_data(user_data, year)
+
+
+async def print_task(start_str: str, end_str: str):
+    print(start_str)
+    await asyncio.sleep(10)
+    print(end_str)
+
+
+@router.get("/test", status_code=status.HTTP_200_OK, response_model=Dict[str, Any])
+@async_fail_gracefully
+async def test(response: Response, background_tasks: BackgroundTasks) -> str:
+    background_tasks.add_task(print_task, "start", "end")
+    return "Test"
