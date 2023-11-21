@@ -15,7 +15,6 @@ motor = "^3.3.1"
 aiofiles = "^23.2.1"
 aiounittest = "^1.4.2"
 coveralls = "^3.3.1"
-google-cloud-pubsub = "^2.18.4"
 grpcio = "^1.59.2"
 gunicorn = "^21.2.0"
 pymongo = {extras = ["srv"], version = "^4.6.0"}

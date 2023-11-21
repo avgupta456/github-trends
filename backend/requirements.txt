@@ -14,7 +14,6 @@ docopt==0.6.2
 fastapi==0.104.1
 google-api-core[grpc]==2.14.0
 google-auth==2.23.4
-google-cloud-pubsub==2.18.4
 googleapis-common-protos==1.61.0
 googleapis-common-protos[grpc]==1.61.0
 grpc-google-iam-v1==0.12.7

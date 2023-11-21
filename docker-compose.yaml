@@ -1,19 +1,6 @@
 version: "3"
 
 services:
-  pubsub:
-    container_name: pubsub
-    build:
-      context: "./backend"
-      dockerfile: deploy/pubsub.Dockerfile
-    ports:
-      - 8085:8085
-    volumes:
-      - ./backend:/backend
-    environment:
-      - GOOGLE_APPLICATION_CREDENTIALS=/backend/gcloud_key.json
-      - PUBSUB_EMULATOR_HOST=pubsub:8085
-
   backend:
     container_name: backend
     build:
@@ -25,11 +12,9 @@ services:
       - ./backend:/backend
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/backend/gcloud_key.json
-      - PUBSUB_EMULATOR_HOST=pubsub:8085
       - PROJECT_ID=github-334619
       - DOCKER=True
-    depends_on:
-      - pubsub
+
   frontend:
     container_name: frontend
     build:

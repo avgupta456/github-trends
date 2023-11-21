@@ -12,8 +12,13 @@ load_dotenv(find_dotenv())
 
 # add endpoints here (after load dotenv)
 from src.constants import PROD, SENTRY_DSN
-from src.publisher.routers import asset_router, auth_router, user_router
-from src.subscriber.routers import dev_router, wrapped_router
+from src.routers import (
+    asset_router,
+    auth_router,
+    dev_router,
+    user_router,
+    wrapped_router,
+)
 
 """
 SETUP
