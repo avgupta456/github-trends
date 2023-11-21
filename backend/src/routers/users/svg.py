@@ -1,12 +1,11 @@
 from datetime import date, timedelta
 from typing import Any
 
-from backend.src.processing.layer2 import get_top_languages, get_top_repos
-from backend.src.processing.layer3 import svg_base
 from fastapi import Response, status
 from fastapi.responses import HTMLResponse
 from fastapi.routing import APIRouter
 
+from src.processing.layer2 import get_top_languages, get_top_repos, svg_base
 from src.render import (
     get_empty_demo_svg,
     get_loading_svg,

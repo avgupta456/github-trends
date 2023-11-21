@@ -4,13 +4,9 @@ from typing import List, Tuple
 
 from svgwrite import Drawing
 
-from backend.src.processing.layer2 import LanguageStats
+from src.processing.layer2 import LanguageStats
 from src.render.error import get_no_data_svg
-from src.render.template import (
-    get_bar_section,
-    get_lang_name_section,
-    get_template,
-)
+from src.render.template import get_bar_section, get_lang_name_section, get_template
 from src.utils import format_number
 
 

@@ -1,11 +1,11 @@
 import logging
 from typing import Optional
 
-from backend.src.processing.layer3 import authenticate, delete_user
 from fastapi import APIRouter
 from fastapi.responses import RedirectResponse
 
 from src.constants import OAUTH_CLIENT_ID
+from src.processing.layer2 import authenticate, delete_user
 from src.routers.decorators import get_redirect_url
 
 router = APIRouter()

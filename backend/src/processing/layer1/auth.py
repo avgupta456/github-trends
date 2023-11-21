@@ -3,7 +3,7 @@ from typing import Tuple
 
 from src.constants import OWNER, REPO
 from src.data.github.rest import RESTError
-from src.subscriber.aggregation import (
+from src.processing.layer0 import (
     get_repo_stargazers,
     get_user_stars,
     get_valid_db_user,

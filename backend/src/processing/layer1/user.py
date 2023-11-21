@@ -9,7 +9,7 @@ from src.data.github.graphql import GraphQLErrorRateLimit
 from src.data.mongo.secret import update_keys
 from src.data.mongo.user_months import UserMonth, get_user_months, set_user_month
 from src.models.user.main import UserPackage
-from src.subscriber.aggregation import get_user_data
+from src.processing.layer0 import get_user_data
 from src.utils import alru_cache, date_to_datetime
 
 s = requests.Session()

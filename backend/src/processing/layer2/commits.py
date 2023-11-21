@@ -2,7 +2,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 from src.constants import DEFAULT_COLOR
 from src.models import UserPackage
-from src.processing.layer2.user.models import LanguageStats, RepoStats
+from src.processing.layer2.models import LanguageStats, RepoStats
 
 dict_type = Dict[str, Union[str, int, float]]
 

@@ -6,7 +6,7 @@ from fastapi import APIRouter, Response, status
 
 from src.data.mongo.secret import update_keys
 from src.models import UserPackage, WrappedPackage
-from src.subscriber.aggregation import get_user_data, get_wrapped_data
+from src.processing.layer0 import get_user_data, get_wrapped_data
 from src.utils import async_fail_gracefully, use_time_range
 
 router = APIRouter()
