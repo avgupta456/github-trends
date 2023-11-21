@@ -1,8 +1,8 @@
+import asyncio
+from datetime import datetime
 from typing import Any
 
-import asyncio
 from dotenv import find_dotenv, load_dotenv
-from datetime import datetime
 
 load_dotenv(find_dotenv())
 

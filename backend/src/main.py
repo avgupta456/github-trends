@@ -15,7 +15,6 @@ from src.constants import PROD, SENTRY_DSN
 from src.publisher.routers import asset_router, auth_router, user_router
 from src.subscriber.routers import dev_router, wrapped_router
 
-
 """
 SETUP
 """
