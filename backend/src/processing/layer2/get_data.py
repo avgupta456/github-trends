@@ -25,6 +25,14 @@ async def _get_user(
 
 
 @alru_cache()
+async def update_user(
+    user_id: str, access_token: str, private_access: bool
+) -> Tuple[bool, bool]:
+    # TODO: implement this
+    return (True, True)
+
+
+@alru_cache()
 async def get_user(
     user_id: str,
     start_date: date,
