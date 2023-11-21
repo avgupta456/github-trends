@@ -1,5 +1,6 @@
 from asyncio import sleep
 from datetime import timedelta
+from typing import Tuple
 
 from aiounittest.case import AsyncTestCase
 
@@ -11,10 +12,10 @@ class TestTemplate(AsyncTestCase):
         count = 0
 
         @alru_cache()
-        async def f(x: int) -> int:
+        async def f(x: int) -> Tuple[bool, int]:
             nonlocal count
             count += 1
-            return (True, x)  # type: ignore
+            return (True, x)
 
         assert count == 0
         assert await f(1) == 1
@@ -32,10 +33,10 @@ class TestTemplate(AsyncTestCase):
         count = 0
 
         @alru_cache()
-        async def f(x: int) -> int:
+        async def f(x: int) -> Tuple[bool, int]:
             nonlocal count
             count += 1
-            return (count % 2 == 0, x)  # type: ignore
+            return (count % 2 == 0, x)
 
         assert count == 0
         assert await f(1) == 1
@@ -53,10 +54,10 @@ class TestTemplate(AsyncTestCase):
         count = 0
 
         @alru_cache(max_size=2)
-        async def f(x: int) -> int:
+        async def f(x: int) -> Tuple[bool, int]:
             nonlocal count
             count += 1
-            return (True, x)  # type: ignore
+            return (True, x)
 
         assert count == 0
         assert await f(1) == 1
@@ -72,10 +73,10 @@ class TestTemplate(AsyncTestCase):
         count = 0
 
         @alru_cache(ttl=timedelta(milliseconds=1))
-        async def f(x: int) -> int:
+        async def f(x: int) -> Tuple[bool, int]:
             nonlocal count
             count += 1
-            return (True, x)  # type: ignore
+            return (True, x)
 
         assert count == 0
         assert await f(1) == 1
@@ -90,10 +91,10 @@ class TestTemplate(AsyncTestCase):
         count = 0
 
         @alru_cache()
-        async def f(x: int, no_cache: bool = False) -> int:
+        async def f(x: int, no_cache: bool = False) -> Tuple[bool, int]:
             nonlocal count
             count += 1
-            return (True, x)  # type: ignore
+            return (True, x)
 
         assert count == 0
         assert await f(1) == 1

@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, validator  # type: ignore
+from pydantic import BaseModel, validator
 
 
 class PublicUserModel(BaseModel):

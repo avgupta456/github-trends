@@ -1,5 +1,5 @@
 from datetime import timedelta
-from typing import List
+from typing import List, Tuple
 
 from src.constants import OWNER, REPO
 from src.data.github.rest import (
@@ -35,7 +35,7 @@ async def get_valid_db_user(user_id: str) -> bool:
 @alru_cache(ttl=timedelta(minutes=15))
 async def get_repo_stargazers(
     owner: str = OWNER, repo: str = REPO, no_cache: bool = False
-) -> List[str]:
+) -> Tuple[bool, List[str]]:
     access_token = get_access_token()
     data: List[str] = []
     page = 0
@@ -45,7 +45,7 @@ async def get_repo_stargazers(
         data.extend(temp_data)
         page += 1
 
-    return (True, data)  # type: ignore
+    return (True, data)
 
 
 async def get_user_stars(user_id: str) -> List[str]:

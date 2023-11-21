@@ -1,5 +1,3 @@
-# type: ignore
-
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from src.constants import MONGODB_PASSWORD, PROD
@@ -17,10 +15,10 @@ if PROD:
     DB = CLIENT.prod_backend
 else:
     conn_str = get_conn_str(MONGODB_PASSWORD, "dev_backend")
-    CLIENT = AsyncIOMotorClient(
+    CLIENT = AsyncIOMotorClient(  # type: ignore
         conn_str, serverSelectionTimeoutMS=5000, tlsInsecure=True
     )
-    DB = CLIENT.dev_backend
+    DB = CLIENT.dev_backend  # type: ignore
 
 SECRETS = DB.secrets
 

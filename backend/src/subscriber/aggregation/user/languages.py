@@ -27,7 +27,7 @@ class CommitLanguages:
             if name not in self.langs:
                 self.langs[name] = {"color": color, "additions": 0, "deletions": 0}
             self.langs[name]["additions"] += additions  # type: ignore
-            self.langs[name]["deletions"] += deletions  # type: ignore
+            self.langs[name]["deletions"] += deletions
 
     def normalize(self, add_ratio: float, del_ratio: float):
         for lang in self.langs:

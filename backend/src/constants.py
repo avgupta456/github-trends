@@ -33,12 +33,6 @@ OAUTH_CLIENT_ID = os.getenv("OAUTH_CLIENT_ID", "")  # client ID for GitHub OAuth
 OAUTH_CLIENT_SECRET = os.getenv("OAUTH_CLIENT_SECRET", "")  # client secret for App
 OAUTH_REDIRECT_URI = os.getenv("OAUTH_REDIRECT_URI", "")  # redirect uri for App
 
-# PUBSUB
-PUBSUB_TOKEN = os.getenv("PUBSUB_TOKEN", "")
-# LOCAL_SUBSCRIBER = "http://" + ("subscriber" if DOCKER else "localhost") + ":8001"
-LOCAL_SUBSCRIBER = "http://backend:8000" if DOCKER else BACKEND_URL
-LOCAL_PUBLISHER = "http://backend:8000" if DOCKER else BACKEND_URL
-
 
 # MONGODB
 MONGODB_PASSWORD = os.getenv("MONGODB_PASSWORD", "")

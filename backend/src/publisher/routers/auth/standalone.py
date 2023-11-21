@@ -24,7 +24,7 @@ def redirect_private(user_id: Optional[str] = None) -> RedirectResponse:
 @router.get("/redirect", include_in_schema=False)
 async def redirect_return(code: str = "", private_access: bool = False) -> str:
     try:
-        user_id = await authenticate(code=code, private_access=private_access)  # type: ignore
+        user_id = await authenticate(code=code, private_access=private_access)
         return f"You ({user_id}) are now authenticated!"
     except Exception as e:
         logging.exception(e)

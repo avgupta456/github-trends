@@ -1,4 +1,5 @@
 from datetime import timedelta
+from typing import Tuple
 
 from src.constants import OWNER, REPO
 from src.data.github.rest import RESTError
@@ -43,17 +44,17 @@ async def check_user_starred_repo(
 
 
 @alru_cache(ttl=timedelta(hours=1))
-async def get_is_valid_user(user_id: str) -> str:
+async def get_is_valid_user(user_id: str) -> Tuple[bool, str]:
     if user_id in USER_WHITELIST:
-        return (True, "Valid user")  # type: ignore
+        return (True, "Valid user")
 
     valid_github_user = await check_github_user_exists(user_id)
     if not valid_github_user:
-        return (False, "GitHub user not found")  # type: ignore
+        return (False, "GitHub user not found")
 
     valid_db_user = await check_db_user_exists(user_id)
     user_starred = await check_user_starred_repo(user_id)
     if not (user_starred or valid_db_user):
-        return (False, "Repo not starred")  # type: ignore
+        return (False, "Repo not starred")
 
-    return (True, "Valid user")  # type: ignore
+    return (True, "Valid user")

@@ -1,14 +1,31 @@
 from datetime import datetime, timedelta
 from functools import wraps
-from typing import Any, Callable, Dict, List, Tuple
+from typing import (
+    Any,
+    Awaitable,
+    Callable,
+    Dict,
+    FrozenSet,
+    List,
+    ParamSpec,
+    Tuple,
+    TypeVar,
+)
+
+Param = ParamSpec("Param")
+TOutput = TypeVar("TOutput")
+
+TKey = Tuple[Tuple[Any, ...], FrozenSet[Tuple[str, Any]]]
 
 
 def alru_cache(max_size: int = 128, ttl: timedelta = timedelta(minutes=1)):
-    def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
-        cache: Dict[Any, Tuple[datetime, Any]] = {}
-        keys: List[Any] = []
+    def decorator(
+        func: Callable[Param, Awaitable[Tuple[bool, TOutput]]]
+    ) -> Callable[Param, Awaitable[TOutput]]:
+        cache: Dict[TKey, Tuple[datetime, TOutput]] = {}
+        keys: List[TKey] = []
 
-        def in_cache(key: Any) -> bool:
+        def in_cache(key: TKey) -> bool:
             # key not in cache
             if key not in cache:
                 return False
@@ -20,7 +37,7 @@ def alru_cache(max_size: int = 128, ttl: timedelta = timedelta(minutes=1)):
             # key in cache and not expired
             return True
 
-        def update_cache_and_return(key: Any, flag: bool, value: Any) -> Any:
+        def update_cache_and_return(key: TKey, flag: bool, value: TOutput) -> TOutput:
             # if flag = False, do not update cache and return value
             if not flag:
                 return value
@@ -43,8 +60,8 @@ def alru_cache(max_size: int = 128, ttl: timedelta = timedelta(minutes=1)):
             return value  # equal to cache[key][1]
 
         @wraps(func)
-        async def wrapper(*args: List[Any], **kwargs: Dict[str, Any]) -> Any:
-            key = tuple(args), frozenset(
+        async def wrapper(*args: Param.args, **kwargs: Param.kwargs) -> TOutput:
+            key: TKey = tuple(args), frozenset(
                 [(k, v) for k, v in kwargs.items() if k not in ["no_cache"]]
             )
             if "no_cache" in kwargs and kwargs["no_cache"]:

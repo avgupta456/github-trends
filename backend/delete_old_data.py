@@ -29,7 +29,7 @@ async def count_old_rows(cutoff_date: datetime) -> int:
 
 async def delete_old_rows(cutoff_date: datetime):
     filters = get_filters(cutoff_date)
-    result = await USER_MONTHS.delete_many(filters)  # type: ignore
+    result = await USER_MONTHS.delete_many(filters)
     print(f"Deleted {result.deleted_count} rows")
 
 

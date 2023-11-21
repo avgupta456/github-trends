@@ -40,10 +40,10 @@ def get_calendar_data(data: UserPackage, year: int) -> CalendarData:
 
             for k, v in item.stats.languages.items():
                 if k in top_langs:
-                    out["top_langs"][k]["loc_added"] = v.additions - v.deletions  # type: ignore
-                    out["top_langs"][k]["loc_changed"] = v.additions + v.deletions  # type: ignore
-                out["loc_added"] += v.additions - v.deletions  # type: ignore
-                out["loc_changed"] += v.additions + v.deletions  # type: ignore
+                    out["top_langs"][k]["loc_added"] = v.additions - v.deletions
+                    out["top_langs"][k]["loc_changed"] = v.additions + v.deletions
+                out["loc_added"] += v.additions - v.deletions
+                out["loc_changed"] += v.additions + v.deletions
 
         out_obj = CalendarDayDatum.model_validate(out)
         total_out.append(out_obj)

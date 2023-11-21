@@ -1,10 +1,10 @@
 from calendar import monthrange
 from datetime import date, datetime, timedelta
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 import requests
 
-from src.constants import API_VERSION, BACKEND_URL, DOCKER, LOCAL_PUBLISHER, PROD
+from src.constants import API_VERSION, BACKEND_URL, PROD
 from src.data.github.graphql import GraphQLErrorRateLimit
 from src.data.mongo.secret import update_keys
 from src.data.mongo.user_months import UserMonth, get_user_months, set_user_month
@@ -72,7 +72,7 @@ async def query_user(
     start_date: date = date.today() - timedelta(365),
     end_date: date = date.today(),
     no_cache: bool = False,
-) -> UserPackage:
+) -> Tuple[bool, UserPackage]:
     # Return (possibly incomplete) within 45 seconds
     start_time = datetime.now()
     incomplete = False
@@ -116,10 +116,8 @@ async def query_user(
         # cache buster for publisher
         if PROD:
             s.get(f"{BACKEND_URL}/user/{user_id}?no_cache=True")
-        elif DOCKER:
-            s.get(f"{LOCAL_PUBLISHER}/user/{user_id}?no_cache=True")
 
-        return (False, out)  # type: ignore
+        return (False, out)
 
     # only cache if just the current month updated
-    return (True, out)  # type: ignore
+    return (True, out)
