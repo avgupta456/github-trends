@@ -60,9 +60,8 @@ def get_info() -> Dict[str, bool]:
     return {"PROD": PROD}
 
 
-app.include_router(user_router, prefix="/user", tags=["Users"])
-app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 app.include_router(asset_router, prefix="/assets", tags=["Assets"])
-
+app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 app.include_router(dev_router, prefix="/dev", tags=["Dev"])
+app.include_router(user_router, prefix="/user", tags=["Users"])
 app.include_router(wrapped_router, prefix="/wrapped", tags=["Wrapped"])

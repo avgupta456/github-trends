@@ -5,14 +5,14 @@ from src.processing.layer2.models import LanguageStats, RepoStats
 from src.processing.layer2.svg import svg_base
 
 __all__ = [
-    "get_top_languages",
-    "get_top_repos",
-    "LanguageStats",
-    "RepoStats",
-    "set_user_key",
     "authenticate",
     "delete_user",
+    "set_user_key",
+    "get_top_languages",
+    "get_top_repos",
     "get_user",
     "get_user_demo",
+    "LanguageStats",
+    "RepoStats",
     "svg_base",
 ]
