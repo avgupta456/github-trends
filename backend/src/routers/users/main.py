@@ -1,10 +1,10 @@
 from datetime import date, timedelta
-from typing import Optional, Dict, Any
+from typing import Any, Dict, Optional
 
 from fastapi import APIRouter, Response, status
 
-from src.models import UserPackage
 from src.aggregation.layer2 import get_user
+from src.models import UserPackage
 from src.routers.users.db import router as db_router
 from src.routers.users.svg import router as svg_router
 from src.utils import async_fail_gracefully

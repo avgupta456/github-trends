@@ -1,5 +1,7 @@
 from typing import Any, Dict, Optional
 
+from backend.src.aggregation.layer2.user import update_user
+
 from src.data.github.auth import authenticate as github_authenticate
 from src.data.mongo.user import (
     PublicUserModel,
@@ -7,7 +9,6 @@ from src.data.mongo.user import (
     get_public_user as db_get_public_user,
     update_user as db_update_user,
 )
-from backend.src.aggregation.layer2.user import update_user
 
 # frontend first calls set_user_key with code and user_key
 # next they call authenticate which determines the user_id to associate with the code/user_key

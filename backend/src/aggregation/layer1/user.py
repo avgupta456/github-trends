@@ -4,12 +4,12 @@ from typing import List, Optional, Tuple
 
 import requests
 
+from src.aggregation.layer0.package import get_user_data
 from src.constants import API_VERSION, BACKEND_URL, PROD
 from src.data.github.graphql import GraphQLErrorRateLimit
 from src.data.mongo.secret import update_keys
 from src.data.mongo.user_months import UserMonth, get_user_months, set_user_month
 from src.models.user.main import UserPackage
-from src.aggregation.layer0.package import get_user_data
 from src.utils import alru_cache, date_to_datetime
 
 s = requests.Session()

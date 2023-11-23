@@ -1,8 +1,8 @@
 from datetime import date
 from typing import Optional
 
-from src.models import UserPackage
 from src.aggregation.layer0.contributions import get_contributions
+from src.models import UserPackage
 
 # from src.subscriber.aggregation.user.follows import get_user_follows
 

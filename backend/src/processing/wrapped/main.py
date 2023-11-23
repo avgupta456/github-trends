@@ -1,10 +1,10 @@
 from datetime import date, timedelta
 from typing import Optional, Tuple
 
+from src.aggregation.layer1 import query_user
 from src.data.mongo.user import PublicUserModel, get_public_user as db_get_public_user
 from src.models import UserPackage, WrappedPackage
 from src.processing.wrapped.package import get_wrapped_data
-from src.aggregation.layer1 import query_user
 from src.utils import alru_cache
 
 

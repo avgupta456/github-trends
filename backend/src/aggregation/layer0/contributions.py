@@ -4,6 +4,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 import pytz
 
+from src.aggregation.layer0.languages import CommitLanguages, get_commit_languages
 from src.constants import (
     GRAPHQL_NODE_CHUNK_SIZE,
     GRAPHQL_NODE_THREADS,
@@ -29,7 +30,6 @@ from src.data.github.rest import (
     get_repo_commits,
 )
 from src.models import UserContributions
-from src.aggregation.layer0.languages import CommitLanguages, get_commit_languages
 from src.utils import date_to_datetime, gather
 
 
