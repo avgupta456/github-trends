@@ -29,9 +29,13 @@ API_VERSION = 0.02  # determines when to overwrite MongoDB data
 BLACKLIST = ["Jupyter Notebook", "HTML"]  # languages to ignore
 
 # OAUTH
-OAUTH_CLIENT_ID = os.getenv("OAUTH_CLIENT_ID", "")  # client ID for GitHub OAuth App
-OAUTH_CLIENT_SECRET = os.getenv("OAUTH_CLIENT_SECRET", "")  # client secret for App
-OAUTH_REDIRECT_URI = os.getenv("OAUTH_REDIRECT_URI", "")  # redirect uri for App
+prefix = "PROD" if PROD else "DEV"
+# client ID for GitHub OAuth App
+OAUTH_CLIENT_ID = os.getenv(f"{prefix}_OAUTH_CLIENT_ID", "")
+# client secret for App
+OAUTH_CLIENT_SECRET = os.getenv(f"{prefix}_OAUTH_CLIENT_SECRET", "")
+# redirect uri for App
+OAUTH_REDIRECT_URI = os.getenv(f"{prefix}_OAUTH_REDIRECT_URI", "")
 
 
 # MONGODB

@@ -12,11 +12,9 @@ async def get_public_user(
     user_id: str, no_cache: bool = False
 ) -> Tuple[bool, Optional[PublicUserModel]]:
     user: Optional[Dict[str, Any]] = await USERS.find_one({"user_id": user_id})
-
     if user is None:
         # flag is false, don't cache
         return (False, None)
-
     try:
         return (True, PublicUserModel.model_validate(user))
     except (TypeError, KeyError, ValidationError):
