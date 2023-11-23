@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { PieChart } from '../Templates';
 import { WrappedCard } from '../Organization';
 
-const PieLangs = ({ data }) => {
+const PieLangs = ({ data, downloadLoading }) => {
   const [useLOCAdded, setUseLOCAdded] = React.useState(false);
 
   const metric = useLOCAdded ? 'added' : 'changed';
@@ -20,15 +20,17 @@ const PieLangs = ({ data }) => {
             <p className="text-xl font-semibold">Most Used Languages</p>
             <p>{useLOCAdded ? 'By LOC Added' : 'By LOC Changed'}</p>
           </div>
-          <div className="flex-shrink-0">
-            <button
-              type="button"
-              className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
-              onClick={() => setUseLOCAdded(!useLOCAdded)}
-            >
-              <span>Toggle</span>
-            </button>
-          </div>
+          {!downloadLoading && (
+            <div className="flex-shrink-0">
+              <button
+                type="button"
+                className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+                onClick={() => setUseLOCAdded(!useLOCAdded)}
+              >
+                <span>Toggle</span>
+              </button>
+            </div>
+          )}
         </div>
         <PieChart
           data={newData}
@@ -43,9 +45,10 @@ const PieLangs = ({ data }) => {
 
 PieLangs.propTypes = {
   data: PropTypes.object.isRequired,
+  downloadLoading: PropTypes.bool.isRequired,
 };
 
-const PieRepos = ({ data }) => {
+const PieRepos = ({ data, downloadLoading }) => {
   const [useLOCAdded, setUseLOCAdded] = React.useState(false);
 
   const metric = useLOCAdded ? 'added' : 'changed';
@@ -59,15 +62,17 @@ const PieRepos = ({ data }) => {
             <p className="text-xl font-semibold">Most Active Repositories</p>
             <p>{useLOCAdded ? 'By LOC Added' : 'By LOC Changed'}</p>
           </div>
-          <div className="flex-shrink-0">
-            <button
-              type="button"
-              className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
-              onClick={() => setUseLOCAdded(!useLOCAdded)}
-            >
-              <span>Toggle</span>
-            </button>
-          </div>
+          {!downloadLoading && (
+            <div className="flex-shrink-0">
+              <button
+                type="button"
+                className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+                onClick={() => setUseLOCAdded(!useLOCAdded)}
+              >
+                <span>Toggle</span>
+              </button>
+            </div>
+          )}
         </div>
         <PieChart
           data={newData}
@@ -87,6 +92,7 @@ const PieRepos = ({ data }) => {
 
 PieRepos.propTypes = {
   data: PropTypes.object.isRequired,
+  downloadLoading: PropTypes.bool.isRequired,
 };
 
 export { PieLangs, PieRepos };

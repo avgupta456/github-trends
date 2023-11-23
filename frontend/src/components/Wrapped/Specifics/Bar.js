@@ -29,7 +29,7 @@ const dayNames = [
   'Saturday',
 ];
 
-const BarMonth = ({ data }) => {
+const BarMonth = ({ data, downloadLoading }) => {
   const newData = data?.month_data?.months || [];
 
   // eslint-disable-next-line no-unused-vars
@@ -45,15 +45,17 @@ const BarMonth = ({ data }) => {
               {displayContribs ? 'By Contribution Count' : 'By LOC Changed'}
             </p>
           </div>
-          <div className="flex-shrink-0">
-            <button
-              type="button"
-              className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
-              onClick={() => setDisplayContribs(!displayContribs)}
-            >
-              <span>Toggle</span>
-            </button>
-          </div>
+          {!downloadLoading && (
+            <div className="flex-shrink-0">
+              <button
+                type="button"
+                className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+                onClick={() => setDisplayContribs(!displayContribs)}
+              >
+                <span>Toggle</span>
+              </button>
+            </div>
+          )}
         </div>
         {displayContribs ? (
           <BarGraph
@@ -81,9 +83,10 @@ const BarMonth = ({ data }) => {
 
 BarMonth.propTypes = {
   data: PropTypes.object.isRequired,
+  downloadLoading: PropTypes.bool.isRequired,
 };
 
-const BarDay = ({ data }) => {
+const BarDay = ({ data, downloadLoading }) => {
   const newData = data?.day_data?.days || [];
 
   const [displayContribs, setDisplayContribs] = useState(true);
@@ -98,15 +101,17 @@ const BarDay = ({ data }) => {
               {displayContribs ? 'By Contribution Count' : 'By LOC Changed'}
             </p>
           </div>
-          <div className="flex-shrink-0">
-            <button
-              type="button"
-              className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
-              onClick={() => setDisplayContribs(!displayContribs)}
-            >
-              <span>Toggle</span>
-            </button>
-          </div>
+          {!downloadLoading && (
+            <div className="flex-shrink-0">
+              <button
+                type="button"
+                className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+                onClick={() => setDisplayContribs(!displayContribs)}
+              >
+                <span>Toggle</span>
+              </button>
+            </div>
+          )}
         </div>
         {displayContribs ? (
           <BarGraph
@@ -134,6 +139,7 @@ const BarDay = ({ data }) => {
 
 BarDay.propTypes = {
   data: PropTypes.object.isRequired,
+  downloadLoading: PropTypes.bool.isRequired,
 };
 
 export { BarMonth, BarDay };
