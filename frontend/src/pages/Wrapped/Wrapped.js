@@ -97,9 +97,11 @@ const WrappedScreen = () => {
       >
         <WrappedSection useTitle={false}>
           <div className="w-full h-auto flex flex-row flex-wrap -mb-4">
-            <Link to="/wrapped">
-              <LeftArrowIcon className="absolute ml-2 mt-2 h-8 w-8 text-gray-500 hover:text-gray-800" />
-            </Link>
+            {!downloadLoading && (
+              <Link to="/wrapped">
+                <LeftArrowIcon className="absolute ml-2 mt-2 h-8 w-8 text-gray-500 hover:text-gray-800" />
+              </Link>
+            )}
             <p className="text-xl font-semibold text-center w-full">
               {`${userId}'s`}
             </p>
@@ -133,6 +135,7 @@ const WrappedScreen = () => {
               endDate={`${year}-12-31`}
               highlightDays={highlightDays}
               highlightColors={highlightColors}
+              downloadLoading={downloadLoading}
             />
           </div>
           <div className="w-1/2 md:w-1/4 lg:w-1/5">
@@ -224,10 +227,10 @@ const WrappedScreen = () => {
         </WrappedSection>
         <WrappedSection title="Lines of Code (LOC) Analysis">
           <div className="w-full md:w-1/2 xl:w-1/3">
-            <PieLangs data={data} />
+            <PieLangs data={data} downloadLoading={downloadLoading} />
           </div>
           <div className="w-full md:w-1/2 xl:w-1/3">
-            <PieRepos data={data} />
+            <PieRepos data={data} downloadLoading={downloadLoading} />
           </div>
           <div className="w-full xl:w-1/3 flex flex-wrap">
             <div className="w-full md:w-1/2 lg:w-1/4 xl:w-1/2">
@@ -262,18 +265,18 @@ const WrappedScreen = () => {
             <Radar data={data} />
           </div>
           <div className="w-full lg:w-2/3">
-            <BarMonth data={data} />
+            <BarMonth data={data} downloadLoading={downloadLoading} />
           </div>
           <div className="w-full lg:w-2/3">
-            <BarDay data={data} />
+            <BarDay data={data} downloadLoading={downloadLoading} />
           </div>
           <div className="w-full lg:w-1/3">
             <SwarmDay data={data} />
           </div>
         </WrappedSection>
         {downloadLoading && (
-          <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-blue-500">
-            Get your own at www.githubtrends.io/wrapped
+          <div className="text-center text-2xl md:text-3xl lg:text-4xl font-bold text-blue-500">
+            Create your own at www.githubtrends.io/wrapped
           </div>
         )}
       </div>
@@ -286,7 +289,7 @@ const WrappedScreen = () => {
             setTimeout(() => {
               downloadImage();
               setDownloadLoading(false);
-            }, 1000);
+            }, 10);
           }}
         >
           {downloadLoading ? (

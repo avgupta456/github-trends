@@ -13,6 +13,7 @@ const Calendar = ({
   endDate,
   highlightDays,
   highlightColors,
+  downloadLoading,
 }) => {
   const newData = data?.calendar_data?.days || [];
 
@@ -69,12 +70,14 @@ const Calendar = ({
           <p className="text-lg lg:text-xl font-semibold">
             Contribution Calendar
           </p>
-          <Input
-            className="hidden lg:block w-48 border-2 border-gray-300"
-            options={valueOptions}
-            selectedOption={value}
-            setSelectedOption={setValue}
-          />
+          {!downloadLoading && (
+            <Input
+              className="hidden lg:block w-48 border-2 border-gray-300"
+              options={valueOptions}
+              selectedOption={value}
+              setSelectedOption={setValue}
+            />
+          )}
         </div>
         <div className="flex flex-col h-48">
           <p className="lg:text-lg">{`${numEvents} ${value.label}`}</p>
@@ -89,7 +92,7 @@ const Calendar = ({
               to={endDate}
               emptyColor="#EBEDF0"
               colors={['#9BE9A8', '#40C463', '#30A14E', '#216E39']}
-              margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+              margin={{ top: 10, right: 0, bottom: 0, left: 0 }}
               monthBorderColor="#ffffff"
               dayBorderWidth={2}
               dayBorderColor="#ffffff"
@@ -112,6 +115,7 @@ Calendar.propTypes = {
   endDate: PropTypes.string.isRequired,
   highlightDays: PropTypes.arrayOf(PropTypes.number),
   highlightColors: PropTypes.arrayOf(PropTypes.string).isRequired,
+  downloadLoading: PropTypes.bool.isRequired,
 };
 
 Calendar.defaultProps = {
