@@ -1,5 +1,5 @@
 service: default
-runtime: python38
+runtime: python311
 entrypoint: gunicorn -w 2 -k uvicorn.workers.UvicornWorker src.main:app
 
 #smallest instance class
