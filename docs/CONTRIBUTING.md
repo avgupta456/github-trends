@@ -14,7 +14,7 @@ docker-compose up --build -d
 
 ### Manual
 
-With Python3.8, install the dependencies from `backend/requirements.txt` and run on two separate terminal windows
+With Python3.11, install the dependencies from `backend/requirements.txt` and run on two separate terminal windows
 
 ```
 yarn start-sub
