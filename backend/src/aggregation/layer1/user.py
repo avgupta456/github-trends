@@ -9,10 +9,13 @@ from src.data.github.graphql import GraphQLErrorRateLimit
 from src.data.mongo.secret import update_keys
 from src.data.mongo.user_months import UserMonth, get_user_months, set_user_month
 from src.models.user.main import UserPackage
-from src.processing.layer0 import get_user_data
+from src.aggregation.layer0.package import get_user_data
 from src.utils import alru_cache, date_to_datetime
 
 s = requests.Session()
+
+
+# Formerly the subscriber, compute and save new data here
 
 
 async def query_user_month(
@@ -83,17 +86,17 @@ async def query_user(
     curr_months = [x.month for x in curr_data if x.complete]
 
     month, year = start_date.month, start_date.year
-    months: List[date] = []
+    new_months: List[date] = []
     while date(year, month, 1) <= end_date:
         start = date(year, month, 1)
         if date_to_datetime(start) not in curr_months:
-            months.append(start)
+            new_months.append(start)
         month = month % 12 + 1
         year = year + (month == 1)
 
     # Start with complete months and add any incomplete months
     all_user_packages: List[UserPackage] = [x.data for x in curr_data if x.complete]
-    for month in months:
+    for month in new_months:
         if datetime.now() - start_time < timedelta(seconds=40):
             temp = await query_user_month(user_id, access_token, private_access, month)
             if temp is not None:
@@ -110,7 +113,7 @@ async def query_user(
             out += user_package
         out.incomplete = incomplete
 
-    if incomplete or len(months) > 1:
+    if incomplete or len(new_months) > 1:
         # cache buster for publisher
         if PROD:
             s.get(f"{BACKEND_URL}/user/{user_id}?no_cache=True")

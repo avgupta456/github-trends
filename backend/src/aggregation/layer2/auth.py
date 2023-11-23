@@ -3,13 +3,14 @@ from typing import Tuple
 
 from src.constants import OWNER, REPO
 from src.data.github.rest import RESTError
-from src.processing.layer0 import (
-    get_repo_stargazers,
-    get_user_stars,
+from src.aggregation.layer1.auth import (
     get_valid_db_user,
     get_valid_github_user,
+    get_repo_stargazers,
+    get_user_stars,
 )
 from src.utils import alru_cache
+
 
 USER_WHITELIST = [
     "torvalds",

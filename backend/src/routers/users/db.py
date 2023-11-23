@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Dict, Any
 
 from fastapi import APIRouter, Response, status
 
@@ -9,7 +9,10 @@ router = APIRouter()
 
 
 @router.get(
-    "/get/metadata/{user_id}", status_code=status.HTTP_200_OK, include_in_schema=False
+    "/get/metadata/{user_id}",
+    status_code=status.HTTP_200_OK,
+    include_in_schema=False,
+    response_model=Dict[str, Any],
 )
 @async_fail_gracefully
 async def get_db_public_user(

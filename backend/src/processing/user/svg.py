@@ -2,7 +2,7 @@ from datetime import date
 from typing import Optional, Tuple
 
 from src.models import UserPackage
-from src.processing.layer2.get_data import get_user, get_user_demo
+from backend.src.aggregation.layer2.user import get_user, get_user_demo
 from src.utils import use_time_range
 
 

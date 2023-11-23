@@ -1,15 +1,15 @@
 from src.models import UserPackage, WrappedPackage
-from src.processing.layer0.wrapped.calendar import get_calendar_data
-from src.processing.layer0.wrapped.langs import get_lang_data
-from src.processing.layer0.wrapped.numeric import get_numeric_data
-from src.processing.layer0.wrapped.repos import get_repo_data
-from src.processing.layer0.wrapped.time import get_day_data, get_month_data
-from src.processing.layer0.wrapped.timestamps import get_timestamp_data
+from src.processing.wrapped.calendar import get_calendar_data
+from src.processing.wrapped.langs import get_lang_data
+from src.processing.wrapped.numeric import get_numeric_data
+from src.processing.wrapped.repos import get_repo_data
+from src.processing.wrapped.time import get_day_data, get_month_data
+from src.processing.wrapped.timestamps import get_timestamp_data
 
 # from src.processing.user.follows import get_user_follows
 
 
-def main(user_package: UserPackage, year: int) -> WrappedPackage:
+def get_wrapped_data(user_package: UserPackage, year: int) -> WrappedPackage:
     """packages all processing steps for the user query"""
 
     month_data = get_month_data(user_package)

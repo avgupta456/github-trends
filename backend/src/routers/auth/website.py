@@ -4,7 +4,7 @@ from fastapi import status
 from fastapi.responses import Response
 from fastapi.routing import APIRouter
 
-from src.processing.layer2 import authenticate, delete_user, set_user_key
+from src.processing.auth import authenticate, delete_user, set_user_key
 from src.utils import async_fail_gracefully
 
 router = APIRouter()

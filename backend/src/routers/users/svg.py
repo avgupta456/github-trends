@@ -5,7 +5,7 @@ from fastapi import Response, status
 from fastapi.responses import HTMLResponse
 from fastapi.routing import APIRouter
 
-from src.processing.layer2 import get_top_languages, get_top_repos, svg_base
+from src.processing.user import get_top_languages, get_top_repos, svg_base
 from src.render import (
     get_empty_demo_svg,
     get_loading_svg,

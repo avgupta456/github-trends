@@ -4,7 +4,7 @@ from aiounittest.case import AsyncTestCase
 
 from src.constants import TEST_TOKEN as TOKEN, TEST_USER_ID as USER_ID
 from src.models import UserContributions
-from src.processing.layer0 import get_contributions
+from src.aggregation.layer0.contributions import get_contributions
 
 
 class TestTemplate(AsyncTestCase):

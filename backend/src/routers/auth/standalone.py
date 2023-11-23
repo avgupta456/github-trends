@@ -5,7 +5,7 @@ from fastapi import APIRouter
 from fastapi.responses import RedirectResponse
 
 from src.constants import OAUTH_CLIENT_ID
-from src.processing.layer2 import authenticate, delete_user
+from src.processing.auth import authenticate, delete_user
 from src.routers.decorators import get_redirect_url
 
 router = APIRouter()

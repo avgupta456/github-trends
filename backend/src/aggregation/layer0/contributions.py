@@ -29,7 +29,7 @@ from src.data.github.rest import (
     get_repo_commits,
 )
 from src.models import UserContributions
-from src.processing.layer0.user.languages import CommitLanguages, get_commit_languages
+from src.aggregation.layer0.languages import CommitLanguages, get_commit_languages
 from src.utils import date_to_datetime, gather
 
 

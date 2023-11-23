@@ -2,7 +2,7 @@ from datetime import date
 from typing import Optional
 
 from src.models import UserPackage
-from src.processing.layer0.user.contributions import get_contributions
+from src.aggregation.layer0.contributions import get_contributions
 
 # from src.subscriber.aggregation.user.follows import get_user_follows
 

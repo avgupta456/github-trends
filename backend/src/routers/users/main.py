@@ -1,10 +1,10 @@
 from datetime import date, timedelta
-from typing import Optional
+from typing import Optional, Dict, Any
 
 from fastapi import APIRouter, Response, status
 
 from src.models import UserPackage
-from src.processing.layer2 import get_user
+from src.aggregation.layer2 import get_user
 from src.routers.users.db import router as db_router
 from src.routers.users.svg import router as svg_router
 from src.utils import async_fail_gracefully
@@ -19,7 +19,7 @@ ANALYTICS
 """
 
 
-@router.get("/{user_id}", status_code=status.HTTP_200_OK)
+@router.get("/{user_id}", status_code=status.HTTP_200_OK, response_model=Dict[str, Any])
 @async_fail_gracefully
 async def get_user_endpoint(
     response: Response,

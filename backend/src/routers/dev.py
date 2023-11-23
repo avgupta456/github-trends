@@ -1,4 +1,3 @@
-import asyncio
 from datetime import date, timedelta
 from typing import Any, Dict, Optional
 
@@ -6,7 +5,8 @@ from fastapi import APIRouter, Response, status
 
 from src.data.mongo.secret import update_keys
 from src.models import UserPackage, WrappedPackage
-from src.processing.layer0 import get_user_data, get_wrapped_data
+from src.aggregation.layer0 import get_user_data
+from src.processing.wrapped.package import get_wrapped_data
 from src.utils import async_fail_gracefully, use_time_range
 
 router = APIRouter()
@@ -48,9 +48,3 @@ async def get_wrapped_user_raw(
         user_id, date(year, 1, 1), date(year, 12, 31), "US/Eastern", access_token
     )
     return get_wrapped_data(user_data, year)
-
-
-async def print_task(start_str: str, end_str: str):
-    print(start_str)
-    await asyncio.sleep(10)
-    print(end_str)

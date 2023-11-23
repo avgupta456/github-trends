@@ -5,8 +5,11 @@ from src.data.mongo.secret.functions import update_keys
 from src.data.mongo.user import PublicUserModel, get_public_user as db_get_public_user
 from src.data.mongo.user_months import get_user_months
 from src.models import UserPackage
-from src.processing.layer0 import get_user_data
+from src.aggregation.layer0 import get_user_data
 from src.utils import alru_cache
+
+
+# Formerly the publisher, loads existing data here
 
 
 async def _get_user(
@@ -55,6 +58,7 @@ async def get_user_demo(
 ) -> Tuple[bool, UserPackage]:
     await update_keys()
     timezone_str = "US/Eastern"
+    # recompute/cache but don't save to db
     data = await get_user_data(
         user_id=user_id,
         start_date=start_date,
