@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 from typing import Any
 
-from fastapi import Response, status
+from fastapi import BackgroundTasks, Response, status
 from fastapi.responses import HTMLResponse
 from fastapi.routing import APIRouter
 
@@ -12,6 +12,7 @@ from src.render import (
     get_top_langs_svg,
     get_top_repos_svg,
 )
+from src.routers.background import run_in_background
 from src.routers.decorators import svg_fail_gracefully
 
 router = APIRouter()
@@ -23,6 +24,7 @@ router = APIRouter()
 @svg_fail_gracefully
 async def get_user_lang_svg(
     response: Response,
+    background_tasks: BackgroundTasks,
     user_id: str,
     start_date: date = date.today() - timedelta(30),
     end_date: date = date.today(),
@@ -37,9 +39,12 @@ async def get_user_lang_svg(
     use_animation: bool = True,
     theme: str = "classic",
 ) -> Any:
-    output, time_str = await svg_base(
+    output, background_task, time_str = await svg_base(
         user_id, start_date, end_date, time_range, demo, no_cache
     )
+    if background_task is not None:
+        # set a background task to update the user
+        background_tasks.add_task(run_in_background, task=background_task)
 
     # if no data, return loading svg
     if output is None:
@@ -65,6 +70,7 @@ async def get_user_lang_svg(
 @svg_fail_gracefully
 async def get_user_repo_svg(
     response: Response,
+    background_tasks: BackgroundTasks,
     user_id: str,
     start_date: date = date.today() - timedelta(30),
     end_date: date = date.today(),
@@ -78,9 +84,12 @@ async def get_user_repo_svg(
     use_animation: bool = True,
     theme: str = "classic",
 ) -> Any:
-    output, time_str = await svg_base(
+    output, background_task, time_str = await svg_base(
         user_id, start_date, end_date, time_range, demo, no_cache
     )
+    if background_task is not None:
+        # set a background task to update the user
+        background_tasks.add_task(run_in_background, task=background_task)
 
     # if no data, return loading svg
     if output is None:

@@ -6,6 +6,7 @@ from src.data.mongo.secret.functions import update_keys
 from src.data.mongo.user import PublicUserModel, get_public_user as db_get_public_user
 from src.data.mongo.user_months import get_user_months
 from src.models import UserPackage
+from src.models.background import UpdateUserBackgroundTask
 from src.utils import alru_cache
 
 # Formerly the publisher, loads existing data here
@@ -27,28 +28,22 @@ async def _get_user(
 
 
 @alru_cache()
-async def update_user(
-    user_id: str, access_token: str, private_access: bool
-) -> Tuple[bool, bool]:
-    # TODO: implement this
-    return (True, True)
-
-
-@alru_cache()
 async def get_user(
     user_id: str,
     start_date: date,
     end_date: date,
     no_cache: bool = False,
-) -> Tuple[bool, Optional[UserPackage]]:
+) -> Tuple[bool, Tuple[Optional[UserPackage], Optional[UpdateUserBackgroundTask]]]:
     user: Optional[PublicUserModel] = await db_get_public_user(user_id)
     if user is None:
-        return (False, None)
+        return (False, (None, None))
 
     private_access = user.private_access or False
-    await update_user(user_id, user.access_token, private_access)
     user_data = await _get_user(user_id, private_access, start_date, end_date)
-    return (user_data is not None, user_data)
+    background_task = UpdateUserBackgroundTask(
+        user_id=user_id, access_token=user.access_token, private_access=private_access
+    )
+    return (user_data is not None, (user_data, background_task))
 
 
 @alru_cache(ttl=timedelta(minutes=15))

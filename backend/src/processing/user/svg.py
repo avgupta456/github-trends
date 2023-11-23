@@ -3,6 +3,7 @@ from typing import Optional, Tuple
 
 from src.aggregation.layer2.user import get_user, get_user_demo
 from src.models import UserPackage
+from src.models.background import UpdateUserBackgroundTask
 from src.utils import use_time_range
 
 
@@ -13,15 +14,18 @@ async def svg_base(
     time_range: str,
     demo: bool,
     no_cache: bool = False,
-) -> Tuple[Optional[UserPackage], str]:
+) -> Tuple[Optional[UserPackage], Optional[UpdateUserBackgroundTask], str]:
     # process time_range, start_date, end_date
     time_range = "one_month" if demo else time_range
     start_date, end_date, time_str = use_time_range(time_range, start_date, end_date)
 
     # fetch data, either using demo or user method
+    background_task = None
     if demo:
         output = await get_user_demo(user_id, start_date, end_date, no_cache=no_cache)
     else:
-        output = await get_user(user_id, start_date, end_date, no_cache=no_cache)
+        output, background_task = await get_user(
+            user_id, start_date, end_date, no_cache=no_cache
+        )
 
-    return output, time_str
+    return output, background_task, time_str

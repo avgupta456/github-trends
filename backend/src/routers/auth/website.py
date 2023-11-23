@@ -1,10 +1,11 @@
 from typing import Any, Dict
 
-from fastapi import status
+from fastapi import BackgroundTasks, status
 from fastapi.responses import Response
 from fastapi.routing import APIRouter
 
 from src.processing.auth import authenticate, delete_user, set_user_key
+from src.routers.background import run_in_background
 from src.utils import async_fail_gracefully
 
 router = APIRouter()
@@ -29,9 +30,16 @@ async def set_user_key_endpoint(response: Response, code: str, user_key: str) ->
 )
 @async_fail_gracefully
 async def authenticate_endpoint(
-    response: Response, code: str, private_access: bool = False
+    response: Response,
+    background_tasks: BackgroundTasks,
+    code: str,
+    private_access: bool = False,
 ) -> str:
-    return await authenticate(code, private_access)
+    output, background_task = await authenticate(code, private_access)
+    if background_task is not None:
+        # set a background task to update the user
+        background_tasks.add_task(run_in_background, task=background_task)
+    return output
 
 
 @router.get(

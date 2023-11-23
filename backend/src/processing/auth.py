@@ -1,6 +1,5 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Tuple
 
-from src.aggregation.layer2.user import update_user
 from src.data.github.auth import authenticate as github_authenticate
 from src.data.mongo.user import (
     PublicUserModel,
@@ -8,6 +7,7 @@ from src.data.mongo.user import (
     get_public_user as db_get_public_user,
     update_user as db_update_user,
 )
+from src.models.background import UpdateUserBackgroundTask
 
 # frontend first calls set_user_key with code and user_key
 # next they call authenticate which determines the user_id to associate with the code/user_key
@@ -20,7 +20,9 @@ async def set_user_key(code: str, user_key: str) -> str:
     return user_key
 
 
-async def authenticate(code: str, private_access: bool) -> str:
+async def authenticate(
+    code: str, private_access: bool
+) -> Tuple[str, Optional[UpdateUserBackgroundTask]]:
     user_id, access_token = await github_authenticate(code)
 
     curr_user: Optional[PublicUserModel] = await db_get_public_user(user_id)
@@ -32,19 +34,29 @@ async def authenticate(code: str, private_access: bool) -> str:
         "private_access": private_access,
     }
 
+    background_task = None
     if curr_user is not None:
         curr_private_access = curr_user.private_access
         new_private_access = curr_private_access or private_access
         raw_user["private_access"] = new_private_access
 
         if new_private_access != curr_private_access:
-            await update_user(user_id, access_token, new_private_access)
+            # new private access status
+            background_task = UpdateUserBackgroundTask(
+                user_id=user_id,
+                access_token=access_token,
+                private_access=new_private_access,
+            )
     else:
         # first time sign up
-        await update_user(user_id, access_token, private_access)
+        background_task = UpdateUserBackgroundTask(
+            user_id=user_id,
+            access_token=access_token,
+            private_access=private_access,
+        )
 
     await db_update_user(user_id, raw_user)
-    return user_id
+    return user_id, background_task
 
 
 async def delete_user(user_id: str, user_key: str, use_user_key: bool = True) -> bool:
