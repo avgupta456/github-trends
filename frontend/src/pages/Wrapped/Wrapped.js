@@ -135,6 +135,7 @@ const WrappedScreen = () => {
               endDate={`${year}-12-31`}
               highlightDays={highlightDays}
               highlightColors={highlightColors}
+              downloadLoading={downloadLoading}
             />
           </div>
           <div className="w-1/2 md:w-1/4 lg:w-1/5">
