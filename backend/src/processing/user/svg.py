@@ -1,8 +1,7 @@
 from datetime import date
 from typing import Optional, Tuple
 
-from backend.src.aggregation.layer2.user import get_user, get_user_demo
-
+from src.aggregation.layer2.user import get_user, get_user_demo
 from src.models import UserPackage
 from src.utils import use_time_range
 

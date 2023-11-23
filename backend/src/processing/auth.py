@@ -1,7 +1,6 @@
 from typing import Any, Dict, Optional
 
-from backend.src.aggregation.layer2.user import update_user
-
+from src.aggregation.layer2.user import update_user
 from src.data.github.auth import authenticate as github_authenticate
 from src.data.mongo.user import (
     PublicUserModel,
