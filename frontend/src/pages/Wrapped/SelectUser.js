@@ -146,7 +146,7 @@ const SelectUserScreen = () => {
       </div>
       <div className="bg-white text-gray-700 w-full py-16">
         <div className="w-full container mx-auto flex flex-col items-center">
-          <h1 className="text-4xl font-medium mb-4">See some Examples</h1>
+          <h1 className="text-4xl font-medium mb-4">See some examples</h1>
           <div className="w-full flex flex-wrap justify-center items-center px-4">
             {[
               {
@@ -156,22 +156,22 @@ const SelectUserScreen = () => {
                 blurb: 'Creator of Linux',
               },
               {
-                name: 'Ryan Dahl',
-                username: 'ry',
-                url: 'https://avatars.githubusercontent.com/u/80?v=4',
-                blurb: 'Creator of Deno',
-              },
-              {
-                name: 'François Chollet',
-                username: 'fchollet',
-                url: 'https://avatars.githubusercontent.com/u/710255?v=4',
-                blurb: 'Creator of Keras',
-              },
-              {
                 name: 'Evan You',
                 username: 'yyx990803',
                 url: 'https://avatars.githubusercontent.com/u/499550?v=4',
                 blurb: 'Creator of Vue',
+              },
+              {
+                name: 'shadcn',
+                username: 'shadcn',
+                url: 'https://avatars.githubusercontent.com/u/124599?v=4',
+                blurb: 'Vercel, shadcn/ui',
+              },
+              {
+                name: 'Sindre Sorhus',
+                username: 'sindresorhus',
+                url: 'https://avatars.githubusercontent.com/u/170270?v=4',
+                blurb: 'Open-sourcer',
               },
             ].map((user) => (
               <div className="w-full md:w-1/2 lg:w-1/4 p-4" key={user.username}>

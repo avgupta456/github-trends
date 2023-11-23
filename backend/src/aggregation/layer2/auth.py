@@ -13,9 +13,9 @@ from src.utils import alru_cache
 
 USER_WHITELIST = [
     "torvalds",
-    "fchollet",
-    "ry",
     "yyx990803",
+    "shadcn",
+    "sindresorhus",
 ]
 
 
