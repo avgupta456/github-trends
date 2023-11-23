@@ -1,8 +1,8 @@
+import asyncio
+from datetime import datetime
 from typing import Any
 
-import asyncio
 from dotenv import find_dotenv, load_dotenv
-from datetime import datetime
 
 load_dotenv(find_dotenv())
 
@@ -29,7 +29,7 @@ async def count_old_rows(cutoff_date: datetime) -> int:
 
 async def delete_old_rows(cutoff_date: datetime):
     filters = get_filters(cutoff_date)
-    result = await USER_MONTHS.delete_many(filters)  # type: ignore
+    result = await USER_MONTHS.delete_many(filters)
     print(f"Deleted {result.deleted_count} rows")
 
 
