@@ -2,7 +2,7 @@ from datetime import date, datetime
 from typing import Any, Dict, List
 
 from src.constants import API_VERSION
-from src.data.mongo.main import USER_MONTHS  # type: ignore
+from src.data.mongo.main import USER_MONTHS
 from src.data.mongo.user_months.models import UserMonth
 from src.models import UserPackage
 

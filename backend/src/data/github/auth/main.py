@@ -20,7 +20,7 @@ def get_unknown_user(access_token: str) -> Optional[str]:
     }
 
     r = s.get("https://api.github.com/user", params={}, headers=headers)
-    return r.json().get("login", None)  # type: ignore
+    return r.json().get("login", None)
 
 
 class OAuthError(Exception):

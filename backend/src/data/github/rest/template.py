@@ -60,7 +60,7 @@ def _get_template(
 
     if r.status_code == 200:
         print("REST API", new_access_token, datetime.now() - start)
-        return r.json()  # type: ignore
+        return r.json()
 
     if r.status_code == 401:
         raise RESTErrorUnauthorized("REST Error: Unauthorized")

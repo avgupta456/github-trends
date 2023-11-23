@@ -8,7 +8,6 @@ steps:
     args: ["run", "create-env"]
     dir: "backend"
     env:
-      - "PUBSUB_TOKEN=${_PUBSUB_TOKEN}"
       - "OAUTH_CLIENT_ID=${_OAUTH_CLIENT_ID}"
       - "OAUTH_CLIENT_SECRET=${_OAUTH_CLIENT_SECRET}"
       - "OAUTH_REDIRECT_URI=${_OAUTH_REDIRECT_URI}"

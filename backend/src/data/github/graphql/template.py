@@ -44,7 +44,7 @@ def get_template(
     headers: Dict[str, str] = {"Authorization": f"bearer {new_access_token}"}
 
     try:
-        r = s.post(  # type: ignore
+        r = s.post(
             "https://api.github.com/graphql",
             json=query,
             headers=headers,
@@ -55,7 +55,7 @@ def get_template(
 
     print("GraphQL", new_access_token, datetime.now() - start)
     if r.status_code == 200:
-        data = r.json()  # type: ignore
+        data = r.json()
         if "errors" in data:
             if (
                 "type" in data["errors"][0]
@@ -64,7 +64,7 @@ def get_template(
                 and isinstance(data["errors"][0]["path"], list)
                 and data["errors"][0]["path"][0] == "nodes"
             ):
-                raise GraphQLErrorMissingNode(node=int(data["errors"][0]["path"][1]))  # type: ignore
+                raise GraphQLErrorMissingNode(node=int(data["errors"][0]["path"][1]))
 
             if retries < 2:
                 print("GraphQL Error, Retrying:", new_access_token)

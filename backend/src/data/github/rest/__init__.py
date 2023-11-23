@@ -5,13 +5,13 @@ from src.data.github.rest.template import RESTError, RESTErrorNotFound
 from src.data.github.rest.user import get_user, get_user_starred_repos
 
 __all__ = [
-    "get_repo_commits",
-    "get_repo_stargazers",
-    "get_user",
-    "get_user_starred_repos",
     "get_commit_files",
     "RawCommit",
     "RawCommitFile",
+    "get_repo_commits",
+    "get_repo_stargazers",
     "RESTError",
     "RESTErrorNotFound",
+    "get_user",
+    "get_user_starred_repos",
 ]

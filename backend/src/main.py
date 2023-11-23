@@ -1,10 +1,9 @@
 from typing import Dict
 
 import sentry_sdk
-from dotenv import find_dotenv, load_dotenv  # type: ignore
+from dotenv import find_dotenv, load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from google.api_core.exceptions import AlreadyExists
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 
 load_dotenv(find_dotenv())
@@ -12,49 +11,14 @@ load_dotenv(find_dotenv())
 # flake8: noqa E402
 
 # add endpoints here (after load dotenv)
-from src.constants import (
-    DOCKER,
-    LOCAL_SUBSCRIBER,
-    PROD,
-    PROJECT_ID,
-    PUBSUB_TOKEN,
-    SENTRY_DSN,
-)
-from src.publisher.routers import (
+from src.constants import PROD, SENTRY_DSN
+from src.routers import (
     asset_router,
     auth_router,
-    pubsub_router as pub_router,
-    user_router,
-)
-from src.subscriber.routers import (
     dev_router,
-    pubsub_router as sub_router,
+    user_router,
     wrapped_router,
 )
-from src.utils.pubsub import create_push_subscription, create_topic
-
-"""
-EMULATOR SETUP
-"""
-
-
-if not PROD and DOCKER:
-    topics = ["user"]
-    subscriptions = ["user_sub"]
-    endpoints = [f"{LOCAL_SUBSCRIBER}/pubsub/sub/user/{PUBSUB_TOKEN}"]
-
-    for topic, subscription, endpoint in zip(topics, subscriptions, endpoints):
-        try:
-            print("Creating Topic", PROJECT_ID, topic)
-            create_topic(PROJECT_ID, topic)
-        except AlreadyExists:
-            print("Topic Already Exists")
-
-        try:
-            print("Creating Subscription", PROJECT_ID, topic, subscription, endpoint)
-            create_push_subscription(PROJECT_ID, topic, subscription, endpoint)
-        except AlreadyExists:
-            print("Subscription already exists")
 
 """
 SETUP
@@ -96,13 +60,8 @@ def get_info() -> Dict[str, bool]:
     return {"PROD": PROD}
 
 
-# (Originally Publisher)
-app.include_router(user_router, prefix="/user", tags=["Users"])
-app.include_router(pub_router, prefix="/pubsub", tags=["PubSub"])
-app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 app.include_router(asset_router, prefix="/assets", tags=["Assets"])
-
-# (Originally Subscriber)
+app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 app.include_router(dev_router, prefix="/dev", tags=["Dev"])
-app.include_router(sub_router, prefix="/pubsub", tags=["PubSub"])
+app.include_router(user_router, prefix="/user", tags=["Users"])
 app.include_router(wrapped_router, prefix="/wrapped", tags=["Wrapped"])
