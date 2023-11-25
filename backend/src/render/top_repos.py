@@ -1,5 +1,6 @@
 # type: ignore
 
+from collections import defaultdict
 from typing import List, Tuple
 
 from svgwrite import Drawing
@@ -56,11 +57,12 @@ def get_top_repos_svg(
         get_bar_section(d=d, dataset=dataset, theme=theme, padding=45, bar_width=195)
     )
 
-    langs = {}
+    langs = defaultdict(int)
     for x in data[:4]:
         for lang in x.langs:
-            langs[lang.lang] = lang.color
-    langs = list(langs.items())[:6]
+            langs[(lang.lang, lang.color)] += lang.loc
+    langs = sorted(langs.items(), key=lambda x: x[1], reverse=True)
+    langs = [lang[0] for lang in langs[:6]]
 
     columns = {1: 1, 2: 2, 3: 3, 4: 2, 5: 3, 6: 3}[len(langs)]
     padding = 215 + (10 if columns == len(langs) else 0)
