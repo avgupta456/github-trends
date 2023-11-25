@@ -23,6 +23,16 @@ Alternatively, users can use the private workflow which creates a token with rea
 </a>
 ```
 
+**Question**: How can I see my stats without giving GitHub Trends my access token?
+
+**Answer**: You will need to run the code locally. Clone the repository, navigate to the `backend` folder, install the dependencies (`pip install -r requirements.txt`), and then run the following script:
+
+```bash
+python ./scripts/local.py --user_id=USER_ID --access_token=ACCESS_TOKEN --start_date=2023-01-01 --end_date=2023-01-31 --output_dir=OUTPUT_DIR
+```
+
+The script will output the raw and processed JSONs into the output directory specified.
+
 **Question**: What if I find a bug, or want to contribute?
 
 **Answer**: Raise an [issue](https://github.com/avgupta456/github-trends/issues/new) or [pull request](https://github.com/avgupta456/github-trends/compare) through GitHub. I would be happy to discuss and implement any suggestions or improvements.

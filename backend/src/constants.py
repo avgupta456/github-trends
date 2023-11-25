@@ -1,6 +1,7 @@
 import os
 
 # GLOBAL
+LOCAL = os.getenv("LOCAL", "False") == "True"
 PROD = os.getenv("PROD", "False") == "True"
 DOCKER = os.getenv("DOCKER", "False") == "True"
 PROJECT_ID = "github-334619"
