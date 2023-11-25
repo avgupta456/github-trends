@@ -14,28 +14,10 @@ docker-compose up --build -d
 
 ### Manual
 
-With Python3.11, install the dependencies from `backend/requirements.txt` and run on two separate terminal windows
+With Python3.11, install the dependencies from `backend/requirements.txt` and run `yarn start`.
 
-```
-yarn start-sub
-yarn start-pub
-```
-
-With Node16 and Yarn, install the dependencies from `frontend/package.json` and run on a separate terminal window
-
-```
-yarn start
-```
+With Node16 and Yarn, install the dependencies from `frontend/package.json` and run on a separate terminal window `yarn start`.
 
 ## Testing
 
 Create a pull request and let GitHub Actions run. Alternatively, explore `.github/backend.yaml` and `.github/frontend.yaml` to run tests locally. Backend coverage must increase for PRs to be merged.
-
-## FAQ
-
-(In Progress)
-
-## Action Items
-
-1. Create Development/Test containers that do not require secrets.
-2. FAQ
