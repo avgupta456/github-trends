@@ -5,7 +5,6 @@ from typing import Tuple
 def date_to_datetime(
     dt: date, hour: int = 0, minute: int = 0, second: int = 0
 ) -> datetime:
-
     return datetime(dt.year, dt.month, dt.day, hour, minute, second)
 
 
@@ -18,6 +17,7 @@ def use_time_range(
         "three_months": (90, "Past 3 Months"),
         "six_months": (180, "Past 6 Months"),
         "one_year": (365, "Past 1 Year"),
+        "all_time": (365 * 10, "All Time"),
     }
 
     start_str = start_date.strftime("X%m/X%d/%Y").replace("X0", "X").replace("X", "")

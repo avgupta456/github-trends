@@ -19,6 +19,7 @@ const DateRangeSection = ({
     },
     { id: 2, label: 'Past 6 Months', disabled: false, value: 'six_months' },
     { id: 3, label: 'Past 1 Year', disabled: false, value: 'one_year' },
+    { id: 4, label: 'All Time', disabled: false, value: 'all_time' },
   ];
 
   const selectedOption = selectedTimeRange || timeRangeOptions[2];
