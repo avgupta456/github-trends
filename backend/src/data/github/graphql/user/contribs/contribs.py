@@ -55,8 +55,6 @@ def get_user_contribution_events(
     access_token: Optional[str] = None,
 ) -> RawEvents:
     """Fetches user contributions (commits, issues, prs, reviews)"""
-    if (end_date - start_date).days > 365:
-        raise ValueError("date range can be at most 1 year")
     query = {
         "variables": {
             "login": user_id,

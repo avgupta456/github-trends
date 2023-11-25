@@ -46,6 +46,8 @@ async def authenticate(
                 user_id=user_id,
                 access_token=access_token,
                 private_access=new_private_access,
+                start_date=None,
+                end_date=None,
             )
     else:
         # first time sign up
@@ -53,6 +55,8 @@ async def authenticate(
             user_id=user_id,
             access_token=access_token,
             private_access=private_access,
+            start_date=None,
+            end_date=None,
         )
 
     await db_update_user(user_id, raw_user)

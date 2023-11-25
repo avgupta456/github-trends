@@ -14,17 +14,22 @@ from src.utils import alru_cache
 
 async def _get_user(
     user_id: str, private_access: bool, start_date: date, end_date: date
-) -> Optional[UserPackage]:
+) -> Tuple[Optional[UserPackage], bool]:
     user_months = await get_user_months(user_id, private_access, start_date, end_date)
     if len(user_months) == 0:
-        return None
+        return None, False
+
+    expected_num_months = (
+        (end_date.year - start_date.year) * 12 + (end_date.month - start_date.month) + 1
+    )
+    complete = len(user_months) == expected_num_months
 
     user_data = user_months[0].data
     for user_month in user_months[1:]:
         user_data += user_month.data
 
     # TODO: handle timezone_str here
-    return user_data.trim(start_date, end_date)
+    return user_data.trim(start_date, end_date), complete
 
 
 @alru_cache()
@@ -33,17 +38,23 @@ async def get_user(
     start_date: date,
     end_date: date,
     no_cache: bool = False,
-) -> Tuple[bool, Tuple[Optional[UserPackage], Optional[UpdateUserBackgroundTask]]]:
+) -> Tuple[
+    bool, Tuple[Optional[UserPackage], bool, Optional[UpdateUserBackgroundTask]]
+]:
     user: Optional[PublicUserModel] = await db_get_public_user(user_id)
     if user is None:
-        return (False, (None, None))
+        return (False, (None, False, None))
 
     private_access = user.private_access or False
-    user_data = await _get_user(user_id, private_access, start_date, end_date)
+    user_data, complete = await _get_user(user_id, private_access, start_date, end_date)
     background_task = UpdateUserBackgroundTask(
-        user_id=user_id, access_token=user.access_token, private_access=private_access
+        user_id=user_id,
+        access_token=user.access_token,
+        private_access=private_access,
+        start_date=start_date,
+        end_date=end_date,
     )
-    return (user_data is not None, (user_data, background_task))
+    return (complete, (user_data, complete, background_task))
 
 
 @alru_cache(ttl=timedelta(minutes=15))

@@ -79,9 +79,13 @@ def get_bar_section(
             )
         )
         total_percent, total_items = 0, len(data_row)
+        diff = max(0, 300 / bar_width - data_row[-1][0])
         for j, (percent, color) in enumerate(data_row):
             color = color or DEFAULT_COLOR
-            percent = max(300 / bar_width, percent)
+            if j == 0:
+                percent -= diff
+            elif j == total_items - 1:
+                percent += diff
             bar_percent = bar_width * percent / 100
             bar_total = bar_width * total_percent / 100
             box_size, insert = (bar_percent, 8), (bar_total, 0)

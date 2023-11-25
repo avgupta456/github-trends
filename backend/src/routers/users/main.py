@@ -31,7 +31,7 @@ async def get_user_endpoint(
     timezone_str: str = "US/Eastern",
     no_cache: bool = False,
 ) -> Optional[UserPackage]:
-    output, background_task = await get_user(
+    output, _, background_task = await get_user(
         user_id, start_date, end_date, no_cache=no_cache
     )
     if background_task is not None:

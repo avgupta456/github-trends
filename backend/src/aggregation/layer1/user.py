@@ -64,7 +64,6 @@ async def query_user_month(
     return user_month
 
 
-# NOTE: can only be called once every 1-2 minutes from publisher due to separate alru_cache
 @alru_cache(ttl=timedelta(hours=6))
 async def query_user(
     user_id: str,
@@ -72,9 +71,10 @@ async def query_user(
     private_access: bool = False,
     start_date: date = date.today() - timedelta(365),
     end_date: date = date.today(),
+    max_time: int = 3600,  # seconds
     no_cache: bool = False,
 ) -> Tuple[bool, UserPackage]:
-    # Return (possibly incomplete) within 45 seconds
+    # Return (possibly incomplete) within max_time seconds
     start_time = datetime.now()
     incomplete = False
 
@@ -97,7 +97,7 @@ async def query_user(
     # Start with complete months and add any incomplete months
     all_user_packages: List[UserPackage] = [x.data for x in curr_data if x.complete]
     for month in new_months:
-        if datetime.now() - start_time < timedelta(seconds=40):
+        if datetime.now() - start_time < timedelta(seconds=max_time):
             temp = await query_user_month(user_id, access_token, private_access, month)
             if temp is not None:
                 all_user_packages.append(temp.data)

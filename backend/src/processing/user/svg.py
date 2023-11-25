@@ -14,18 +14,19 @@ async def svg_base(
     time_range: str,
     demo: bool,
     no_cache: bool = False,
-) -> Tuple[Optional[UserPackage], Optional[UpdateUserBackgroundTask], str]:
+) -> Tuple[Optional[UserPackage], bool, Optional[UpdateUserBackgroundTask], str]:
     # process time_range, start_date, end_date
     time_range = "one_month" if demo else time_range
     start_date, end_date, time_str = use_time_range(time_range, start_date, end_date)
+    complete = True  # overwritten later if not complete
+    background_task = None
 
     # fetch data, either using demo or user method
-    background_task = None
     if demo:
         output = await get_user_demo(user_id, start_date, end_date, no_cache=no_cache)
     else:
-        output, background_task = await get_user(
+        output, complete, background_task = await get_user(
             user_id, start_date, end_date, no_cache=no_cache
         )
 
-    return output, background_task, time_str
+    return output, complete, background_task, time_str
