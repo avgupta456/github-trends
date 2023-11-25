@@ -1,10 +1,15 @@
 import asyncio
+import os
+import sys
 from datetime import datetime
 from typing import Any
 
 from dotenv import find_dotenv, load_dotenv
 
 load_dotenv(find_dotenv())
+
+# Add the parent directory to the Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # flake8: noqa E402
 
