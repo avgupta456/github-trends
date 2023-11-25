@@ -7,7 +7,7 @@ import { Input } from '../Generic';
 const DateRangeSection = ({
   selectedTimeRange,
   setSelectedTimeRange,
-  disabled,
+  privateAccess,
 }) => {
   const timeRangeOptions = [
     { id: 1, label: 'Past 1 Month', disabled: false, value: 'one_month' },
@@ -19,7 +19,7 @@ const DateRangeSection = ({
     },
     { id: 2, label: 'Past 6 Months', disabled: false, value: 'six_months' },
     { id: 3, label: 'Past 1 Year', disabled: false, value: 'one_year' },
-    { id: 4, label: 'All Time', disabled: false, value: 'all_time' },
+    { id: 4, label: 'All Time', disabled: !privateAccess, value: 'all_time' },
   ];
 
   const selectedOption = selectedTimeRange || timeRangeOptions[2];
@@ -31,7 +31,6 @@ const DateRangeSection = ({
         options={timeRangeOptions}
         selectedOption={selectedOption}
         setSelectedOption={setSelectedTimeRange}
-        disabled={disabled}
       />
     </Section>
   );
@@ -40,11 +39,7 @@ const DateRangeSection = ({
 DateRangeSection.propTypes = {
   selectedTimeRange: PropTypes.object.isRequired,
   setSelectedTimeRange: PropTypes.func.isRequired,
-  disabled: PropTypes.bool,
-};
-
-DateRangeSection.defaultProps = {
-  disabled: false,
+  privateAccess: PropTypes.bool.isRequired,
 };
 
 export default DateRangeSection;

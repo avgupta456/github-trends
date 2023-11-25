@@ -28,6 +28,7 @@ const CustomizeStage = ({
         <DateRangeSection
           selectedTimeRange={selectedTimeRange}
           setSelectedTimeRange={setSelectedTimeRange}
+          privateAccess={privateAccess}
         />
         {selectedCard === 'langs' && (
           <CheckboxSection
