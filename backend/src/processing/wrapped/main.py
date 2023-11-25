@@ -22,7 +22,7 @@ async def query_wrapped_user(
         private_access,
         start_date,
         end_date,
-        max_time=45,
+        max_time=40,
         no_cache=True,
     )
     wrapped_package = get_wrapped_data(user_package, year)
