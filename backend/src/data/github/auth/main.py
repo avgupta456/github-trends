@@ -42,14 +42,10 @@ async def authenticate(code: str) -> Tuple[str, str]:
         "redirect_uri": OAUTH_REDIRECT_URI,
     }
 
-    print(params)
-
     r = s.post("https://github.com/login/oauth/access_token", params=params)
 
-    print(r.status_code, r.text)
-
     if r.status_code != 200:
-        raise OAuthError(f"OAuth Error: {str(r.status_code)} {r.text}")
+        raise OAuthError(f"OAuth Error: {str(r.status_code)}")
 
     access_token = r.text.split("&")[0].split("=")[1]
     user_id = get_unknown_user(access_token)
