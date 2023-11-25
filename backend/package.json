@@ -6,7 +6,7 @@
     "gen-lang-map": "poetry run python src/data/github/language_map.py",
     "start": "poetry run uvicorn src.main:app --reload --port=8000",
     "set-reqs": "poetry lock && poetry export -f requirements.txt --output requirements.txt --without-hashes",
-    "create-env": "printenv > .env",
+    "create-env": "printenv && printenv > .env",
     "test": "poetry run coverage run --source=src -m unittest -v && poetry run coverage report",
     "isort": "poetry run isort . --src-path=./src --multi-line=3 --trailing-comma --line-length=88 --combine-as --ensure-newline-before-comments"
   }

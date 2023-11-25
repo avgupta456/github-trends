@@ -38,6 +38,10 @@ OAUTH_CLIENT_SECRET = os.getenv(f"{prefix}_OAUTH_CLIENT_SECRET", "")
 # redirect uri for App
 OAUTH_REDIRECT_URI = os.getenv(f"{prefix}_OAUTH_REDIRECT_URI", "")
 
+print("prefix", prefix)
+print("OAUTH_CLIENT_ID", OAUTH_CLIENT_ID)
+print("OAUTH_CLIENT_SECRET", OAUTH_CLIENT_SECRET)
+print("OAUTH_REDIRECT_URI", OAUTH_REDIRECT_URI)
 
 # MONGODB
 MONGODB_PASSWORD = os.getenv("MONGODB_PASSWORD", "")
