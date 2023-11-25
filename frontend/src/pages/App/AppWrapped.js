@@ -6,16 +6,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Header from './Header';
-import LandingScreen from '../Landing';
-import DemoScreen from '../Demo';
 import { SignUpScreen } from '../Auth';
-import HomeScreen from '../Home';
 import { SelectUserScreen, WrappedScreen } from '../Wrapped';
-import SettingsScreen from '../Settings';
-import { NoMatchScreen, RedirectScreen } from '../Misc';
+import { NoMatchScreen } from '../Misc';
 
 import { setPrivateAccess as _setPrivateAccess } from '../../redux/actions/userActions';
 import { getUserMetadata } from '../../api';
+import Footer from './Footer';
 
 function App() {
   const userId = useSelector((state) => state.user.userId);
@@ -45,30 +42,15 @@ function App() {
             {!isAuthenticated && (
               <Route path="/signup" element={<SignUpScreen />} />
             )}
-            <Route path="/demo" element={<DemoScreen />} />
-            <Route path="/user/redirect" element={<RedirectScreen />} />
-            <Route path="/user" element={<HomeScreen />} />
-            <Route path="/user/*" element={<HomeScreen />} />
-            <Route path="/wrapped/:userId/:year" element={<WrappedScreen />} />
-            <Route path="/wrapped/:userId" element={<WrappedScreen />} />
-            <Route path="/wrapped" element={<SelectUserScreen />} />
-            {isAuthenticated && (
-              <Route path="/settings" element={<SettingsScreen />} />
-            )}
+            <Route path="/" element={<SelectUserScreen />} />
+            <Route path="/public/" element={<SelectUserScreen />} />
+            <Route path="/private/" element={<SelectUserScreen />} />
+            <Route path="/:userId/:year" element={<WrappedScreen />} />
             <Route path="/:userId" element={<WrappedScreen />} />
-            <Route exact path="/" element={<LandingScreen />} />
             <Route path="*" element={<NoMatchScreen />} />
           </Routes>
         </section>
-        <footer className="body-font">
-          <div className="bg-gray-100 border-t border-gray-300">
-            <div className="container mx-auto py-4 px-5">
-              <p className="text-gray-500 text-sm text-center">
-                © 2023 GitHub Trends
-              </p>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </Router>
     </div>
   );

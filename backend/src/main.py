@@ -28,8 +28,11 @@ app = FastAPI()
 
 origins = [
     "http://localhost:3000",
+    "http://localhost:3001",
     "https://githubtrends.io",
     "https://www.githubtrends.io",
+    "https://githubwrapped.io",
+    "https://www.githubwrapped.io",
 ]
 
 app.add_middleware(

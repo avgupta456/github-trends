@@ -2,9 +2,9 @@
 
 import axios from 'axios';
 
-import { SUBSCRIBER_URL } from '../constants';
+import { BACKEND_URL } from '../constants';
 
-const URL_PREFIX = `${SUBSCRIBER_URL}/wrapped`;
+const URL_PREFIX = `${BACKEND_URL}/wrapped`;
 
 const getValidUser = async (userId) => {
   try {
