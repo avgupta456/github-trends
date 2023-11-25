@@ -15,6 +15,7 @@ def get_top_langs_svg(
     time_str: str,
     use_percent: bool,
     loc_metric: str,
+    complete: bool,
     commits_excluded: int,
     compact: bool,
     use_animation: bool,
@@ -24,7 +25,9 @@ def get_top_langs_svg(
     subheader = time_str
     if not use_percent:
         subheader += " | " + ("LOC Changed" if loc_metric == "changed" else "LOC Added")
-    if commits_excluded > 50:
+    if not complete:
+        subheader += " | Incomplete (refresh to update)"
+    elif commits_excluded > 50:
         subheader += f" | {commits_excluded} commits excluded"
 
     if len(data) <= 1:

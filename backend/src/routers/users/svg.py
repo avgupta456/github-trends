@@ -39,7 +39,7 @@ async def get_user_lang_svg(
     use_animation: bool = True,
     theme: str = "classic",
 ) -> Any:
-    output, background_task, time_str = await svg_base(
+    output, complete, background_task, time_str = await svg_base(
         user_id, start_date, end_date, time_range, demo, no_cache
     )
     if background_task is not None:
@@ -57,6 +57,7 @@ async def get_user_lang_svg(
         time_str=time_str,
         use_percent=use_percent,
         loc_metric=loc_metric,
+        complete=complete,
         commits_excluded=commits_excluded,
         compact=compact,
         use_animation=use_animation,
@@ -84,7 +85,7 @@ async def get_user_repo_svg(
     use_animation: bool = True,
     theme: str = "classic",
 ) -> Any:
-    output, background_task, time_str = await svg_base(
+    output, complete, background_task, time_str = await svg_base(
         user_id, start_date, end_date, time_range, demo, no_cache
     )
     if background_task is not None:
@@ -103,6 +104,7 @@ async def get_user_repo_svg(
         data=processed,
         time_str=time_str,
         loc_metric=loc_metric,
+        complete=complete,
         commits_excluded=commits_excluded,
         use_animation=use_animation,
         theme=theme,
