@@ -22,6 +22,7 @@ import { setPrivateAccess as _setPrivateAccess } from '../../redux/actions/userA
 import { getUserMetadata } from '../../api';
 import { WRAPPED_URL } from '../../constants';
 import Footer from './Footer';
+import { SelectUserScreen, WrappedScreen } from '../Wrapped';
 
 function WrappedAuthRedirectScreen() {
   const { rest } = useParams();
@@ -68,9 +69,13 @@ function App() {
               element={<WrappedAuthRedirectScreen />}
             />
             <Route path="/user/*" element={<HomeScreen />} />
+            <Route path="/wrapped/:userId/:year" element={<WrappedScreen />} />
+            <Route path="/wrapped/:userId" element={<WrappedScreen />} />
+            <Route path="/wrapped" element={<SelectUserScreen />} />
             {isAuthenticated && (
               <Route path="/settings" element={<SettingsScreen />} />
             )}
+            <Route path="/:userId" element={<WrappedScreen />} />
             <Route exact path="/" element={<LandingScreen />} />
             <Route path="*" element={<NoMatchScreen />} />
           </Routes>
