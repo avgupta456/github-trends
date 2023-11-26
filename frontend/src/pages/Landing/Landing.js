@@ -137,15 +137,12 @@ function LandingScreen() {
           </p>
           <br />
           <div>
-            <Link to="/wrapped/avgupta456" className="w-auto">
+            <Link to="/avgupta456" className="w-auto">
               <Button className="my-4 mr-4 w-auto justify-center text-white text-xl 3xl:text-2xl bg-gray-700 hover:bg-gray-800">
                 Example
               </Button>
             </Link>
-            <Link
-              to={isAuthenticated ? `/wrapped/${userId}` : '/wrapped'}
-              className="w-auto"
-            >
+            <Link to={isAuthenticated ? `/${userId}` : '/'} className="w-auto">
               <Button className="my-4 mr-4 w-auto justify-center text-white text-xl 3xl:text-2xl bg-blue-500 hover:bg-blue-600">
                 Get your Wrapped
               </Button>

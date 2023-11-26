@@ -98,7 +98,7 @@ const WrappedScreen = () => {
         <WrappedSection useTitle={false}>
           <div className="w-full h-auto flex flex-row flex-wrap -mb-4">
             {!downloadLoading && (
-              <Link to="/wrapped">
+              <Link to="/">
                 <LeftArrowIcon className="absolute ml-2 mt-2 h-8 w-8 text-gray-500 hover:text-gray-800" />
               </Link>
             )}

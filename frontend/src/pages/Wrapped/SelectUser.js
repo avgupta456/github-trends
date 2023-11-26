@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { useNavigate, Link } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
@@ -15,6 +15,9 @@ import { classnames, sleep } from '../../utils';
 import wrapped1 from '../../assets/wrapped1.png';
 import wrapped2 from '../../assets/wrapped2.png';
 import wrapped3 from '../../assets/wrapped3.png';
+import { PROD } from '../../constants';
+import { authenticate, setUserKey } from '../../api';
+import { login as _login } from '../../redux/actions/userActions';
 
 const SelectUserScreen = () => {
   const userId = useSelector((state) => state.user.userId || '');
@@ -22,12 +25,40 @@ const SelectUserScreen = () => {
   const [userName, setUserName] = useState(userId);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   let userNameInput;
 
   useEffect(() => {
     userNameInput.focus();
   }, [userNameInput]);
+
+  const login = (newUserId, userKey) => dispatch(_login(newUserId, userKey));
+
+  useEffect(() => {
+    async function redirectCode() {
+      // After requesting Github access, Github redirects back to your app with a code parameter
+      const url = window.location.href;
+
+      if (url.includes('error=')) {
+        navigate('/');
+      }
+
+      // If Github API returns the code parameter
+      if (url.includes('code=')) {
+        const tempPrivateAccess = url.includes('private');
+        const newUrl = url.split('?code=');
+        const subStr = PROD ? 'githubwrapped.io' : 'localhost:3001';
+        const redirect = `${url.split(subStr)[0]}${subStr}/`;
+        window.history.pushState({}, null, redirect);
+        const userKey = await setUserKey(newUrl[1]);
+        const newUserId = await authenticate(newUrl[1], tempPrivateAccess);
+        login(newUserId, userKey);
+      }
+    }
+
+    redirectCode();
+  }, []);
 
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +68,7 @@ const SelectUserScreen = () => {
     const validUser = await getValidUser(userName);
     if (validUser === 'Valid user') {
       await sleep(100);
-      navigate(`/wrapped/${userName}`);
+      navigate(`/${userName}`);
     } else if (validUser === 'GitHub user not found') {
       setError('GitHub user not found. Check your spelling and try again.');
     } else if (validUser === 'Repo not starred') {
@@ -175,7 +206,7 @@ const SelectUserScreen = () => {
               },
             ].map((user) => (
               <div className="w-full md:w-1/2 lg:w-1/4 p-4" key={user.username}>
-                <Link to={`/wrapped/${user.username}`}>
+                <Link to={`/${user.username}`}>
                   <div className="w-full rounded bg-gray-50 hover:bg-gray-100 shadow p-4 flex">
                     <img
                       src={user.url}

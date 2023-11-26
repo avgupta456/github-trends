@@ -1,3 +1,0 @@
-deploy/Dockerfile
-.dockerignore
-node_modules

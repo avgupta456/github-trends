@@ -1,3 +1,4 @@
-import App from './App';
+import AppTrends from './AppTrends';
+import AppWrapped from './AppWrapped';
 
-export default App;
+export { AppTrends, AppWrapped };

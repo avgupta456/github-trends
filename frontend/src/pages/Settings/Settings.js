@@ -164,7 +164,14 @@ const SettingsScreen = () => {
                 )}
               </div>
             )}
-            {selected === 'personalization' && <div>Personalization</div>}
+            {selected === 'personalization' && (
+              <div>
+                <p className="mb-1 text-2xl text-gray-700">Personalization</p>
+                <hr />
+                <br />
+                <p>Coming soon!</p>
+              </div>
+            )}
             {selected === 'deleteAccount' && (
               <div>
                 <p className="mb-1 text-2xl text-gray-700">Delete Account</p>
