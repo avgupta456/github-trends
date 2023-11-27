@@ -81,22 +81,36 @@ const SelectUserScreen = () => {
 
   return (
     <div className="w-full -mt-16 text-white">
-      <div className="w-full h-full bg-blue-500 pt-24 pb-16">
+      <div className="w-full h-full bg-blue-500 pt-24 pb-8">
+        <div className="w-full text-center px-8 pt-8">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium mb-2">
+            Reflect on your year <br className="inline sm:hidden" />
+            with <strong>GitHub Wrapped</strong>
+          </h1>
+          <p className="hidden sm:inline text-lg">
+            Powered by{' '}
+            <strong>
+              <Link
+                to="https://www.githubtrends.io"
+                className="underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GitHub Trends
+              </Link>
+            </strong>{' '}
+            (not affiliated with GitHub)
+          </p>
+        </div>
         <div className="w-full h-full flex flex-wrap items-center container mx-auto">
           <div className="w-full lg:w-1/2 xl:w-2/5 flex flex-col items-center">
-            <h1 className="text-xl md:text-xl lg:text-3xl font-medium mb-8 flex flex-col items-center">
-              Reflect on your year
-              <div>
-                with <strong>GitHub Wrapped</strong>
-              </div>
-            </h1>
-            <div className="p-6 w-80 lg:w-96 rounded-lg bg-gray-200 shadow text-gray-800">
+            <div className="p-6 md:w-80 lg:w-96 rounded-lg bg-gray-200 shadow text-gray-800">
               <div className="text-sm lg:text-lg mb-4 flex items-center">
                 <p>
-                  <strong>Step 1</strong>: Star the GitHub Repository.{' '}
+                  <strong>Step 1</strong>: Star the GitHub repository.{' '}
                 </p>
                 <div
-                  className="tooltip"
+                  className="hidden md:inline md:tooltip"
                   data-tip="This helps prevent spam requests and protect user privacy. Feel free to unstar after."
                 >
                   <BsInfoCircle className="h-4 w-4 ml-2 text-gray-500 hover:text-gray-800 cursor-pointer" />
@@ -160,7 +174,7 @@ const SelectUserScreen = () => {
               )}
             </div>
           </div>
-          <div className="w-full lg:w-1/2 xl:w-3/5 p-8 flex flex-col items-center">
+          <div className="w-full lg:w-1/2 xl:w-3/5 lg:px-8 flex flex-col items-center">
             <div className="w-full xl:w-4/5 2xl:w-3/4 mx-auto">
               <Preview
                 pages={[wrapped1, wrapped2, wrapped3]}
@@ -231,8 +245,8 @@ const SelectUserScreen = () => {
           <h1 className="text-4xl font-medium mb-4">GitHub Trends</h1>
           <h2 className="w-3/4 text-center text-sm lg:text-lg">
             GitHub Trends dives deep into the GitHub API to bring you insightful
-            metrics and shareable visualizations. We access individual commits,
-            enabling a range of metrics to be displayed.
+            metrics and visualizations. We access individual commits to compute
+            accurate and granular statistics.
           </h2>
           <div className="w-4/5 mx-auto py-8 flex flex-wrap items-center justify-center">
             {[

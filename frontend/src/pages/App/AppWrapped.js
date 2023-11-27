@@ -36,7 +36,7 @@ function App() {
   return (
     <div className="h-screen flex flex-col">
       <Router>
-        <Header />
+        <Header mode="wrapped" />
         <section className="bg-white text-gray-700 flex-grow">
           <Routes>
             {!isAuthenticated && (

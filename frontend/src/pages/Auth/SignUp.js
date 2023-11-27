@@ -30,8 +30,9 @@ const SignUpScreen = () => {
             'lg:w-96 lg:h-auto 2xl:w-1/2 2xl:h-1/2 2xl:flex 2xl:flex-col 2xl:justify-between',
           )}
         >
-          <h3 className="text-3xl 2xl:text-4xl font-semibold text-gray-900 mb-12">
-            Sign up for GitHub Trends
+          <h3 className="text-3xl 2xl:text-4xl font-semibold text-gray-900 mb-12 text-center">
+            Sign up for <br />
+            GitHub Trends
           </h3>
           <div>
             <a href={GITHUB_PUBLIC_AUTH_URL} className="flex justify-center">
