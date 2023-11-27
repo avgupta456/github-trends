@@ -8,6 +8,7 @@ import { toPng } from 'html-to-image';
 import download from 'downloadjs';
 import { FaArrowLeft as LeftArrowIcon } from 'react-icons/fa';
 import { BsImage as ImageIcon, BsInfoCircle } from 'react-icons/bs';
+import Select from 'react-select';
 import { ClipLoader } from 'react-spinners';
 
 import { getWrapped } from '../../api';
@@ -31,11 +32,12 @@ import {
 import Radar from '../../components/Wrapped/Specifics/Radar';
 import { LoadingScreen } from './sections';
 import { classnames } from '../../utils';
+import { CURR_YEAR } from '../../constants';
 
 const WrappedScreen = () => {
   // eslint-disable-next-line prefer-const
   let { userId, year } = useParams();
-  year = year || '2023';
+  year = year || `${CURR_YEAR}`;
 
   const currUserId = useSelector((state) => state.user.userId);
   const usePrivate = useSelector((state) => state.user.privateAccess);
@@ -55,7 +57,7 @@ const WrappedScreen = () => {
 
   useEffect(() => {
     async function getData() {
-      if (userId?.length > 0 && year > 2010 && year <= 2023) {
+      if (userId?.length > 0 && year > 2010 && year <= CURR_YEAR) {
         const output = await getWrapped(userId, year);
         if (
           output !== null &&
@@ -105,9 +107,19 @@ const WrappedScreen = () => {
             <p className="text-xl font-semibold text-center w-full">
               {`${userId}'s`}
             </p>
-            <p className="text-3xl text-center w-full">
-              {`${year} GitHub Wrapped`}
-            </p>
+            <div className="w-full flex justify-center items-center">
+              <Select
+                options={Array.from(
+                  { length: 10 },
+                  (_, i) => CURR_YEAR - i,
+                ).map((x) => ({ value: x, label: x }))}
+                value={{ value: year, label: year }}
+                onChange={(e) => {
+                  window.location.href = `/${userId}/${e.value}`;
+                }}
+              />
+              <p className="text-3xl ml-2">GitHub Wrapped</p>
+            </div>
             <div className="mt-2 text-md text-center w-full text-gray-600 flex justify-center items-center">
               Private Access:{' '}
               {userId === currUserId && usePrivate ? 'True' : 'False'}
