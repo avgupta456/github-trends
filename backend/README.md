@@ -12,8 +12,7 @@ poetry run pre-commit install
 Navigate to localhost:8000
 
 ```
-yarn start-pub
-yarn start-sub
+yarn start
 ```
 
 ## Test with Code Coverage

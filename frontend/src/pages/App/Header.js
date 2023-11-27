@@ -10,7 +10,7 @@ import { MdSettings as SettingsIcon } from 'react-icons/md';
 import { logout as _logout } from '../../redux/actions/userActions';
 import rocketIcon from '../../assets/rocket.png';
 import { classnames } from '../../utils';
-import { GITHUB_PUBLIC_AUTH_URL } from '../../constants';
+import { GITHUB_PUBLIC_AUTH_URL, WRAPPED_URL } from '../../constants';
 
 const propTypes = {
   to: PropTypes.string.isRequired,
@@ -58,7 +58,7 @@ MobileLink.propTypes = propTypes;
 
 MobileLink.defaultProps = defaultProps;
 
-const Header = () => {
+const Header = ({ mode }) => {
   const [toggle, setToggle] = useState(false);
 
   const userId = useSelector((state) => state.user.userId);
@@ -68,7 +68,7 @@ const Header = () => {
   const logout = () => dispatch(_logout());
 
   return (
-    <div className="text-gray-100 bg-white shadow-md body-font sticky top-0 z-50">
+    <div className="text-gray-100 bg-white shadow-md body-font top-0 z-50">
       <div className="p-5 flex flex-wrap">
         {/* GitHub Trends Logo */}
         <Link
@@ -76,22 +76,29 @@ const Header = () => {
           className="flex items-center title-font font-medium text-gray-700 mb-0 md:mr-8"
         >
           <img src={rocketIcon} alt="logo" className="w-6 h-6" />
-          <span className="ml-2 text-xl">GitHub Trends</span>
+          {mode === 'trends' && (
+            <span className="ml-2 text-xl">GitHub Trends</span>
+          )}
+          {mode === 'wrapped' && (
+            <span className="ml-2 text-xl">GitHub Wrapped</span>
+          )}
         </Link>
         {/* Pages: Wrapped, Dashboard, Demo */}
-        <div className="hidden md:flex">
-          <Link
-            to="/wrapped"
-            className="px-4 py-1 mr-3 rounded-sm bg-blue-500 hover:bg-blue-600 text-white"
-          >
-            Wrapped
-          </Link>
-          {isAuthenticated ? (
-            <StandardLink to="/user">Dashboard</StandardLink>
-          ) : (
-            <StandardLink to="/demo">Demo</StandardLink>
-          )}
-        </div>
+        {mode === 'trends' && (
+          <div className="hidden md:flex">
+            <Link
+              to={WRAPPED_URL}
+              className="px-4 py-1 mr-3 rounded-sm bg-blue-500 hover:bg-blue-600 text-white"
+            >
+              Wrapped
+            </Link>
+            {isAuthenticated ? (
+              <StandardLink to="/user">Dashboard</StandardLink>
+            ) : (
+              <StandardLink to="/demo">Demo</StandardLink>
+            )}
+          </div>
+        )}
         {/* Auth Pages: Sign Up, Log In, Log Out */}
         <div className="hidden md:flex ml-auto items-center text-base justify-center">
           <a
@@ -108,9 +115,11 @@ const Header = () => {
           </a>
           {isAuthenticated ? (
             <>
-              <Link to="/settings" className="mr-3 px-1 py-1">
-                <SettingsIcon className="h-6 w-6 text-gray-700" />
-              </Link>
+              {mode === 'trends' && (
+                <Link to="/settings" className="mr-3 px-1 py-1">
+                  <SettingsIcon className="h-6 w-6 text-gray-700" />
+                </Link>
+              )}
               <StandardLink to="/" onClick={logout}>
                 Sign Out
               </StandardLink>
@@ -192,6 +201,10 @@ const Header = () => {
       </div>
     </div>
   );
+};
+
+Header.propTypes = {
+  mode: PropTypes.string.isRequired,
 };
 
 export default Header;
