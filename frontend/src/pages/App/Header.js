@@ -154,17 +154,29 @@ const Header = ({ mode }) => {
       </div>
       {/* Hamburger Dropdown */}
       <div className={classnames('p-5 pt-0', !toggle && 'hidden')}>
-        {isAuthenticated ? (
+        {mode === 'trends' && (
           <>
-            <MobileLink to="/wrapped" onClick={() => setToggle(false)}>
+            <MobileLink to={WRAPPED_URL} onClick={() => setToggle(false)}>
               Wrapped
             </MobileLink>
-            <MobileLink to="/user" onClick={() => setToggle(false)}>
-              Dashboard
-            </MobileLink>
-            <MobileLink to="/settings" onClick={() => setToggle(false)}>
-              Settings
-            </MobileLink>
+            {isAuthenticated ? (
+              <MobileLink to="/user" onClick={() => setToggle(false)}>
+                Dashboard
+              </MobileLink>
+            ) : (
+              <MobileLink to="/demo" onClick={() => setToggle(false)}>
+                Demo
+              </MobileLink>
+            )}
+          </>
+        )}
+        {isAuthenticated ? (
+          <>
+            {mode === 'trends' && (
+              <MobileLink to="/settings" onClick={() => setToggle(false)}>
+                Settings
+              </MobileLink>
+            )}
             <MobileLink
               to="/"
               onClick={() => {
@@ -177,12 +189,6 @@ const Header = ({ mode }) => {
           </>
         ) : (
           <>
-            <MobileLink to="/wrapped" onClick={() => setToggle(false)}>
-              Wrapped
-            </MobileLink>
-            <MobileLink to="/demo" onClick={() => setToggle(false)}>
-              Demo
-            </MobileLink>
             <a
               className="block text-sm px-2 my-2 py-2 rounded-sm bg-gray-200 text-gray-700"
               href={GITHUB_PUBLIC_AUTH_URL}
