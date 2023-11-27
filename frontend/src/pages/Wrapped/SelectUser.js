@@ -104,7 +104,7 @@ const SelectUserScreen = () => {
         </div>
         <div className="w-full h-full flex flex-wrap items-center container mx-auto">
           <div className="w-full lg:w-1/2 xl:w-2/5 flex flex-col items-center">
-            <div className="p-6 md:w-80 lg:w-96 rounded-lg bg-gray-200 shadow text-gray-800">
+            <div className="p-6 m-2 md:w-80 lg:w-96 rounded-lg bg-gray-200 shadow text-gray-800">
               <div className="text-sm lg:text-lg mb-4 flex items-center">
                 <p>
                   <strong>Step 1</strong>: Star the GitHub repository.{' '}
