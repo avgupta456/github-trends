@@ -47,8 +47,8 @@
     "tailwindcss": "^3.3.5"
   },
   "scripts": {
-    "trends": "REACT_APP_MODE=trends react-scripts start",
-    "wrapped": "REACT_APP_MODE=wrapped PORT=3001 react-scripts start",
+    "trends": "cp ./public/trends.html ./public/index.html && REACT_APP_MODE=trends react-scripts start",
+    "wrapped": "cp ./public/wrapped.html ./public/index.html && REACT_APP_MODE=wrapped PORT=3001 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
