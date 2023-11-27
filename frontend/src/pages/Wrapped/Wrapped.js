@@ -101,7 +101,7 @@ const WrappedScreen = () => {
           <div className="w-full h-auto flex flex-row flex-wrap -mb-4">
             {!downloadLoading && (
               <Link to="/">
-                <LeftArrowIcon className="absolute ml-2 mt-2 h-8 w-8 text-gray-500 hover:text-gray-800" />
+                <LeftArrowIcon className="hidden md:absolute ml-2 mt-2 h-8 w-8 text-gray-500 hover:text-gray-800" />
               </Link>
             )}
             <p className="text-xl font-semibold text-center w-full">
@@ -118,7 +118,7 @@ const WrappedScreen = () => {
                   window.location.href = `/${userId}/${e.value}`;
                 }}
               />
-              <p className="text-3xl ml-2">GitHub Wrapped</p>
+              <p className="text-2xl md:text-3xl ml-2">GitHub Wrapped</p>
             </div>
             <div className="mt-2 text-md text-center w-full text-gray-600 flex justify-center items-center">
               Private Access:{' '}
