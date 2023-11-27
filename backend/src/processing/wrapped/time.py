@@ -40,7 +40,7 @@ def get_day_data(data: UserPackage) -> DayData:
     )
 
     for item in data.contribs.total:
-        day = datetime.fromisoformat(item.date).weekday()
+        day = (datetime.fromisoformat(item.date).weekday() + 1) % 7
         days[day]["contribs"] += item.stats.contribs_count
         loc_changed = sum(
             x.additions + x.deletions for x in item.stats.languages.values()
