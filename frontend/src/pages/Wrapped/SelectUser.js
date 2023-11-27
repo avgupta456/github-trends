@@ -82,7 +82,7 @@ const SelectUserScreen = () => {
   return (
     <div className="w-full -mt-16 text-white">
       <div className="w-full h-full bg-blue-500 pt-24 pb-8">
-        <div className="w-full text-center px-8 pt-8">
+        <div className="w-full text-center p-8 lg:pb-2">
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium mb-2">
             Reflect on your year <br className="inline sm:hidden" />
             with <strong>GitHub Wrapped</strong>
@@ -104,7 +104,7 @@ const SelectUserScreen = () => {
         </div>
         <div className="w-full h-full flex flex-wrap items-center container mx-auto">
           <div className="w-full lg:w-1/2 xl:w-2/5 flex flex-col items-center">
-            <div className="p-6 md:w-80 lg:w-96 rounded-lg bg-gray-200 shadow text-gray-800">
+            <div className="p-6 m-2 md:w-80 lg:w-96 rounded-lg bg-gray-200 shadow text-gray-800">
               <div className="text-sm lg:text-lg mb-4 flex items-center">
                 <p>
                   <strong>Step 1</strong>: Star the GitHub repository.{' '}
