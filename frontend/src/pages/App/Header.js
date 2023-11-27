@@ -10,7 +10,7 @@ import { MdSettings as SettingsIcon } from 'react-icons/md';
 import { logout as _logout } from '../../redux/actions/userActions';
 import rocketIcon from '../../assets/rocket.png';
 import { classnames } from '../../utils';
-import { GITHUB_PUBLIC_AUTH_URL } from '../../constants';
+import { GITHUB_PUBLIC_AUTH_URL, WRAPPED_URL } from '../../constants';
 
 const propTypes = {
   to: PropTypes.string.isRequired,
@@ -87,7 +87,7 @@ const Header = ({ mode }) => {
         {mode === 'trends' && (
           <div className="hidden md:flex">
             <Link
-              to="/wrapped"
+              to={WRAPPED_URL}
               className="px-4 py-1 mr-3 rounded-sm bg-blue-500 hover:bg-blue-600 text-white"
             >
               Wrapped

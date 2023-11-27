@@ -14,6 +14,7 @@ import avgupta456Langs from '../../assets/avgupta456_langs.png';
 import tiangoloRepos from '../../assets/tiangolo_repos.png';
 import reininkRepos from '../../assets/reinink_repos.png';
 import dhermesLangs from '../../assets/dhermes_langs.png';
+import { WRAPPED_URL } from '../../constants';
 
 function LandingScreen() {
   const userId = useSelector((state) => state.user.userId);
@@ -137,12 +138,15 @@ function LandingScreen() {
           </p>
           <br />
           <div>
-            <Link to="/avgupta456" className="w-auto">
+            <Link to={`${WRAPPED_URL}/avgupta456`} className="w-auto">
               <Button className="my-4 mr-4 w-auto justify-center text-white text-xl 3xl:text-2xl bg-gray-700 hover:bg-gray-800">
                 Example
               </Button>
             </Link>
-            <Link to={isAuthenticated ? `/${userId}` : '/'} className="w-auto">
+            <Link
+              to={isAuthenticated ? `${WRAPPED_URL}/${userId}` : WRAPPED_URL}
+              className="w-auto"
+            >
               <Button className="my-4 mr-4 w-auto justify-center text-white text-xl 3xl:text-2xl bg-blue-500 hover:bg-blue-600">
                 Get your Wrapped
               </Button>
@@ -159,8 +163,8 @@ function LandingScreen() {
         <h1 className="text-4xl font-medium mb-4">GitHub Trends</h1>
         <h2 className="w-2/3 text-center text-lg">
           GitHub Trends dives deep into the GitHub API to bring you insightful
-          metrics and shareable visualizations. We access individual commits,
-          enabling a range of metrics to be displayed.
+          metrics and visualizations. We access individual commits to compute
+          accurate and granular statistics.
         </h2>
         <div className="w-4/5 mx-auto py-8 flex flex-wrap items-center justify-center">
           {[
