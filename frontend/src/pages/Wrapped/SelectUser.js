@@ -82,7 +82,7 @@ const SelectUserScreen = () => {
   return (
     <div className="w-full -mt-16 text-white">
       <div className="w-full h-full bg-blue-500 pt-24 pb-8">
-        <div className="w-full text-center px-8 pt-8">
+        <div className="w-full text-center p-8 lg:pb-2">
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium mb-2">
             Reflect on your year <br className="inline sm:hidden" />
             with <strong>GitHub Wrapped</strong>
