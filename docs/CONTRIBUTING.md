@@ -8,7 +8,7 @@ First, copy `backend/.env-template` into `backend/.env` and fill in the missing 
 
 With Python3.11, install the dependencies from `backend/requirements.txt` and run `yarn start`.
 
-With Node16 and Yarn, install the dependencies from `frontend/package.json` and run on a separate terminal window `yarn start`.
+With Node16 and Yarn, install the dependencies from `frontend/package.json` and run on a separate terminal window `yarn start-trends`.
 
 ## Testing
 
