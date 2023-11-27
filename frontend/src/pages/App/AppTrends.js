@@ -22,9 +22,9 @@ import { setPrivateAccess as _setPrivateAccess } from '../../redux/actions/userA
 import { getUserMetadata } from '../../api';
 import { WRAPPED_URL } from '../../constants';
 import Footer from './Footer';
-import { SelectUserScreen, WrappedScreen } from '../Wrapped';
 
 function WrappedAuthRedirectScreen() {
+  // for wrapped auth redirects
   const { rest } = useParams();
   useEffect(() => {
     const code = new URLSearchParams(window.location.search).get('code');
@@ -32,6 +32,22 @@ function WrappedAuthRedirectScreen() {
   }, [rest]);
 
   return null;
+}
+
+function WrappedRedirectScreen() {
+  // redirects /wrapped/* to https://www.githubwrapped.com/*
+  const { userId, year } = useParams();
+  useEffect(() => {
+    if (userId) {
+      if (year) {
+        window.location.href = `${WRAPPED_URL}/${userId}/${year}`;
+      } else {
+        window.location.href = `${WRAPPED_URL}/${userId}`;
+      }
+    } else {
+      window.location.href = `${WRAPPED_URL}/`;
+    }
+  }, [userId, year]);
 }
 
 function App() {
@@ -69,13 +85,19 @@ function App() {
               element={<WrappedAuthRedirectScreen />}
             />
             <Route path="/user/*" element={<HomeScreen />} />
-            <Route path="/wrapped/:userId/:year" element={<WrappedScreen />} />
-            <Route path="/wrapped/:userId" element={<WrappedScreen />} />
-            <Route path="/wrapped" element={<SelectUserScreen />} />
+            <Route
+              path="/wrapped/:userId/:year"
+              element={<WrappedRedirectScreen />}
+            />
+            <Route
+              path="/wrapped/:userId"
+              element={<WrappedRedirectScreen />}
+            />
+            <Route path="/wrapped" element={<WrappedRedirectScreen />} />
             {isAuthenticated && (
               <Route path="/settings" element={<SettingsScreen />} />
             )}
-            <Route path="/:userId" element={<WrappedScreen />} />
+            <Route path="/:userId" element={<WrappedRedirectScreen />} />
             <Route exact path="/" element={<LandingScreen />} />
             <Route path="*" element={<NoMatchScreen />} />
           </Routes>
