@@ -1,7 +1,7 @@
 from datetime import date, datetime
 from typing import Any, Dict, List
 
-from src.constants import API_VERSION
+from src.constants import API_VERSION, USER_WHITELIST
 from src.data.mongo.main import USER_MONTHS
 from src.data.mongo.user_months.models import UserMonth
 from src.models import UserPackage
@@ -28,7 +28,10 @@ async def get_user_months(
     months_data: List[UserMonth] = []
     for month in months:
         date_obj: datetime = month["month"]
-        complete = not (date_obj.year == today.year and date_obj.month == today.month)
+        complete = (
+            not (date_obj.year == today.year and date_obj.month == today.month)
+            or user_id in USER_WHITELIST
+        )
         try:
             data = UserPackage.decompress(month["data"])
             months_data.append(

@@ -7,16 +7,9 @@ from src.aggregation.layer1.auth import (
     get_valid_db_user,
     get_valid_github_user,
 )
-from src.constants import OWNER, REPO
+from src.constants import OWNER, REPO, USER_WHITELIST
 from src.data.github.rest import RESTError
 from src.utils import alru_cache
-
-USER_WHITELIST = [
-    "torvalds",
-    "yyx990803",
-    "shadcn",
-    "sindresorhus",
-]
 
 
 async def check_github_user_exists(user_id: str) -> bool:

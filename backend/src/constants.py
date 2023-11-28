@@ -57,6 +57,15 @@ TEST_NODE_IDS = [
 ]
 TEST_SHA = "ad83e6340377904fa0295745b5314202b23d2f3f"
 
+# WRAPPED
+
+# example users, don't need to star the repo
+USER_WHITELIST = [
+    "torvalds",
+    "yyx990803",
+    "shadcn",
+    "sindresorhus",
+]
 
 print("PROD", PROD)
 print("API_VERSION", API_VERSION)
