@@ -288,7 +288,7 @@ const WrappedScreen = () => {
         </WrappedSection>
         {downloadLoading && (
           <div className="text-center text-2xl md:text-3xl lg:text-4xl font-bold text-blue-500">
-            Create your own at www.githubtrends.io/wrapped
+            Create your own at www.githubwrapped.io
           </div>
         )}
       </div>
