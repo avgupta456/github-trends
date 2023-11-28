@@ -4,7 +4,7 @@
 
 Check out your GitHub Wrapped at `githubtrends.io/wrapped`!
 
-![github-wrapped](https://user-images.githubusercontent.com/16708871/204590479-556eb628-a7bd-45c0-9b35-9171c3891f12.png)
+![github-wrapped](https://github.com/avgupta456/github-trends/assets/16708871/560b5da3-4ea3-4108-a360-2497b265d38f)
 
 ---
 
