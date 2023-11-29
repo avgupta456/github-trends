@@ -74,12 +74,27 @@ const SettingsScreen = () => {
   useOutsideAlerter(wrapperRef, closeDeleteModal);
 
   const userId = useSelector((state) => state.user.userId);
+  const isAuthenticated = userId && userId.length > 0;
   const userKey = useSelector((state) => state.user.userKey);
   const privateAccess = useSelector((state) => state.user.privateAccess);
   const accountTier = privateAccess ? 'Private Workflow' : 'Public Workflow';
 
   const dispatch = useDispatch();
   const logout = () => dispatch(_logout());
+
+  console.log(isAuthenticated, userId, userKey, privateAccess, accountTier);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="h-full py-8 flex justify-center items-center">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold">
+            Please sign in to access this page
+          </h1>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-full w-full">

@@ -94,9 +94,7 @@ function App() {
               element={<WrappedRedirectScreen />}
             />
             <Route path="/wrapped" element={<WrappedRedirectScreen />} />
-            {isAuthenticated && (
-              <Route path="/settings" element={<SettingsScreen />} />
-            )}
+            <Route path="/settings" element={<SettingsScreen />} />
             <Route path="/:userId" element={<WrappedRedirectScreen />} />
             <Route exact path="/" element={<LandingScreen />} />
             <Route path="*" element={<NoMatchScreen />} />
