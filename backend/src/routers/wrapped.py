@@ -24,7 +24,7 @@ async def get_wrapped_user(
     response: Response, user_id: str, year: int = 2022, no_cache: bool = False
 ) -> Optional[WrappedPackage]:
     valid_user = await get_is_valid_user(user_id)
-    if valid_user != "Valid user":
+    if "Valid user" not in valid_user:
         return WrappedPackage.empty()
 
     return await query_wrapped_user(user_id, year, no_cache=no_cache)

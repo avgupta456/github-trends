@@ -22,7 +22,7 @@ const DemoScreen = () => {
 
   const handleSubmit = async () => {
     const validUser = await getValidUser(userName);
-    if (validUser === 'Valid user' || validUser === 'Repo not starred') {
+    if (validUser.includes('Valid user') || validUser === 'Repo not starred') {
       setLoading(true);
       setSelectedUserName(userName);
       setLoading(false);

@@ -66,9 +66,10 @@ const SelectUserScreen = () => {
   const handleSubmit = async () => {
     setIsLoading(true);
     const validUser = await getValidUser(userName);
-    if (validUser === 'Valid user') {
-      await sleep(100);
-      navigate(`/${userName}`);
+    if (validUser.includes('Valid user')) {
+      const newUserName = validUser.split(' ')[2];
+      await sleep(10);
+      navigate(`/${newUserName}`);
     } else if (validUser === 'GitHub user not found') {
       setError('GitHub user not found. Check your spelling and try again.');
     } else if (validUser === 'Repo not starred') {

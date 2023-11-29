@@ -1,5 +1,5 @@
 from datetime import timedelta
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 from src.constants import OWNER, REPO
 from src.data.github.rest import (
@@ -14,17 +14,16 @@ from src.data.mongo.user import get_public_user as db_get_public_user
 from src.utils import alru_cache
 
 
-async def get_valid_github_user(user_id: str) -> bool:
+async def get_valid_github_user(user_id: str) -> Optional[str]:
     access_token = get_access_token()
     try:
-        github_get_user(user_id, access_token)
-        return True
-    except RESTErrorNotFound:
+        return github_get_user(user_id, access_token)["login"]
+    except (RESTErrorNotFound, KeyError):
         # User does not exist
-        return False
+        return None
     except RESTError:
         # Rate limited, so assume user exists
-        return True
+        return user_id
 
 
 async def get_valid_db_user(user_id: str) -> bool:
