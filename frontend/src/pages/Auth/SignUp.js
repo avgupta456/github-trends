@@ -27,29 +27,25 @@ const SignUpScreen = () => {
         <div
           className={classnames(
             'bg-gray-100 rounded-sm w-full h-full m-auto p-8 shadow',
-            'lg:w-96 lg:h-auto 2xl:w-1/2 2xl:h-1/2 2xl:flex 2xl:flex-col 2xl:justify-between',
+            'lg:w-80 lg:h-auto',
           )}
         >
-          <h3 className="text-3xl 2xl:text-4xl font-semibold text-gray-900 mb-12 text-center">
+          <h3 className="text-3xl font-semibold text-gray-900 mb-12 text-center">
             Sign up for <br />
             GitHub Trends
           </h3>
           <div>
             <a href={GITHUB_PUBLIC_AUTH_URL} className="flex justify-center">
               <Button className="h-12 flex justify-center items-center text-white bg-blue-500 hover:bg-blue-600">
-                <GithubIcon className="w-4 h-4 2xl:w-6 2xl:h-6" />
-                <span className="ml-2 xl:text-lg 2xl:text-xl">
-                  GitHub Public Access
-                </span>
+                <GithubIcon className="w-4 h-4" />
+                <span className="ml-2 xl:text-lg">GitHub Public Access</span>
               </Button>
             </a>
             <div className="mt-4" />
             <a href={GITHUB_PRIVATE_AUTH_URL} className="flex justify-center">
               <Button className="h-12 flex justify-center items-center text-black border border-black bg-white hover:bg-gray-100">
-                <GithubIcon className="w-4 h-4 2xl:w-6 2xl:h-6" />
-                <span className="ml-2 xl:text-lg 2xl:text-xl">
-                  GitHub Private Access
-                </span>
+                <GithubIcon className="w-4 h-4" />
+                <span className="ml-2 xl:text-lg">GitHub Private Access</span>
               </Button>
             </a>
           </div>
