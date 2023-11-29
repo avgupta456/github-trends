@@ -1,5 +1,5 @@
 from datetime import timedelta
-from typing import Tuple
+from typing import Optional, Tuple
 
 from src.aggregation.layer1.auth import (
     get_repo_stargazers,
@@ -12,7 +12,7 @@ from src.data.github.rest import RESTError
 from src.utils import alru_cache
 
 
-async def check_github_user_exists(user_id: str) -> bool:
+async def check_github_user_exists(user_id: str) -> Optional[str]:
     return await get_valid_github_user(user_id)
 
 
@@ -38,16 +38,16 @@ async def check_user_starred_repo(
 
 @alru_cache(ttl=timedelta(hours=1))
 async def get_is_valid_user(user_id: str) -> Tuple[bool, str]:
-    if user_id in USER_WHITELIST:
-        return (True, "Valid user")
+    if user_id.lower() in USER_WHITELIST:
+        return (True, f"Valid user {user_id.lower()}")
 
-    valid_github_user = await check_github_user_exists(user_id)
-    if not valid_github_user:
+    valid_user_id = await check_github_user_exists(user_id)
+    if valid_user_id is None:
         return (False, "GitHub user not found")
 
-    valid_db_user = await check_db_user_exists(user_id)
-    user_starred = await check_user_starred_repo(user_id)
+    valid_db_user = await check_db_user_exists(valid_user_id)
+    user_starred = await check_user_starred_repo(valid_user_id)
     if not (user_starred or valid_db_user):
         return (False, "Repo not starred")
 
-    return (True, "Valid user")
+    return (True, f"Valid user {valid_user_id}")
