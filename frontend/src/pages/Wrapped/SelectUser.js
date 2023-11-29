@@ -31,6 +31,7 @@ const SelectUserScreen = () => {
 
   useEffect(() => {
     userNameInput.focus();
+    userNameInput.value = userNameInput.value.toLowerCase();
   }, [userNameInput]);
 
   const login = (newUserId, userKey) => dispatch(_login(newUserId, userKey));
