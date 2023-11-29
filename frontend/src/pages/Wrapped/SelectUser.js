@@ -31,7 +31,6 @@ const SelectUserScreen = () => {
 
   useEffect(() => {
     userNameInput.focus();
-    userNameInput.value = userNameInput.value.toLowerCase();
   }, [userNameInput]);
 
   const login = (newUserId, userKey) => dispatch(_login(newUserId, userKey));
@@ -136,6 +135,7 @@ const SelectUserScreen = () => {
               <div className="flex space-x-2 mt-2">
                 <input
                   type="text"
+                  autoCapitalize="none"
                   ref={(input) => {
                     userNameInput = input;
                   }}
