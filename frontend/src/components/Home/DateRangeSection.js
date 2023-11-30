@@ -7,6 +7,7 @@ import { Input } from '../Generic';
 const DateRangeSection = ({
   selectedTimeRange,
   setSelectedTimeRange,
+  // eslint-disable-next-line no-unused-vars
   privateAccess,
 }) => {
   const timeRangeOptions = [
@@ -19,7 +20,8 @@ const DateRangeSection = ({
     },
     { id: 2, label: 'Past 6 Months', disabled: false, value: 'six_months' },
     { id: 3, label: 'Past 1 Year', disabled: false, value: 'one_year' },
-    { id: 4, label: 'All Time', disabled: !privateAccess, value: 'all_time' },
+    // { id: 4, label: 'All Time', disabled: !privateAccess, value: 'all_time' },
+    { id: 4, label: 'All Time', disabled: true, value: 'all_time' },
   ];
 
   const selectedOption = selectedTimeRange || timeRangeOptions[2];
