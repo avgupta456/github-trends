@@ -7,7 +7,7 @@ from src.aggregation.layer1.auth import (
     get_valid_db_user,
     get_valid_github_user,
 )
-from src.constants import OWNER, REPO, USER_WHITELIST
+from src.constants import OWNER, REPO, USER_BLACKLIST, USER_WHITELIST
 from src.data.github.rest import RESTError
 from src.utils import alru_cache
 
@@ -38,6 +38,10 @@ async def check_user_starred_repo(
 
 @alru_cache(ttl=timedelta(hours=1))
 async def get_is_valid_user(user_id: str) -> Tuple[bool, str]:
+    if user_id.lower() in USER_BLACKLIST:
+        # TODO: change error message
+        return (False, "GitHub user not found")
+
     if user_id.lower() in USER_WHITELIST:
         return (True, f"Valid user {user_id.lower()}")
 

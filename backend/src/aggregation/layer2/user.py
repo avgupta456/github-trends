@@ -2,6 +2,7 @@ from datetime import date, timedelta
 from typing import Optional, Tuple
 
 from src.aggregation.layer0 import get_user_data
+from src.constants import USER_BLACKLIST
 from src.data.mongo.secret.functions import update_keys
 from src.data.mongo.user import PublicUserModel, get_public_user as db_get_public_user
 from src.data.mongo.user_months import get_user_months
@@ -41,6 +42,9 @@ async def get_user(
 ) -> Tuple[
     bool, Tuple[Optional[UserPackage], bool, Optional[UpdateUserBackgroundTask]]
 ]:
+    if user_id in USER_BLACKLIST:
+        return (False, (None, False, None))
+
     user: Optional[PublicUserModel] = await db_get_public_user(user_id)
     if user is None:
         return (False, (None, False, None))
