@@ -5,7 +5,7 @@ from src.constants import LOCAL, MONGODB_PASSWORD, PROD
 
 
 def get_conn_str(password: str, database: str) -> str:
-    return f"mongodb://root:{password}@backend-shard-00-00.aqlpb.mongodb.net:27017,backend-shard-00-01.aqlpb.mongodb.net:27017,backend-shard-00-02.aqlpb.mongodb.net:27017/{database}?ssl=true&replicaSet=atlas-25pkcv-shard-0&authSource=admin&retryWrites=true&w=majority"
+    return f"mongodb+srv://root:{password}@backend.aqlpb.mongodb.net/?retryWrites=true&w=majority"
 
 
 if LOCAL:
