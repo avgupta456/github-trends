@@ -8,7 +8,7 @@ instance_class: F1
 #prevents creating additional instances
 automatic_scaling:
   min_instances: 0
-  max_instances: 2
+  max_instances: 8
 
 env_variables:
   PROD: true
