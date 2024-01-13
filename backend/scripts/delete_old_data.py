@@ -40,7 +40,7 @@ async def delete_old_rows(cutoff_date: datetime):
 
 async def main():
     # Replace 'your_date_field' with the actual name of your date field
-    cutoff_date = datetime(2022, 12, 31)
+    cutoff_date = datetime(2023, 12, 31)
 
     count = await count_old_rows(cutoff_date)
     if count == 0:
