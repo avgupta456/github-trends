@@ -28,4 +28,4 @@ export const BACKEND_URL = PROD
   ? 'https://api.githubtrends.io'
   : 'http://localhost:8000';
 
-export const CURR_YEAR = 2023;
+export const CURR_YEAR = 2024;
