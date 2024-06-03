@@ -5,9 +5,9 @@ from datetime import datetime
 from typing import Any
 
 from dotenv import find_dotenv, load_dotenv
-
+print("Loading environment variables...")
 load_dotenv(find_dotenv())
-
+print("Environment variables loaded.")
 # Add the parent directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
