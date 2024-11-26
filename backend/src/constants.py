@@ -67,7 +67,7 @@ USER_WHITELIST = [
     "sindresorhus",
 ]
 
-USER_BLACKLIST = ["kangmingtay", "ae7er", "stalukdar7"]
+USER_BLACKLIST = ["kangmingtay", "ae7er", "stalukdar7", "piyush7833"]
 
 print("PROD", PROD)
 print("API_VERSION", API_VERSION)
