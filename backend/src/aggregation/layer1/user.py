@@ -5,7 +5,7 @@ from typing import List, Optional, Tuple
 import requests
 
 from src.aggregation.layer0.package import get_user_data
-from src.constants import API_VERSION, BACKEND_URL, PROD
+from src.constants import API_VERSION  # , BACKEND_URL, PROD
 from src.data.github.graphql import GraphQLErrorRateLimit
 from src.data.mongo.secret import update_keys
 from src.data.mongo.user_months import UserMonth, get_user_months, set_user_month
@@ -114,9 +114,10 @@ async def query_user(
         out.incomplete = incomplete
 
     if incomplete or len(new_months) > 1:
-        # cache buster for publisher
-        if PROD:
-            s.get(f"{BACKEND_URL}/user/{user_id}?no_cache=True")
+        # TODO: figure out why this causes an infinite loop
+        # # cache buster for publisher
+        # if PROD:
+        #     s.get(f"{BACKEND_URL}/user/{user_id}?no_cache=True")
 
         return (False, out)
 
