@@ -101,20 +101,6 @@ const Header = ({ mode }) => {
         )}
         {/* Auth Pages: Sign Up, Log In, Log Out */}
         <div className="hidden md:flex ml-auto items-center text-base justify-center">
-          {mode === 'wrapped' && (
-            <a
-              href="https://www.producthunt.com/posts/github-wrapped-2023?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-github&#0045;wrapped&#0045;2023"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mr-3"
-            >
-              <img
-                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=427801&theme=light"
-                alt="GitHub Wrapped | Product Hunt"
-                className="w-32 h-8"
-              />
-            </a>
-          )}
           {isAuthenticated ? (
             <>
               {mode === 'trends' && (
