@@ -2,10 +2,23 @@ from typing import Any, Dict, Optional
 
 from fastapi import APIRouter, Response, status
 
+from src.data.mongo.secret import update_keys
 from src.data.mongo.user import PublicUserModel, get_public_user as db_get_public_user
 from src.utils import async_fail_gracefully
 
 router = APIRouter()
+
+
+@router.get(
+    "/update_keys",
+    status_code=status.HTTP_200_OK,
+    include_in_schema=False,
+    response_model=Dict[str, Any],
+)
+@async_fail_gracefully
+async def update_keys_endpoint(response: Response) -> bool:
+    await update_keys(no_cache=True)
+    return True
 
 
 @router.get(

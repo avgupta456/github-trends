@@ -21,9 +21,9 @@ async def get_keys(no_cache: bool = False) -> Tuple[bool, List[str]]:
 secret_keys: List[str] = []
 
 
-async def update_keys() -> None:
+async def update_keys(no_cache: bool = False) -> None:
     global secret_keys
-    secret_keys = await get_keys()
+    secret_keys = await get_keys(no_cache=no_cache)
 
 
 def get_random_key() -> str:
