@@ -14,8 +14,11 @@ async def query_wrapped_user(
 ) -> Tuple[bool, Optional[WrappedPackage]]:
     start_date, end_date = date(year, 1, 1), date(year, 12, 31)
     user: Optional[PublicUserModel] = await db_get_public_user(user_id)
-    access_token = None if user is None else user.access_token
-    private_access = False if user is None else user.private_access or False
+    private_access = False
+    access_token = None
+    if user is not None and user.private_access:
+        private_access = True
+        access_token = user.access_token
     user_package: UserPackage = await query_user(
         user_id,
         access_token,
